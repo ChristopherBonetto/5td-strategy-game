@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 public class TilemapSpawnerDemo : MonoBehaviour
 {
     public Grid GridPrefab;
-    public Tilemap TilemapPrefab;
+    public Tilemap[] TilemapPrefab;
 
     [Header("parent Empty Object")]
     public Transform ParentOfLevelgenerated;
@@ -16,7 +16,7 @@ public class TilemapSpawnerDemo : MonoBehaviour
     private void OnValidate()
     {
         if (GridPrefab)
-            TilemapPrefab = GridPrefab.GetComponentInChildren<Tilemap>();
+            TilemapPrefab = GridPrefab.GetComponentsInChildren<Tilemap>(true);
     }
 
     public void GenerateLevel()
@@ -27,28 +27,33 @@ public class TilemapSpawnerDemo : MonoBehaviour
         DestroyMapGenerated();
 
         // Get boundieris of tilemap.
-        BoundsInt bounds = TilemapPrefab.cellBounds;
-
-        // Search all tile with that bounds.
-        TileBase[] tiles = TilemapPrefab.GetTilesBlock(bounds);
+        BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
 
 
-        for (int i = 0; i < bounds.size.x; i++)
+        foreach (var map in TilemapPrefab)
         {
-            for (int j = 0; j < bounds.size.y; j++)
+            // Search all tile with that bounds.
+            TileBase[] tiles = map.GetTilesBlock(bounds);
+
+
+            for (int columns = 0; columns < bounds.size.x; columns++)
             {
-                TileBase tile = tiles[i + j * bounds.size.x];
-
-                if (tile)
+                for (int rows = 0; rows < bounds.size.y; rows++)
                 {
-                    Vector3Int position = new Vector3Int(i, 0, j);
+                    TileBase tile = tiles[columns + (rows * bounds.size.x)];
 
-                    // Store tile datas
-                    TileData tileData = new TileData();
-                    tile.GetTileData(position, null, ref tileData);
+                    if (tile)
+                    {
+                        Vector3Int position = new Vector3Int(columns - (bounds.size.x / 2), rows - (bounds.size.y / 2), 0);
+                        Vector3 worldPos = GridPrefab.CellToWorld(position);
 
-                    GameObject go = Instantiate(tileData.gameObject, position, Quaternion.identity, ParentOfLevelgenerated);
-                    m_prefabsSpawned.Add(go);
+                        // Store tile datas
+                        TileData tileData = new TileData();
+                        tile.GetTileData(position, null, ref tileData);
+
+                        GameObject go = Instantiate(tileData.gameObject, worldPos, Quaternion.identity, ParentOfLevelgenerated);
+                        m_prefabsSpawned.Add(go);
+                    }
                 }
             }
         }
@@ -62,5 +67,27 @@ public class TilemapSpawnerDemo : MonoBehaviour
         }
 
         m_prefabsSpawned.Clear();
+    }
+
+    private Tilemap GetTheMaxBoundaries(Tilemap[] maps)
+    {
+        Tilemap map = maps[0];
+        BoundsInt bounds = map.cellBounds;
+        int max = bounds.xMax + bounds.yMax + bounds.zMax;
+
+        for (int i = 0; i < maps.Length; i++)
+        {
+            BoundsInt tempBounds = maps[i].cellBounds;
+            int tempMax = tempBounds.xMax + tempBounds.yMax + tempBounds.zMax;
+
+            if (max < tempMax)
+            {
+                map = maps[i];
+                bounds = map.cellBounds;
+                max = bounds.xMax + bounds.yMax + bounds.zMax;
+            }
+        }
+
+        return map;
     }
 }
