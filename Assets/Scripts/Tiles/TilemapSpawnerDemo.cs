@@ -28,7 +28,7 @@ public class TilemapSpawnerDemo : MonoBehaviour
 
         // Get boundieris of tilemap.
         BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
-
+        Debug.Log(bounds);
 
         foreach (var map in TilemapPrefab)
         {
@@ -44,7 +44,7 @@ public class TilemapSpawnerDemo : MonoBehaviour
 
                     if (tile)
                     {
-                        Vector3Int position = new Vector3Int(columns - (bounds.size.x / 2), rows - (bounds.size.y / 2), 0);
+                        Vector3Int position = new Vector3Int(columns + map.editorPreviewOrigin.x, rows + map.editorPreviewOrigin.y, 0);
                         Vector3 worldPos = GridPrefab.CellToWorld(position);
 
                         // Store tile datas
@@ -75,7 +75,7 @@ public class TilemapSpawnerDemo : MonoBehaviour
         BoundsInt bounds = map.cellBounds;
         int max = bounds.xMax + bounds.yMax + bounds.zMax;
 
-        for (int i = 0; i < maps.Length; i++)
+        for (int i = 1; i < maps.Length; i++)
         {
             BoundsInt tempBounds = maps[i].cellBounds;
             int tempMax = tempBounds.xMax + tempBounds.yMax + tempBounds.zMax;
