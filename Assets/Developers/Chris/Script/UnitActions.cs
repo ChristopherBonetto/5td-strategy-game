@@ -3,28 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AIBehaviour : Entity, IDamageable
+public class UnitActions : Entity, IDamageable
 {
-    public Actions m_CurrentEntityAction;
+    public Actions m_CurrentUnitAction;
 
-    protected NavMeshAgent m_entityAgent;
-    public NavMeshAgent EntityAgent
+    protected NavMeshAgent m_unitAgent;
+    public NavMeshAgent UnitAgent
     {
         get
         {
-            if(m_entityAgent != null)
-            {
-                return m_entityAgent;
-            }
-            else
-            {
-                return null;
-            }
-            
+            return m_unitAgent;
         }
         set
         {
-            m_entityAgent = value;
+            m_unitAgent = value;
         }
     }
 
@@ -46,7 +38,7 @@ public class AIBehaviour : Entity, IDamageable
         }
     }
 
-    protected int m_entityCurrentHp = 10;
+    protected int m_unitCurrentHp = 10;
 
 
 
@@ -57,21 +49,17 @@ public class AIBehaviour : Entity, IDamageable
 
         if(tempAgent != null)
         {
-            EntityAgent = tempAgent;
+            UnitAgent = tempAgent;
         }
-        
     }
 
     // Start is called before the first frame update
     public virtual void Start()
     {
-        if(EntityAgent != null)
+        if(UnitAgent != null)
         {
-            EntityAgent.speed = EntityAgent.speed + EntityStatisticsSO.MovementSpeed;
+            UnitAgent.speed = UnitAgent.speed + EntityStatisticsSO.MovementSpeed;
         }
-        
-        
-        
         RefreshFullHp();
     }
 
@@ -79,25 +67,11 @@ public class AIBehaviour : Entity, IDamageable
     public virtual void Update()
     {
         ManageState();
-        //if (CheckFocussedObjectDistance() && m_CanAttack)
-        //{
-        //    Attack();
-        //}
-
-        //if (!m_CanAttack)
-        //{
-        //    m_CanAttack = Timer(EntityStatisticsSO.TimeToAttack);
-        //}
-
-        //if (FocusObject != null)
-        //{
-        //    gameObject.transform.LookAt(new Vector3(FocusObject.transform.position.x, gameObject.transform.position.y, FocusObject.transform.position.z));
-        //}
     }
 
     protected virtual void ManageState()
     {
-        switch (m_CurrentEntityAction)
+        switch (m_CurrentUnitAction)
         {
             case Actions.Idle:
                 break;
@@ -120,7 +94,7 @@ public class AIBehaviour : Entity, IDamageable
             case Actions.Move:
                 if (CheckFocussedObjectDistance())
                 {
-                    m_CurrentEntityAction = Actions.Attack;
+                    m_CurrentUnitAction = Actions.Attack;
                 }
                 break;
 
@@ -137,14 +111,14 @@ public class AIBehaviour : Entity, IDamageable
 
     #region Utility
 
-    public virtual void ChangeEntityState(Actions NewAction)
+    public virtual void ChangeUnitState(Actions NewAction)
     {
-        m_CurrentEntityAction = NewAction;
+        m_CurrentUnitAction = NewAction;
     }
 
     public virtual void RefreshFullHp()
     {
-        m_entityCurrentHp = EntityStatisticsSO.HealthMax;
+        m_unitCurrentHp = EntityStatisticsSO.HealthMax;
     }
 
     #endregion
@@ -154,7 +128,7 @@ public class AIBehaviour : Entity, IDamageable
 
     public virtual void Attack()
     {
-        ChangeEntityState(Actions.Attack);
+        ChangeUnitState(Actions.Attack);
 
         CanTakeDamage = FocusObject.GetComponent<IDamageable>() as IDamageable;
 
@@ -175,11 +149,11 @@ public class AIBehaviour : Entity, IDamageable
     {
         if (FocusObject != null)
         {
-            if (Vector3.Distance(transform.position, FocusObject.transform.position) <= EntityAgent.stoppingDistance + FocusObject.transform.localScale.x + EntityStatisticsSO.ViewRadius)
+            if (Vector3.Distance(transform.position, FocusObject.transform.position) <= UnitAgent.stoppingDistance + FocusObject.transform.localScale.x + EntityStatisticsSO.ViewRadius)
             {
-                EntityAgent.ResetPath();
+                UnitAgent.ResetPath();
 
-                if (EntityAgent.velocity.sqrMagnitude == 0)
+                if (UnitAgent.velocity.sqrMagnitude == 0)
                 {
                     return true;
                 }
@@ -190,19 +164,19 @@ public class AIBehaviour : Entity, IDamageable
             }
             else
             {
-                if (EntityAgent.pathStatus == NavMeshPathStatus.PathComplete)
+                if (UnitAgent.pathStatus == NavMeshPathStatus.PathComplete)
                 {
-                    ChangeEntityState(Actions.Move);
-                    EntityAgent.SetDestination(FocusObject.transform.position);
+                    ChangeUnitState(Actions.Move);
+                    UnitAgent.SetDestination(FocusObject.transform.position);
                 }
             }
         }
         else if (FocusObject == null)
         {
 
-            if (EntityAgent.velocity.sqrMagnitude == 0 && !EntityAgent.pathPending && !EntityAgent.hasPath && m_CurrentEntityAction != Actions.Idle)
+            if (UnitAgent.velocity.sqrMagnitude == 0 && !UnitAgent.pathPending && !UnitAgent.hasPath && m_CurrentUnitAction != Actions.Idle)
             {
-                ChangeEntityState(Actions.Idle);
+                ChangeUnitState(Actions.Idle);
             }
             else
             {
@@ -215,7 +189,7 @@ public class AIBehaviour : Entity, IDamageable
 
     public virtual void StopAgent()
     {
-        m_entityAgent.velocity = Vector3.zero;
+        m_unitAgent.velocity = Vector3.zero;
     }
 
     #endregion
@@ -227,15 +201,15 @@ public class AIBehaviour : Entity, IDamageable
     {
         Damage = Mathf.Clamp(Damage, 0, EntityStatisticsSO.HealthMax + EntityStatisticsSO.Defence);
         Debug.Log(transform.name + "damaged");
-        if (m_entityCurrentHp <= Damage)
+        if (m_unitCurrentHp <= Damage)
         {
-            m_entityCurrentHp -= Damage;
+            m_unitCurrentHp -= Damage;
             Death();
             return true;
         }
         else
         {
-            m_entityCurrentHp -= Damage;
+            m_unitCurrentHp -= Damage;
             return false;
         }
     }

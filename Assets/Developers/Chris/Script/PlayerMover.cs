@@ -10,18 +10,18 @@ public enum Actions
     Move
 }
 
-public class EntityHandler : MonoBehaviour
+public class PlayerMover : MonoBehaviour
 {
-    public PlayerAIBehaviour m_currentPlayerEntity;
-    public PlayerAIBehaviour CurrentPlayerEntity
+    public UnitActions m_currentPlayerUnit;
+    public UnitActions CurrentPlayerUnit
     {
         get
         {
-            return m_currentPlayerEntity;
+            return m_currentPlayerUnit;
         }
         set
         {
-            m_currentPlayerEntity = value;
+            m_currentPlayerUnit = value;
         }
     }
 
@@ -31,10 +31,10 @@ public class EntityHandler : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            CurrentPlayerEntity = SelectPlayerEntity();
+            CurrentPlayerUnit = SelectPlayerEntity();
         }
 
-        if(CurrentPlayerEntity != null)
+        if(CurrentPlayerUnit != null)
         {
             if (Input.GetMouseButtonDown(1))
             {
@@ -43,7 +43,7 @@ public class EntityHandler : MonoBehaviour
         }
     }
 
-    private PlayerAIBehaviour SelectPlayerEntity()
+    private UnitActions SelectPlayerEntity()
     {
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -52,9 +52,9 @@ public class EntityHandler : MonoBehaviour
         {
             if(HitInfo.transform != null)
             {
-                PlayerAIBehaviour playerEntity = HitInfo.transform.GetComponent<PlayerAIBehaviour>();
+                UnitActions playerEntity = HitInfo.transform.GetComponent<UnitActions>();
 
-                if(playerEntity is PlayerAIBehaviour)
+                if(playerEntity != null && HitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Player"))
                 {
                     return playerEntity;
                 }
@@ -82,10 +82,9 @@ public class EntityHandler : MonoBehaviour
 
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
-            Entity FocussedEntity = HitInfo.transform.GetComponent<Entity>();
             IDamageable CanBeAttacked = HitInfo.transform.GetComponent<IDamageable>();
 
-            if (FocussedEntity is AIBehaviour && CanBeAttacked != null)
+            if (HitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Enemy") && CanBeAttacked != null)
             {
                 Debug.Log("Attack");
                 GiveToEachUnitTipeAFocusObject(Actions.Attack, HitInfo.transform.gameObject, HitInfo.transform.position);
@@ -104,10 +103,10 @@ public class EntityHandler : MonoBehaviour
         switch (ActionType)
         {
             case Actions.Attack:
-                if (CurrentPlayerEntity.EntityAgent != null)
+                if (CurrentPlayerUnit.UnitAgent != null)
                 {
-                    CurrentPlayerEntity.FocusObject = FocussedGameobject;
-                    CurrentPlayerEntity.ChangeEntityState(Actions.Attack);
+                    CurrentPlayerUnit.FocusObject = FocussedGameobject;
+                    CurrentPlayerUnit.ChangeUnitState(Actions.Attack);
                 }
                 break;
 
@@ -115,11 +114,11 @@ public class EntityHandler : MonoBehaviour
                 break;
 
             case Actions.Move:
-                if (CurrentPlayerEntity.EntityAgent != null)
+                if (CurrentPlayerUnit.UnitAgent != null)
                 {
-                    CurrentPlayerEntity.FocusObject = null;
-                    CurrentPlayerEntity.EntityAgent.SetDestination(ObjectPosition);
-                    CurrentPlayerEntity.ChangeEntityState(Actions.Move);
+                    CurrentPlayerUnit.FocusObject = null;
+                    CurrentPlayerUnit.UnitAgent.SetDestination(ObjectPosition);
+                    CurrentPlayerUnit.ChangeUnitState(Actions.Move);
                 }
                 break;
 
