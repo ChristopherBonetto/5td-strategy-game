@@ -11,6 +11,8 @@ public class CivilizationAction : MonoBehaviour
     [SerializeField] private CivilizationStatistics m_selectedCivilizationSO;
     public CivilizationStatistics CurrentCivilizationSO = null;
 
+    [SerializeField] private Transform m_civilizationSpawnPoint;
+    [SerializeField] private Transform m_civilizationCastleSpawnPoint;
 
     private void Awake()
     {
@@ -23,17 +25,34 @@ public class CivilizationAction : MonoBehaviour
     void Start()
     {
         CopyResourcesFromCivilization();
+
+        InstantiateEntityFromType(EntityType.Soldier, m_civilizationSpawnPoint);
+        InstantiateEntityFromType(EntityType.Castle, m_civilizationCastleSpawnPoint);
     }
     
-    private void Update()
+
+    public void InstantiateEntityFromType(EntityType inEntityType, Transform inPos)
     {
-        if (Input.GetKey(KeyCode.A))
+        if (CurrentCivilizationSO.EntitiesDictionary.ContainsKey(inEntityType))
         {
-            Debug.Log("First resources quantity" + CurrentCivilizationSO.ResourcesValuesDictionary[0].ResourceQuantity);
-            Debug.Log("First unit name" + CurrentCivilizationSO.UnitsDictionary[0].UnitName);
+            if(CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityPrefab != null && inPos != null)
+            {
+                InstantiateEntity(inEntityType, inPos);
+            }
         }
     }
 
+    public void InstantiateEntity(EntityType inEntityType, Transform inPos)
+    {
+        GameObject entity = Instantiate(CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityPrefab, inPos.position, Quaternion.identity);
+        entity.transform.name = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy.EntityName;
+        AIBehaviour entityAI = entity.GetComponent<AIBehaviour>();
+
+        if (entityAI != null && entityAI is AIBehaviour)
+        {
+            entityAI.EntityStatisticsSO = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy;
+        }
+    }
 
     #region Resources
 

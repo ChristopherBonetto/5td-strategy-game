@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Flags]
-public enum UnitQualities
+public enum EntityQualities
 {
     None = 0,
     Melee = 1 << 0,
@@ -12,8 +12,9 @@ public enum UnitQualities
     Cavalry = 1 << 3
 }
 
-public enum Units
+public enum EntityType
 {
+    Castle,
     Soldier,
     Lancer,
     ArcherMedium,
@@ -38,28 +39,26 @@ public struct QuantityOfResources
 
 
 [System.Serializable]
-public struct UnitInfo
+public struct EntityInfo
 {
-    public string UnitName;
+    [SerializeField] private EntityStatistics m_OriginalEntityStats;
+    public EntityStatistics OriginalEntityStats { get { return m_OriginalEntityStats; } }
 
-    [SerializeField] private UnitStatistics m_OriginalUnitStats;
-    public UnitStatistics OriginalUnitStats { get { return m_OriginalUnitStats; } }
-
-    private UnitStatistics m_UnitStatsCopy;
-    public UnitStatistics UnitStatsCopy
+    private EntityStatistics m_EntityStatsCopy;
+    public EntityStatistics EntityStatsCopy
     {
         get
         {
-            return m_UnitStatsCopy;
+            return m_EntityStatsCopy;
         }
         set
         {
-            m_UnitStatsCopy = value;
+            m_EntityStatsCopy = value;
         }
     }
 
-    public GameObject UnitPrefab;
-    public QuantityOfResources[] UnitUpgradeCost;
+    public GameObject EntityPrefab;
+    public QuantityOfResources[] EntityUpgradeCost;
 }
 
 
@@ -80,28 +79,28 @@ public class CivilizationStatistics : ScriptableObject
     public Dictionary<Materials, QuantityOfResources> ResourcesValuesDictionary { get; private set; }
 
     [Space, Header("Civilitazion's Units")]
-    [SerializeField] private UnitInfo[] m_CivilizationUnits;
-    public Dictionary<Units, UnitInfo> UnitsDictionary { get; private set; }
-
+    [SerializeField] private EntityInfo[] m_CivilizationEntities;
+    public Dictionary<EntityType, EntityInfo> EntitiesDictionary { get; private set; }
 
 
     private void Awake()
     {
-        UnitsDictionary = new Dictionary<Units, UnitInfo>();
+        EntitiesDictionary = new Dictionary<EntityType, EntityInfo>();
         ResourcesValuesDictionary = new Dictionary<Materials, QuantityOfResources>();
 
-        for (int i = 0; i < m_CivilizationUnits.Length; i++)
+        for (int i = 0; i < m_CivilizationEntities.Length; i++)
         {
-            if (!UnitsDictionary.ContainsKey(m_CivilizationUnits[i].OriginalUnitStats.UnitType))
+            if (!EntitiesDictionary.ContainsKey(m_CivilizationEntities[i].OriginalEntityStats.EntityType))
             {
-                m_CivilizationUnits[i].UnitStatsCopy = Instantiate(m_CivilizationUnits[i].OriginalUnitStats);
-                UnitsDictionary.Add(m_CivilizationUnits[i].UnitStatsCopy.UnitType, m_CivilizationUnits[i]);
+                m_CivilizationEntities[i].EntityStatsCopy = Instantiate(m_CivilizationEntities[i].OriginalEntityStats);
+                EntitiesDictionary.Add(m_CivilizationEntities[i].EntityStatsCopy.EntityType, m_CivilizationEntities[i]);
             }
             else
             {
-                Debug.Log(m_CivilizationUnits[i].OriginalUnitStats.UnitType + " can't be added because there is another key with same value");
+                Debug.Log(m_CivilizationEntities[i].OriginalEntityStats.EntityType + " can't be added because there is another key with same value");
             }
         }
+
 
         for (int i = 0; i < m_CivilizationQuantityResources.Length; i++)
         {
