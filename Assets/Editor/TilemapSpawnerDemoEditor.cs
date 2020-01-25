@@ -2,31 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using UnityEngine.Tilemaps;
 
-[CustomEditor(typeof(TilemapSpawnerDemo))]
-public class TilemapSpawnerDemoEditor : Editor
+public class TilemapSpawnerDemoEditor : EditorWindow
 {
-    TilemapSpawnerDemo m_target;
+    public TilemapSpawnerDemo m_grid;
+    public TileBase m_fillTile;
 
-
-    private void OnSceneGUI()
+    [MenuItem("GoodNorth/LevelEditor")]
+    public static void CreateWindow()
     {
-        m_target = (TilemapSpawnerDemo)target;
+        GetWindow<TilemapSpawnerDemoEditor>("LevelEditor");
+    }
+
+    private void OnEnable()
+    {
+        m_grid = new TilemapSpawnerDemo();
+    }
+
+    private void OnGUI()
+    {
+        m_grid.GridPrefab = EditorGUILayout.ObjectField(m_grid.GridPrefab, typeof(Grid), true) as Grid;
+        m_fillTile = EditorGUILayout.ObjectField(m_fillTile, typeof(TileBase), true) as TileBase;
 
         Handles.BeginGUI();
         {
             GUIStyle style = new GUIStyle("box");
 
-            GUILayout.BeginArea(new Rect(10, 10, 150, 50), style);
-            {
-                GUILayout.Space(10);
+            GUILayout.BeginVertical();
 
-                if (GUILayout.Button("Generate Map"))
+            if (GUILayout.Button("Generate Map"))
+            {
+                m_grid.TilemapPrefab = m_grid.GridPrefab.GetComponentsInChildren<Tilemap>();
+                m_grid.Fill(m_fillTile);
+                m_grid.GenerateLevel();
+            }
+            else if (GUILayout.Button("Push"))
+            {
+                if (m_grid.GridPrefab != null)
                 {
-                    m_target.GenerateLevel();
+                    m_grid.PushLevelAsPrefab();
                 }
             }
-            GUILayout.EndArea();
+            GUILayout.EndVertical();
         }
         Handles.EndGUI();
     }
