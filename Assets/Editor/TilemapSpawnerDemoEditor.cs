@@ -46,7 +46,7 @@ public class TilemapSpawnerDemoEditor : EditorWindow
 				if (m_grid.GridPrefab)
 				{
 					m_grid.TilemapPrefab = m_grid.GridPrefab.GetComponentsInChildren<Tilemap>();
-					m_grid.GenerateLevel();
+					m_grid.GenerateLevel(m_grid.ParentOfLevelGenerated);
 				}
 				else
 				{
@@ -57,7 +57,7 @@ public class TilemapSpawnerDemoEditor : EditorWindow
             {
                 if (m_grid.GridPrefab)
                 {
-                    m_grid.PushLevelAsPrefab();
+                    m_grid.PushLevelAsPrefab(m_grid.ParentOfLevelGenerated);
 				}
 				else
 				{
