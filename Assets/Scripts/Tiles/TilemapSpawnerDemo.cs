@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using UnityEngine.SceneManagement;
-using System.IO;
 
 public class TilemapSpawnerDemo
 {
@@ -47,14 +45,12 @@ public class TilemapSpawnerDemo
 
         // Get the greatest boundaries of tilemap.
         BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
-        Debug.Log(bounds);
 
-        foreach (var map in TilemapPrefab)
+        foreach (Tilemap map in TilemapPrefab)
         {
             // Search all tiles with that bounds.
             TileBase[] tiles = map.GetTilesBlock(bounds);
-
-
+			
             for (int columns = 0; columns < bounds.size.x; columns++)
             {
                 for (int rows = 0; rows < bounds.size.y; rows++)
@@ -70,7 +66,7 @@ public class TilemapSpawnerDemo
                         TileData tileData = new TileData();
                         tile.GetTileData(position, null, ref tileData);
 
-                        GameObject go = GameObject.Instantiate(tileData.gameObject, worldPos, Quaternion.identity, ParentOfLevelGenerated.transform);
+                        GameObject go = Object.Instantiate(tileData.gameObject, worldPos, Quaternion.identity, ParentOfLevelGenerated.transform);
                         m_prefabsSpawned.Add(go);
                     }
                 }
@@ -80,40 +76,42 @@ public class TilemapSpawnerDemo
 
     public void Fill(TileBase fillTile)
     {
-
+		BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
         // Get the greatest boundieris of tilemap.
-        BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
-        Debug.Log(bounds);
-
-        foreach (var map in TilemapPrefab)
+        foreach (Tilemap map in TilemapPrefab)
         {
-            // Search all tile with that bounds.
+            // Search all tiles within that box bounds.
             TileBase[] tiles = map.GetTilesBlock(bounds);
-
 
             for (int columns = 0; columns < bounds.size.x; columns++)
             {
                 int min = 1000;
                 int max = -1000;
+				// Find real min and max (shape bounds)
                 for (int rows = 0; rows < bounds.size.y; rows++)
                 {
-                    TileBase tile = tiles[columns + (rows * bounds.size.x)];
+					TileBase tile = tiles[columns + (rows * bounds.size.x)];
 
-                    if (tile)
+					if (tile)
                     {
-                        int tileY = rows + map.editorPreviewOrigin.y;
-                        if (tileY < min)
-                        {
-                            min = tileY;
-                        }
-                        if (tileY > max)
-                        {
-                            max = tileY;
-                        }
+                        min = (rows < min) ? rows : min;
+                        max = (rows > max) ? rows : max;
                     }
                 }
-                Debug.Log("Col " + columns + ": min " + min + " max " + max);
-            }
+				// Fill shape
+				if (max > min)
+				{
+					for (int rows = 0; rows < bounds.size.y; rows++)
+					{
+						if (rows >= min && rows <= max)
+						{
+							tiles[columns + (rows * bounds.size.x)] = fillTile;
+						}
+					} 
+				}
+			}
+
+			map.SetTilesBlock(bounds, tiles);
         }
     }
 
@@ -135,9 +133,9 @@ public class TilemapSpawnerDemo
 
     private void DestroyMapGenerated()
     {
-        foreach (var item in m_prefabsSpawned)
+        foreach (GameObject item in m_prefabsSpawned)
         {
-            GameObject.DestroyImmediate(item);
+            Object.DestroyImmediate(item);
         }
         m_prefabsSpawned.Clear();
     }
