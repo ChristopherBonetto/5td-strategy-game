@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAIBehaviour : AIBehaviour
+public class BuildingsActions : UnitActions
 {
     public override void Start()
     {

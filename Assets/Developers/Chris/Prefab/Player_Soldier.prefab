@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 748956349412681458}
   - component: {fileID: 748956349412681469}
   - component: {fileID: 748956349412681462}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player_Soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,6 +106,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30f85a8c47c07b140846ea3eaaf0cce9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_CurrentEntityAction: 0
+  m_CanAttack: 1
+  m_FocusObject: {fileID: 0}
 --- !u!195 &748956349412681462
 NavMeshAgent:
   m_ObjectHideFlags: 0

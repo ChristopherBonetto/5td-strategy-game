@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class CivilizationAction : MonoBehaviour
 {
-    public static CivilizationAction Instance;
-
     public QuantityOfResources[] m_CurrentCivilizationResources { get; private set; }
     
     [SerializeField] private CivilizationStatistics m_selectedCivilizationSO;
     public CivilizationStatistics CurrentCivilizationSO = null;
 
-    [SerializeField] private Transform m_civilizationSpawnPoint;
-    [SerializeField] private Transform m_civilizationCastleSpawnPoint;
+    public Transform[] CivilizationSpawnPoint;
 
     private void Awake()
     {
-        Instance = this;
-
         CurrentCivilizationSO = Instantiate(m_selectedCivilizationSO);
     }
 
@@ -25,9 +20,6 @@ public class CivilizationAction : MonoBehaviour
     void Start()
     {
         CopyResourcesFromCivilization();
-
-        InstantiateEntityFromType(EntityType.Soldier, m_civilizationSpawnPoint);
-        InstantiateEntityFromType(EntityType.Castle, m_civilizationCastleSpawnPoint);
     }
     
 
@@ -46,9 +38,9 @@ public class CivilizationAction : MonoBehaviour
     {
         GameObject entity = Instantiate(CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityPrefab, inPos.position, Quaternion.identity);
         entity.transform.name = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy.EntityName;
-        AIBehaviour entityAI = entity.GetComponent<AIBehaviour>();
+        UnitActions entityAI = entity.GetComponent<UnitActions>();
 
-        if (entityAI != null && entityAI is AIBehaviour)
+        if (entityAI != null && entityAI is UnitActions)
         {
             entityAI.EntityStatisticsSO = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy;
         }
