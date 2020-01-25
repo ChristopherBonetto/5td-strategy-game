@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88f2861592efe77458c834c117b000a9, type: 3}
-  m_Name: Vikings_Civilization
+  m_Name: Player_Civilization
   m_EditorClassIdentifier: 
   m_CivilizationName: Vikings
   m_CivilizationQuantityResources:
@@ -18,10 +18,13 @@ MonoBehaviour:
     ResourceQuantity: 10
   - ResourceType: 1
     ResourceQuantity: 20
-  m_CivilizationUnits:
-  - UnitName: Soldier_Viking
-    m_OriginalUnitStats: {fileID: 11400000, guid: 9494e18fca0217049acf6e4a5470301e,
+  m_CivilizationEntities:
+  - m_OriginalEntityStats: {fileID: 11400000, guid: 9494e18fca0217049acf6e4a5470301e,
       type: 2}
-    UnitPrefab: {fileID: 5836017895913729699, guid: f077769a5285bed438a3458a896de1a5,
+    EntityPrefab: {fileID: 748956349412681468, guid: eb7c48465a5da1d469c33dd23637e92d,
       type: 3}
-    UnitUpgradeCost: []
+    EntityUpgradeCost: []
+  m_civilizationCastle:
+    m_OriginalEntityStats: {fileID: 0}
+    EntityPrefab: {fileID: 0}
+    EntityUpgradeCost: []
