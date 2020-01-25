@@ -38,35 +38,43 @@ public class TilemapSpawnerDemo
     /// </summary>
     public void GenerateLevel(GameObject parent)
     {
+        // Null check.
         if (m_prefabsSpawned == null)
             m_prefabsSpawned = new List<GameObject>();
 
+        // destroy previous level generated.
         DestroyMapGenerated();
 
         // Get the greatest boundaries of tilemap.
         BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
 
+        // Cycle every tilemaps created.
         foreach (Tilemap map in TilemapPrefab)
         {
             // Search all tiles with that bounds.
             TileBase[] tiles = map.GetTilesBlock(bounds);
 			
+
             for (int columns = 0; columns < bounds.size.x; columns++)
             {
                 for (int rows = 0; rows < bounds.size.y; rows++)
                 {
+                    // Transfrom from list to "matrix" coordinate.
                     TileBase tile = tiles[columns + (rows * bounds.size.x)];
 
                     if (tile)
                     {
+                        // Store position based on tilemap coordinates.
+                        // Store world position.
                         Vector3Int position = new Vector3Int(columns + map.editorPreviewOrigin.x, rows + map.editorPreviewOrigin.y, 0);
                         Vector3 worldPos = GridPrefab.CellToWorld(position);
 
-                        // Store tile datas
+                        // Find tile data.
                         TileData tileData = new TileData();
                         tile.GetTileData(position, null, ref tileData);
 
-                        GameObject go = Object.Instantiate(tileData.gameObject, worldPos, Quaternion.identity, parent.transform);
+                        // Instantiate.
+                        GameObject go = Object.Instantiate(tileData.gameObject, new Vector3(worldPos.x, 0, worldPos.y), Quaternion.identity, parent.transform);
                         m_prefabsSpawned.Add(go);
                     }
                 }

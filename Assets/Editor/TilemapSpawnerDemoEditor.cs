@@ -20,8 +20,8 @@ public class TilemapSpawnerDemoEditor : EditorWindow
 
     private void OnGUI()
     {
-        m_grid.GridPrefab = EditorGUILayout.ObjectField(m_grid.GridPrefab, typeof(Grid), true) as Grid;
-        m_fillTile = EditorGUILayout.ObjectField(m_fillTile, typeof(TileBase), true) as TileBase;
+        m_grid.GridPrefab = EditorGUILayout.ObjectField("Grid", m_grid.GridPrefab, typeof(Grid), true) as Grid;
+        m_fillTile = EditorGUILayout.ObjectField("Default TileBase", m_fillTile, typeof(TileBase), true) as TileBase;
 
         Handles.BeginGUI();
         {
