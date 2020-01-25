@@ -1,14 +1,30 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.SceneManagement;
+using System.IO;
 
-public class TilemapSpawnerDemo : MonoBehaviour
+public class TilemapSpawnerDemo
 {
+    // Tilemap
     public Grid GridPrefab;
     public Tilemap[] TilemapPrefab;
 
-    [Header("parent Empty Object")]
-    public Transform ParentOfLevelgenerated;
+    // Level Generated
+    private GameObject m_ParentOfLevelgenerated;
+    public GameObject ParentOfLevelGenerated
+    {
+        get
+        {
+            if (m_ParentOfLevelgenerated == null)
+            {
+                m_ParentOfLevelgenerated = new GameObject("ParentOfLevelGenerated");
+            }
+            return m_ParentOfLevelgenerated;
+        }
+    }
 
     private List<GameObject> m_prefabsSpawned;
 
@@ -19,6 +35,9 @@ public class TilemapSpawnerDemo : MonoBehaviour
             TilemapPrefab = GridPrefab.GetComponentsInChildren<Tilemap>(true);
     }
 
+    /// <summary>
+    /// Generate level from Tilemap.
+    /// </summary>
     public void GenerateLevel()
     {
         if (m_prefabsSpawned == null)
@@ -26,13 +45,13 @@ public class TilemapSpawnerDemo : MonoBehaviour
 
         DestroyMapGenerated();
 
-        // Get boundieris of tilemap.
+        // Get the greatest boundaries of tilemap.
         BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
         Debug.Log(bounds);
 
         foreach (var map in TilemapPrefab)
         {
-            // Search all tile with that bounds.
+            // Search all tiles with that bounds.
             TileBase[] tiles = map.GetTilesBlock(bounds);
 
 
@@ -51,7 +70,7 @@ public class TilemapSpawnerDemo : MonoBehaviour
                         TileData tileData = new TileData();
                         tile.GetTileData(position, null, ref tileData);
 
-                        GameObject go = Instantiate(tileData.gameObject, worldPos, Quaternion.identity, ParentOfLevelgenerated);
+                        GameObject go = GameObject.Instantiate(tileData.gameObject, worldPos, Quaternion.identity, ParentOfLevelGenerated.transform);
                         m_prefabsSpawned.Add(go);
                     }
                 }
@@ -59,16 +78,75 @@ public class TilemapSpawnerDemo : MonoBehaviour
         }
     }
 
+    public void Fill(TileBase fillTile)
+    {
+
+        // Get the greatest boundieris of tilemap.
+        BoundsInt bounds = GetTheMaxBoundaries(TilemapPrefab).cellBounds;
+        Debug.Log(bounds);
+
+        foreach (var map in TilemapPrefab)
+        {
+            // Search all tile with that bounds.
+            TileBase[] tiles = map.GetTilesBlock(bounds);
+
+
+            for (int columns = 0; columns < bounds.size.x; columns++)
+            {
+                int min = 1000;
+                int max = -1000;
+                for (int rows = 0; rows < bounds.size.y; rows++)
+                {
+                    TileBase tile = tiles[columns + (rows * bounds.size.x)];
+
+                    if (tile)
+                    {
+                        int tileY = rows + map.editorPreviewOrigin.y;
+                        if (tileY < min)
+                        {
+                            min = tileY;
+                        }
+                        if (tileY > max)
+                        {
+                            max = tileY;
+                        }
+                    }
+                }
+                Debug.Log("Col " + columns + ": min " + min + " max " + max);
+            }
+        }
+    }
+
+    public void PushLevelAsPrefab()
+    {
+        if (ParentOfLevelGenerated.transform.childCount > 0)
+        {
+            // Set the path as within the Assets folder,
+            // and name it as the GameObject's name with the .Prefab format
+            string localPath = "Assets/Prefabs/LevelGenerated/" + "Level_00" + ".prefab";
+
+            // Make sure the file name is unique, in case an existing Prefab has the same name.
+            localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
+
+            // Create the new Prefab.
+            PrefabUtility.SaveAsPrefabAsset(ParentOfLevelGenerated, localPath);
+        }
+    }
+
     private void DestroyMapGenerated()
     {
         foreach (var item in m_prefabsSpawned)
         {
-            DestroyImmediate(item);
+            GameObject.DestroyImmediate(item);
         }
-
         m_prefabsSpawned.Clear();
     }
 
+    /// <summary>
+    /// Return the Tilemap with the greatest boudaries.
+    /// </summary>
+    /// <param name="maps"></param>
+    /// <returns></returns>
     private Tilemap GetTheMaxBoundaries(Tilemap[] maps)
     {
         Tilemap map = maps[0];
@@ -91,3 +169,4 @@ public class TilemapSpawnerDemo : MonoBehaviour
         return map;
     }
 }
+#endif
