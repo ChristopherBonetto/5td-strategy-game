@@ -73,9 +73,12 @@ public class TilemapSpawnerDemo
                         TileData tileData = new TileData();
                         tile.GetTileData(position, null, ref tileData);
 
-                        // Instantiate.
-                        GameObject go = Object.Instantiate(tileData.gameObject, new Vector3(worldPos.x, 0, worldPos.y), Quaternion.identity, parent.transform);
-                        m_prefabsSpawned.Add(go);
+						// Instantiate.
+						if (tileData.gameObject)
+						{
+							GameObject go = Object.Instantiate(tileData.gameObject, new Vector3(worldPos.x, 0, worldPos.y), Quaternion.identity, parent.transform);
+							m_prefabsSpawned.Add(go); 
+						}
                     }
                 }
             }

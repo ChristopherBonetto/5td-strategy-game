@@ -9,8 +9,8 @@ public class TileDataCustom : RuleTile
 
     public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
     {
-        tileData.sprite = Sprite;
-        tileData.flags = TileFlags.InstantiateGameObjectRuntimeOnly;
-        Flag = tileData.flags;
+		base.GetTileData(position, tilemap, ref tileData);
+		tileData.sprite = Sprite;
+		tileData.flags = Flag;
     }
 }
