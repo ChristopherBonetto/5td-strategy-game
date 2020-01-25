@@ -7,23 +7,70 @@ public class CivilizationAction : MonoBehaviour
     public QuantityOfResources[] m_CurrentCivilizationResources { get; private set; }
     
     [SerializeField] private CivilizationStatistics m_selectedCivilizationSO;
-    public CivilizationStatistics CurrentCivilizationSO = null;
+    public CivilizationStatistics CurrentCivilizationSO { get; private set; }
 
-    public Transform[] CivilizationSpawnPoint;
+    public Transform[] CivilizationUnitsSpawnPoint;
+    public Transform CivilizationCastleSpawnPoint;
 
-    private void Awake()
+    public CastleActions CivilizationCastle;
+
+    public List<UnitActions> CivilizationUnits = new List<UnitActions>();
+
+    public virtual void Awake()
     {
         CurrentCivilizationSO = Instantiate(m_selectedCivilizationSO);
     }
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
         CopyResourcesFromCivilization();
-    }
-    
 
-    public void InstantiateEntityFromType(EntityType inEntityType, Transform inPos)
+        TestStartingInstantiate();
+    }
+
+    #region Instantiate Castle and Soldiers
+
+    public virtual void TestStartingInstantiate()
+    {
+        InstantiateCastle();
+
+        InstantiateCivilizationTroups();
+    }
+
+    public virtual void InstantiateCastle()
+    {
+        if(CurrentCivilizationSO.CivilizationCastle.gameObject != null && CivilizationCastleSpawnPoint != null)
+        {
+            GameObject LevelCastle = Instantiate(CurrentCivilizationSO.CivilizationCastle, CivilizationCastleSpawnPoint.position, Quaternion.identity);
+            CastleActions tempRef = LevelCastle.GetComponent<CastleActions>();
+
+            if (tempRef != null)
+            {
+                CivilizationCastle = tempRef;
+                CivilizationCastle.RefreshHp(CurrentCivilizationSO.CastleHp);
+                GameManager.Instance.SetObjective(CivilizationCastle);
+            }
+        }
+        else
+        {
+
+        }
+    }
+
+    public virtual void InstantiateCivilizationTroups()
+    {
+        for (int i = 0; i < CivilizationUnitsSpawnPoint.Length; i++)
+        {
+            InstantiateEntityFromType(EntityType.Soldier, CivilizationUnitsSpawnPoint[i]);
+        }
+    }
+
+    #endregion
+
+    #region Instantiate Methods
+
+    public virtual void InstantiateEntityFromType(EntityType inEntityType, Transform inPos)
     {
         if (CurrentCivilizationSO.EntitiesDictionary.ContainsKey(inEntityType))
         {
@@ -34,17 +81,28 @@ public class CivilizationAction : MonoBehaviour
         }
     }
 
-    public void InstantiateEntity(EntityType inEntityType, Transform inPos)
+    public virtual void InstantiateEntity(EntityType inEntityType, Transform inPos)
     {
         GameObject entity = Instantiate(CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityPrefab, inPos.position, Quaternion.identity);
         entity.transform.name = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy.EntityName;
-        UnitActions entityAI = entity.GetComponent<UnitActions>();
+        UnitActions tempUnitRef = entity.GetComponent<UnitActions>();
 
-        if (entityAI != null && entityAI is UnitActions)
+        if (tempUnitRef != null)
         {
-            entityAI.EntityStatisticsSO = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy;
+            tempUnitRef.EntityStatisticsSO = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy;
+            AddUnitsToList(tempUnitRef);
         }
     }
+
+    public virtual void AddUnitsToList(UnitActions inUnit)
+    {
+        if (!CivilizationUnits.Contains(inUnit))
+        {
+            CivilizationUnits.Add(inUnit);
+        }
+    }
+
+    #endregion
 
     #region Resources
 

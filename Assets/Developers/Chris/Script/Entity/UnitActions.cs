@@ -200,7 +200,7 @@ public class UnitActions : Entity, IDamageable
     public virtual bool TakeDamage(int Damage)
     {
         Damage = Mathf.Clamp(Damage, 0, EntityStatisticsSO.HealthMax + EntityStatisticsSO.Defence);
-        Debug.Log(transform.name + "damaged");
+
         if (m_unitCurrentHp <= Damage)
         {
             m_unitCurrentHp -= Damage;
