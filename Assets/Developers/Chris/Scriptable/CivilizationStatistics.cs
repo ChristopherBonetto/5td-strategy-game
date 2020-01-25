@@ -14,7 +14,6 @@ public enum EntityQualities
 
 public enum EntityType
 {
-    Castle,
     Soldier,
     Lancer,
     ArcherMedium,
@@ -81,6 +80,24 @@ public class CivilizationStatistics : ScriptableObject
     [Space, Header("Civilitazion's Units")]
     [SerializeField] private EntityInfo[] m_CivilizationEntities;
     public Dictionary<EntityType, EntityInfo> EntitiesDictionary { get; private set; }
+
+    [Space, Header("Civilization Castle")]
+    [Space, Space, SerializeField] private GameObject m_civilizationCastle;
+    public GameObject CivilizationCastle
+    {
+        get
+        {
+            return m_civilizationCastle;
+        }
+    }
+    [SerializeField] private int m_CastleHp;
+    public int CastleHp
+    {
+        get
+        {
+            return m_CastleHp;
+        }
+    }
 
 
     private void Awake()

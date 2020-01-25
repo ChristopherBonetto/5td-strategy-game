@@ -239,16 +239,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 185171168}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98ba873712e489048ba8134a4a092940, type: 3}
+  m_Script: {fileID: 11500000, guid: b06da5dab71a12f4abec82b030086085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_selectedCivilizationSO: {fileID: 11400000, guid: 862d71b0716cc93499148425de0a6e19,
     type: 2}
-  CurrentCivilizationSO: {fileID: 0}
-  CivilizationSpawnPoint:
+  CivilizationUnitsSpawnPoint:
   - {fileID: 1817663805}
   - {fileID: 2142469155}
   - {fileID: 1395896986}
+  CivilizationCastleSpawnPoint: {fileID: 0}
+  CivilizationCastle: {fileID: 0}
+  CivilizationUnits: []
 --- !u!4 &185171170
 Transform:
   m_ObjectHideFlags: 0
@@ -650,11 +652,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_selectedCivilizationSO: {fileID: 11400000, guid: 8d6c3f08e9cd78040b91584b6d227235,
     type: 2}
-  CurrentCivilizationSO: {fileID: 0}
-  CivilizationSpawnPoint:
+  CivilizationUnitsSpawnPoint:
   - {fileID: 1248669571}
   - {fileID: 1313021597}
   - {fileID: 1316987603}
+  CivilizationCastleSpawnPoint: {fileID: 242843837}
+  CivilizationCastle: {fileID: 0}
+  CivilizationUnits: []
 --- !u!4 &1091988880
 Transform:
   m_ObjectHideFlags: 0
@@ -1466,8 +1470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c112e213609bac4082e2bd4b35e81cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCivilization: {fileID: 1091988878}
-  EnemyCivilization: {fileID: 185171169}
+  PlayerCastle: {fileID: 0}
 --- !u!4 &1958016944
 Transform:
   m_ObjectHideFlags: 0
