@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Custom/Tile", fileName = "New Tile")]
-public class TileDataCustom : TileBase
+public class TileDataCustom : RuleTile
 {
     public Sprite Sprite;
     public GameObject PrefabAssociated;
