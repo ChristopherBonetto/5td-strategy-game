@@ -4,18 +4,15 @@ using UnityEngine;
 
 public class CivilizationAction : MonoBehaviour
 {
-    public static CivilizationAction Instance;
-
     public QuantityOfResources[] m_CurrentCivilizationResources { get; private set; }
     
     [SerializeField] private CivilizationStatistics m_selectedCivilizationSO;
     public CivilizationStatistics CurrentCivilizationSO = null;
 
+    public Transform[] CivilizationSpawnPoint;
 
     private void Awake()
     {
-        Instance = this;
-
         CurrentCivilizationSO = Instantiate(m_selectedCivilizationSO);
     }
 
@@ -25,15 +22,29 @@ public class CivilizationAction : MonoBehaviour
         CopyResourcesFromCivilization();
     }
     
-    private void Update()
+
+    public void InstantiateEntityFromType(EntityType inEntityType, Transform inPos)
     {
-        if (Input.GetKey(KeyCode.A))
+        if (CurrentCivilizationSO.EntitiesDictionary.ContainsKey(inEntityType))
         {
-            Debug.Log("First resources quantity" + CurrentCivilizationSO.ResourcesValuesDictionary[0].ResourceQuantity);
-            Debug.Log("First unit name" + CurrentCivilizationSO.UnitsDictionary[0].UnitName);
+            if(CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityPrefab != null && inPos != null)
+            {
+                InstantiateEntity(inEntityType, inPos);
+            }
         }
     }
 
+    public void InstantiateEntity(EntityType inEntityType, Transform inPos)
+    {
+        GameObject entity = Instantiate(CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityPrefab, inPos.position, Quaternion.identity);
+        entity.transform.name = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy.EntityName;
+        UnitActions entityAI = entity.GetComponent<UnitActions>();
+
+        if (entityAI != null && entityAI is UnitActions)
+        {
+            entityAI.EntityStatisticsSO = CurrentCivilizationSO.EntitiesDictionary[inEntityType].EntityStatsCopy;
+        }
+    }
 
     #region Resources
 
