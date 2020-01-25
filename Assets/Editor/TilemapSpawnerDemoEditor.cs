@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 
@@ -31,19 +29,41 @@ public class TilemapSpawnerDemoEditor : EditorWindow
 
             GUILayout.BeginVertical();
 
-            if (GUILayout.Button("Generate Map"))
+			if (GUILayout.Button("Fill Shape"))
+			{
+				if (m_fillTile)
+				{
+					m_grid.TilemapPrefab = m_grid.GridPrefab.GetComponentsInChildren<Tilemap>();
+					m_grid.Fill(m_fillTile); 
+				}
+				else
+				{
+					ShowNotification(new GUIContent("No fill tile has been specified!"));
+				}
+			}
+			else if (GUILayout.Button("Generate Map"))
             {
-                m_grid.TilemapPrefab = m_grid.GridPrefab.GetComponentsInChildren<Tilemap>();
-                m_grid.Fill(m_fillTile);
-                m_grid.GenerateLevel();
+				if (m_grid.GridPrefab)
+				{
+					m_grid.TilemapPrefab = m_grid.GridPrefab.GetComponentsInChildren<Tilemap>();
+					m_grid.GenerateLevel();
+				}
+				else
+				{
+					ShowNotification(new GUIContent("No grid tilemap has been specified!"));
+				}
             }
             else if (GUILayout.Button("Push"))
             {
-                if (m_grid.GridPrefab != null)
+                if (m_grid.GridPrefab)
                 {
                     m_grid.PushLevelAsPrefab();
-                }
-            }
+				}
+				else
+				{
+					ShowNotification(new GUIContent("No grid tilemap has been specified!"));
+				}
+			}
             GUILayout.EndVertical();
         }
         Handles.EndGUI();
