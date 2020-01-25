@@ -18,6 +18,7 @@ public class TilemapSpawnerDemoEditor : EditorWindow
     private void OnEnable()
     {
         m_grid = new TilemapSpawnerDemo();
+        m_grid.GridPrefab = FindObjectOfType<Grid>();
     }
 
     private void OnGUI()
@@ -35,13 +36,13 @@ public class TilemapSpawnerDemoEditor : EditorWindow
             {
                 m_grid.TilemapPrefab = m_grid.GridPrefab.GetComponentsInChildren<Tilemap>();
                 m_grid.Fill(m_fillTile);
-                m_grid.GenerateLevel();
+                m_grid.GenerateLevel(m_grid.ParentOfLevelGenerated);
             }
             else if (GUILayout.Button("Push"))
             {
                 if (m_grid.GridPrefab != null)
                 {
-                    m_grid.PushLevelAsPrefab();
+                    m_grid.PushLevelAsPrefab(m_grid.ParentOfLevelGenerated);
                 }
             }
             GUILayout.EndVertical();

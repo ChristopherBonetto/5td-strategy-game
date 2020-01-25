@@ -38,7 +38,7 @@ public class TilemapSpawnerDemo
     /// <summary>
     /// Generate level from Tilemap.
     /// </summary>
-    public void GenerateLevel()
+    public void GenerateLevel(GameObject parent)
     {
         if (m_prefabsSpawned == null)
             m_prefabsSpawned = new List<GameObject>();
@@ -70,7 +70,7 @@ public class TilemapSpawnerDemo
                         TileData tileData = new TileData();
                         tile.GetTileData(position, null, ref tileData);
 
-                        GameObject go = GameObject.Instantiate(tileData.gameObject, worldPos, Quaternion.identity, ParentOfLevelGenerated.transform);
+                        GameObject go = GameObject.Instantiate(tileData.gameObject, worldPos, Quaternion.identity, parent.transform);
                         m_prefabsSpawned.Add(go);
                     }
                 }
@@ -117,19 +117,19 @@ public class TilemapSpawnerDemo
         }
     }
 
-    public void PushLevelAsPrefab()
+    public void PushLevelAsPrefab(GameObject level)
     {
         if (ParentOfLevelGenerated.transform.childCount > 0)
         {
             // Set the path as within the Assets folder,
             // and name it as the GameObject's name with the .Prefab format
-            string localPath = "Assets/Prefabs/LevelGenerated/" + "Level_00" + ".prefab";
+            string localPath = "Assets/Prefabs/LevelCreated/" + "Level_00" + ".prefab";
 
             // Make sure the file name is unique, in case an existing Prefab has the same name.
             localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
 
             // Create the new Prefab.
-            PrefabUtility.SaveAsPrefabAsset(ParentOfLevelGenerated, localPath);
+            PrefabUtility.SaveAsPrefabAsset(level, localPath);
         }
     }
 
