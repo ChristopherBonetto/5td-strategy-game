@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-public class UIManager : Singleton<UIManager>
+public class HFUIManager : Singleton<HFUIManager>
 {
     /// <summary>
     /// Controls Collection.
     /// Every key must provides only one value.
     /// </summary>
-    public Dictionary<UIControlID, UIControl> controls = new Dictionary<UIControlID, UIControl>();
+    public Dictionary<UIControlID, HFUIControl> controls = new Dictionary<UIControlID, HFUIControl>();
 
 
     #region Methods
@@ -14,7 +14,7 @@ public class UIManager : Singleton<UIManager>
     /// Add new UIControl
     /// <see cref="UIControl"/>
     /// </summary>
-    public void AddControl(UIControl uiControl)
+    public void AddControl(HFUIControl uiControl)
     {
         if (uiControl != null && !controls.ContainsKey(uiControl.Name))
             controls.Add(uiControl.Name, uiControl);
@@ -24,7 +24,7 @@ public class UIManager : Singleton<UIManager>
     /// Remove an existing UIControl
     /// <see cref="UIControl"/>
     /// </summary>
-    public void RemoveControl(UIControl uiControl)
+    public void RemoveControl(HFUIControl uiControl)
     {
         if (uiControl != null && controls.ContainsKey(uiControl.Name))
             controls.Remove(uiControl.Name);
@@ -36,7 +36,7 @@ public class UIManager : Singleton<UIManager>
     /// </summary>
     public void Show(UIControlID id)
     {
-        if (controls.TryGetValue(id, out UIControl control))
+        if (controls.TryGetValue(id, out HFUIControl control))
         {
             control.OnShow();
         }
@@ -48,7 +48,7 @@ public class UIManager : Singleton<UIManager>
     /// </summary>
     public void Hide(UIControlID id)
     {
-        if (controls.TryGetValue(id, out UIControl control))
+        if (controls.TryGetValue(id, out HFUIControl control))
             control.OnHide();
     }
 
@@ -58,13 +58,13 @@ public class UIManager : Singleton<UIManager>
     /// <see cref="UIControlID"/>
     /// <seealso cref="UIControl"/>
     /// </summary>
-    public void ShowAndHide(UIControlID id, UIControl controlToHide)
+    public void ShowAndHide(UIControlID id, HFUIControl controlToHide)
     {
         // If they are the same control... return
         if (id == controlToHide.Name) return;
 
 
-        if (controls.TryGetValue(id, out UIControl control))
+        if (controls.TryGetValue(id, out HFUIControl control))
         {
             // Show the control searched by name.
             if (!control.gameObject.activeSelf)

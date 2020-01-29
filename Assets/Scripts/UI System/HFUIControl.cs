@@ -3,7 +3,7 @@
 /// <summary>
 /// Abstract structure for all UI panels.
 /// </summary>
-public abstract class UIControl : MonoBehaviour
+public abstract class HFUIControl : MonoBehaviour
 {
     /// <summary>
     /// Name.
@@ -14,14 +14,14 @@ public abstract class UIControl : MonoBehaviour
 
     protected virtual void Start()
     {
-        UIManager.Instance.AddControl(this);
+        HFUIManager.Instance.AddControl(this);
 
         this.gameObject.SetActive(false);
     }
 
     protected virtual void OnDestroy()
     {
-        UIManager.Instance.RemoveControl(this);
+        HFUIManager.Instance.RemoveControl(this);
     }
 
 
