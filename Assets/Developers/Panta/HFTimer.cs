@@ -5,7 +5,7 @@ using System;
 
 public class HFTimer
 {
-    public float MaxTime;  // It's supposed that this value doesn't change later.
+    public float MaxTime;
     public float CurrentTime;
 
 

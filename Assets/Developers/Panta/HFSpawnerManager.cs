@@ -1,118 +1,175 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
+/// <summary>
+/// Choose "When" spawn something.
+/// </summary>
 public enum SpawnType
 {
     PRE_DELAY = 0,
     POST_DELAY = 1,
+
+    MAX_SPAWN_TYPE,
 }
 
-public class HFSpawnerManager : MonoBehaviour // Singleton<HFSpawnerManager>
+/// <summary>
+/// Allow us to split variable based no faction.
+/// </summary>
+public enum Faction
 {
-    [Header("Area included")] [Tooltip("Objects will be never spawnned in a lower radius")]
-    public float Radius;
+    ENEMY = 0,
+    ALLY = 1,
+    NEUTRAL = 2,
 
-    [Header("Spawn wave timer management")]
-    public SpawnType CurrentSpawnType;  // This value will be checked from the sender of the event.
+    MAX_FACTION,
+}
 
-    [SerializeField] 
-    private float m_MaxTime;
-    public float MaxTime
-    {
-        get { return m_MaxTime; }
-        set
-        {
-            m_MaxTime = value;
-            Timer.MaxTime = m_MaxTime;
-        }
-    }
-
-    private HFTimer m_Timer;
-    public HFTimer Timer
-    {
-        get
-        {
-            if (m_Timer == null)
-                m_Timer = new HFTimer(MaxTime);
-            return m_Timer;
-        }
-    }
-
-    public readonly float MinAngle = -1;
-    public readonly float MaxAngle = 1;
-    public float Angle { get { return UnityEngine.Random.Range(MinAngle, MaxAngle) * 360; } }
-
+public class HFSpawnerManager : Singleton<HFSpawnerManager>
+{
+    [Header("Inspector Assign")]
+    public List<HFSpawner> Points;  // @TEMP
 
     /// <summary>
-    /// Set position and rotation of the entity.
-    /// In order to prevent errors, Instantiate or Pool 
-    /// must be declared in "entity" slot or before.
+    /// Store all enemy and ally spawn positions.
     /// </summary>
-    /// <param name="entity"></param>
-    /// <param name="origin"></param>
-    public void SpawnEntityInRandomPosition(GameObject entity, Vector3 origin)
+    public Dictionary<Faction, List<HFSpawner>> Spawners;
+    /// <summary>
+    /// Store the generated waves in a queue.
+    /// </summary>
+    public Dictionary<Faction, Queue<HFWave>> Waves;    // I assume that each wave must be wait the previous one to spawn.
+    /// <summary>
+    /// Take reference to the current wave.
+    /// </summary>
+    public Dictionary<Faction, HFWave> CurrentWave;
+
+
+    #region METHODS
+
+    private void Start()
     {
-        // Null check.
-        if (entity == null)
+        InitSpawnerDictionary();
+        InitWavesDictionary();
+
+        // @TEMP
+        AddSpawner(Faction.ENEMY, Points); 
+        AddWave(Faction.ENEMY, new HFWave(2, SpawnType.POST_DELAY, Points[0].gameObject));
+    }
+
+    private void Update()
+    {
+        // @TEMP
+        if (Input.GetKeyDown(KeyCode.Space))
+            CallNextWave(Faction.ENEMY);
+    }
+
+    #region SPAWNER MANAGEMENT
+    private void InitSpawnerDictionary()
+    {
+        // Create an instance of dictionary
+        Spawners = new Dictionary<Faction, List<HFSpawner>>();
+
+        for (int i = 0; i < (int)Faction.MAX_FACTION; i++)
         {
-            Debug.LogWarning("entity param can't be null");
-            return;
+            // Create a new list instance for every key.
+            Spawners[(Faction)i] = new List<HFSpawner>();
+            Debug.Log((Faction)i);
         }
-
-        // Set position
-        entity.transform.position = RandomCircleSpawn(origin, Radius);
-
-        // Set rotation
-        entity.transform.rotation = Quaternion.LookRotation(origin - entity.transform.position, Vector3.up);
     }
 
-    public Vector3 RandomCircleSpawn(Vector3 center, float radius)
+    public void AddSpawner(Faction faction, List<HFSpawner> spawner) // change the list parameter with a single value.
     {
-        Vector3 position;
-
-        // Fixed radius offset
-        float fixedRadius = radius + (radius / 2);
-
-        // Find area, basic concept
-        position.x = center.x + fixedRadius * Mathf.Sin(Angle * Mathf.Deg2Rad);
-        position.y = center.y;
-        position.z = center.z + fixedRadius * Mathf.Cos(Angle * Mathf.Deg2Rad);
-
-        Debug.Log($"X : {position.x}, Z : {position.z}");
-
-        // Add some semi-randomness
-        position.x *= Mathf.Sign(Angle);
-        position.z *= Mathf.Sign(Angle);
-
-        return position;
+        for (int i = 0; i < spawner.Count; i++) // delete this row of code later...
+            Spawners[faction].Add(spawner[i]);
     }
 
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
+    public void RemoveSpawner(Faction faction, HFSpawner spawner)
     {
-        UnityEditor.Handles.DrawWireArc(transform.position, Vector3.up, Vector3.forward, 360, Radius);
+        Spawners[faction].Remove(spawner);
     }
-#endif
 
-
-    // Those methods are tempporary.
-    // I think they will be a concrete methods where generics
-    // are existing type. 
-
-    public void CallNextWave(Action callback)
+    public void ClearDictionary()
     {
-        StartCoroutine(Timer.DecreaseTime(callback));
+        for (int i = 0; i < (int)Faction.MAX_FACTION; i++)
+        {
+            // Clear the list for every key.
+            Spawners[(Faction)i].Clear();
+        }
+    }
+    #endregion
+
+    #region WAVES MANAGEMENT
+    private void InitWavesDictionary()
+    {
+        // Create an instance of dictionaries
+        CurrentWave = new Dictionary<Faction, HFWave>();
+        Waves = new Dictionary<Faction, Queue<HFWave>>();
+
+        for (int i = 0; i < (int)Faction.MAX_FACTION; i++)
+        {
+            // Create a new list instance for every key.
+            Waves[(Faction)i] = new Queue<HFWave>();
+        }
     }
 
-    public void CallNextWave<T>(Action<T> callback, T arg1) 
+    public void AddWave(Faction faction, HFWave wave)
     {
-        StartCoroutine(Timer.DecreaseTime<T>(callback, arg1));
+        Waves[faction].Enqueue(wave);
     }
 
-    public void CallNextWave<T, U>(Action<T, U> callback, T arg1, U arg2)
+    public void CallNextWave(Faction faction)
     {
-        StartCoroutine(Timer.DecreaseTime<T, U>(callback, arg1, arg2));
+        CurrentWave[faction] = Waves[faction].Dequeue();
+
+        // Init new timer.
+        HFTimer timer = new HFTimer(CurrentWave[faction].CallTime);
+        // when timer go to 0, invoke the method => Spawn New Wave.
+        StartCoroutine(timer.DecreaseTime<Faction>(SpawnNextWave, faction));
     }
+
+    public void SpawnNextWave(Faction faction)
+    {
+        if (CurrentWave[faction] != null)
+        {
+            // Get random spawn position.
+            HFSpawner spawnPoint;
+            int randomValue = Random.Range(0, Spawners[faction].Count);
+
+            // Check variables.
+            List<HFSpawner> checkedSpawner = new List<HFSpawner>();
+
+            // if the this picked spawner is free...
+            if (!Spawners[faction][randomValue].IsAlreadyEmployed)
+            {
+                // Assign the troop to the spawner.
+
+                Debug.Log(randomValue);
+                return;
+            }
+
+            // if this picked spawn is already employed...
+            else if (Spawners[faction][randomValue].IsAlreadyEmployed)
+            {
+                // if it's not already checked before...
+                if (!checkedSpawner.Contains(Spawners[faction][randomValue]))
+                {
+                    // Add this spawn to the check list
+                    checkedSpawner.Add(Spawners[faction][randomValue]);
+                    // if all spawn available are checked and no one is free
+                    // then return.
+                    if (checkedSpawner.Count == Spawners[faction].Count)
+                    {
+                        Debug.LogWarning("There aren't any available spawners");
+                        return;
+                    }
+                }
+
+                // search recursively.
+                SpawnNextWave(faction);
+            }
+        }
+    }
+    #endregion
+
+    #endregion
 }
