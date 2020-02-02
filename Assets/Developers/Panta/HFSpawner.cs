@@ -41,6 +41,20 @@ public class HFSpawner : MonoBehaviour
             m_Troop = value;
 
             // Instantiate troop, set position, set rotation.
+
+            // get position of the map to calculate the rotation.
+            // I suppose the map is positioned in (0,0,0) coordinates.
+            if (m_Troop != null)
+                Instantiate(m_Troop, transform.position, Quaternion.LookRotation(Vector3.zero - transform.position, Vector3.up));
         }
+    }
+
+    /// <summary>
+    /// Reset the spawner's values.
+    /// </summary>
+    public void ResetSpawner()
+    {
+        IsAlreadyEmployed = false;
+        Troop = null;
     }
 }
