@@ -3,15 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EventManager
+public class HFEventManager
 {
     public delegate void Callback();
     public delegate void Callback<T>(T arg);
     public delegate void Callback<T, K>(T arg1, K arg2);
 
-    private static Dictionary<EventID, Delegate> m_Events = new Dictionary<EventID, Delegate>();
+    private static Dictionary<HFEventID, Delegate> m_Events = new Dictionary<HFEventID, Delegate>();
 
-    public static void SubscribeTo(EventID inEvent, Callback inHandler)
+    public static void SubscribeTo(HFEventID inEvent, Callback inHandler)
     {
         if (!m_Events.ContainsKey(inEvent)) m_Events.Add(inEvent, null);
 
@@ -29,7 +29,7 @@ public class EventManager
         m_Events[inEvent] = (Callback)m_Events[inEvent] + inHandler;
     }
 
-    public static void SubscribeTo<T>(EventID inEvent, Callback<T> inHandler)
+    public static void SubscribeTo<T>(HFEventID inEvent, Callback<T> inHandler)
     {
         if (!m_Events.ContainsKey(inEvent)) m_Events.Add(inEvent, null);
 
@@ -47,7 +47,7 @@ public class EventManager
         m_Events[inEvent] = (Callback<T>)m_Events[inEvent] + inHandler;
     }
 
-    public static void SubscribeTo<T,K>(EventID inEvent, Callback<T,K> inHandler)
+    public static void SubscribeTo<T,K>(HFEventID inEvent, Callback<T,K> inHandler)
     {
         if (!m_Events.ContainsKey(inEvent)) m_Events.Add(inEvent, null);
 
@@ -66,7 +66,7 @@ public class EventManager
     }
 
 
-    public static void UnsubscribeFrom(EventID inEvent, Callback inHandler)
+    public static void UnsubscribeFrom(HFEventID inEvent, Callback inHandler)
     {
         if (m_Events.ContainsKey(inEvent))
         {
@@ -76,7 +76,7 @@ public class EventManager
         }
     }
 
-    public static void UnsubscribeFrom<T>(EventID inEvent, Callback<T> inHandler)
+    public static void UnsubscribeFrom<T>(HFEventID inEvent, Callback<T> inHandler)
     {
         if (m_Events.ContainsKey(inEvent))
         {
@@ -86,7 +86,7 @@ public class EventManager
         }
     }
 
-    public static void UnsubscribeFrom<T,K>(EventID inEvent, Callback<T,K> inHandler)
+    public static void UnsubscribeFrom<T,K>(HFEventID inEvent, Callback<T,K> inHandler)
     {
         if (m_Events.ContainsKey(inEvent))
         {
@@ -97,22 +97,22 @@ public class EventManager
     }
 
 
-    public static void TriggerEvent(EventID inEvent)
+    public static void TriggerEvent(HFEventID inEvent)
     {
         if (m_Events.ContainsKey(inEvent)) (m_Events[inEvent] as Callback)?.Invoke();
     }
 
-    public static void TriggerEvent<T>(EventID inEvent, T arg)
+    public static void TriggerEvent<T>(HFEventID inEvent, T arg)
     {
         if (m_Events.ContainsKey(inEvent)) (m_Events[inEvent] as Callback<T>)?.Invoke(arg);
     }
 
-    public static void TriggerEvent<T,K>(EventID inEvent, T arg1, K arg2)
+    public static void TriggerEvent<T,K>(HFEventID inEvent, T arg1, K arg2)
     {
         if (m_Events.ContainsKey(inEvent)) (m_Events[inEvent] as Callback<T,K>)?.Invoke(arg1, arg2);
     }
 
-    public static bool Exists(EventID inEvent)
+    public static bool Exists(HFEventID inEvent)
     {
         return m_Events.ContainsKey(inEvent);
     }

@@ -11,7 +11,7 @@ public enum MouseIndex
     Center = 2
 }
 
-public class TInputManager : MonoBehaviour
+public class HFInputManager : MonoBehaviour
 {
     //Custom key to open or close intenvory
     [SerializeField] private KeyCode m_keyToOpenSettings;
@@ -20,6 +20,8 @@ public class TInputManager : MonoBehaviour
     private void Update()
     {
         CheckMouseInput();
+
+        
     }
 
 

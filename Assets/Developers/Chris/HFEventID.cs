@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EventID
+public enum HFEventID
 {
     OnGameStart,
     OnLevelSelection,
