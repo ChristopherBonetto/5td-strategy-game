@@ -49,7 +49,7 @@ public class HFWaveControl : MonoBehaviour
 		HFWaveManager.Instance.AddWave(this);
 	}
 
-	private void OnDestroy()
+	private void OnDisable()
 	{
 		HFWaveManager.Instance.RemoveWave(this);
 	}

@@ -20,7 +20,8 @@ public class HFWaveManager : Singleton<HFWaveManager>
 	{
 		get 
 		{
-			m_WaveControls = m_WaveControls ?? new Dictionary<int, HFWaveControl>();
+			if (m_WaveControls == null)
+				m_WaveControls = new Dictionary<int, HFWaveControl>();
 			return m_WaveControls; 
 		}
 		set { m_WaveControls = value; }
@@ -45,16 +46,15 @@ public class HFWaveManager : Singleton<HFWaveManager>
 		}
 	}
 
-
-	private void Start()
+	private void Update()
 	{
-		ResetValues();
-		SpawnNextMinorWave();
+		if (Input.GetKeyDown(KeyCode.A))
+			SpawnNextMinorWave();
 	}
 
 	public void SpawnNextMinorWave()
 	{
-		if (WaveControls[TotalWavesCleared] != null)
+		if (WaveControls != null)
 		{
 			HFWaveControl control = GetCurrentWaveControl();
 
@@ -69,13 +69,16 @@ public class HFWaveManager : Singleton<HFWaveManager>
 
 				// If the spawn is set to "pre"
 				// wait the call time and spawn next minor wave if exist.
-				HFMinorWave nextMinorWave = control.MinorWaves[control.TotalMinorWaveCleared + 1];
-
-				if (nextMinorWave != null && nextMinorWave.SpawnType == SpawnType.Pre)
+				if (control.MinorWaves.Count > control.TotalMinorWaveCleared + 1)
 				{
-					// Start the timer.
-					HFTimer timer = new HFTimer(nextMinorWave.CallTime);
-					StartCoroutine(timer.DecreaseTime(SpawnNextMinorWave));
+					HFMinorWave nextMinorWave = control.MinorWaves[control.TotalMinorWaveCleared + 1];
+
+					if (nextMinorWave != null && nextMinorWave.SpawnType == SpawnType.Pre)
+					{
+						// Start the timer.
+						HFTimer timer = new HFTimer(nextMinorWave.CallTime);
+						StartCoroutine(timer.DecreaseTime(SpawnNextMinorWave));
+					}
 				}
 			}
 		}
@@ -88,7 +91,7 @@ public class HFWaveManager : Singleton<HFWaveManager>
 	/// <param name="control"></param>
 	public void AddWave(HFWaveControl control)
 	{
-		if (!WaveControls.ContainsValue(control))
+		if (!WaveControls.ContainsKey(control.WaveIndex))
 			WaveControls.Add(control.WaveIndex, control);
 	}
 
@@ -98,7 +101,7 @@ public class HFWaveManager : Singleton<HFWaveManager>
 	/// <param name="control"></param>
 	public void RemoveWave(HFWaveControl control)
 	{
-		if (WaveControls.ContainsValue(control))
+		if (WaveControls.ContainsKey(control.WaveIndex))
 			WaveControls.Remove(control.WaveIndex);
 	}
 
@@ -125,5 +128,5 @@ public class HFWaveManager : Singleton<HFWaveManager>
 		CleartWaveCollection();
 	}
 
-	#endregion
+	#endregion 
 }
