@@ -4,11 +4,5 @@ using UnityEngine;
 
 public enum HFEventID
 {
-    OnGameStart,
-    OnLevelSelection,
-    OnInitializeLevel,
-    OnPlayLevel,
-    OnSettings,
-    OnEndLevel,
-    OnPause
+    OnGameStateChanged
 }

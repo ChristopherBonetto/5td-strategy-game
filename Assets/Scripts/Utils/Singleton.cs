@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 /// <summary>
 /// Generic abstract singleton implementation
@@ -57,6 +58,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 return _instance;
             }
         }
+        set
+        {
+            Instance = value;
+        }
     }
 
     private static bool applicationIsQuitting = false;
@@ -71,5 +76,10 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     public virtual void OnDestroy()
     {
         applicationIsQuitting = true;
+    }
+
+    internal void AwakeSingleton()
+    {
+        throw new NotImplementedException();
     }
 }

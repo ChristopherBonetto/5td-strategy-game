@@ -20,8 +20,6 @@ public class HFInputManager : MonoBehaviour
     private void Update()
     {
         CheckMouseInput();
-
-        
     }
 
 

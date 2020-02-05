@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameStates
 {
@@ -15,7 +16,7 @@ public enum GameStates
 
 public class HFGameManager : Singleton<HFGameManager>
 {
-    private GameStates m_currentGameState = GameStates.LoadStartingInfo;
+    public GameStates m_currentGameState = GameStates.LoadStartingInfo;
     public GameStates CurrentGameState
     {
         get
@@ -28,6 +29,7 @@ public class HFGameManager : Singleton<HFGameManager>
             {
                 ActionBeforeChangeGMState(value);
                 m_currentGameState = value;
+                ActionAfterChangeGMState(value);
             }
         }
     }
@@ -37,7 +39,7 @@ public class HFGameManager : Singleton<HFGameManager>
     public GameStates NextGameState;
 
 
-
+    
     private void Start()
     {
         CurrentGameState = GameStates.LoadStartingInfo;
@@ -89,6 +91,11 @@ public class HFGameManager : Singleton<HFGameManager>
             default:
                 break;
         }
+    }
+
+    public void ActionAfterChangeGMState(GameStates newState)
+    {
+        HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, newState);
     }
 
 
