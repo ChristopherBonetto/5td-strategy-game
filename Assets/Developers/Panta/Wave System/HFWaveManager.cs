@@ -26,17 +26,11 @@ public class HFWaveManager : Singleton<HFWaveManager>
 		set { m_WaveControls = value; }
 	}
 
-	private int m_CurrentWaveIndex;
-	/// <summary>
-	/// Current index of the running wave.
-	/// </summary>
-	public int CurrentWaveIndex
-	{
-		get { return m_CurrentWaveIndex; }
-		set { m_CurrentWaveIndex = value; }
-	}
-
 	private int m_TotalWavesCleared;
+	/// <summary>
+	/// The total waves cleared.
+	/// It can be readed also like TotalWavesCleared = CurrentWaveIndex.
+	/// </summary>
 	public int TotalWavesCleared
 	{
 		get { return m_TotalWavesCleared; }
@@ -60,7 +54,7 @@ public class HFWaveManager : Singleton<HFWaveManager>
 
 	public void SpawnNextMinorWave()
 	{
-		if (WaveControls[CurrentWaveIndex] != null)
+		if (WaveControls[TotalWavesCleared] != null)
 		{
 			HFWaveControl control = GetCurrentWaveControl();
 
@@ -121,13 +115,12 @@ public class HFWaveManager : Singleton<HFWaveManager>
 
 	public HFWaveControl GetCurrentWaveControl()
 	{
-		return WaveControls[CurrentWaveIndex];
+		return WaveControls[TotalWavesCleared];
 	}
 
 	public void ResetValues()
 	{
 		TotalWavesCleared = 0;
-		CurrentWaveIndex = 0;
 
 		CleartWaveCollection();
 	}
