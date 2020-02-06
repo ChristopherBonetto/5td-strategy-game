@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HFUnitType
+{
+	PlaceHolder = 0,
+	Unit = 1,
+	Turret = 2,
+	Castle = 3
+}
+
 public enum HFStatistics
 {
 	Dummy = 0,
@@ -13,13 +21,14 @@ public enum HFStatistics
 	BuildingDamage = 6,
 	CarryCapacity = 7,
 	Weight = 8,
+	RewardValue = 9,
 
 
 	Name = 20,
 	Description = 21
 }
 
-public enum RewardCondition
+public enum HFRewardCondition
 {
 	NoReward = 0,
 	Kill = 1,
@@ -56,10 +65,10 @@ public class HFBaseStats : ScriptableObject
 	public Sprite Icon = null;
 
 	[SerializeField]
-	public RewardCondition ConditionalReward = RewardCondition.NoReward;
+	public HFUnitType UnitType = HFUnitType.PlaceHolder;
 
 	[SerializeField]
-	public float RewardValue = 0f;
+	public HFRewardCondition RewardCondition = HFRewardCondition.NoReward;
 
 	void OnValidate()
 	{

@@ -8,8 +8,7 @@ public class HFEditorHelper : Editor
 	public static void ShowList(SerializedProperty list, bool includeChildren)
 	{
 		EditorGUILayout.Space();
-		//EditorGUILayout.PropertyField(list);
-		EditorGUILayout.LabelField(list.displayName);
+		EditorGUILayout.LabelField(list.displayName); //EditorGUILayout.PropertyField(list);
 		list.isExpanded = true;
 		EditorGUI.indentLevel += 1;
 		if (list.isExpanded && includeChildren)
@@ -51,18 +50,14 @@ public class HFBaseStatsEditor : Editor
 		serializedObject.Update();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("Icon"));
 		EditorGUILayout.Space();
-		EditorGUILayout.PropertyField(serializedObject.FindProperty("ConditionalReward"));
-		EditorGUILayout.PropertyField(serializedObject.FindProperty("RewardValue"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("UnitType"));
+		EditorGUILayout.Space();
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("RewardCondition"));
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_floatStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_intStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_stringStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_boolStats"), true);
 		serializedObject.ApplyModifiedProperties();
-
-// 		if (GUILayout.Button("Update Dictionaries"))
-// 		{
-// 			((HFBaseStats)target).UpdateAll();
-// 		}
 	}
 }
 
