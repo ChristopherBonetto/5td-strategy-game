@@ -14,7 +14,7 @@ public enum GameStates
     Pause
 }
 
-public class HFGameManager : Singleton<HFGameManager>
+public class HFGameManager : MonoBehaviour
 {
     public GameStates m_currentGameState = GameStates.LoadStartingInfo;
     public GameStates CurrentGameState
@@ -27,7 +27,7 @@ public class HFGameManager : Singleton<HFGameManager>
         {
             if (CheckNextState(value))
             {
-                ActionBeforeChangeGMState(value);
+                //ActionBeforeChangeGMState(m_currentGameState, value);
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
             }
@@ -38,64 +38,85 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public GameStates NextGameState;
 
-
     
+
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
     private void Start()
     {
         CurrentGameState = GameStates.LoadStartingInfo;
+
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CurrentGameState = NextGameState;
-        }
-    }
+    
 
-    public void ActionBeforeChangeGMState(GameStates newState)
+    public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
     {
-        switch (newState)
+        switch (preState)
         {
             case GameStates.LoadStartingInfo:
-                Debug.Log("Load info");
                 LoadPlayerProfile();
                 break;
 
             case GameStates.StartGame:
-                Debug.Log("THE GAME STARTED");
                 StartGameScene();
                 break;
 
             case GameStates.LevelSelection:
-                Debug.Log("ON LEVEL SELECTION SCENE");
                 break;
 
             case GameStates.InitializeLevel:
-                Debug.Log("INITIALIZE LEVEL WITH INFO");
                 break;
 
             case GameStates.PlayingLevel:
-                Debug.Log("LEVEL IS RUNNING");
                 break;
 
-
             case GameStates.EndLevel:
-                Debug.Log("LEVEL FINISHED");
                 break;
 
             case GameStates.Pause:
-                Debug.Log("PAUSE");
                 break;
 
             default:
                 break;
         }
+        Debug.Log("Do something before change " + preState + " in " + postState);
     }
 
-    public void ActionAfterChangeGMState(GameStates newState)
+    public void ActionAfterChangeGMState(GameStates inState)
     {
-        HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, newState);
+        switch (inState)
+        {
+            case GameStates.LoadStartingInfo:
+                Debug.Log("ciao");
+                CurrentGameState = GameStates.StartGame;
+                SceneManager.LoadScene(1);
+                break;
+
+            case GameStates.StartGame:
+                break;
+
+            case GameStates.LevelSelection:
+                break;
+
+            case GameStates.InitializeLevel:
+                break;
+
+            case GameStates.PlayingLevel:
+                break;
+
+            case GameStates.EndLevel:
+                break;
+
+            case GameStates.Pause:
+                break;
+
+            default:
+                break;
+        }
+        //HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, inState);
     }
 
 
@@ -118,7 +139,6 @@ public class HFGameManager : Singleton<HFGameManager>
         return false;
     }
 
-
     public void ChangeGMState(GameStates newState)
     {
         CurrentGameState = newState;
@@ -131,6 +151,8 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public void StartGameScene()
     {
-
+        
     }
+
+    
 }
