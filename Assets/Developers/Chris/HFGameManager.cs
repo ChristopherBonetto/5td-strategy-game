@@ -14,7 +14,7 @@ public enum GameStates
     Pause
 }
 
-public class HFGameManager : MonoBehaviour
+public class HFGameManager : Singleton<HFGameManager>
 {
     public GameStates m_currentGameState = GameStates.LoadStartingInfo;
     public GameStates CurrentGameState
@@ -27,6 +27,7 @@ public class HFGameManager : MonoBehaviour
         {
             if (CheckNextState(value))
             {
+                //Used to reset somethings before change state
                 //ActionBeforeChangeGMState(m_currentGameState, value);
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
@@ -47,7 +48,6 @@ public class HFGameManager : MonoBehaviour
     private void Start()
     {
         CurrentGameState = GameStates.LoadStartingInfo;
-
     }
 
     
@@ -61,6 +61,7 @@ public class HFGameManager : MonoBehaviour
                 break;
 
             case GameStates.StartGame:
+                
                 StartGameScene();
                 break;
 
@@ -116,7 +117,7 @@ public class HFGameManager : MonoBehaviour
             default:
                 break;
         }
-        //HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, inState);
+        HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, inState);
     }
 
 

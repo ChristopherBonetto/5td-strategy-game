@@ -16,6 +16,7 @@ public class HFMainMenuWindow : HFUIControl
     {
         // Turn on level selection window,
         // turn off this window.
+        HFGameManager.Instance.CurrentGameState = GameStates.LevelSelection;
         HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
     }
 

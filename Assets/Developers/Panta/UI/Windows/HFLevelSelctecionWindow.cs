@@ -13,6 +13,7 @@ public class HFLevelSelctecionWindow : HFUIControl
     public void OnClickSelectLevel()
     {
         // Invoke some event instead of running this method.
+        HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
         SceneManager.LoadScene(SceneName);
     }
 
@@ -20,6 +21,7 @@ public class HFLevelSelctecionWindow : HFUIControl
     {
         // Turn off this window,
         // Turn on main menu window.
+        HFGameManager.Instance.CurrentGameState = GameStates.StartGame;
         HFUIManager.Instance.ShowAndHide(UIControlID.MainMenu, this);
     }
 }
