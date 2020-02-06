@@ -4,6 +4,18 @@ using UnityEngine;
 
 public enum HFEventID
 {
-    OnBeforeChangeState,
-    OnGameStateChanged
+	/// <summary>
+	/// GameStates preState,
+	/// GameStates postState
+	/// </summary>
+	OnBeforeChangeState,
+	/// <summary>
+	/// GameStates newState
+	/// </summary>
+	OnGameStateChanged,
+	/// <summary>
+	/// float	rewardValue,
+	/// HFUnit	instigatorUnit
+	/// </summary>
+	GainReward
 }
