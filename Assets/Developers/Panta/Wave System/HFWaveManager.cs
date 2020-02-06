@@ -58,9 +58,9 @@ public class HFWaveManager : Singleton<HFWaveManager>
 		{
 			HFWaveControl control = GetCurrentWaveControl();
 
-			if (control.MinorWaves[control.TotalMinorWaveCleared] != null)
+			if (control.MinorWaves[control.CurrentMinorWaveSpawned] != null)
 			{
-				HFMinorWave minorWave = control.MinorWaves[control.TotalMinorWaveCleared];
+				HFMinorWave minorWave = control.MinorWaves[control.CurrentMinorWaveSpawned];
 
 				// Instantiate the prefab at the position associated, 
 				// make the prefab facing the map. (i suppose the map is located in (0,0,0)).
@@ -69,9 +69,10 @@ public class HFWaveManager : Singleton<HFWaveManager>
 
 				// If the spawn is set to "pre"
 				// wait the call time and spawn next minor wave if exist.
-				if (control.MinorWaves.Count > control.TotalMinorWaveCleared + 1)
+				if (control.MinorWaves.Count > control.CurrentMinorWaveSpawned + 1)
 				{
-					HFMinorWave nextMinorWave = control.MinorWaves[control.TotalMinorWaveCleared + 1];
+					control.CurrentMinorWaveSpawned++;
+					HFMinorWave nextMinorWave = control.MinorWaves[control.CurrentMinorWaveSpawned];
 
 					if (nextMinorWave != null && nextMinorWave.SpawnType == SpawnType.Pre)
 					{
@@ -79,6 +80,46 @@ public class HFWaveManager : Singleton<HFWaveManager>
 						HFTimer timer = new HFTimer(nextMinorWave.CallTime);
 						StartCoroutine(timer.DecreaseTime(SpawnNextMinorWave));
 					}
+				}
+			}
+		}
+	}
+
+	public void CallNextMajorWave()
+	{
+		// Get the current wave control
+		HFWaveControl control = GetCurrentWaveControl();
+
+		if (control.CurrentMinorWaveSpawned == 0)
+		{
+			// Take the first minor wave.
+			HFMinorWave minorWave = control.MinorWaves[0];
+
+			#region Null Checks
+			if (minorWave.PrefabToSpawn == null) 
+				Debug.LogError("There isn't any prefab assigned to: Major Wave" + control.name + " | Minor Wave of index " + control.CurrentMinorWaveSpawned);
+
+			else if (minorWave.SpawnPoint == null)
+				Debug.LogError("There isn't any spawn point assigned to: Major Wave" + control.name + " | Minor Wave of index " + control.CurrentMinorWaveSpawned);
+			#endregion
+
+			// Instantiate the prefab at the position associated, 
+			// make the prefab facing the map. (i suppose the map is located in (0,0,0)).
+			Instantiate(minorWave.PrefabToSpawn, minorWave.SpawnPoint.position, Quaternion.LookRotation(Vector3.zero - minorWave.SpawnPoint.position, Vector3.up));
+
+
+			// If the spawn is set to "pre"
+			// wait the call time and spawn next minor wave if exist.
+			if (control.MinorWaves.Count > control.CurrentMinorWaveSpawned + 1)
+			{
+				control.CurrentMinorWaveSpawned++;
+				HFMinorWave nextMinorWave = control.MinorWaves[control.CurrentMinorWaveSpawned];
+
+				if (nextMinorWave != null && nextMinorWave.SpawnType == SpawnType.Pre)
+				{
+					// Start the timer.
+					HFTimer timer = new HFTimer(nextMinorWave.CallTime);
+					StartCoroutine(timer.DecreaseTime(SpawnNextMinorWave));
 				}
 			}
 		}
@@ -121,11 +162,28 @@ public class HFWaveManager : Singleton<HFWaveManager>
 		return WaveControls[TotalWavesCleared];
 	}
 
-	public void ResetValues()
+	public void ResetValues(bool clearWaveCollection = false)
 	{
 		TotalWavesCleared = 0;
 
-		CleartWaveCollection();
+		if (clearWaveCollection)
+			CleartWaveCollection();
+		else
+		{
+			// Reset Waves
+			foreach (var wave in WaveControls.Values)
+			{
+				wave.TotalMinorWaveCleared = 0;
+				wave.CurrentMinorWaveSpawned = 0;
+
+				// Reset Minor Waves
+				foreach (var minorWave in wave.MinorWaves)
+				{
+					minorWave.IsCleared = false;
+				}
+			}
+		}
+
 	}
 
 	#endregion 

@@ -24,6 +24,17 @@ public class HFWaveControl : MonoBehaviour
 	// Minor waves managememnt.
 	public List<HFMinorWave> MinorWaves;
 
+	private int m_CurrentMinorwaveSpawned;
+	/// <summary>
+	/// Take reference of the current minor wave spawned.
+	/// </summary>
+	public int CurrentMinorWaveSpawned
+	{
+		get { return m_CurrentMinorwaveSpawned; }
+		set { m_CurrentMinorwaveSpawned = value; }
+	}
+
+
 	private int m_TotalMinorWaveCleared;
 	/// <summary>
 	/// take ref of the minor waves cleared.
@@ -38,6 +49,8 @@ public class HFWaveControl : MonoBehaviour
 
 			if (value >= MinorWaves.Count)
 				IsCleared = true;
+			else
+				IsCleared = false;
 		}
 	}
 
@@ -51,7 +64,8 @@ public class HFWaveControl : MonoBehaviour
 
 	private void OnDisable()
 	{
-		HFWaveManager.Instance.RemoveWave(this);
+		if (HFWaveManager.Instance != null)
+			HFWaveManager.Instance.RemoveWave(this);
 	}
 	#endregion
 }

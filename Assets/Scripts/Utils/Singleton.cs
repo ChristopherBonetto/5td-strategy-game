@@ -52,6 +52,8 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                     {
                         Debug.Log("[Singleton] Using instance already created: " +
                             _instance.gameObject.name);
+
+                        DontDestroyOnLoad(Instance);
                     }
                 }
 
@@ -80,6 +82,14 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 
     internal void AwakeSingleton()
     {
-        throw new NotImplementedException();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(Instance);
+        }
+    }
+
+    private void Awake()
+    {
+        AwakeSingleton();
     }
 }
