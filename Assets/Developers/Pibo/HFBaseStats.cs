@@ -10,7 +10,20 @@ public enum HFStatistics
 	AttackRange = 3,
 	AttackRate = 4,
 	UnitDamage = 5,
-	BuildingDamage = 6
+	BuildingDamage = 6,
+	CarryCapacity = 7,
+	Weight = 8,
+
+
+	Name = 20,
+	Description = 21
+}
+
+public enum RewardCondition
+{
+	NoReward = 0,
+	Kill = 1,
+	Survive = 2
 }
 
 [Serializable]
@@ -43,7 +56,15 @@ public class HFBaseStats : ScriptableObject
 	public Sprite Icon = null;
 
 	[SerializeField]
-	public RewardCondition RewardCond = RewardCondition.NoReward;
+	public RewardCondition ConditionalReward = RewardCondition.NoReward;
+
+	[SerializeField]
+	public float RewardValue = 0f;
+
+	void OnValidate()
+	{
+		UpdateAll();
+	}
 
 	#region Floats
 
@@ -140,7 +161,7 @@ public class HFBaseStats : ScriptableObject
 			}
 			else
 			{
-				LogDuplicate(pair.Key.ToString(), dict.ToString());
+				//LogDuplicate(pair.Key.ToString(), dict.ToString());
 			}
 		}
 	}
