@@ -34,8 +34,8 @@ public class HFSceneManager : Singleton<HFSceneManager>
         }
         else
         {
-            // Load first scene
-            SceneManager.LoadScene(0);
+            // Load war room
+            SceneManager.LoadScene(1);
         }
     }
 
