@@ -7,7 +7,7 @@ public enum GameStates
 {
     LoadStartingInfo,
     StartGame,
-    LevelSelection,
+    WarRoom,
     InitializeLevel,
     PlayingLevel,
     EndLevel,
@@ -16,7 +16,7 @@ public enum GameStates
 
 public class HFGameManager : Singleton<HFGameManager>
 {
-    public GameStates m_currentGameState = GameStates.LoadStartingInfo;
+    private GameStates m_currentGameState = GameStates.LoadStartingInfo;
     public GameStates CurrentGameState
     {
         get
@@ -29,15 +29,16 @@ public class HFGameManager : Singleton<HFGameManager>
             {
                 //Used to reset somethings before change state
                 //ActionBeforeChangeGMState(m_currentGameState, value);
+
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
+
+                Debug.Log(m_currentGameState);
             }
         }
     }
 
     public List<HFGMStateSO> ListOfStates = new List<HFGMStateSO>();
-
-    public GameStates NextGameState;
 
     
 
@@ -65,7 +66,7 @@ public class HFGameManager : Singleton<HFGameManager>
                 StartGameScene();
                 break;
 
-            case GameStates.LevelSelection:
+            case GameStates.WarRoom:
                 break;
 
             case GameStates.InitializeLevel:
@@ -91,15 +92,13 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (inState)
         {
             case GameStates.LoadStartingInfo:
-                Debug.Log("ciao");
-                CurrentGameState = GameStates.StartGame;
-                SceneManager.LoadScene(1);
+                HFSceneManager.Instance.LoadNextScene();
                 break;
 
             case GameStates.StartGame:
                 break;
 
-            case GameStates.LevelSelection:
+            case GameStates.WarRoom:
                 break;
 
             case GameStates.InitializeLevel:
@@ -154,6 +153,4 @@ public class HFGameManager : Singleton<HFGameManager>
     {
         
     }
-
-    
 }
