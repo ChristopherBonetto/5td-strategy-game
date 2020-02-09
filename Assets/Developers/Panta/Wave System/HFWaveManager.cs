@@ -64,7 +64,8 @@ public class HFWaveManager : Singleton<HFWaveManager>
 
 				// Instantiate the prefab at the position associated, 
 				// make the prefab facing the map. (i suppose the map is located in (0,0,0)).
-				Instantiate(minorWave.PrefabToSpawn, minorWave.SpawnPoint.position, Quaternion.LookRotation(Vector3.zero - minorWave.SpawnPoint.position, Vector3.up));
+				// Set the own spawn point as transform parent (is more readable in hierarchy).
+				Instantiate(minorWave.PrefabToSpawn, minorWave.SpawnPoint.position, Quaternion.LookRotation(Vector3.zero - minorWave.SpawnPoint.position, Vector3.up), minorWave.SpawnPoint.transform);
 
 
 				// If the spawn is set to "pre"
