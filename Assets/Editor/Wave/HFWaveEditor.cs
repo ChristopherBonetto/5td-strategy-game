@@ -34,33 +34,26 @@ public class HFWaveEditor : Editor
         //Display our list to the inspector window
         for (int i = 0; i < ThisList.arraySize; i++)
         {
+            // Store properties.
             SerializedProperty MyListRef = ThisList.GetArrayElementAtIndex(i);
+            SerializedProperty MyFoldout = MyListRef.FindPropertyRelative("Foldout");
             SerializedProperty MyRandomEmemy = MyListRef.FindPropertyRelative("RandomEnemy");
             SerializedProperty MyEnemyPrefab = MyListRef.FindPropertyRelative("EnemyPrefab");
             SerializedProperty MySpawnPoint = MyListRef.FindPropertyRelative("SpawnPoint");
             SerializedProperty MyTimeToWait = MyListRef.FindPropertyRelative("TimeToWait");
+            SerializedProperty MyAmountToSpawn = MyListRef.FindPropertyRelative("AmountToSpawn");
 
 
             if (list[i].Type == BehaviourType.Single)
             {
                 GUILayout.BeginHorizontal();
-
+                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
                 t.BehavioursCollection[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(list[i].Type);
 
-                if (GUILayout.Button("v"))
-                {
-                    ThisList.MoveArrayElement(i, i + 1);
-                    GetTarget.ApplyModifiedProperties();
-                    return;
-                }
-                else if (GUILayout.Button("^"))
-                {
-                    ThisList.MoveArrayElement(i, i - 1);
-                    GetTarget.ApplyModifiedProperties();
-                    return;
-                }
-
-                else if (GUILayout.Button("Delete minor wave"))
+                // Buttons
+                MoveUpTheElement(i);
+                MoveDownTheElement(i);
+                if (GUILayout.Button("Delete"))
                 {
                     ThisList.DeleteArrayElementAtIndex(i);
                     GetTarget.ApplyModifiedProperties();
@@ -69,10 +62,13 @@ public class HFWaveEditor : Editor
                 GUILayout.EndHorizontal();
 
 
-                //MyRandomEmemy.boolValue = EditorGUILayout.Toggle("Random Enemy", MyRandomEmemy.boolValue);    // Update soon...
-
-                MyEnemyPrefab.objectReferenceValue = EditorGUILayout.ObjectField("My Enemy Prefab", MyEnemyPrefab.objectReferenceValue, typeof(GameObject), true);
-                MySpawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", MySpawnPoint.intValue);
+                if (MyFoldout.boolValue)
+                {
+                    MyRandomEmemy.boolValue = EditorGUILayout.Toggle("Random Enemy", MyRandomEmemy.boolValue);    // Update soon...
+                    if (!MyRandomEmemy.boolValue)
+                        MyEnemyPrefab.objectReferenceValue = EditorGUILayout.ObjectField("My Enemy Prefab", MyEnemyPrefab.objectReferenceValue, typeof(GameObject), true);
+                    MySpawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", MySpawnPoint.intValue);
+                }
 
                 // Add some space.
                 EditorGUILayout.Space();
@@ -81,24 +77,13 @@ public class HFWaveEditor : Editor
             else if (list[i].Type == BehaviourType.Wait)
             {
                 GUILayout.BeginHorizontal();
-
+                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
                 list[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(list[i].Type);
 
-
-                if (GUILayout.Button("v"))
-                {
-                    ThisList.MoveArrayElement(i, i + 1);
-                    GetTarget.ApplyModifiedProperties();
-                    return;
-                }
-                else if (GUILayout.Button("^"))
-                {
-                    ThisList.MoveArrayElement(i, i - 1);
-                    GetTarget.ApplyModifiedProperties();
-                    return;
-                }
-
-                else if (GUILayout.Button("Delete minor wave"))
+                // Buttons
+                MoveUpTheElement(i);
+                MoveDownTheElement(i);
+                if (GUILayout.Button("Delete"))
                 {
                     ThisList.DeleteArrayElementAtIndex(i);
                     GetTarget.ApplyModifiedProperties();
@@ -106,7 +91,42 @@ public class HFWaveEditor : Editor
                 }
                 GUILayout.EndHorizontal();
 
-                MyTimeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", MyTimeToWait.floatValue);
+
+                if (MyFoldout.boolValue)
+                {
+                    MyTimeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", MyTimeToWait.floatValue);
+                }
+
+                // Add some space.
+                EditorGUILayout.Space();
+                EditorGUILayout.Space();
+            }
+            else if (list[i].Type == BehaviourType.Bulk)
+            {
+                GUILayout.BeginHorizontal();
+                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
+                t.BehavioursCollection[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(list[i].Type);
+
+                // Buttons
+                MoveUpTheElement(i);
+                MoveDownTheElement(i);
+                if (GUILayout.Button("Delete"))
+                {
+                    ThisList.DeleteArrayElementAtIndex(i);
+                    GetTarget.ApplyModifiedProperties();
+                    return;
+                }
+                GUILayout.EndHorizontal();
+
+                
+                if (MyFoldout.boolValue)
+                {
+                    MyRandomEmemy.boolValue = EditorGUILayout.Toggle("Random Enemy", MyRandomEmemy.boolValue);    // Update soon...
+                    if (!MyRandomEmemy.boolValue)
+                        MyEnemyPrefab.objectReferenceValue = EditorGUILayout.ObjectField("My Enemy Prefab", MyEnemyPrefab.objectReferenceValue, typeof(GameObject), true);
+                    MySpawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", MySpawnPoint.intValue);
+                    MyAmountToSpawn.intValue = EditorGUILayout.IntField("Amount to spawn", MySpawnPoint.intValue);
+                }
 
                 // Add some space.
                 EditorGUILayout.Space();
@@ -116,9 +136,6 @@ public class HFWaveEditor : Editor
 
          EditorGUILayout.Space();
          EditorGUILayout.Space();
-
-        //Or add a new item to the List<> with a button
-        EditorGUILayout.LabelField("Add a new item with a button");
 
         if (GUILayout.Button("Add New Behaviour"))
         {
@@ -128,4 +145,26 @@ public class HFWaveEditor : Editor
         //Apply the changes to our list
         GetTarget.ApplyModifiedProperties();
     }
+
+    #region List Control
+    private void MoveUpTheElement(int i)
+    {
+        if (GUILayout.Button("^"))
+        {
+            ThisList.MoveArrayElement(i, i - 1);
+            GetTarget.ApplyModifiedProperties();
+            return;
+        }
+    }
+
+    private void MoveDownTheElement(int i)
+    {
+        if (GUILayout.Button("v"))
+        {
+            ThisList.MoveArrayElement(i, i + 1);
+            GetTarget.ApplyModifiedProperties();
+            return;
+        }
+    }
+    #endregion
 }

@@ -14,6 +14,10 @@ namespace HF.WaveSystem
         /// Represent the time to wait
         /// </summary>
         Wait = 1 << 1,
+        /// <summary>
+        /// Setting to spawn multiple instance of the same prefab
+        /// </summary>
+        Bulk = 1 << 2,
     }
 
     [CreateAssetMenu(fileName = "L_00_Wave_00", menuName = "Human Factor/New Wave")]
@@ -24,6 +28,10 @@ namespace HF.WaveSystem
         [System.Serializable]
         public class Behaviour
         {
+#if UNITY_EDITOR
+            public bool Foldout;
+#endif
+
             public BehaviourType Type = BehaviourType.Single;
 
             // 0) Single
@@ -31,8 +39,11 @@ namespace HF.WaveSystem
             public GameObject EnemyPrefab;
             public int SpawnPoint;
 
-            // 1) wait
+            // 1) Wait
             public float TimeToWait;
+
+            // 2) Bulk
+            public int AmountToSpawn;
         }
     }
 }
