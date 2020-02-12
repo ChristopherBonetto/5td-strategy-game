@@ -10,11 +10,10 @@ public class HFLevelSelctecionWindow : HFUIControl
     //public string SceneName;
 
 
-    public void OnClickSelectLevel()
+    public void OnClickSelectLevel(int inSceneIndex)
     {
         // Invoke some event instead of running this method.
-
-        HFSceneManager.Instance.LoadSceneFromIndex(2);
+        HFLevelManager.Instance.StartLevelFromIndex(inSceneIndex);
     }
 
     public void OnClickBackToMainMenu()

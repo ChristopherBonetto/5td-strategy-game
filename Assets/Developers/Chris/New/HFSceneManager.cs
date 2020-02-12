@@ -8,6 +8,13 @@ public class HFSceneManager : Singleton<HFSceneManager>
 
     public int IndexCurrentScene = 0;
 
+    private int m_sceneCount;
+    public int SceneCount { get => m_sceneCount; }
+
+    public List<string> AllScenes = new List<string>();
+
+
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -17,7 +24,25 @@ public class HFSceneManager : Singleton<HFSceneManager>
     {
         Scene currentScene = SceneManager.GetActiveScene();
         IndexCurrentScene = currentScene.buildIndex;
+
+        TakeAllSceneInBuild();
     }
+
+    #region Get All Scenes
+
+    public void TakeAllSceneInBuild()
+    {
+        m_sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
+
+        for (int i = 0; i < m_sceneCount; i++)
+        {
+            AllScenes.Add(System.IO.Path.GetFileNameWithoutExtension(UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i)));
+        }
+    }
+
+    #endregion
+
+    #region LOAD SCENE
 
     public void LoadSceneFromIndex(int inSceneIndex)
     {
@@ -38,6 +63,18 @@ public class HFSceneManager : Singleton<HFSceneManager>
             SceneManager.LoadScene(1);
         }
     }
+
+    public void LoadFromObjectScene(Object inObj)
+    {
+        string tempName = inObj.name;
+
+        if (AllScenes.Contains(tempName))
+        {
+            SceneManager.LoadScene(tempName);
+        }
+    }
+
+    #endregion
 
     public void OnLevelWasLoaded(int level)
     {
