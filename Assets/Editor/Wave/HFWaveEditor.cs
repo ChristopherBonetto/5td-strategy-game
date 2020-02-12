@@ -7,35 +7,43 @@ using HF.WaveSystem;
 [CustomEditor(typeof(HFWave))]
 public class HFWaveEditor : Editor
 {
-    BehaviourType DisplayFieldType;
+    new HFWave target;
+    SerializedObject getTarget;
 
-    HFWave t;
-    SerializedObject GetTarget;
-    SerializedProperty ThisList;
+    SerializedProperty thisList;
     int ListSize;
-    List<HFWave.Behaviour> list;
+
+    List<HFWave.Behaviour> typedList;
+
+    #region Resources
+    Texture2D deleteButton;
+    #endregion
 
     void OnEnable()
     {
-        t = (HFWave)target;
-        GetTarget = new SerializedObject(t);
-        ThisList = GetTarget.FindProperty("BehavioursCollection"); // Find the List in our script and create a refrence of it
-        list = t.BehavioursCollection;
+        target = (HFWave)base.target;
+        getTarget = new SerializedObject(target);
+
+        thisList = getTarget.FindProperty("BehavioursCollection");  // Find the List in our script and create a refrence of it
+        typedList = target.BehavioursCollection;                          // Find the List in our script and create a refrence of it with the same type.
+
+        // Resources
+        deleteButton = Resources.Load<Texture2D>("Editor/custom_editor_button_delete");
     }
 
     public override void OnInspectorGUI()
     {
         //Update our list
-        GetTarget.Update();
+        getTarget.Update();
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
         //Display our list to the inspector window
-        for (int i = 0; i < ThisList.arraySize; i++)
+        for (int i = 0; i < thisList.arraySize; i++)
         {
             // Store properties.
-            SerializedProperty MyListRef = ThisList.GetArrayElementAtIndex(i);
+            SerializedProperty MyListRef = thisList.GetArrayElementAtIndex(i);
             SerializedProperty MyFoldout = MyListRef.FindPropertyRelative("Foldout");
             SerializedProperty MyRandomEmemy = MyListRef.FindPropertyRelative("RandomEnemy");
             SerializedProperty MyEnemyPrefab = MyListRef.FindPropertyRelative("EnemyPrefab");
@@ -44,29 +52,40 @@ public class HFWaveEditor : Editor
             SerializedProperty MyAmountToSpawn = MyListRef.FindPropertyRelative("AmountToSpawn");
 
 
-            if (list[i].Type == BehaviourType.Single)
+            if (typedList[i].Type == BehaviourType.Single)
             {
                 GUILayout.BeginHorizontal();
-                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
-                t.BehavioursCollection[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(list[i].Type);
 
-                // Buttons
+                // Foldout 
+                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
+
+                // Assign Behaviour type (enum)
+                typedList[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(typedList[i].Type);
+
+                // Buttons: Moves up, moves down, delete.
                 MoveUpTheElement(i);
+
                 MoveDownTheElement(i);
-                if (GUILayout.Button("Delete"))
+
+                if (GUILayout.Button(deleteButton))
                 {
-                    ThisList.DeleteArrayElementAtIndex(i);
-                    GetTarget.ApplyModifiedProperties();
+                    thisList.DeleteArrayElementAtIndex(i);
+                    getTarget.ApplyModifiedProperties();
                     return;
                 }
+
                 GUILayout.EndHorizontal();
 
 
                 if (MyFoldout.boolValue)
                 {
                     MyRandomEmemy.boolValue = EditorGUILayout.Toggle("Random Enemy", MyRandomEmemy.boolValue);    // Update soon...
-                    if (!MyRandomEmemy.boolValue)
+
+                    if (!MyRandomEmemy.boolValue)   //  Drag and drop a prefab
                         MyEnemyPrefab.objectReferenceValue = EditorGUILayout.ObjectField("My Enemy Prefab", MyEnemyPrefab.objectReferenceValue, typeof(GameObject), true);
+                    // else                        
+                                                    // else choose randomly (weighted) the prefab from a collection
+
                     MySpawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", MySpawnPoint.intValue);
                 }
 
@@ -74,21 +93,28 @@ public class HFWaveEditor : Editor
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
             }
-            else if (list[i].Type == BehaviourType.Wait)
+            else if (typedList[i].Type == BehaviourType.Wait)
             {
                 GUILayout.BeginHorizontal();
-                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
-                list[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(list[i].Type);
 
-                // Buttons
+                // Foldout
+                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
+
+                // Assign Behaviour type (enum)
+                typedList[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(typedList[i].Type);
+
+                // Buttons: Moves up, moves down, delete.
                 MoveUpTheElement(i);
+
                 MoveDownTheElement(i);
-                if (GUILayout.Button("Delete"))
+
+                if (GUILayout.Button(deleteButton))
                 {
-                    ThisList.DeleteArrayElementAtIndex(i);
-                    GetTarget.ApplyModifiedProperties();
+                    thisList.DeleteArrayElementAtIndex(i);
+                    getTarget.ApplyModifiedProperties();
                     return;
                 }
+
                 GUILayout.EndHorizontal();
 
 
@@ -101,21 +127,28 @@ public class HFWaveEditor : Editor
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
             }
-            else if (list[i].Type == BehaviourType.Bulk)
+            else if (typedList[i].Type == BehaviourType.Bulk)
             {
                 GUILayout.BeginHorizontal();
-                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
-                t.BehavioursCollection[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(list[i].Type);
 
-                // Buttons
+                // Foldout
+                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
+
+                // Assign Behaviour type (enum)
+                typedList[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(typedList[i].Type);
+
+                // Buttons: Moves up, moves down, delete.
                 MoveUpTheElement(i);
+
                 MoveDownTheElement(i);
-                if (GUILayout.Button("Delete"))
+
+                if (GUILayout.Button(deleteButton))
                 {
-                    ThisList.DeleteArrayElementAtIndex(i);
-                    GetTarget.ApplyModifiedProperties();
+                    thisList.DeleteArrayElementAtIndex(i);
+                    getTarget.ApplyModifiedProperties();
                     return;
                 }
+
                 GUILayout.EndHorizontal();
 
                 
@@ -139,11 +172,11 @@ public class HFWaveEditor : Editor
 
         if (GUILayout.Button("Add New Behaviour"))
         {
-            t.BehavioursCollection.Add(new HFWave.Behaviour());
+            target.BehavioursCollection.Add(new HFWave.Behaviour());
         }
 
         //Apply the changes to our list
-        GetTarget.ApplyModifiedProperties();
+        getTarget.ApplyModifiedProperties();
     }
 
     #region List Control
@@ -151,8 +184,8 @@ public class HFWaveEditor : Editor
     {
         if (GUILayout.Button("^"))
         {
-            ThisList.MoveArrayElement(i, i - 1);
-            GetTarget.ApplyModifiedProperties();
+            thisList.MoveArrayElement(i, i - 1);
+            getTarget.ApplyModifiedProperties();
             return;
         }
     }
@@ -161,8 +194,8 @@ public class HFWaveEditor : Editor
     {
         if (GUILayout.Button("v"))
         {
-            ThisList.MoveArrayElement(i, i + 1);
-            GetTarget.ApplyModifiedProperties();
+            thisList.MoveArrayElement(i, i + 1);
+            getTarget.ApplyModifiedProperties();
             return;
         }
     }
