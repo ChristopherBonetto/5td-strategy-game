@@ -34,7 +34,7 @@ public static class HFReorderableList
     public static bool DoLayoutListWithFoldout(ReorderableList list, string label = null)
     {
         var property = list.serializedProperty;
-        property.isExpanded = EditorGUILayout.Foldout(property.isExpanded, label != null ? label : "Reorderable Troops List");
+        property.isExpanded = EditorGUILayout.Foldout(property.isExpanded, label != null ? label : property.displayName);
         if (property.isExpanded)
         {
             list.DoLayoutList();
@@ -49,17 +49,16 @@ public static class HFReorderableList
         {
             var property = list.serializedProperty;
             var columns = getColumns();
-            //var layouts = CalculateColumnLayout(columns, rect, columnSpacing);
+            var layouts = CalculateColumnLayout(columns, rect, columnSpacing);
 
             var arect = rect;
             arect.height = EditorGUIUtility.singleLineHeight;
             for (var ii = 0; ii < columns.Count; ii++)
             {
-                var c = columns[ii];
+                //var c = columns[ii];
 
                 //arect.width = layouts[ii];
-                //EditorGUI.PropertyField(arect, property.GetArrayElementAtIndex(index).FindPropertyRelative(c.PropertyName), GUIContent.none);
-                EditorGUI.PropertyField(arect, property.GetArrayElementAtIndex(index), GUIContent.none);
+                EditorGUI.PropertyField(arect, property.GetArrayElementAtIndex(index)/*.FindPropertyRelative(c.PropertyName)*/, GUIContent.none);
                 arect.x += arect.width + columnSpacing;
             }
         };
@@ -77,15 +76,15 @@ public static class HFReorderableList
                 rect.x += 15;
             }
 
-            //var layouts = CalculateColumnLayout(columns, rect, columnSpacing);
+            var layouts = CalculateColumnLayout(columns, rect, columnSpacing);
             var arect = rect;
             arect.height = EditorGUIUtility.singleLineHeight;
             for (var ii = 0; ii < columns.Count; ii++)
             {
-                var c = columns[ii];
+                //var c = columns[ii];
 
                 //arect.width = layouts[ii];
-                EditorGUI.LabelField(arect, "Troop G.O.");
+                EditorGUI.LabelField(arect, /*c.DisplayName*/ "");
                 arect.x += arect.width + columnSpacing;
             }
         };
