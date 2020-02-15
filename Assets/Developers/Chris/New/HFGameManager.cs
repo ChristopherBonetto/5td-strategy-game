@@ -92,7 +92,6 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (inState)
         {
             case GameStates.LoadStartingInfo:
-                //HFSceneManager.Instance.LoadNextScene();
                 break;
 
             case GameStates.StartGame:

@@ -8,4 +8,5 @@ public enum UIControlID
     MainMenu,
     Credits,
     LevelSelection,
+    InGameWindow
 }
