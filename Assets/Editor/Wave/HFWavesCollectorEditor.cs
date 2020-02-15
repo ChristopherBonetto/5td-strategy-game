@@ -4,11 +4,10 @@ using UnityEngine;
 using UnityEditor;
 using HF.WaveSystem;
 
-[CustomEditor(typeof(HFWaveLevel))]
+[CustomEditor(typeof(HFWavesCollector))]
 [CanEditMultipleObjects]
-public class HFWaveLevelEditor : Editor
+public class HFWavesCollectorEditor : Editor
 {
-    SerializedProperty collector;
     UnityEditorInternal.ReorderableList list1;
 
     public override void OnInspectorGUI()
@@ -16,23 +15,16 @@ public class HFWaveLevelEditor : Editor
         this.serializedObject.Update();
 
         EditorGUILayout.Space();
-
         EditorGUILayout.LabelField("", EditorStyles.boldLabel);
         HFReorderableList.DoLayoutListWithFoldout(this.list1);
-
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-
-        EditorGUILayout.ObjectField(collector);
 
         this.serializedObject.ApplyModifiedProperties();
     }
 
     private void OnEnable()
     {
-        var property = this.serializedObject.FindProperty("m_SpawnPoints");
-        this.list1 = HFReorderableList.CreateAutoLayout(property);
+        var property = this.serializedObject.FindProperty("m_WavesCollection");
 
-        collector = this.serializedObject.FindProperty("m_WaveCollector");
+        this.list1 = HFReorderableList.CreateAutoLayout(property);
     }
 }
