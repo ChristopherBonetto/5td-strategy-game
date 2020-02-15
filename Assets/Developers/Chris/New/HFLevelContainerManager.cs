@@ -14,6 +14,6 @@ public class HFLevelContainerManager : Singleton<HFLevelContainerManager>
     }
     public void StartLevelFromIndex(int inIndex)
     {
-        HFSceneManager.Instance.LoadFromName(LevelContainer.Levels[inIndex].LevelSceneName);
+        HFSceneManager.Instance.LoadFromObjectScene(LevelContainer.Levels[inIndex].LevelScene);
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class HFSceneManager : Singleton<HFSceneManager>
 {
@@ -13,6 +12,7 @@ public class HFSceneManager : Singleton<HFSceneManager>
     public int SceneCount { get => m_sceneCount; }
 
     public List<string> AllScenes = new List<string>();
+
 
 
     private void Awake()
@@ -40,7 +40,6 @@ public class HFSceneManager : Singleton<HFSceneManager>
         {
             AllScenes.Add(System.IO.Path.GetFileNameWithoutExtension(UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i)));
         }
-        
     }
 
     #endregion
@@ -67,11 +66,13 @@ public class HFSceneManager : Singleton<HFSceneManager>
         }
     }
 
-    public void LoadFromName(string inName)
+    public void LoadFromObjectScene(Object inObj)
     {
-        if (AllScenes.Contains(inName))
+        string tempName = inObj.name;
+
+        if (AllScenes.Contains(tempName))
         {
-            SceneManager.LoadScene(inName);
+            SceneManager.LoadScene(tempName);
         }
     }
 
