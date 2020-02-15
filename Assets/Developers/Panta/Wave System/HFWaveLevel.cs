@@ -42,9 +42,10 @@ namespace HF.WaveSystem
         public List<HFWave.Behaviour> GetBehaviours => GetWaves[m_currentWaveIndex].BehavioursCollection;
         #endregion
 
-        private void Start()
+
+        public void RequestNextBehaviourFromInput()
         {
-            RequestNextBehaviour(RequestType.Pre);
+            RequestNextBehaviour(GetBehaviours[m_currentBehaviourIndex].RequestType);
         }
 
         public void RequestNextBehaviour(RequestType requestType)
@@ -93,7 +94,7 @@ namespace HF.WaveSystem
             //go.transform.position = SpawnPoints[behaviour.SpawnPoint].position;
             //go.transform.rotation = Quaternion.LookRotation(Vector3.zero - go.transform.position, Vector3.up);
             Debug.Log("Spawn Enemy");
-            //RequestNextBehaviour(m_behaviour.RequestType); // simulate the eevnt trigger.
+            RequestNextBehaviour(m_behaviour.RequestType); // simulate the eevnt trigger.
         }
 
         private void ExecuteWaitBehaviour(HFWave.Behaviour behaviour)
