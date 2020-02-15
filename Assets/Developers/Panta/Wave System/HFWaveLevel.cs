@@ -10,110 +10,171 @@ namespace HF.WaveSystem
         // e.g. 
         // public var;
         // [Serializefield] private var;
+        [SerializeField]
+        private List<Transform> m_SpawnPoints;
 
-        public HFController controller;
+        [SerializeField] 
+        private HFWavesCollector m_WaveCollector;
+
+        public HFController Controller;
+
+        public bool wait;
         #endregion
 
         #region Private (single variables)
         // e.g. 
         // private var 
-
-        private int m_currentWaveIndex;
-        private int m_currentBehaviourIndex;
-        private HFWave.Behaviour m_behaviour;
+        private int m_WaveIndex;
+        private int m_MinorWaveIndex;
+        private int m_CountOfEnemiesKilled;
+        private float m_currentTime;
         #endregion
 
         #region Property
-        [SerializeField]
-        private List<Transform> m_SpawnPoints;
         /// <summary>
         /// Level's spawn points ordered from inspector.
         /// The ordered declare the spawn point ID.
         /// </summary>
         public List<Transform> SpawnPoints => m_SpawnPoints;
 
-        [SerializeField] 
-        private HFWavesCollector m_WaveCollector;
         /// <summary>
         /// Collection of all level's waves.
         /// It's only to read purpose.
         /// </summary>
         public HFWavesCollector WaveCollector => m_WaveCollector;
 
+        /// <summary>
+        /// Current index of the wave.
+        /// </summary>
+        public int WaveIndex
+        {
+            get { return m_WaveIndex; }
+            set { m_WaveIndex = value; }
+        }
+
+        /// <summary>
+        /// Current index of the minor wave.
+        /// </summary>
+        public int MinorWaveIndex
+        {
+            get { return m_MinorWaveIndex; }
+            set { m_MinorWaveIndex = value; }
+        }
+
+        /// <summary>
+        /// Get number of waves
+        /// </summary>
         public List<HFWave> GetWaves => WaveCollector.WavesCollection;
-        public List<HFWave.Behaviour> GetBehaviours => GetWaves[m_currentWaveIndex].BehavioursCollection;
+
+        /// <summary>
+        /// Get number of minor waves of the current wave
+        /// </summary>
+        public List<HFWave.Behaviour> GetMinorWaves => GetWaves[WaveIndex].BehavioursCollection;
+
+        /// <summary>
+        /// Get current wave.
+        /// </summary>
+        public HFWave GetCurrentWave => GetWaves[WaveIndex];
+
+        /// <summary>
+        /// Get Current minor wave.
+        /// </summary>
+        public HFWave.Behaviour GetCurrentMinorWave => GetCurrentWave.BehavioursCollection[MinorWaveIndex];
+
+        /// <summary>
+        /// Get number of all enemies in the current wave.
+        /// </summary>
+        public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);
+
+        /// <summary>
+        /// Count of enemies killed.
+        /// </summary>
+        public int CountOfEnemyKilled
+        {
+            get { return m_CountOfEnemiesKilled; }
+            set { m_CountOfEnemiesKilled = value; }
+        }
+
         #endregion
 
-        private void OnEnable()
+        private void Update()
         {
-            HFEventManager.SubscribeTo<RequestType>(HFEventID.OnRequestNewBehaviour, RequestNextBehaviour);
+            CallNextMinorWave();
         }
 
-        private void OnDisable()
+        /// <summary>
+        /// Check if the level is cleared.
+        /// This check is evaluated every time the wave is cleared.
+        /// </summary>
+        /// <returns></returns>
+        public bool LevelCleared()
         {
-            
-            HFEventManager.UnsubscribeFrom<RequestType>(HFEventID.OnRequestNewBehaviour, RequestNextBehaviour);
+            return WaveIndex > GetWaves.Count - 1;
         }
 
-        public void RequestNextBehaviourFromInput()
+        /// <summary>
+        /// check if the wave is cleared.
+        /// This check is evaluated every kill confirmed.
+        /// </summary>
+        /// <returns></returns>
+        public bool WaveCleared()
         {
-            RequestNextBehaviour(GetBehaviours[m_currentBehaviourIndex].RequestType);
+            return CountOfEnemyKilled >= GetTotalEnemiesOfTheWave;
         }
 
-        public void RequestNextBehaviour(RequestType requestType)
+        /// <summary>
+        /// Invoke from event when a enemy troop is killed.
+        /// </summary>
+        public void OnEnemyKilled()
         {
-            if (m_behaviour == null)
-                m_behaviour = GetBehaviours[m_currentBehaviourIndex];
+            // only if the unit is marked as enemy do this function.
 
-            if (requestType == m_behaviour.RequestType)
+            CountOfEnemyKilled++;
+
+            if (WaveCleared())
             {
-                // Check index bounds
-                if (m_currentBehaviourIndex > GetBehaviours.Count - 1)
-                {
-                    m_currentWaveIndex++;
-                    m_currentBehaviourIndex = 0;
+                // Show button in UI to start the next wave.
+                // Reset the count of enemies killed.
+                CountOfEnemyKilled = 0;
+                // increase the WaveIndex.
+                WaveIndex++;
+                // Reset the MinorWaveIndex.
+                MinorWaveIndex = 0;
 
-                    if (m_currentWaveIndex > GetWaves.Count - 1)
+                if (LevelCleared())
+                {
+                    // Show end level results.
+                }
+            }
+        }
+
+        public void CallNextMinorWave()
+        {
+            if (MinorWaveIndex <= GetMinorWaves.Count - 1)
+            {
+                if (m_currentTime <= 0)
+                {
+                    HFWave.Behaviour bh = GetCurrentMinorWave;
+                    Debug.Log($"Wave {WaveIndex}, Minor wave {MinorWaveIndex}");
+
+                    if (bh.BehaviourType == BehaviourType.Single)
                     {
-                        Debug.Log("End Level");
-                        return;
+                        // Spawn it
+                        Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
+                        Controller.SpawnUnit(GetCurrentMinorWave.EnemyPrefab, position);
+
+                        // Count ++ of the wave spawned.
                     }
-                }
+                    else if (bh.BehaviourType == BehaviourType.Wait)
+                    {
+                        m_currentTime = bh.TimeToWait;
+                    }
 
-                m_behaviour = GetBehaviours[m_currentBehaviourIndex];
-
-                if (m_behaviour.BehaviourType == BehaviourType.Single)
-                {
-                    ExecuteSingleBehaviour(m_behaviour);
+                    MinorWaveIndex++;
                 }
-                else if (m_behaviour.BehaviourType == BehaviourType.Wait)
-                {
-                    ExecuteWaitBehaviour(m_behaviour);
-                }
-
-                m_currentBehaviourIndex++;
+                else
+                    m_currentTime -= Time.deltaTime;
             }
-        }
-
-        private void ExecuteSingleBehaviour(HFWave.Behaviour behaviour)
-        {
-            if (behaviour.EnemyPrefab == null)
-            {
-                Debug.LogWarning($"There are no stats assigned, Wave {m_currentWaveIndex}, Minor wave {m_currentBehaviourIndex}");
-                return;
-            }
-
-            Vector3 pos = SpawnPoints[behaviour.SpawnPoint].position;
-
-            controller.SpawnUnit(GetBehaviours[m_currentBehaviourIndex].EnemyPrefab, pos);
-            Debug.Log("Spawn Enemy");
-        }
-
-        private void ExecuteWaitBehaviour(HFWave.Behaviour behaviour)
-        {
-            HFTimer timer = new HFTimer(behaviour.TimeToWait);
-            StartCoroutine(timer.DecreaseTime(RequestNextBehaviour, m_behaviour.RequestType));
-            Debug.Log("Time elapsed...");
         }
     }
 }
