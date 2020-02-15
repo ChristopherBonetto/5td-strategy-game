@@ -99,13 +99,12 @@ namespace HF
 		[Space]
 		[Header("Selection")]
 
-		private bool m_isSelected;
-
 		[SerializeField]
 		private Material m_selectedMaterial = null;
 
-		[SerializeField]
 		private Material m_unselectedMaterial = null;
+
+		private bool m_isSelected;
 
 		/*** IHFDamageable interface */
 
@@ -284,15 +283,17 @@ namespace HF
 			else if (controller is HFAIController)
 			{
 				ControllerType = InputType.AI;
-				Team = controller.Team;
 			}
 			else
 			{
 				ControllerType = InputType.Player;
-				Team = controller.Team;
 			}
 
+			Team = controller.Team;
+			m_unselectedMaterial = controller.BaseMaterial;
 			m_controller = controller;
+
+			Unselect();
 		}
 
 		public void UnPossess()
