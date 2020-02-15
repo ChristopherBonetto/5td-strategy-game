@@ -3,11 +3,13 @@
 /// </summary>
 public struct DamageInfo
 {
-	public float Amount;
+	public float UnitAmount;
+	public float BuildingAmount;
 
-	public DamageInfo(float amount = 0f)
+	public DamageInfo(float unitAmount = 0f, float buildingAmount = 0f)
 	{
-		Amount = amount;
+		UnitAmount = unitAmount;
+		BuildingAmount = buildingAmount;
 	}
 }
 

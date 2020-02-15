@@ -23,6 +23,7 @@ public enum HFStatistics
 	Weight = 8,
 	RewardValue = 9,
 	ShootAngle = 10,
+	BulletSpeed = 11,
 
 
 	Name = 20,

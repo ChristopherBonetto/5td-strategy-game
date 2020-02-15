@@ -4,23 +4,23 @@ namespace HF
 {
 	public struct HFBulletParameters
 	{
+		public HFUnit Instigator;
 		public float UnitDamage;
 		public float BuildingDamage;
+		public float Speed;
 
-		public HFBulletParameters(float inUnitDamage, float inBuildingDamage)
+		public HFBulletParameters(HFUnit inInstigator, float inUnitDamage = 0f, float inBuildingDamage = 0f, float inSpeed = 10f)
 		{
+			Instigator = inInstigator;
 			UnitDamage = inUnitDamage;
 			BuildingDamage = inBuildingDamage;
+			Speed = inSpeed;
 		}
 	}
 
 	public class HFBullet : MonoBehaviour
 	{
 		private bool m_isExploding = false;
-
-		[SerializeField]
-		[Tooltip("the speed of the bullet")]
-		private float m_speed = 10f;
 
 		private Collider m_target;
 
@@ -32,7 +32,7 @@ namespace HF
 
 		private Transform m_transform;
 
-		private HFBulletParameters m_parameters;
+		private HFBulletParameters m_parameters = new HFBulletParameters();
 
 		private void Awake()
 		{
@@ -45,16 +45,21 @@ namespace HF
 		{
 			if (!m_isExploding)
 			{
-				m_transform.position += m_transform.forward * m_speed * Time.deltaTime;
+				MoveToTarget();
+			}
+		}
 
-				if (m_target)
-				{
-					m_transform.LookAt(m_target.bounds.center);
-				}
-				else
-				{
-					Destroy(gameObject);
-				}
+		private void MoveToTarget()
+		{
+			m_transform.position += m_transform.forward * m_parameters.Speed * Time.deltaTime;
+
+			if (m_target)
+			{
+				m_transform.LookAt(m_target.bounds.center);
+			}
+			else
+			{
+				Destroy(gameObject);
 			}
 		}
 
@@ -66,13 +71,13 @@ namespace HF
 				{
 					HFUnit targetUnit = m_target.gameObject.GetComponent<HFUnit>();
 					float actualDamage = (targetUnit.UnitType == HFUnitType.Unit ? m_parameters.UnitDamage : m_parameters.BuildingDamage);
-					targetUnit.TakeDamage(new DamageInfo(actualDamage));
 				}
+
+				m_isExploding = true;
 				if (m_explosionParticle)
 				{
 					m_explosionParticle.Play();
 				}
-				m_isExploding = true;
 
 				m_mesh.enabled = false;
 

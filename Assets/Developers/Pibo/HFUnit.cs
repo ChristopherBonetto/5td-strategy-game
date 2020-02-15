@@ -150,13 +150,11 @@ namespace HF
 			// #TEMP
 			//HFHelpers.NullCheck(gameObject, m_anim, "animator");
 
-			m_mods = new List<IHFStatModifier>();
-			UpdateModifiers();
-
 			m_stats = new Dictionary<HFStatistics, float>();
+			m_mods = new List<IHFStatModifier>();
 			UpdateStats();
 
-			ResetHealth(true);
+			ResetHealth(true, true);
 
 			UnPossess();
 
@@ -201,6 +199,21 @@ namespace HF
 			UpdateStats();
 		}
 
+		private void UpdateStats()
+		{
+			UpdateModifiers();
+
+			m_stats.Clear();
+			HFStatistics[] allStats = HFHelpers.EnumToArray<HFStatistics>();
+			foreach (HFStatistics stat in allStats)
+			{
+				m_stats.Add(stat, CalculateStat(stat));
+			}
+
+			// IHFDamageable update
+			ResetHealth(false, false);
+		}
+
 		private void UpdateModifiers()
 		{
 			m_mods.Clear();
@@ -213,29 +226,21 @@ namespace HF
 			}
 		}
 
-		private void UpdateStats()
-		{
-			m_stats.Clear();
-			HFStatistics[] allStats = HFHelpers.EnumToArray<HFStatistics>();
-			foreach (HFStatistics stat in allStats)
-			{
-				m_stats.Add(stat, CalculateStat(stat));
-			}
-
-			// IHFDamageable update
-			ResetHealth(false);
-		}
-
 		/// <summary>
-		/// 
+		/// Calculate modified value for a given statistic
 		/// </summary>
-		/// <param name="stat"></param>
-		/// <returns></returns>
+		/// <param name="stat">Statistic type</param>
+		/// <returns>Statistic value</returns>
 		private float CalculateStat(HFStatistics stat)
 		{
 			return (m_baseStats.GetFloat(stat) + GetAddModifiers(stat)) * (1f + GetPctModifiers(stat));
 		}
 
+		/// <summary>
+		/// Calculate all additive modifiers for a given statistic
+		/// </summary>
+		/// <param name="stat">Statistic type</param>
+		/// <returns>Sum of additive modifiers</returns>
 		private float GetAddModifiers(HFStatistics stat)
 		{
 			float total = 0f;
@@ -249,6 +254,11 @@ namespace HF
 			return total;
 		}
 
+		/// <summary>
+		/// Calculate all percentage modifiers for a given statistic
+		/// </summary>
+		/// <param name="stat">Statistic type</param>
+		/// <returns>Sum of percentage modifiers</returns>
 		private float GetPctModifiers(HFStatistics stat)
 		{
 			float totalPct = 0f;
@@ -262,11 +272,14 @@ namespace HF
 			return totalPct / 100f;
 		}
 
+		/// <summary>
+		/// Assign reward
+		/// </summary>
 		private void GainReward()
 		{
 			if (m_stats[HFStatistics.RewardValue] > 0f)
 			{
-				HFEventManager.TriggerEvent<float, HFUnit>(HFEventID.GainReward, Mathf.Round(m_stats[HFStatistics.RewardValue]), this);
+				HFEventManager.TriggerEvent(HFEventID.GainReward, Mathf.Round(m_stats[HFStatistics.RewardValue]), this);
 			}
 		}
 
@@ -551,10 +564,10 @@ namespace HF
 					if (attackDistance <= 1f)
 					{
 						MeleeAttack(m_targetEnemy);
+						m_lastAttackTime = Time.time;
 					}
 					else
 					{
-						// #TODO Only calculate angle based on rotating mesh
 						// Check if target is within shoot angle and shoot distance
 						// If not specified use full width
 						float shootAngle = m_stats[HFStatistics.ShootAngle];
@@ -562,12 +575,14 @@ namespace HF
 						{
 							shootAngle = 180f;
 						}
-						float targetAngle = Vector3.Angle(transform.forward, direction);
+						// #TODO Only calculate angle based on rotating mesh
+						float targetAngle = Vector3.Angle(m_transform.forward, direction);
 						float targetDistance = direction.magnitude;
 
 						if (Mathf.Abs(targetAngle) < shootAngle && targetDistance < attackDistance * m_tileSize)
 						{
 							RangedAttack(m_targetCollider);
+							m_lastAttackTime = Time.time;
 						}
 					}
 				}
@@ -588,25 +603,24 @@ namespace HF
 
 		private void MeleeAttack(HFUnit target)
 		{
-			if (target.UnitType == HFUnitType.Unit)
-			{
-				target.TakeDamage(new DamageInfo(m_stats[HFStatistics.UnitDamage]));
-			}
-			else if (target.UnitType == HFUnitType.Turret || target.UnitType == HFUnitType.Castle)
-			{
-				target.TakeDamage(new DamageInfo(m_stats[HFStatistics.BuildingDamage]));
-			}
+			DamageInfo damageInfo = new DamageInfo(
+				m_stats[HFStatistics.UnitDamage],
+				m_stats[HFStatistics.BuildingDamage]
+				);
+			target.TakeDamage(damageInfo);
 		}
 
 		private void RangedAttack(Collider target)
 		{
 			HFBullet bullet = Instantiate(m_bulletPrefab, m_spawnPoint.position, m_spawnPoint.rotation);
-			bullet.SetParameters(new HFBulletParameters(m_stats[HFStatistics.UnitDamage], m_stats[HFStatistics.BuildingDamage]));
+			HFBulletParameters bulletParams = new HFBulletParameters(
+				this,
+				m_stats[HFStatistics.UnitDamage],
+				m_stats[HFStatistics.BuildingDamage],
+				m_stats[HFStatistics.BulletSpeed]
+				);
+			bullet.SetParameters(bulletParams);
 			bullet.SetTarget(target);
-			//bool _critHit = Random.Range(0f, 1f) <= criticalChance ? true : false;
-			//float _actualDamage = damage * (_critHit ? (1f + criticalExtra / 100f) : 1f);
-			//bullet.InitParameters(_actualDamage, target, physicalDamage, _critHit);
-			m_lastAttackTime = Time.time;
 		}
 
 		private bool IsInRange()
@@ -650,15 +664,6 @@ namespace HF
 			{
 				// #TEMP
 				MeleeAttack(otherUnit);
-
-				//if (otherUnit.UnitType == HFUnitType.Unit)
-				//{
-				//	otherUnit.TakeDamage(new DamageInfo(m_stats[HFStatistics.UnitDamage]));
-				//}
-				//else if (otherUnit.UnitType == HFUnitType.Turret || otherUnit.UnitType == HFUnitType.Castle)
-				//{
-				//	otherUnit.TakeDamage(new DamageInfo(m_stats[HFStatistics.BuildingDamage]));
-				//}
 			}
 
 			ActionComplete(true);
@@ -705,10 +710,17 @@ namespace HF
 			}
 
 			float previous = CurrentHealth;
+			float receivedDamage = (
+				UnitType == HFUnitType.Unit
+				? info.UnitAmount
+				: (
+					(UnitType == HFUnitType.Turret || UnitType == HFUnitType.Castle)
+					? info.BuildingAmount
+					: 0f));
 
-			if (info.Amount > 0f)
+			if (receivedDamage > 0f)
 			{
-				CurrentHealth = Mathf.Max(previous - info.Amount, 0f);
+				CurrentHealth = Mathf.Max(previous - receivedDamage, 0f);
 			}
 
 			float actualDamage = previous - CurrentHealth;
@@ -772,12 +784,16 @@ namespace HF
 		/// Current health will be clamped if greater than MaxHealth
 		/// </summary>
 		/// <param name="bCurrentToMax">True if current health must be reset to maximum, will be unchanged or clamped otherwise</param>
-		private void ResetHealth(bool bCurrentToMax)
+		private void ResetHealth(bool bCurrentToMax, bool bResetKill = false)
 		{
-			float maxHealth = m_stats[HFStatistics.MaxHealth];
-			CurrentHealth = (bCurrentToMax ? maxHealth : Mathf.Min(CurrentHealth, maxHealth));
-			CanSufferDamage = (maxHealth > 0f);
-			IsKilled = false;
+			IsKilled = (bResetKill ? false : IsKilled);
+
+			if (!IsKilled)
+			{
+				float maxHealth = m_stats[HFStatistics.MaxHealth];
+				CurrentHealth = (bCurrentToMax ? maxHealth : Mathf.Min(CurrentHealth, maxHealth));
+				CanSufferDamage = (maxHealth > 0f);
+			}
 		}
 
 		#endregion
