@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HFLevelManager : Singleton<HFLevelManager>
+public class HFLevelContainerManager : Singleton<HFLevelContainerManager>
 {
 
     [SerializeField] private HFLevelContainerSO m_levelContainer;
