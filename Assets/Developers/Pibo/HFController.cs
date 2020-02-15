@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace HF
 {
@@ -9,7 +10,12 @@ namespace HF
 		private HFUnit m_currentSelection;
 
 		[SerializeField]
+		private HFUnit m_unitPrefab = null;
+
+		[SerializeField]
 		private HFUnit[] m_possessedUnitsOnStart = new HFUnit[0];
+
+		private List<HFUnit> m_possessedUnits = new List<HFUnit>();
 
 		public int Team = 0;
 
@@ -94,5 +100,16 @@ namespace HF
 
 		#endregion
 
+		#region Spawn
+
+		public void SpawnUnit(HFBaseStats stats, Vector3 location)
+		{
+			HFUnit newUnit = Instantiate(m_unitPrefab, location, Quaternion.identity);
+			newUnit.SetStats(stats);
+			newUnit.Possess(this);
+			m_possessedUnits.Add(newUnit);
+		}
+
+		#endregion
 	}
 }

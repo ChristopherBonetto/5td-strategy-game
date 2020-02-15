@@ -196,6 +196,12 @@ namespace HF
 
 		#region Statistics
 
+		public void SetStats(HFBaseStats newStats)
+		{
+			m_baseStats = newStats;
+			UpdateStats();
+		}
+
 		private void UpdateModifiers()
 		{
 			m_mods.Clear();
