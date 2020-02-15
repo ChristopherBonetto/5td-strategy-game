@@ -4,20 +4,15 @@ using UnityEngine;
 
 public class HFGameWindowsUI : MonoBehaviour
 {
-    private void OnEnable()
+
+    public void OnClickStartGame()
     {
-        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, UnderstandBehaviorFromGameState);
+        HFGameManager.Instance.CurrentGameState = GameStates.PlayingLevel;
     }
 
-    public void UnderstandBehaviorFromGameState(GameStates inState)
+    public void EndLevel()
     {
-        if (inState == GameStates.InitializeLevel || inState == GameStates.PlayingLevel)
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        HFGameManager.Instance.CurrentGameState = GameStates.EndLevel;
+        HFSceneManager.Instance.LoadSceneFromIndex(1);
     }
 }
