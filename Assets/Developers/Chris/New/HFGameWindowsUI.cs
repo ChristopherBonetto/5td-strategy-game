@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HFGameWindowsUI : HFUIControl
+public class HFGameWindowsUI : MonoBehaviour
 {
-    public override UIControlID Name => UIControlID.InGameWindow;
 
     public void OnClickStartGame()
     {

@@ -66,13 +66,11 @@ public class HFSceneManager : Singleton<HFSceneManager>
         }
     }
 
-    public void LoadFromObjectScene(Object inObj)
+    public void LoadFromName(string inName)
     {
-        string tempName = inObj.name;
-
-        if (AllScenes.Contains(tempName))
+        if (AllScenes.Contains(inName))
         {
-            SceneManager.LoadScene(tempName);
+            SceneManager.LoadScene(inName);
         }
     }
 
