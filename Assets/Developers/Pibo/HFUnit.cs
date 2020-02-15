@@ -140,7 +140,7 @@ namespace HF
 		void Awake()
 		{
 			m_transform = transform;
-			m_renderer = GetComponent<Renderer>();
+			m_renderer = GetComponentInChildren<Renderer>();
 			m_navAgent = GetComponent<NavMeshAgent>();
 			m_anim = GetComponent<Animator>();
 
