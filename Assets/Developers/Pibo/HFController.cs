@@ -1,95 +1,98 @@
 ﻿using UnityEngine;
 
-public class HFController : MonoBehaviour
+namespace HF
 {
-	#region Variables
-	
-	private HFUnit m_currentSelection;
-
-	[SerializeField]
-	private HFUnit[] m_possessedUnitsOnStart = new HFUnit[0];
-
-	public int Team = 0;
-
-	#endregion
-
-	#region Core loop
-
-	void Start()
+	public class HFController : MonoBehaviour
 	{
-		for (int i = 0; i < m_possessedUnitsOnStart.Length; i++)
+		#region Variables
+
+		private HFUnit m_currentSelection;
+
+		[SerializeField]
+		private HFUnit[] m_possessedUnitsOnStart = new HFUnit[0];
+
+		public int Team = 0;
+
+		#endregion
+
+		#region Core loop
+
+		void Start()
 		{
-			m_possessedUnitsOnStart[i].Possess(this);
-		}
-	}
-
-	void Update()
-	{
-		TrySelect();
-		TryInteract();
-	}
-
-	#endregion
-
-	#region Selection
-
-	/// <summary>
-	/// Update unit selection on mouse click
-	/// </summary>
-	private void TrySelect()
-	{
-		if (Input.GetMouseButtonDown(0) && !HFUIManager.Instance.IsMouseOverUI())
-		{
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
+			for (int i = 0; i < m_possessedUnitsOnStart.Length; i++)
 			{
-				HFUnit hitUnit = testHit.collider.gameObject.GetComponent<HFUnit>();
-				if (hitUnit && hitUnit.ControllerType == InputType.Player)
+				m_possessedUnitsOnStart[i].Possess(this);
+			}
+		}
+
+		void Update()
+		{
+			TrySelect();
+			TryInteract();
+		}
+
+		#endregion
+
+		#region Selection
+
+		/// <summary>
+		/// Update unit selection on mouse click
+		/// </summary>
+		private void TrySelect()
+		{
+			if (Input.GetMouseButtonDown(0) && !HFUIManager.Instance.IsMouseOverUI())
+			{
+				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{
-					if (m_currentSelection)
+					HFUnit hitUnit = testHit.collider.gameObject.GetComponent<HFUnit>();
+					if (hitUnit && hitUnit.ControllerType == InputType.Player)
 					{
-						m_currentSelection.Unselect();
+						if (m_currentSelection)
+						{
+							m_currentSelection.Unselect();
+						}
+						hitUnit.Select();
+						m_currentSelection = hitUnit;
 					}
-					hitUnit.Select();
-					m_currentSelection = hitUnit;
-				}
-				else
-				{
-					if (m_currentSelection)
+					else
 					{
-						m_currentSelection.Unselect();
+						if (m_currentSelection)
+						{
+							m_currentSelection.Unselect();
+						}
+						m_currentSelection = null;
 					}
-					m_currentSelection = null;
 				}
 			}
 		}
-	}
 
-	#endregion
+		#endregion
 
-	#region Interaction
+		#region Interaction
 
-	/// <summary>
-	/// Try unit
-	/// </summary>
-	private void TryInteract()
-	{
-		if (m_currentSelection && Input.GetMouseButtonDown(1) && !HFUIManager.Instance.IsMouseOverUI())
+		/// <summary>
+		/// Try unit
+		/// </summary>
+		private void TryInteract()
 		{
-			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
+			if (m_currentSelection && Input.GetMouseButtonDown(1) && !HFUIManager.Instance.IsMouseOverUI())
 			{
-				HFUnit hitUnit = testHit.collider.gameObject.GetComponent<HFUnit>();
-				if (hitUnit)
+				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{
-					m_currentSelection.SetCommand(new HFInteractCommand(hitUnit));
-				}
-				else
-				{
-					m_currentSelection.SetCommand(new HFMoveCommand(testHit.point));
+					HFUnit hitUnit = testHit.collider.gameObject.GetComponent<HFUnit>();
+					if (hitUnit)
+					{
+						m_currentSelection.SetCommand(new HFInteractCommand(hitUnit));
+					}
+					else
+					{
+						m_currentSelection.SetCommand(new HFMoveCommand(testHit.point));
+					}
 				}
 			}
 		}
-	}
 
-	#endregion
-	
+		#endregion
+
+	}
 }

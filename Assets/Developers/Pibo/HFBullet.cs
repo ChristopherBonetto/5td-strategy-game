@@ -65,7 +65,7 @@ namespace HF
 				if (m_target.enabled)
 				{
 					HFUnit targetUnit = m_target.gameObject.GetComponent<HFUnit>();
-					float actualDamage = (targetUnit.UnitType == HFUnitType.Unit ? m_parameters.UnitDamage);
+					float actualDamage = (targetUnit.UnitType == HFUnitType.Unit ? m_parameters.UnitDamage : m_parameters.BuildingDamage);
 					targetUnit.TakeDamage(new DamageInfo(actualDamage));
 				}
 				if (m_explosionParticle)

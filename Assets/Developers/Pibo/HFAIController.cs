@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class HFAIController : HFController
+namespace HF
 {
+	public class HFAIController : HFController
+	{
 
+	}
 }
