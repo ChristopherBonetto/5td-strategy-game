@@ -53,7 +53,7 @@ namespace HF
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{
-					HFUnit hitUnit = testHit.collider.gameObject.GetComponent<HFUnit>();
+					HFUnit hitUnit = testHit.collider.gameObject.GetComponentInParent<HFUnit>();
 					if (hitUnit && hitUnit.ControllerType == InputType.Player)
 					{
 						if (m_currentSelection)
@@ -88,7 +88,7 @@ namespace HF
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{
-					HFUnit hitUnit = testHit.collider.gameObject.GetComponent<HFUnit>();
+					HFUnit hitUnit = testHit.collider.gameObject.GetComponentInParent<HFUnit>();
 					if (hitUnit)
 					{
 						m_currentSelection.SetCommand(new HFInteractCommand(hitUnit));

@@ -512,7 +512,7 @@ namespace HF
 			}
 
 			// #TEMP Acquisition range is one tile unit larger than attack range
-			Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 1f) * m_tileSize, m_unitLayer);
+			Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 1f) * HFGameParameters.TileSize, m_unitLayer);
 
 			if (colliders.Length > 0)
 			{
@@ -579,7 +579,7 @@ namespace HF
 						float targetAngle = Vector3.Angle(m_transform.forward, direction);
 						float targetDistance = direction.magnitude;
 
-						if (Mathf.Abs(targetAngle) < shootAngle && targetDistance < attackDistance * m_tileSize)
+						if (Mathf.Abs(targetAngle) < shootAngle && targetDistance < attackDistance * HFGameParameters.TileSize)
 						{
 							RangedAttack(m_targetCollider);
 							m_lastAttackTime = Time.time;
