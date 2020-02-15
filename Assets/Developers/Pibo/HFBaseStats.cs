@@ -22,6 +22,7 @@ public enum HFStatistics
 	CarryCapacity = 7,
 	Weight = 8,
 	RewardValue = 9,
+	ShootAngle = 10,
 
 
 	Name = 20,

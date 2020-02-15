@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,6 +30,21 @@ public class HFUnit : MonoBehaviour, IHFDamageable
 
 	private Animator m_anim = null;
 
+	/*** Statistics */
+
+	[Space]
+	[Header("Statistics")]
+
+	[SerializeField]
+	private HFBaseStats m_baseStats = null;
+	private Dictionary<HFStatistics, float> m_stats;
+
+	[SerializeField]
+	private HFStatUpgrade[] m_upgrades = new HFStatUpgrade[0];
+	private List<IHFStatModifier> m_mods;
+
+	public HFUnitType UnitType => m_baseStats.UnitType;
+
 	/*** Input */
 
 	private HFController m_controller = null;
@@ -55,7 +69,34 @@ public class HFUnit : MonoBehaviour, IHFDamageable
 
 	private Vector3 m_lastPosition;
 
+	/*** Attack */
+
+	[Space]
+	[Header("Attack")]
+
+	[SerializeField]
+	private HFBullet m_bulletPrefab = null;
+
+	[SerializeField]
+	private LayerMask m_unitLayer = 1 << 9;
+
+	private Collider m_targetCollider;
+
+	private Transform m_spawnPoint;
+
+	private HFUnit m_targetEnemy;
+
+	private float m_lastAttackTime;
+
+	// #TEMP
+	[Tooltip("TEMP This must be removed")]
+	[SerializeField]
+	private float m_tileSize = 1f;
+
 	/*** Selection */
+
+	[Space]
+	[Header("Selection")]
 
 	private bool m_isSelected;
 
@@ -91,18 +132,6 @@ public class HFUnit : MonoBehaviour, IHFDamageable
 	/// Killed flag
 	/// </summary>
 	public bool IsKilled { get; protected set; }
-
-	/*** Statistics */
-
-	[SerializeField]
-	private HFBaseStats m_baseStats = null;
-	private Dictionary<HFStatistics, float> m_stats;
-
-	[SerializeField]
-	private HFStatUpgrade[] m_upgrades = new HFStatUpgrade[0];
-	private List<IHFStatModifier> m_mods;
-
-	public HFUnitType UnitType => m_baseStats.UnitType;
 
 	#endregion
 
@@ -446,6 +475,135 @@ public class HFUnit : MonoBehaviour, IHFDamageable
 
 	#endregion
 
+	#region Attack
+
+	public bool FindNewTarget()
+	{
+		// Fail if can't deal any damage
+		if (m_stats[HFStatistics.BuildingDamage] == 0f && m_stats[HFStatistics.UnitDamage] == 0f)
+		{
+			return false;
+		}
+
+		// #TEMP Acquisition range is one tile unit larger than attack range
+		Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 1f) * m_tileSize, m_unitLayer);
+
+		if (colliders.Length > 0)
+		{
+			float targetDistance = Mathf.Infinity;
+			m_targetCollider = colliders[0];
+
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				float distanceTest = Vector3.Magnitude(colliders[i].bounds.center - m_transform.position);
+				if (distanceTest < targetDistance)
+				{
+					m_targetCollider = colliders[i];
+					targetDistance = distanceTest;
+				}
+			}
+
+			UpdateAnimState();
+
+			m_targetEnemy = m_targetCollider.gameObject.GetComponent<HFUnit>();
+
+		}
+
+		return (m_targetEnemy != null);
+	}
+
+	public void TryAttack()
+	{
+		if (IsInRange() && m_targetEnemy && m_targetEnemy.enabled)
+		{
+			// Look at target
+			Vector3 direction = (m_targetCollider.transform.position - transform.position);
+
+			// #TODO Move towards target
+
+			// #TODO Rotate shooting mesh towards target
+			//Quaternion lookDirection = Quaternion.LookRotation(direction);
+
+			//m_mesh.transform.rotation = Quaternion.Lerp(m_mesh.transform.rotation, lookDirection, Time.deltaTime * 3f);
+			//m_mesh.transform.rotation = Quaternion.Euler(0, m_mesh.transform.rotation.eulerAngles.y, 0);
+
+			// Wait for cooldown
+			float rateOfFire = m_stats[HFStatistics.AttackRate];
+			bool bCanShootAgain = rateOfFire > 0f && (Time.time > m_lastAttackTime + 1f / rateOfFire);
+
+			if (bCanShootAgain)
+			{
+				float attackDistance = m_stats[HFStatistics.AttackRange];
+
+				if (attackDistance <= 1f)
+				{
+					MeleeAttack(m_targetEnemy);
+				}
+				else
+				{
+					// #TODO Only calculate angle based on rotating mesh
+					// Check if target is within shoot angle and shoot distance
+					// If not specified use full width
+					float shootAngle = m_stats[HFStatistics.ShootAngle];
+					if (shootAngle == 0f)
+					{
+						shootAngle = 180f;
+					}
+					float targetAngle = Vector3.Angle(transform.forward, direction);
+					float targetDistance = direction.magnitude;
+
+					if (Mathf.Abs(targetAngle) < shootAngle && targetDistance < attackDistance * m_tileSize)
+					{
+						RangedAttack(m_targetCollider);
+					}
+				}
+			}
+		}
+		else
+		{
+			// Lost target
+			UpdateAnimState();
+			m_targetCollider = null;
+			m_targetEnemy = null;
+
+			if (m_currentCommand is HFAttackCommand)
+			{
+				m_currentCommand.End(); 
+			}
+		}
+	}
+
+	private void MeleeAttack(HFUnit target)
+	{
+		if (target.UnitType == HFUnitType.Unit)
+		{
+			target.TakeDamage(new DamageInfo(m_stats[HFStatistics.UnitDamage]));
+		}
+		else if (target.UnitType == HFUnitType.Turret || target.UnitType == HFUnitType.Castle)
+		{
+			target.TakeDamage(new DamageInfo(m_stats[HFStatistics.BuildingDamage]));
+		}
+	}
+
+	private void RangedAttack(Collider target)
+	{
+		HFBullet bullet = Instantiate(m_bulletPrefab, m_spawnPoint.position, m_spawnPoint.rotation);
+		bullet.SetTarget(target);
+		//bool _critHit = Random.Range(0f, 1f) <= criticalChance ? true : false;
+		//float _actualDamage = damage * (_critHit ? (1f + criticalExtra / 100f) : 1f);
+		//bullet.InitParameters(_actualDamage, target, physicalDamage, _critHit);
+		m_lastAttackTime = Time.time;
+	}
+
+	private bool IsInRange()
+	{
+		// #TEMP Acquisition range is one tile unit larger than attack range
+		return (Vector3.Magnitude(m_targetCollider.bounds.center - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 1f) * m_tileSize);
+	}
+
+
+	#endregion
+
 	#region Animations
 
 	private void UpdateAnimState()
@@ -453,6 +611,7 @@ public class HFUnit : MonoBehaviour, IHFDamageable
 		if (m_anim)
 		{
 			m_anim.SetBool("Moving", m_isMoving);
+			m_anim.SetBool("Fighting", (m_targetEnemy != null));
 		}
 	}
 
@@ -476,14 +635,17 @@ public class HFUnit : MonoBehaviour, IHFDamageable
 
 		if (otherUnit != this && otherUnit.Team != Team)
 		{
-			if (otherUnit.UnitType == HFUnitType.Unit)
-			{
-				otherUnit.TakeDamage(new DamageInfo(m_stats[HFStatistics.UnitDamage]));
-			}
-			else if (otherUnit.UnitType == HFUnitType.Turret || otherUnit.UnitType == HFUnitType.Castle)
-			{
-				otherUnit.TakeDamage(new DamageInfo(m_stats[HFStatistics.BuildingDamage]));
-			}
+			// #TEMP
+			MeleeAttack(otherUnit);
+
+			//if (otherUnit.UnitType == HFUnitType.Unit)
+			//{
+			//	otherUnit.TakeDamage(new DamageInfo(m_stats[HFStatistics.UnitDamage]));
+			//}
+			//else if (otherUnit.UnitType == HFUnitType.Turret || otherUnit.UnitType == HFUnitType.Castle)
+			//{
+			//	otherUnit.TakeDamage(new DamageInfo(m_stats[HFStatistics.BuildingDamage]));
+			//}
 		}
 
 		ActionComplete(true);
@@ -657,6 +819,34 @@ public class HFInteractCommand : IHFCommand
 		{
 			End();
 		}
+	}
+
+	public void Abort()
+	{
+		End();
+	}
+
+	public void End()
+	{ }
+}
+
+public class HFAttackCommand : IHFCommand
+{
+	private HFUnit m_unit;
+
+	public HFAttackCommand()
+	{ }
+
+	public bool Start(HFUnit unit)
+	{
+		m_unit = unit;
+
+		return (m_unit != null && m_unit.FindNewTarget());
+	}
+
+	public void Perform()
+	{
+		m_unit.TryAttack();
 	}
 
 	public void Abort()
