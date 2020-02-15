@@ -99,20 +99,19 @@ namespace HF
 		[Space]
 		[Header("Selection")]
 
-		private bool m_isSelected;
-
 		[SerializeField]
 		private Material m_selectedMaterial = null;
 
-		[SerializeField]
 		private Material m_unselectedMaterial = null;
+
+		private bool m_isSelected;
 
 		/*** IHFDamageable interface */
 
 		/// <summary>
 		/// Max health
 		/// </summary>
-		public float MaxHealth { get; protected set; }
+		public float MaxHealth => m_stats[HFStatistics.MaxHealth];
 
 		/// <summary>
 		/// Current health
@@ -284,15 +283,17 @@ namespace HF
 			else if (controller is HFAIController)
 			{
 				ControllerType = InputType.AI;
-				Team = controller.Team;
 			}
 			else
 			{
 				ControllerType = InputType.Player;
-				Team = controller.Team;
 			}
 
+			Team = controller.Team;
+			m_unselectedMaterial = controller.BaseMaterial;
 			m_controller = controller;
+
+			Unselect();
 		}
 
 		public void UnPossess()
@@ -697,27 +698,30 @@ namespace HF
 		/// <returns>Actual health value decrease amount</returns>
 		public float TakeDamage(DamageInfo info)
 		{
-			float previous = CurrentHealth;
-			if (info.Amount > 0f && CanSufferDamage)
+			if (!CanSufferDamage)
 			{
-				CurrentHealth = Mathf.Max(CurrentHealth - info.Amount, 0f);
+				Debug.Log(gameObject.name + " can't suffer damage");
+				return 0f;
 			}
-			if (CanSufferDamage && CurrentHealth == 0f)
+
+			float previous = CurrentHealth;
+
+			if (info.Amount > 0f)
 			{
+				CurrentHealth = Mathf.Max(previous - info.Amount, 0f);
+			}
+
+			float actualDamage = previous - CurrentHealth;
+
+			Debug.Log(gameObject.name + " has suffered damage: " + actualDamage.ToString());
+
+			if (CurrentHealth == 0f)
+			{
+				CanSufferDamage = false;
 				OnDeath();
 			}
-			{
-				// #TEMP
-				if (CanSufferDamage)
-				{
-					Debug.Log(gameObject.name + " has suffered damage: " + (previous - CurrentHealth).ToString());
-				}
-				else
-				{
-					Debug.Log(gameObject.name + " can't suffer damage");
-				}
-			}
-			return previous - CurrentHealth;
+
+			return actualDamage;
 		}
 
 		/// <summary>
@@ -727,12 +731,22 @@ namespace HF
 		/// <returns>Actual health value increase amount</returns>
 		public float Heal(HealInfo info)
 		{
+			if (!CanSufferDamage)
+			{
+				Debug.Log(gameObject.name + " can't be healed");
+				return 0f;
+			}
+
 			float previous = CurrentHealth;
+
 			if (info.Amount > 0f && CanSufferDamage)
 			{
-				CurrentHealth = Mathf.Min(CurrentHealth + info.Amount, MaxHealth);
+				CurrentHealth = Mathf.Min(previous + info.Amount, m_stats[HFStatistics.MaxHealth]);
 			}
-			return CurrentHealth - previous;
+
+			float actualHeal = CurrentHealth - previous;
+
+			return actualHeal;
 		}
 
 		/// <summary>
@@ -760,9 +774,10 @@ namespace HF
 		/// <param name="bCurrentToMax">True if current health must be reset to maximum, will be unchanged or clamped otherwise</param>
 		private void ResetHealth(bool bCurrentToMax)
 		{
-			MaxHealth = m_stats[HFStatistics.MaxHealth];
-			CurrentHealth = (bCurrentToMax ? MaxHealth : Mathf.Min(CurrentHealth, MaxHealth));
-			CanSufferDamage = (MaxHealth > 0f);
+			float maxHealth = m_stats[HFStatistics.MaxHealth];
+			CurrentHealth = (bCurrentToMax ? maxHealth : Mathf.Min(CurrentHealth, maxHealth));
+			CanSufferDamage = (maxHealth > 0f);
+			IsKilled = false;
 		}
 
 		#endregion

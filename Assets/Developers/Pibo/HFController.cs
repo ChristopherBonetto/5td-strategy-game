@@ -19,6 +19,8 @@ namespace HF
 
 		public int Team = 0;
 
+		public Material BaseMaterial;
+
 		#endregion
 
 		#region Core loop
@@ -28,6 +30,7 @@ namespace HF
 			for (int i = 0; i < m_possessedUnitsOnStart.Length; i++)
 			{
 				m_possessedUnitsOnStart[i].Possess(this);
+				m_possessedUnits.Add(m_possessedUnitsOnStart[i]);
 			}
 		}
 
@@ -44,7 +47,7 @@ namespace HF
 		/// <summary>
 		/// Update unit selection on mouse click
 		/// </summary>
-		private void TrySelect()
+		protected virtual void TrySelect()
 		{
 			if (Input.GetMouseButtonDown(0) && !HFUIManager.Instance.IsMouseOverUI())
 			{
@@ -77,9 +80,9 @@ namespace HF
 		#region Interaction
 
 		/// <summary>
-		/// Try unit
+		/// Try interact with unit
 		/// </summary>
-		private void TryInteract()
+		protected virtual void TryInteract()
 		{
 			if (m_currentSelection && Input.GetMouseButtonDown(1) && !HFUIManager.Instance.IsMouseOverUI())
 			{
