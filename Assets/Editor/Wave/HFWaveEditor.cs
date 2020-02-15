@@ -7,13 +7,9 @@ using HF.WaveSystem;
 [CustomEditor(typeof(HFWave))]
 public class HFWaveEditor : Editor
 {
-    new HFWave target;
-    SerializedObject getTarget;
-
-    SerializedProperty thisList;
-    int ListSize;
-
-    List<HFWave.Behaviour> typedList;
+    HFWave m_target;
+    SerializedProperty m_list;
+    List<HFWave.Behaviour> m_typedList;
 
     #region Resources
     Texture2D deleteButton;
@@ -21,11 +17,9 @@ public class HFWaveEditor : Editor
 
     void OnEnable()
     {
-        target = (HFWave)base.target;
-        getTarget = new SerializedObject(target);
-
-        thisList = getTarget.FindProperty("BehavioursCollection");  // Find the List in our script and create a refrence of it
-        typedList = target.BehavioursCollection;                          // Find the List in our script and create a refrence of it with the same type.
+        HFWave m_target = (HFWave)target;
+        m_typedList = m_target.BehavioursCollection;
+        m_list = serializedObject.FindProperty("BehavioursCollection");
 
         // Resources
         deleteButton = Resources.Load<Texture2D>("Editor/custom_editor_button_delete");
@@ -34,136 +28,131 @@ public class HFWaveEditor : Editor
     public override void OnInspectorGUI()
     {
         //Update our list
-        getTarget.Update();
+        serializedObject.Update();
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
         //Display our list to the inspector window
-        for (int i = 0; i < thisList.arraySize; i++)
+        for (int i = 0; i < m_list.arraySize; i++)
         {
-            // Store properties.
-            SerializedProperty MyListRef = thisList.GetArrayElementAtIndex(i);
-            SerializedProperty MyFoldout = MyListRef.FindPropertyRelative("Foldout");
-            SerializedProperty MyRandomEmemy = MyListRef.FindPropertyRelative("RandomEnemy");
-            SerializedProperty MyEnemyPrefab = MyListRef.FindPropertyRelative("EnemyPrefab");
-            SerializedProperty MySpawnPoint = MyListRef.FindPropertyRelative("SpawnPoint");
-            SerializedProperty MyTimeToWait = MyListRef.FindPropertyRelative("TimeToWait");
-            SerializedProperty MyAmountToSpawn = MyListRef.FindPropertyRelative("AmountToSpawn");
+            SerializedProperty list = m_list.GetArrayElementAtIndex(i);
+            SerializedProperty foldout = list.FindPropertyRelative("Foldout");
+            SerializedProperty waitForInput = list.FindPropertyRelative("WaitForInput");
+            SerializedProperty randomEnemy = list.FindPropertyRelative("RandomEnemy");
+            SerializedProperty enemyPrefab = list.FindPropertyRelative("EnemyPrefab");
+            SerializedProperty spawnPoint = list.FindPropertyRelative("SpawnPoint");
+            SerializedProperty timeToWait = list.FindPropertyRelative("TimeToWait");
+            SerializedProperty amountToSpawn = list.FindPropertyRelative("AmountToSpawn");
 
 
-            if (typedList[i].Type == BehaviourType.Single)
+            EditorGUILayout.Space();
+            EditorGUILayout.Space();
+
+
+            EditorGUILayout.BeginHorizontal();
+            
+            foldout.boolValue = EditorGUILayout.ToggleLeft("Show", foldout.boolValue, GUILayout.Width(100));
+
+            m_typedList[i].BehaviourType = (BehaviourType)EditorGUILayout.EnumPopup(m_typedList[i].BehaviourType);
+
+            #region Buttons
+            MoveDownTheElement(i);
+            MoveUpTheElement(i);
+
+            if (GUILayout.Button("Remove"))
             {
-                GUILayout.BeginHorizontal();
-
-                // Foldout 
-                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
-
-                // Assign Behaviour type (enum)
-                typedList[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(typedList[i].Type);
-
-                // Buttons: Moves up, moves down, delete.
-                MoveUpTheElement(i);
-
-                MoveDownTheElement(i);
-
-                if (GUILayout.Button(deleteButton))
-                {
-                    thisList.DeleteArrayElementAtIndex(i);
-                    getTarget.ApplyModifiedProperties();
-                    return;
-                }
-
-                GUILayout.EndHorizontal();
-
-
-                if (MyFoldout.boolValue)
-                {
-                    MyRandomEmemy.boolValue = EditorGUILayout.Toggle("Random Enemy", MyRandomEmemy.boolValue);    // Update soon...
-
-                    if (!MyRandomEmemy.boolValue)   //  Drag and drop a prefab
-                        MyEnemyPrefab.objectReferenceValue = EditorGUILayout.ObjectField("My Enemy Prefab", MyEnemyPrefab.objectReferenceValue, typeof(GameObject), true);
-                    // else                        
-                                                    // else choose randomly (weighted) the prefab from a collection
-
-                    MySpawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", MySpawnPoint.intValue);
-                }
-
-                // Add some space.
-                EditorGUILayout.Space();
-                EditorGUILayout.Space();
+                m_list.DeleteArrayElementAtIndex(i);
+                serializedObject.ApplyModifiedProperties();
+                return;
             }
-            else if (typedList[i].Type == BehaviourType.Wait)
+            #endregion
+
+            EditorGUILayout.EndHorizontal();
+
+            if (foldout.boolValue)
             {
-                GUILayout.BeginHorizontal();
-
-                // Foldout
-                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
-
-                // Assign Behaviour type (enum)
-                typedList[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(typedList[i].Type);
-
-                // Buttons: Moves up, moves down, delete.
-                MoveUpTheElement(i);
-
-                MoveDownTheElement(i);
-
-                if (GUILayout.Button(deleteButton))
+                if (m_typedList[i].BehaviourType == BehaviourType.Single)
                 {
-                    thisList.DeleteArrayElementAtIndex(i);
-                    getTarget.ApplyModifiedProperties();
-                    return;
+                    EditorGUILayout.Space();
+
+
+                    EditorGUILayout.BeginHorizontal();
+
+                    EditorGUILayout.LabelField("Request next behaviour when?");
+                    m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
+
+
+                    EditorGUILayout.EndHorizontal();
+
+
+                    //EditorGUILayout.BeginHorizontal();
+
+                    //if (m_typedList[i].RequestType == RequestType.Post)
+                    //{
+                    //    EditorGUILayout.LabelField("Wait for player input ?");
+                    //    waitForInput.boolValue = EditorGUILayout.Toggle(waitForInput.boolValue);
+                    //}
+
+                    //EditorGUILayout.EndHorizontal();
+
+                    //randomEnemy.boolValue = EditorGUILayout.Toggle("Pick random enemies ?", randomEnemy.boolValue);
+
+                    if (!randomEnemy.boolValue)
+                        EditorGUILayout.ObjectField(enemyPrefab);
+
+                    spawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", spawnPoint.intValue);
                 }
-
-                GUILayout.EndHorizontal();
-
-
-                if (MyFoldout.boolValue)
+                else if (m_typedList[i].BehaviourType == BehaviourType.Wait)
                 {
-                    MyTimeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", MyTimeToWait.floatValue);
+                    EditorGUILayout.Space();
+
+
+                    timeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", timeToWait.floatValue);
+
+                    //if (m_list.arraySize >= i + 1 && m_typedList.Count >= i + 1)
+                    //    m_typedList[i].RequestType = m_typedList[i + 1].RequestType;
+
+                    EditorGUILayout.BeginHorizontal();
+
+                    EditorGUILayout.LabelField("Request next behaviour when?");
+                    m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
+
+
+                    EditorGUILayout.EndHorizontal();
+
+                    //EditorGUILayout.LabelField("Request type will be: " + m_typedList[i].RequestType);
                 }
+                //else if (m_typedList[i].BehaviourType == BehaviourType.Bulk)
+                //{
+                //    EditorGUILayout.Space();
 
-                // Add some space.
-                EditorGUILayout.Space();
-                EditorGUILayout.Space();
-            }
-            else if (typedList[i].Type == BehaviourType.Bulk)
-            {
-                GUILayout.BeginHorizontal();
 
-                // Foldout
-                MyFoldout.boolValue = EditorGUILayout.Foldout(MyFoldout.boolValue, i.ToString());
+                //    EditorGUILayout.BeginHorizontal();
 
-                // Assign Behaviour type (enum)
-                typedList[i].Type = (BehaviourType)EditorGUILayout.EnumPopup(typedList[i].Type);
+                //    EditorGUILayout.LabelField("Request next behaviour when?");
+                //    m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
 
-                // Buttons: Moves up, moves down, delete.
-                MoveUpTheElement(i);
+                //    EditorGUILayout.EndHorizontal();
 
-                MoveDownTheElement(i);
+                //    EditorGUILayout.BeginHorizontal();
 
-                if (GUILayout.Button(deleteButton))
-                {
-                    thisList.DeleteArrayElementAtIndex(i);
-                    getTarget.ApplyModifiedProperties();
-                    return;
-                }
+                //    if (m_typedList[i].RequestType == RequestType.Post)
+                //    {
+                //        EditorGUILayout.LabelField("Wait for player input ?");
+                //        waitForInput.boolValue = EditorGUILayout.Toggle(waitForInput.boolValue);
+                //    }
 
-                GUILayout.EndHorizontal();
+                //    EditorGUILayout.EndHorizontal();
 
-                
-                if (MyFoldout.boolValue)
-                {
-                    MyRandomEmemy.boolValue = EditorGUILayout.Toggle("Random Enemy", MyRandomEmemy.boolValue);    // Update soon...
-                    if (!MyRandomEmemy.boolValue)
-                        MyEnemyPrefab.objectReferenceValue = EditorGUILayout.ObjectField("My Enemy Prefab", MyEnemyPrefab.objectReferenceValue, typeof(GameObject), true);
-                    MySpawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", MySpawnPoint.intValue);
-                    MyAmountToSpawn.intValue = EditorGUILayout.IntField("Amount to spawn", MySpawnPoint.intValue);
-                }
+                //    randomEnemy.boolValue = EditorGUILayout.Toggle("Pick random enemies ?", randomEnemy.boolValue);
 
-                // Add some space.
-                EditorGUILayout.Space();
-                EditorGUILayout.Space();
+                //    if (!randomEnemy.boolValue)
+                //        EditorGUILayout.ObjectField(enemyPrefab);
+
+                //    amountToSpawn.intValue = EditorGUILayout.IntField("Amount to spawn", amountToSpawn.intValue);
+                //    spawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", spawnPoint.intValue);
+                //}
             }
         }
 
@@ -172,11 +161,11 @@ public class HFWaveEditor : Editor
 
         if (GUILayout.Button("Add New Behaviour"))
         {
-            target.BehavioursCollection.Add(new HFWave.Behaviour());
+            m_typedList.Add(new HFWave.Behaviour());
         }
 
-        //Apply the changes to our list
-        getTarget.ApplyModifiedProperties();
+        //Apply changes
+        serializedObject.ApplyModifiedProperties();
     }
 
     #region List Control
@@ -184,9 +173,8 @@ public class HFWaveEditor : Editor
     {
         if (GUILayout.Button("^"))
         {
-            thisList.MoveArrayElement(i, i - 1);
-            getTarget.ApplyModifiedProperties();
-            return;
+            m_list.MoveArrayElement(i, i - 1);
+            serializedObject.ApplyModifiedProperties();
         }
     }
 
@@ -194,9 +182,8 @@ public class HFWaveEditor : Editor
     {
         if (GUILayout.Button("v"))
         {
-            thisList.MoveArrayElement(i, i + 1);
-            getTarget.ApplyModifiedProperties();
-            return;
+            m_list.MoveArrayElement(i, i + 1);
+            serializedObject.ApplyModifiedProperties();
         }
     }
     #endregion

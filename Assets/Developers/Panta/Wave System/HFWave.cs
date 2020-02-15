@@ -20,7 +20,13 @@ namespace HF.WaveSystem
         Bulk = 1 << 2,
     }
 
-    [CreateAssetMenu(fileName = "L_00_Wave_00", menuName = "Human Factor/New Wave")]
+    public enum RequestType
+    {
+        Pre,
+        Post,
+    }
+
+    [CreateAssetMenu(fileName = "L_00_Wave_00", menuName = "Human Factor/Wave/New Wave")]
     public class HFWave : ScriptableObject
     {
         public List<Behaviour> BehavioursCollection;
@@ -29,14 +35,17 @@ namespace HF.WaveSystem
         public class Behaviour
         {
 #if UNITY_EDITOR
-            public bool Foldout;
+            public bool Foldout = true;
 #endif
 
-            public BehaviourType Type = BehaviourType.Single;
+            public BehaviourType BehaviourType = BehaviourType.Single;
+            public RequestType RequestType = RequestType.Pre;
+
+            public bool WaitForInput;
 
             // 0) Single
             public bool RandomEnemy;
-            public GameObject EnemyPrefab;
+            public HFBaseStats EnemyPrefab;
             public int SpawnPoint;
 
             // 1) Wait
