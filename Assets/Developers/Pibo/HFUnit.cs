@@ -83,16 +83,12 @@ namespace HF
 
 		private Collider m_targetCollider;
 
-		private Transform m_spawnPoint;
+		[SerializeField]
+		private Transform m_spawnPoint = null;
 
 		private HFUnit m_targetEnemy;
 
 		private float m_lastAttackTime;
-
-		// #TEMP
-		[Tooltip("TEMP This must be removed")]
-		[SerializeField]
-		private float m_tileSize = 1f;
 
 		/*** Selection */
 
@@ -157,9 +153,6 @@ namespace HF
 			ResetHealth(true, true);
 
 			UnPossess();
-
-			m_navAgent.enabled = (m_stats[HFStatistics.Speed] > 0f);
-			m_navAgent.speed = m_stats[HFStatistics.Speed];
 		}
 
 		void OnEnable()
@@ -169,7 +162,7 @@ namespace HF
 
 		void Start()
 		{
-			HFEventManager.TriggerEvent(HFEventID.OnRequestNewBehaviour, HF.WaveSystem.RequestType.Pre);
+			HFEventManager.TriggerEvent(HFEventID.OnRequestNewBehaviour, WaveSystem.RequestType.Pre);
 		}
 
 		void OnDisable()
@@ -186,6 +179,10 @@ namespace HF
 			else if (m_currentCommand != null)
 			{
 				m_currentCommand.Perform();
+			}
+			else
+			{
+				RefreshCommands();
 			}
 		}
 
@@ -212,6 +209,10 @@ namespace HF
 
 			// IHFDamageable update
 			ResetHealth(false, false);
+
+			// Navigation update
+			m_navAgent.enabled = (m_stats[HFStatistics.Speed] > 0f);
+			m_navAgent.speed = m_stats[HFStatistics.Speed];
 		}
 
 		private void UpdateModifiers()
@@ -280,6 +281,7 @@ namespace HF
 			if (m_stats[HFStatistics.RewardValue] > 0f)
 			{
 				HFEventManager.TriggerEvent(HFEventID.GainReward, Mathf.Round(m_stats[HFStatistics.RewardValue]), this);
+				Debug.Log("Given reward: " + Mathf.Round(m_stats[HFStatistics.RewardValue]) + " by " + gameObject.name);
 			}
 		}
 
@@ -289,19 +291,14 @@ namespace HF
 
 		public void Possess(HFController controller)
 		{
+			UnPossess();
+
 			if (!controller)
 			{
-				UnPossess();
-			}
-			else if (controller is HFAIController)
-			{
-				ControllerType = InputType.AI;
-			}
-			else
-			{
-				ControllerType = InputType.Player;
+				return;
 			}
 
+			ControllerType = (controller is HFAIController ? InputType.AI : InputType.Player);
 			Team = controller.Team;
 			m_unselectedMaterial = controller.BaseMaterial;
 			m_controller = controller;
@@ -322,6 +319,12 @@ namespace HF
 			{
 				GainReward();
 			}
+		}
+
+		private void RefreshCommands()
+		{
+			AddCommand(new HFAttackCommand());
+			ActionComplete(true);
 		}
 
 		#endregion
@@ -362,10 +365,15 @@ namespace HF
 		private void TryStartAction()
 		{
 			IHFCommand nextCommand = GetNextCommand();
-			if (nextCommand != null && nextCommand.Start(this))
+			while (nextCommand != null)
 			{
-				m_isCommandComplete = false;
-				m_currentCommand = nextCommand;
+				if (nextCommand.Start(this))
+				{
+					m_isCommandComplete = false;
+					m_currentCommand = nextCommand;
+					break;
+				}
+				nextCommand = GetNextCommand();
 			}
 		}
 
@@ -626,7 +634,7 @@ namespace HF
 		private bool IsInRange()
 		{
 			// #TEMP Acquisition range is one tile unit larger than attack range
-			return (Vector3.Magnitude(m_targetCollider.bounds.center - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 1f) * m_tileSize);
+			return (Vector3.Magnitude(m_targetCollider.bounds.center - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 1f) * HFGameParameters.TileSize);
 		}
 		
 		#endregion
@@ -771,7 +779,7 @@ namespace HF
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
 
-			HFEventManager.TriggerEvent(HFEventID.OnRequestNewBehaviour, HF.WaveSystem.RequestType.Post);
+			HFEventManager.TriggerEvent(HFEventID.OnRequestNewBehaviour, WaveSystem.RequestType.Post);
 
 			if (m_baseStats.RewardCondition == HFRewardCondition.Kill)
 			{
