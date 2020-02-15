@@ -110,8 +110,7 @@ public class HFWaveEditor : Editor
 
                     timeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", timeToWait.floatValue);
 
-                    //if (m_list.arraySize >= i + 1 && m_typedList.Count >= i + 1)
-                    //    m_typedList[i].RequestType = m_typedList[i + 1].RequestType;
+                    m_typedList[i].RequestType = m_typedList[i - 1].RequestType;
 
                     //EditorGUILayout.BeginHorizontal();
 

@@ -9,6 +9,7 @@ using HF.WaveSystem;
 public class HFWaveLevelEditor : Editor
 {
     SerializedProperty collector;
+    SerializedProperty controller;
     UnityEditorInternal.ReorderableList list1;
 
     public override void OnInspectorGUI()
@@ -24,6 +25,9 @@ public class HFWaveLevelEditor : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.ObjectField(collector);
+        EditorGUILayout.ObjectField(controller);
+
+
 
         this.serializedObject.ApplyModifiedProperties();
     }
@@ -34,5 +38,6 @@ public class HFWaveLevelEditor : Editor
         this.list1 = HFReorderableList.CreateAutoLayout(property);
 
         collector = this.serializedObject.FindProperty("m_WaveCollector");
+        controller = this.serializedObject.FindProperty("controller");
     }
 }

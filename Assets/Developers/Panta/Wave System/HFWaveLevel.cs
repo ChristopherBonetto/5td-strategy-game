@@ -10,6 +10,8 @@ namespace HF.WaveSystem
         // e.g. 
         // public var;
         // [Serializefield] private var;
+
+        public HFController controller;
         #endregion
 
         #region Private (single variables)
@@ -60,31 +62,25 @@ namespace HF.WaveSystem
 
         public void RequestNextBehaviour(RequestType requestType)
         {
-            m_behaviour = GetBehaviours[m_currentBehaviourIndex];
-            Debug.Log("Index = " + m_currentBehaviourIndex + ", " + "Type picked: " + m_behaviour.RequestType + ", " + "Type request: " + requestType);
-            
+            if (m_behaviour == null)
+                m_behaviour = GetBehaviours[m_currentBehaviourIndex];
+
             if (requestType == m_behaviour.RequestType)
             {
-                m_currentBehaviourIndex++;
-                
-                if (m_behaviour.WaitForInput)
-                {
-                    // Show UI
-                    Debug.Log("Show UI");
-                    return;
-                }
-
+                // Check index bounds
                 if (m_currentBehaviourIndex > GetBehaviours.Count - 1)
                 {
-                    m_currentBehaviourIndex = 0;
                     m_currentWaveIndex++;
+                    m_currentBehaviourIndex = 0;
 
                     if (m_currentWaveIndex > GetWaves.Count - 1)
                     {
-                        Debug.Log("End waves");
+                        Debug.Log("End Level");
                         return;
                     }
                 }
+
+                m_behaviour = GetBehaviours[m_currentBehaviourIndex];
 
                 if (m_behaviour.BehaviourType == BehaviourType.Single)
                 {
@@ -94,17 +90,23 @@ namespace HF.WaveSystem
                 {
                     ExecuteWaitBehaviour(m_behaviour);
                 }
-            }
 
+                m_currentBehaviourIndex++;
+            }
         }
 
         private void ExecuteSingleBehaviour(HFWave.Behaviour behaviour)
         {
-            //GameObject go = new GameObject("Enemy", typeof(HFUnit));    // Set stats
-            //go.transform.position = SpawnPoints[behaviour.SpawnPoint].position;
-            //go.transform.rotation = Quaternion.LookRotation(Vector3.zero - go.transform.position, Vector3.up);
+            if (behaviour.EnemyPrefab == null)
+            {
+                Debug.LogWarning($"There are no stats assigned, Wave {m_currentWaveIndex}, Minor wave {m_currentBehaviourIndex}");
+                return;
+            }
+
+            Vector3 pos = SpawnPoints[behaviour.SpawnPoint].position;
+
+            controller.SpawnUnit(GetBehaviours[m_currentBehaviourIndex].EnemyPrefab, pos);
             Debug.Log("Spawn Enemy");
-            RequestNextBehaviour(m_behaviour.RequestType); // simulate the eevnt trigger.
         }
 
         private void ExecuteWaitBehaviour(HFWave.Behaviour behaviour)
