@@ -51,7 +51,7 @@ public class HFGameManager : Singleton<HFGameManager>
         CurrentGameState = GameStates.LoadStartingInfo;
     }
 
-    
+
 
     public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
     {
@@ -92,7 +92,7 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (inState)
         {
             case GameStates.LoadStartingInfo:
-                HFSceneManager.Instance.LoadNextScene();
+                //HFSceneManager.Instance.LoadNextScene();
                 break;
 
             case GameStates.StartGame:
@@ -108,6 +108,7 @@ public class HFGameManager : Singleton<HFGameManager>
                 break;
 
             case GameStates.EndLevel:
+                
                 break;
 
             case GameStates.Pause:

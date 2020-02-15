@@ -4,20 +4,8 @@ using UnityEngine;
 
 public class HFLoadWindowsUI : MonoBehaviour
 {
-    private void OnEnable()
+    public void LoadedPlayer()
     {
-        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, UnderstandBehaviorFromGameState);
-    }
-
-    public void UnderstandBehaviorFromGameState(GameStates inState)
-    {
-        if (inState == GameStates.LoadStartingInfo)
-        {
-            gameObject.SetActive(true);
-        }
-        else
-        {
-            gameObject.SetActive(false);
-        }
+        HFGameManager.Instance.CurrentGameState = GameStates.StartGame;
     }
 }

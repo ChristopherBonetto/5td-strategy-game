@@ -28,6 +28,8 @@ public class HFSceneManager : Singleton<HFSceneManager>
         TakeAllSceneInBuild();
     }
 
+    
+
     #region Get All Scenes
 
     public void TakeAllSceneInBuild()
@@ -86,7 +88,7 @@ public class HFSceneManager : Singleton<HFSceneManager>
         }
         else if(IndexCurrentScene == 1)
         {
-            HFGameManager.Instance.CurrentGameState = GameStates.StartGame;
+            HFGameManager.Instance.CurrentGameState = GameStates.WarRoom;
         }
         else
         {
