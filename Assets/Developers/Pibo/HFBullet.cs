@@ -22,7 +22,7 @@ namespace HF
 	{
 		private bool m_isExploding = false;
 
-		private Collider m_target;
+		private HFUnit m_target;
 
 		[SerializeField]
 		private Renderer m_mesh = null;
@@ -53,9 +53,9 @@ namespace HF
 		{
 			m_transform.position += m_transform.forward * m_parameters.Speed * Time.deltaTime;
 
-			if (m_target)
+			if (m_target && !m_target.IsKilled)
 			{
-				m_transform.LookAt(m_target.bounds.center);
+				m_transform.LookAt(m_target.TargetCollider.bounds.center);
 			}
 			else
 			{
@@ -63,14 +63,20 @@ namespace HF
 			}
 		}
 
-		private void OnTriggerEnter(Collider other)
+		private void OnCollisionEnter(Collision collision)
 		{
-			if (other == m_target)
+			Debug.Log(collision.gameObject.name);
+			if (collision.collider == m_target.TargetCollider)
 			{
-				if (m_target.enabled)
+				Debug.Log(m_target.gameObject.name);
+				if (m_target && m_target.enabled)
 				{
-					HFUnit targetUnit = m_target.gameObject.GetComponent<HFUnit>();
-					float actualDamage = (targetUnit.UnitType == HFUnitType.Unit ? m_parameters.UnitDamage : m_parameters.BuildingDamage);
+					DamageInfo damageInfo = new DamageInfo(
+						m_parameters.Instigator,
+						m_parameters.UnitDamage,
+						m_parameters.BuildingDamage
+						);
+					m_target.TakeDamage(damageInfo);
 				}
 
 				m_isExploding = true;
@@ -85,7 +91,7 @@ namespace HF
 			}
 		}
 
-		public void SetTarget(Collider inTarget)
+		public void SetTarget(HFUnit inTarget)
 		{
 			m_target = inTarget;
 		}

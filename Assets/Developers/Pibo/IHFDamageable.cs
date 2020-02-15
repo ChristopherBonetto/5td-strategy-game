@@ -1,72 +1,77 @@
-﻿/// <summary>
-/// Struct containing damage event information
-/// </summary>
-public struct DamageInfo
+﻿namespace HF
 {
-	public float UnitAmount;
-	public float BuildingAmount;
-
-	public DamageInfo(float unitAmount = 0f, float buildingAmount = 0f)
+	/// <summary>
+	/// Struct containing damage event information
+	/// </summary>
+	public struct DamageInfo
 	{
-		UnitAmount = unitAmount;
-		BuildingAmount = buildingAmount;
+		public HFUnit Instigator;
+		public float UnitAmount;
+		public float BuildingAmount;
+
+		public DamageInfo(HFUnit inInstigator, float unitAmount = 0f, float buildingAmount = 0f)
+		{
+			Instigator = inInstigator;
+			UnitAmount = unitAmount;
+			BuildingAmount = buildingAmount;
+		}
 	}
-}
 
-/// <summary>
-/// Struct containing heal event information
-/// </summary>
-public struct HealInfo
-{
-	public float Amount;
-
-	public HealInfo(float amount = 0f)
+	/// <summary>
+	/// Struct containing heal event information
+	/// </summary>
+	public struct HealInfo
 	{
-		Amount = amount;
+		public float Amount;
+
+		public HealInfo(float amount = 0f)
+		{
+			Amount = amount;
+		}
 	}
-}
-
-/// <summary>
-/// Interface for health system
-/// </summary>
-public interface IHFDamageable
-{
-	/// <summary>
-	/// Max health
-	/// </summary>
-	float MaxHealth { get; }
 
 	/// <summary>
-	/// Current health
+	/// Interface for health system
 	/// </summary>
-	float CurrentHealth { get; }
+	public interface IHFDamageable
+	{
+		/// <summary>
+		/// Max health
+		/// </summary>
+		float MaxHealth { get; }
 
-	/// <summary>
-	/// Invincibility flag
-	/// </summary>
-	bool CanSufferDamage { get; }
+		/// <summary>
+		/// Current health
+		/// </summary>
+		float CurrentHealth { get; }
 
-	/// <summary>
-	/// Team ID number
-	/// </summary>
-	int Team { get; }
+		/// <summary>
+		/// Invincibility flag
+		/// </summary>
+		bool CanSufferDamage { get; }
 
-	/// <summary>
-	/// Killed flag
-	/// </summary>
-	bool IsKilled { get; }
+		/// <summary>
+		/// Team ID number
+		/// </summary>
+		int Team { get; }
 
-	/// <summary>
-	/// Should be used to receive damage
-	/// </summary>
-	/// <param name="info">Struct containing damage event information</param>
-	/// <returns>Actual health value decrease amount</returns>
-	float TakeDamage(DamageInfo info);
+		/// <summary>
+		/// Killed flag
+		/// </summary>
+		bool IsKilled { get; }
 
-	/// <summary>
-	/// Should be used to receive heal
-	/// </summary>
-	/// <param name="info">Struct containing heal event information</param>
-	/// <returns>Actual health value increase amount</returns>
-	float Heal(HealInfo info);
+		/// <summary>
+		/// Should be used to receive damage
+		/// </summary>
+		/// <param name="info">Struct containing damage event information</param>
+		/// <returns>Actual health value decrease amount</returns>
+		float TakeDamage(DamageInfo info);
+
+		/// <summary>
+		/// Should be used to receive heal
+		/// </summary>
+		/// <param name="info">Struct containing heal event information</param>
+		/// <returns>Actual health value increase amount</returns>
+		float Heal(HealInfo info);
+	}
 }

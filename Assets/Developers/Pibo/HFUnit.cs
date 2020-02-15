@@ -32,6 +32,10 @@ namespace HF
 
 		private Animator m_anim = null;
 
+		private Collider m_collider = null;
+
+		public Collider TargetCollider => m_collider;
+
 		/*** Statistics */
 
 		[Space]
@@ -80,8 +84,6 @@ namespace HF
 		private HFBullet m_bulletPrefab = null;
 
 		private LayerMask m_unitLayer = 1 << 0;
-
-		private Collider m_targetCollider;
 
 		[SerializeField]
 		private Transform m_spawnPoint = null;
@@ -139,12 +141,14 @@ namespace HF
 			m_renderer = GetComponentInChildren<Renderer>();
 			m_navAgent = GetComponent<NavMeshAgent>();
 			m_anim = GetComponent<Animator>();
+			m_collider = GetComponentInChildren<Collider>();
 
 			HFHelpers.NullCheck(gameObject, m_baseStats, "base stats");
 			HFHelpers.NullCheck(gameObject, m_renderer, "renderer");
 			HFHelpers.NullCheck(gameObject, m_navAgent, "navigation agent");
 			// #TEMP
 			//HFHelpers.NullCheck(gameObject, m_anim, "animator");
+			HFHelpers.NullCheck(gameObject, m_collider, "collider");
 
 			m_stats = new Dictionary<HFStatistics, float>();
 			m_mods = new List<IHFStatModifier>();
@@ -172,6 +176,11 @@ namespace HF
 
 		void Update()
 		{
+			if (IsKilled)
+			{
+				return;
+			}
+
 			if (m_isCommandComplete)
 			{
 				TryStartAction();
@@ -323,8 +332,8 @@ namespace HF
 
 		private void RefreshCommands()
 		{
-			AddCommand(new HFAttackCommand());
 			ActionComplete(true);
+			AddCommand(new HFAttackCommand());
 		}
 
 		#endregion
@@ -513,6 +522,8 @@ namespace HF
 
 		public bool FindNewTarget()
 		{
+			m_targetEnemy = null;
+
 			// Fail if can't deal any damage
 			if (m_stats[HFStatistics.BuildingDamage] == 0f && m_stats[HFStatistics.UnitDamage] == 0f)
 			{
@@ -525,33 +536,43 @@ namespace HF
 			if (colliders.Length > 0)
 			{
 				float targetDistance = Mathf.Infinity;
-				m_targetCollider = colliders[0];
 
 				for (int i = 0; i < colliders.Length; i++)
 				{
-					float distanceTest = Vector3.Magnitude(colliders[i].bounds.center - m_transform.position);
-					if (distanceTest < targetDistance)
+					Collider testCollider = colliders[i];
+					// Ignore self
+					if (testCollider == m_collider)
 					{
-						m_targetCollider = colliders[i];
-						targetDistance = distanceTest;
+						continue;
+					}
+
+					HFUnit testEnemy = testCollider.gameObject.GetComponentInParent<HFUnit>();
+					// Ignore already killed and disable friendly fire
+					if (!testEnemy || testEnemy.IsKilled || testEnemy.Team == Team)
+					{
+						continue;
+					}
+
+					float testDistance = Vector3.Magnitude(testEnemy.transform.position - m_transform.position);
+					if (testDistance < targetDistance)
+					{
+						m_targetEnemy = testEnemy;
+						targetDistance = testDistance;
 					}
 				}
-
-				UpdateAnimState();
-
-				m_targetEnemy = m_targetCollider.gameObject.GetComponent<HFUnit>();
-
 			}
+
+			UpdateAnimState();
 
 			return (m_targetEnemy != null);
 		}
 
 		public void TryAttack()
 		{
-			if (IsInRange() && m_targetEnemy && m_targetEnemy.enabled)
+			if (m_targetEnemy && IsInRange() && m_targetEnemy.enabled && !m_targetEnemy.IsKilled)
 			{
 				// Look at target
-				Vector3 direction = (m_targetCollider.transform.position - transform.position);
+				Vector3 direction = (m_targetEnemy.transform.position - m_transform.position);
 
 				// #TODO Move towards target
 
@@ -589,7 +610,7 @@ namespace HF
 
 						if (Mathf.Abs(targetAngle) < shootAngle && targetDistance < attackDistance * HFGameParameters.TileSize)
 						{
-							RangedAttack(m_targetCollider);
+							RangedAttack(m_targetEnemy);
 							m_lastAttackTime = Time.time;
 						}
 					}
@@ -599,7 +620,6 @@ namespace HF
 			{
 				// Lost target
 				UpdateAnimState();
-				m_targetCollider = null;
 				m_targetEnemy = null;
 
 				if (m_currentCommand is HFAttackCommand)
@@ -612,13 +632,14 @@ namespace HF
 		private void MeleeAttack(HFUnit target)
 		{
 			DamageInfo damageInfo = new DamageInfo(
+				this,
 				m_stats[HFStatistics.UnitDamage],
 				m_stats[HFStatistics.BuildingDamage]
 				);
 			target.TakeDamage(damageInfo);
 		}
 
-		private void RangedAttack(Collider target)
+		private void RangedAttack(HFUnit target)
 		{
 			HFBullet bullet = Instantiate(m_bulletPrefab, m_spawnPoint.position, m_spawnPoint.rotation);
 			HFBulletParameters bulletParams = new HFBulletParameters(
@@ -634,7 +655,7 @@ namespace HF
 		private bool IsInRange()
 		{
 			// #TEMP Acquisition range is one tile unit larger than attack range
-			return (Vector3.Magnitude(m_targetCollider.bounds.center - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 1f) * HFGameParameters.TileSize);
+			return (Vector3.Magnitude(m_targetEnemy.transform.position - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 1f) * HFGameParameters.TileSize);
 		}
 		
 		#endregion
@@ -717,6 +738,12 @@ namespace HF
 				return 0f;
 			}
 
+			// Ignore friendly fire
+			if (info.Instigator.Team == Team)
+			{
+				return 0f;
+			}
+
 			float previous = CurrentHealth;
 			float receivedDamage = (
 				UnitType == HFUnitType.Unit
@@ -775,6 +802,7 @@ namespace HF
 		protected virtual void OnDeath()
 		{
 			IsKilled = true;
+			ActionComplete(false);
 
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
@@ -908,7 +936,9 @@ namespace HF
 		}
 
 		public void End()
-		{ }
+		{
+			m_unit.ActionComplete(true);
+		}
 	}
 
 	#endregion
