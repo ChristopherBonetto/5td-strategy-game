@@ -77,24 +77,24 @@ public class HFWaveEditor : Editor
                     EditorGUILayout.Space();
 
 
-                    EditorGUILayout.BeginHorizontal();
+                    //EditorGUILayout.BeginHorizontal();
 
-                    EditorGUILayout.LabelField("Request next behaviour when?");
-                    m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
-
-
-                    EditorGUILayout.EndHorizontal();
+                    //EditorGUILayout.LabelField("Request next behaviour when?");
+                    ////m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
 
 
-                    EditorGUILayout.BeginHorizontal();
+                    //EditorGUILayout.EndHorizontal();
 
-                    if (m_typedList[i].RequestType == RequestType.Post)
-                    {
-                        EditorGUILayout.LabelField("Wait for player input ?");
-                        waitForInput.boolValue = EditorGUILayout.Toggle(waitForInput.boolValue);
-                    }
 
-                    EditorGUILayout.EndHorizontal();
+                    //EditorGUILayout.BeginHorizontal();
+
+                    //if (m_typedList[i].RequestType == RequestType.Post)
+                    //{
+                    //    EditorGUILayout.LabelField("Wait for player input ?");
+                    //    waitForInput.boolValue = EditorGUILayout.Toggle(waitForInput.boolValue);
+                    //}
+
+                    //EditorGUILayout.EndHorizontal();
 
                     //randomEnemy.boolValue = EditorGUILayout.Toggle("Pick random enemies ?", randomEnemy.boolValue);
 
@@ -110,7 +110,7 @@ public class HFWaveEditor : Editor
 
                     timeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", timeToWait.floatValue);
 
-                    m_typedList[i].RequestType = m_typedList[i - 1].RequestType;
+                    //m_typedList[i].RequestType = m_typedList[i - 1].RequestType;
 
                     //EditorGUILayout.BeginHorizontal();
 
