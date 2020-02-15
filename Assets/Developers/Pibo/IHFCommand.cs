@@ -1,10 +1,13 @@
-﻿/// <summary>
-/// Interface for command system
-/// </summary>
-public interface IHFCommand
+﻿namespace HF
 {
-	bool Start(HFUnit unit);
-	void Perform();
-	void Abort();
-	void End();
+	/// <summary>
+	/// Interface for command system
+	/// </summary>
+	public interface IHFCommand
+	{
+		bool Start(HFUnit unit);
+		void Perform();
+		void Abort();
+		void End();
+	}
 }
