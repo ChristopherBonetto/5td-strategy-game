@@ -42,6 +42,16 @@ namespace HF.WaveSystem
         public List<HFWave.Behaviour> GetBehaviours => GetWaves[m_currentWaveIndex].BehavioursCollection;
         #endregion
 
+        private void OnEnable()
+        {
+            HFEventManager.SubscribeTo<RequestType>(HFEventID.OnRequestNewBehaviour, RequestNextBehaviour);
+        }
+
+        private void OnDisable()
+        {
+            
+            HFEventManager.UnsubscribeFrom<RequestType>(HFEventID.OnRequestNewBehaviour, RequestNextBehaviour);
+        }
 
         public void RequestNextBehaviourFromInput()
         {

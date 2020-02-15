@@ -17,5 +17,9 @@ public enum HFEventID
 	/// float	rewardValue,
 	/// HFUnit	instigatorUnit
 	/// </summary>
-	GainReward
+	GainReward,
+    /// <summary>
+    /// RequestType requestType,
+    /// </summary>
+    OnRequestNewBehaviour,
 }
