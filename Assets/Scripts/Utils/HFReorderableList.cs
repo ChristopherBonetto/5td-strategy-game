@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+#endif
 
+#if UNITY_EDITOR
 public static class HFReorderableList
 {
     public static ReorderableList CreateAutoLayout(SerializedProperty property, float columnSpacing = 10f)
@@ -176,3 +179,4 @@ public static class HFReorderableList
         public float? Width;
     }
 }
+#endif
