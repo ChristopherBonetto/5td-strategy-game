@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace HF.WaveSystem
 {
@@ -16,18 +17,22 @@ namespace HF.WaveSystem
         [SerializeField] 
         private HFWavesCollector m_WaveCollector;
 
-        public HFController Controller;
-
-        public bool wait;
+        [SerializeField] private HFController m_Controller;
+        [SerializeField] private Button m_NextWavebutton;
         #endregion
 
         #region Private (single variables)
-        // e.g. 
-        // private var 
-        private int m_WaveIndex;
+        private int m_WaveIndex = 0;
         private int m_MinorWaveIndex;
         private int m_CountOfEnemiesKilled;
+
         private float m_currentTime;
+        private bool m_waitForInput = false;
+
+        // Bulk
+        private int m_bulkSpawnedIndex;
+        private float m_totalDelayBetweenBulkSpawn;
+        private float m_currentDelayBetweenBulkSpawn;
         #endregion
 
         #region Property
@@ -67,14 +72,14 @@ namespace HF.WaveSystem
         public List<HFWave> GetWaves => WaveCollector.WavesCollection;
 
         /// <summary>
-        /// Get number of minor waves of the current wave
-        /// </summary>
-        public List<HFWave.Behaviour> GetMinorWaves => GetWaves[WaveIndex].BehavioursCollection;
-
-        /// <summary>
         /// Get current wave.
         /// </summary>
-        public HFWave GetCurrentWave => GetWaves[WaveIndex];
+        public HFWave GetCurrentWave => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)];
+
+        /// <summary>
+        /// Get number of minor waves of the current wave
+        /// </summary>
+        public List<HFWave.Behaviour> GetMinorWaves => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)].BehavioursCollection;
 
         /// <summary>
         /// Get Current minor wave.
@@ -84,7 +89,7 @@ namespace HF.WaveSystem
         /// <summary>
         /// Get number of all enemies in the current wave.
         /// </summary>
-        public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);
+        public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);    // Do that every wave refresh.
 
         /// <summary>
         /// Count of enemies killed.
@@ -96,6 +101,17 @@ namespace HF.WaveSystem
         }
 
         #endregion
+
+        private void OnEnable()
+        {
+            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnRequestNewBehaviour, OnEnemyKilled);
+        }
+
+        private void OnDisable()
+        {
+            
+            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnRequestNewBehaviour, OnEnemyKilled);
+        }
 
         private void Update()
         {
@@ -125,56 +141,103 @@ namespace HF.WaveSystem
         /// <summary>
         /// Invoke from event when a enemy troop is killed.
         /// </summary>
-        public void OnEnemyKilled()
+        public void OnEnemyKilled(HFUnit unit)
         {
             // only if the unit is marked as enemy do this function.
-
-            CountOfEnemyKilled++;
-
-            if (WaveCleared())
+            if (unit.Team == m_Controller.Team)
             {
-                // Show button in UI to start the next wave.
-                // Reset the count of enemies killed.
-                CountOfEnemyKilled = 0;
-                // increase the WaveIndex.
-                WaveIndex++;
-                // Reset the MinorWaveIndex.
-                MinorWaveIndex = 0;
+                CountOfEnemyKilled++;
+                Debug.Log(WaveIndex);
+                Debug.Log($"Total enemies killed: {CountOfEnemyKilled} / {GetTotalEnemiesOfTheWave}");
 
-                if (LevelCleared())
+                if (WaveCleared())
                 {
-                    // Show end level results.
+
+                    // Reset the count of enemies killed.
+                    CountOfEnemyKilled = 0;
+                    // increase the WaveIndex.
+                    WaveIndex++;
+                    // Reset the MinorWaveIndex.
+                    MinorWaveIndex = 0;
+
+
+                    if (LevelCleared())
+                    {
+                        // Show end level results.
+                        Debug.Log("End Level");
+                    }
+                    else
+                    {
+                        // Show button in UI to start the next wave.
+                        m_waitForInput = true;
+                        m_NextWavebutton.gameObject.SetActive(true);
+                    }
                 }
             }
         }
 
-        public void CallNextMinorWave()
+        // This will be a state machine.
+        public void CallNextMinorWave() // => think about a state machine.
         {
-            if (MinorWaveIndex <= GetMinorWaves.Count - 1)
+            if (!m_waitForInput)
             {
-                if (m_currentTime <= 0)
+                if (MinorWaveIndex <= GetMinorWaves.Count - 1)
                 {
-                    HFWave.Behaviour bh = GetCurrentMinorWave;
-                    Debug.Log($"Wave {WaveIndex}, Minor wave {MinorWaveIndex}");
-
-                    if (bh.BehaviourType == BehaviourType.Single)
+                    if (m_currentTime <= 0)
                     {
-                        // Spawn it
-                        Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
-                        Controller.SpawnUnit(GetCurrentMinorWave.EnemyPrefab, position);
+                        HFWave.Behaviour bh = GetCurrentMinorWave;
+                        Debug.Log($"Wave {WaveIndex}, Minor wave {MinorWaveIndex}" + "\n" +
+                            $"{GetCurrentWave.name}");
 
-                        // Count ++ of the wave spawned.
-                    }
-                    else if (bh.BehaviourType == BehaviourType.Wait)
-                    {
-                        m_currentTime = bh.TimeToWait;
-                    }
+                        if (bh.BehaviourType == BehaviourType.Single)
+                        {
+                            // Spawn it
+                            Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
+                            m_Controller.SpawnUnit(GetCurrentMinorWave.EnemyPrefab, position);
 
-                    MinorWaveIndex++;
+                            MinorWaveIndex++;
+
+                            // Count ++ of the wave spawned.
+                        }
+                        else if (bh.BehaviourType == BehaviourType.Wait)
+                        {
+                            m_currentTime = bh.TimeToWait;
+
+                            MinorWaveIndex++;
+                        }
+                        else if (bh.BehaviourType == BehaviourType.Bulk)
+                        {
+                            if (m_currentDelayBetweenBulkSpawn <= 0)
+                            {
+                                if (m_bulkSpawnedIndex < bh.AmountToSpawn)
+                                {
+                                    Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
+                                    m_Controller.SpawnUnit(GetCurrentMinorWave.EnemyPrefab, position);
+
+                                    m_bulkSpawnedIndex++;
+                                }
+                                else
+                                {
+                                    m_bulkSpawnedIndex = 0;
+                                    MinorWaveIndex++;
+                                }
+                            }
+                            else
+                            {
+                                m_currentDelayBetweenBulkSpawn = m_totalDelayBetweenBulkSpawn;
+                            }
+                        }   // TEMP@
+                    }
+                    else
+                        m_currentTime -= Time.deltaTime;
                 }
-                else
-                    m_currentTime -= Time.deltaTime;
             }
+        }
+
+        public void CallNextWave()
+        {
+            m_waitForInput = false;
+            m_NextWavebutton.gameObject.SetActive(false);
         }
     }
 }

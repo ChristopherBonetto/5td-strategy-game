@@ -36,11 +36,8 @@ namespace HF.WaveSystem
             foreach (var w in wave.BehavioursCollection)
             {
                 if (w.BehaviourType == BehaviourType.Single)
-                    n++;
-                else if (w.BehaviourType == BehaviourType.Bulk)
-                    n += w.AmountToSpawn;
+                    n += 1;
             }
-
             return n;
         }
     }

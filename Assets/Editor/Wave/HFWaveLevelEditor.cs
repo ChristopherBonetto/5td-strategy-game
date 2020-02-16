@@ -10,7 +10,7 @@ public class HFWaveLevelEditor : Editor
 {
     SerializedProperty collector;
     SerializedProperty controller;
-    SerializedProperty wait;
+    SerializedProperty button;
     UnityEditorInternal.ReorderableList list1;
 
     public override void OnInspectorGUI()
@@ -27,7 +27,7 @@ public class HFWaveLevelEditor : Editor
 
         EditorGUILayout.ObjectField(collector);
         EditorGUILayout.ObjectField(controller);
-        wait.boolValue = EditorGUILayout.Toggle(wait.boolValue);
+        EditorGUILayout.ObjectField(button);
 
 
 
@@ -40,7 +40,7 @@ public class HFWaveLevelEditor : Editor
         this.list1 = HFReorderableList.CreateAutoLayout(property);
 
         collector = this.serializedObject.FindProperty("m_WaveCollector");
-        controller = this.serializedObject.FindProperty("Controller");
-        wait = this.serializedObject.FindProperty("wait");
+        controller = this.serializedObject.FindProperty("m_Controller");
+        button = this.serializedObject.FindProperty("m_NextWavebutton");
     }
 }

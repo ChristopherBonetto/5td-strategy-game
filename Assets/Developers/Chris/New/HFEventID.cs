@@ -19,7 +19,7 @@ public enum HFEventID
 	/// </summary>
 	GainReward,
     /// <summary>
-    /// RequestType requestType,
+    /// HFUnit unit
     /// </summary>
     OnRequestNewBehaviour,
 }
