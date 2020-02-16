@@ -13,6 +13,6 @@ public class HFGameWindowsUI : MonoBehaviour
     public void EndLevel()
     {
         HFGameManager.Instance.CurrentGameState = GameStates.EndLevel;
-        HFSceneManager.Instance.LoadSceneFromIndex(1);
+        HFScenesManager.Instance.LoadSceneFromIndex(1);
     }
 }

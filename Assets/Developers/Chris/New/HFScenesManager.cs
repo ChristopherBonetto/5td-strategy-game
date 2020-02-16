@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class HFSceneManager : Singleton<HFSceneManager>
+public class HFScenesManager : Singleton<HFScenesManager>
 {
+    [SerializeField] private HFLevelContainerSO m_levelContainer;
+    public HFLevelContainerSO LevelContainer { get => m_levelContainer; }
 
     public int IndexCurrentScene = 0;
 
     private int m_sceneCount;
     public int SceneCount { get => m_sceneCount; }
 
-    public List<string> AllScenes = new List<string>();
-
+    private List<string> m_allScenes = new List<string>();
+    public List<string> AllScenes { get => m_allScenes; }
 
 
     private void Awake()
@@ -25,10 +27,9 @@ public class HFSceneManager : Singleton<HFSceneManager>
         Scene currentScene = SceneManager.GetActiveScene();
         IndexCurrentScene = currentScene.buildIndex;
 
-        TakeAllSceneInBuild();
     }
-
     
+
 
     #region Get All Scenes
 
@@ -38,7 +39,11 @@ public class HFSceneManager : Singleton<HFSceneManager>
 
         for (int i = 0; i < m_sceneCount; i++)
         {
-            AllScenes.Add(System.IO.Path.GetFileNameWithoutExtension(UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i)));
+            string tempSceneName = System.IO.Path.GetFileNameWithoutExtension(UnityEngine.SceneManagement.SceneUtility.GetScenePathByBuildIndex(i));
+            if (!AllScenes.Contains(tempSceneName))
+            {
+                AllScenes.Add(tempSceneName);
+            }
         }
     }
 
@@ -74,17 +79,27 @@ public class HFSceneManager : Singleton<HFSceneManager>
         }
     }
 
+    public void LoadLevelWithIndex(int inIndex)
+    {
+        string tempSceneName = LevelContainer.Levels[inIndex].LevelSceneName;
+
+        if (AllScenes.Contains(tempSceneName))
+        {
+            SceneManager.LoadScene(tempSceneName);
+        }
+    }
+
     #endregion
 
     public void OnLevelWasLoaded(int level)
     {
         IndexCurrentScene = level;
 
-        if(IndexCurrentScene == 0)
+        if (IndexCurrentScene == 0)
         {
             HFGameManager.Instance.CurrentGameState = GameStates.LoadStartingInfo;
         }
-        else if(IndexCurrentScene == 1)
+        else if (IndexCurrentScene == 1)
         {
             HFGameManager.Instance.CurrentGameState = GameStates.WarRoom;
         }

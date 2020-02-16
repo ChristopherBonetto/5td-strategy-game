@@ -13,7 +13,7 @@ public class HFLevelSelctecionWindow : HFUIControl
     public void OnClickSelectLevel(int inSceneIndex)
     {
         // Invoke some event instead of running this method.
-        HFLevelContainerManager.Instance.StartLevelFromIndex(inSceneIndex);
+        HFScenesManager.Instance.LoadLevelWithIndex(inSceneIndex);
     }
 
     public void OnClickBackToMainMenu()

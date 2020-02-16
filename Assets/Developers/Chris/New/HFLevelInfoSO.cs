@@ -16,6 +16,19 @@ public class HFLevelInfoSO : ScriptableObject
 
     [TextArea] public string m_levelDescription;
 
-    [SerializeField] private string m_levelSceneName;
-    public string LevelSceneName { get => m_levelSceneName;}
+    [SerializeField] private Object m_levelScene;
+    public Object LevelScene { get => m_levelScene; }
+
+    private string m_levelSceneName;
+    public string LevelSceneName
+    {
+        get
+        {
+            return m_levelSceneName;
+        }
+        set
+        {
+            m_levelSceneName = value;
+        }
+    }
 }

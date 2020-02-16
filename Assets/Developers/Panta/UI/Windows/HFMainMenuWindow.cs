@@ -16,7 +16,7 @@ public class HFMainMenuWindow : HFUIControl
     {
         // Turn on level selection window,
         // turn off this window.
-        HFSceneManager.Instance.LoadSceneFromIndex(1);
+        HFScenesManager.Instance.LoadSceneFromIndex(1);
         HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
     }
 
