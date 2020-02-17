@@ -15,9 +15,9 @@ namespace HF.WaveSystem
         {
             int n = 0;
 
-            foreach (var w in wave.BehavioursCollection)
+            foreach (var w in wave.MinorWavesCollection)
             {
-                if (w.BehaviourType == BehaviourType.Single || w.BehaviourType == BehaviourType.Bulk)
+                if (w.MinorWaveType == MinorWaveType.Single || w.MinorWaveType == MinorWaveType.Bulk)
                     n++;
             }
 
@@ -33,10 +33,10 @@ namespace HF.WaveSystem
         {
             int n = 0;
 
-            foreach (var w in wave.BehavioursCollection)
+            foreach (var w in wave.MinorWavesCollection)
             {
-                if (w.BehaviourType == BehaviourType.Single)
-                    n += 1;
+                if (w.MinorWaveType == MinorWaveType.Single)
+                    n++;
             }
             return n;
         }

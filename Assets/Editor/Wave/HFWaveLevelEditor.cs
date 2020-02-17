@@ -8,39 +8,47 @@ using HF.WaveSystem;
 [CanEditMultipleObjects]
 public class HFWaveLevelEditor : Editor
 {
-    SerializedProperty collector;
-    SerializedProperty controller;
-    SerializedProperty button;
-    UnityEditorInternal.ReorderableList list1;
+    SerializedProperty m_waveCollector;
+    SerializedProperty m_AIController;
+    SerializedProperty m_buttonNextWave;
+
+    UnityEditorInternal.ReorderableList waev_list;
+
+    private void OnEnable()
+    {
+        // Reorderable list creation
+        var property = this.serializedObject.FindProperty("m_SpawnPoints");
+        this.waev_list = HFReorderableList.CreateAutoLayout(property);
+
+        // other variables creation
+        m_waveCollector = this.serializedObject.FindProperty("m_WaveCollector");
+        m_AIController = this.serializedObject.FindProperty("m_Controller");
+        m_buttonNextWave = this.serializedObject.FindProperty("m_NextWavebutton");
+    }
 
     public override void OnInspectorGUI()
     {
         this.serializedObject.Update();
 
+        
         EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
 
         EditorGUILayout.LabelField("", EditorStyles.boldLabel);
-        HFReorderableList.DoLayoutListWithFoldout(this.list1);
+        HFReorderableList.DoLayoutListWithFoldout(this.waev_list);
+
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
-        EditorGUILayout.ObjectField(collector);
-        EditorGUILayout.ObjectField(controller);
-        EditorGUILayout.ObjectField(button);
 
+        // Create objects fields.
+        EditorGUILayout.ObjectField(m_waveCollector);
+        EditorGUILayout.ObjectField(m_AIController);
+        EditorGUILayout.ObjectField(m_buttonNextWave);
 
 
         this.serializedObject.ApplyModifiedProperties();
-    }
-
-    private void OnEnable()
-    {
-        var property = this.serializedObject.FindProperty("m_SpawnPoints");
-        this.list1 = HFReorderableList.CreateAutoLayout(property);
-
-        collector = this.serializedObject.FindProperty("m_WaveCollector");
-        controller = this.serializedObject.FindProperty("m_Controller");
-        button = this.serializedObject.FindProperty("m_NextWavebutton");
     }
 }

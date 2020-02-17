@@ -79,12 +79,12 @@ namespace HF.WaveSystem
         /// <summary>
         /// Get number of minor waves of the current wave
         /// </summary>
-        public List<HFWave.Behaviour> GetMinorWaves => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)].BehavioursCollection;
+        public List<HFWave.MinorWave> GetMinorWaves => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)].MinorWavesCollection;
 
         /// <summary>
         /// Get Current minor wave.
         /// </summary>
-        public HFWave.Behaviour GetCurrentMinorWave => GetCurrentWave.BehavioursCollection[MinorWaveIndex];
+        public HFWave.MinorWave GetCurrentMinorWave => GetCurrentWave.MinorWavesCollection[MinorWaveIndex];
 
         /// <summary>
         /// Get number of all enemies in the current wave.
@@ -104,13 +104,13 @@ namespace HF.WaveSystem
 
         private void OnEnable()
         {
-            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnRequestNewBehaviour, OnEnemyKilled);
+            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
         }
 
         private void OnDisable()
         {
             
-            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnRequestNewBehaviour, OnEnemyKilled);
+            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
         }
 
         private void Update()
@@ -185,34 +185,34 @@ namespace HF.WaveSystem
                 {
                     if (m_currentTime <= 0)
                     {
-                        HFWave.Behaviour bh = GetCurrentMinorWave;
+                        HFWave.MinorWave bh = GetCurrentMinorWave;
                         Debug.Log($"Wave {WaveIndex}, Minor wave {MinorWaveIndex}" + "\n" +
                             $"{GetCurrentWave.name}");
 
-                        if (bh.BehaviourType == BehaviourType.Single)
+                        if (bh.MinorWaveType == MinorWaveType.Single)
                         {
                             // Spawn it
                             Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
-                            m_Controller.SpawnUnit(GetCurrentMinorWave.EnemyPrefab, position);
+                            m_Controller.SpawnUnit(GetCurrentMinorWave.UnitStatsData, position);
 
                             MinorWaveIndex++;
 
                             // Count ++ of the wave spawned.
                         }
-                        else if (bh.BehaviourType == BehaviourType.Wait)
+                        else if (bh.MinorWaveType == MinorWaveType.Wait)
                         {
                             m_currentTime = bh.TimeToWait;
 
                             MinorWaveIndex++;
                         }
-                        else if (bh.BehaviourType == BehaviourType.Bulk)
+                        else if (bh.MinorWaveType == MinorWaveType.Bulk)
                         {
                             if (m_currentDelayBetweenBulkSpawn <= 0)
                             {
                                 if (m_bulkSpawnedIndex < bh.AmountToSpawn)
                                 {
                                     Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
-                                    m_Controller.SpawnUnit(GetCurrentMinorWave.EnemyPrefab, position);
+                                    m_Controller.SpawnUnit(GetCurrentMinorWave.UnitStatsData, position);
 
                                     m_bulkSpawnedIndex++;
                                 }

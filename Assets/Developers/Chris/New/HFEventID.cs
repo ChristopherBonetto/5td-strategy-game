@@ -21,5 +21,5 @@ public enum HFEventID
     /// <summary>
     /// HFUnit unit
     /// </summary>
-    OnRequestNewBehaviour,
+    OnUnitDeath,
 }

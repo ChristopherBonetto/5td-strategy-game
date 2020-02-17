@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HF.WaveSystem
 {
-    public enum BehaviourType
+    public enum MinorWaveType
     {
         /// <summary>
         /// Represent the single troop to spawn.
@@ -20,32 +20,24 @@ namespace HF.WaveSystem
         Bulk = 1 << 2,
     }
 
-    public enum RequestType
-    {
-        Pre,
-        Post,
-    }
-
     [CreateAssetMenu(fileName = "L_00_Wave_00", menuName = "Human Factor/Wave/New Wave")]
     public class HFWave : ScriptableObject
     {
-        public List<Behaviour> BehavioursCollection;
+        /// <summary>
+        /// Collection of minor wave.
+        /// </summary>
+        public List<MinorWave> MinorWavesCollection;
 
         [System.Serializable]
-        public class Behaviour
+        public class MinorWave
         {
 #if UNITY_EDITOR
             public bool Foldout = true;
 #endif
 
-            public BehaviourType BehaviourType = BehaviourType.Single;
-            public RequestType RequestType = RequestType.Pre;
+            public MinorWaveType MinorWaveType = MinorWaveType.Single;
 
-            public bool WaitForInput;
-
-            // 0) Single
-            public bool RandomEnemy;
-            public HFBaseStats EnemyPrefab;
+            public HFBaseStats UnitStatsData;
             public int SpawnPoint;
 
             // 1) Wait

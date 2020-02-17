@@ -9,17 +9,16 @@ public class HFWaveEditor : Editor
 {
     HFWave m_target;
     SerializedProperty m_list;
-    List<HFWave.Behaviour> m_typedList;
+    List<HFWave.MinorWave> m_typedList;
 
-    #region Resources
+    // Resources
     Texture2D deleteButton;
-    #endregion
 
     void OnEnable()
     {
         HFWave m_target = (HFWave)target;
-        m_typedList = m_target.BehavioursCollection;
-        m_list = serializedObject.FindProperty("BehavioursCollection");
+        m_typedList = m_target.MinorWavesCollection;
+        m_list = serializedObject.FindProperty("MinorWavesCollection");
 
         // Resources
         deleteButton = Resources.Load<Texture2D>("Editor/custom_editor_button_delete");
@@ -27,34 +26,36 @@ public class HFWaveEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        //Update our list
         serializedObject.Update();
+
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
+
 
         //Display our list to the inspector window
         for (int i = 0; i < m_list.arraySize; i++)
         {
+            // Find list
             SerializedProperty list = m_list.GetArrayElementAtIndex(i);
+            // Find properties
             SerializedProperty foldout = list.FindPropertyRelative("Foldout");
-            SerializedProperty waitForInput = list.FindPropertyRelative("WaitForInput");
-            SerializedProperty randomEnemy = list.FindPropertyRelative("RandomEnemy");
-            SerializedProperty enemyPrefab = list.FindPropertyRelative("EnemyPrefab");
+            SerializedProperty unitStatsData = list.FindPropertyRelative("UnitStatsData");
             SerializedProperty spawnPoint = list.FindPropertyRelative("SpawnPoint");
             SerializedProperty timeToWait = list.FindPropertyRelative("TimeToWait");
             SerializedProperty amountToSpawn = list.FindPropertyRelative("AmountToSpawn");
 
 
+            // Add some space
             EditorGUILayout.Space();
             EditorGUILayout.Space();
 
 
             EditorGUILayout.BeginHorizontal();
-            
+            // Foldout?
             foldout.boolValue = EditorGUILayout.ToggleLeft("Show", foldout.boolValue, GUILayout.Width(100));
-
-            m_typedList[i].BehaviourType = (BehaviourType)EditorGUILayout.EnumPopup(m_typedList[i].BehaviourType);
+            // Get typed list
+            m_typedList[i].MinorWaveType = (MinorWaveType)EditorGUILayout.EnumPopup(m_typedList[i].MinorWaveType);
 
             #region Buttons
             MoveDownTheElement(i);
@@ -70,100 +71,37 @@ public class HFWaveEditor : Editor
 
             EditorGUILayout.EndHorizontal();
 
+            // If it's foldout
             if (foldout.boolValue)
             {
-                if (m_typedList[i].BehaviourType == BehaviourType.Single)
+                // Fill "single" behaviour case
+                if (m_typedList[i].MinorWaveType == MinorWaveType.Single)
                 {
-                    EditorGUILayout.Space();
+                    EditorGUILayout.Space();;
 
-
-                    //EditorGUILayout.BeginHorizontal();
-
-                    //EditorGUILayout.LabelField("Request next behaviour when?");
-                    ////m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
-
-
-                    //EditorGUILayout.EndHorizontal();
-
-
-                    //EditorGUILayout.BeginHorizontal();
-
-                    //if (m_typedList[i].RequestType == RequestType.Post)
-                    //{
-                    //    EditorGUILayout.LabelField("Wait for player input ?");
-                    //    waitForInput.boolValue = EditorGUILayout.Toggle(waitForInput.boolValue);
-                    //}
-
-                    //EditorGUILayout.EndHorizontal();
-
-                    //randomEnemy.boolValue = EditorGUILayout.Toggle("Pick random enemies ?", randomEnemy.boolValue);
-
-                    if (!randomEnemy.boolValue)
-                        EditorGUILayout.ObjectField(enemyPrefab);
-
+                    unitStatsData.objectReferenceValue = EditorGUILayout.ObjectField("unit stats data", unitStatsData.objectReferenceValue, typeof(HFBaseStats));
                     spawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", spawnPoint.intValue);
                 }
-                else if (m_typedList[i].BehaviourType == BehaviourType.Wait)
+                // Fill "wait" behaviour case
+                else if (m_typedList[i].MinorWaveType == MinorWaveType.Wait)
                 {
                     EditorGUILayout.Space();
 
-
                     timeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", timeToWait.floatValue);
-
-                    //m_typedList[i].RequestType = m_typedList[i - 1].RequestType;
-
-                    //EditorGUILayout.BeginHorizontal();
-
-                    //EditorGUILayout.LabelField("Request next behaviour when?");
-                    //m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
-
-
-                    //EditorGUILayout.EndHorizontal();
-
-                    //EditorGUILayout.LabelField("Request type will be: " + m_typedList[i].RequestType);
                 }
-                //else if (m_typedList[i].BehaviourType == BehaviourType.Bulk)
-                //{
-                //    EditorGUILayout.Space();
-
-
-                //    EditorGUILayout.BeginHorizontal();
-
-                //    EditorGUILayout.LabelField("Request next behaviour when?");
-                //    m_typedList[i].RequestType = (RequestType)EditorGUILayout.EnumPopup(m_typedList[i].RequestType);
-
-                //    EditorGUILayout.EndHorizontal();
-
-                //    EditorGUILayout.BeginHorizontal();
-
-                //    if (m_typedList[i].RequestType == RequestType.Post)
-                //    {
-                //        EditorGUILayout.LabelField("Wait for player input ?");
-                //        waitForInput.boolValue = EditorGUILayout.Toggle(waitForInput.boolValue);
-                //    }
-
-                //    EditorGUILayout.EndHorizontal();
-
-                //    randomEnemy.boolValue = EditorGUILayout.Toggle("Pick random enemies ?", randomEnemy.boolValue);
-
-                //    if (!randomEnemy.boolValue)
-                //        EditorGUILayout.ObjectField(enemyPrefab);
-
-                //    amountToSpawn.intValue = EditorGUILayout.IntField("Amount to spawn", amountToSpawn.intValue);
-                //    spawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", spawnPoint.intValue);
-                //}
             }
         }
 
+
          EditorGUILayout.Space();
          EditorGUILayout.Space();
+
 
         if (GUILayout.Button("Add New Behaviour"))
         {
-            m_typedList.Add(new HFWave.Behaviour());
+            m_typedList.Add(new HFWave.MinorWave());
         }
 
-        //Apply changes
         serializedObject.ApplyModifiedProperties();
     }
 
