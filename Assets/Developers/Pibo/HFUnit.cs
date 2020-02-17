@@ -807,7 +807,7 @@ namespace HF
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
 
-			HFEventManager.TriggerEvent(HFEventID.OnRequestNewBehaviour, WaveSystem.RequestType.Post);
+			HFEventManager.TriggerEvent(HFEventID.OnRequestNewBehaviour, this);
 
 			if (m_baseStats.RewardCondition == HFRewardCondition.Kill)
 			{
