@@ -189,6 +189,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_levelContainer: {fileID: 11400000, guid: 9a8cdc43897506244afccedf0115bd81, type: 2}
   IndexCurrentScene: 0
+  AllScenes:
+  - START_LOADING_SCENE
+  - StartGameAndWarRoom_SCENE
+  - Level_00
+  - Level_01
+  - Level_02
+  - Level_03
+  - Level_04
+  - Level_05
+  ciao: {fileID: 1440645040}
 --- !u!4 &28052039
 Transform:
   m_ObjectHideFlags: 0
@@ -524,10 +534,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: c39d05a0d41952544b348c1cd40a4747,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
           m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
@@ -997,10 +1008,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 6f07b3e995c5cd24386ecb8efcb242df,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1027,17 +1039,6 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -1515,10 +1516,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 9009908d3f823334d8c2ba5a2eed823e,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
           m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2768,6 +2770,7 @@ RectTransform:
   - {fileID: 555210756}
   - {fileID: 1992397065}
   - {fileID: 463633}
+  - {fileID: 1440645039}
   m_Father: {fileID: 1679920375}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2920,10 +2923,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 36a40494066954948b47cd29f53ff20d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3376,10 +3380,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: cba93f32891522543b407c0b18ddc97d,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3446,6 +3451,85 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1381529586}
+  m_CullTransparentMesh: 0
+--- !u!1 &1440645038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1440645039}
+  - component: {fileID: 1440645041}
+  - component: {fileID: 1440645040}
+  m_Layer: 5
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1440645039
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440645038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1130310596}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 1000}
+  m_Pivot: {x: 0, y: 0.5}
+--- !u!114 &1440645040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440645038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 30
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 3
+    m_MaxSize: 300
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 
+--- !u!222 &1440645041
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1440645038}
   m_CullTransparentMesh: 0
 --- !u!1 &1461707223
 GameObject:
@@ -4561,10 +4645,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 3
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 73076d57c4282614a916ffb2efd0ab0c,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
           m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 

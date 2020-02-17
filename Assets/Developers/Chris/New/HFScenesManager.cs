@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class HFScenesManager : Singleton<HFScenesManager>
 {
@@ -13,9 +14,9 @@ public class HFScenesManager : Singleton<HFScenesManager>
     private int m_sceneCount;
     public int SceneCount { get => m_sceneCount; }
 
-    private List<string> m_allScenes = new List<string>();
-    public List<string> AllScenes { get => m_allScenes; }
+    public List<string> AllScenes;
 
+    public Text ciao;
 
     private void Awake()
     {
@@ -27,14 +28,17 @@ public class HFScenesManager : Singleton<HFScenesManager>
         Scene currentScene = SceneManager.GetActiveScene();
         IndexCurrentScene = currentScene.buildIndex;
 
+        GiveIndexToAllLevels();
     }
     
+   
 
-
-    #region Get All Scenes
+    #region Get Scenes
 
     public void TakeAllSceneInBuild()
     {
+        AllScenes.Clear();
+
         m_sceneCount = UnityEngine.SceneManagement.SceneManager.sceneCountInBuildSettings;
 
         for (int i = 0; i < m_sceneCount; i++)
@@ -44,6 +48,23 @@ public class HFScenesManager : Singleton<HFScenesManager>
             {
                 AllScenes.Add(tempSceneName);
             }
+        }
+    }
+
+    public void GiveIndexToAllLevels()
+    {
+        for (int i = 0; i < LevelContainer.Levels.Count; i++)
+        {
+            GiveIndexToALevel(LevelContainer.Levels[i]);
+        }
+    }
+
+    public void GiveIndexToALevel(HFLevelInfoSO inLevel)
+    {
+        if (AllScenes.Contains(inLevel.LevelScene.name))
+        {
+            int indexToAssign = AllScenes.FindIndex(x => x.Equals(inLevel.LevelScene.name));
+            inLevel.LevelSceneIndex = indexToAssign;
         }
     }
 
@@ -79,14 +100,15 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
+    public void LoadLevelFromLevelInfo(HFLevelInfoSO inLevel)
+    {
+        SceneManager.LoadScene(inLevel.LevelSceneIndex);
+    }
+
     public void LoadLevelWithIndex(int inIndex)
     {
-        string tempSceneName = LevelContainer.Levels[inIndex].LevelSceneName;
-
-        if (AllScenes.Contains(tempSceneName))
-        {
-            SceneManager.LoadScene(tempSceneName);
-        }
+        Debug.Log("To implement");
+        //SceneManager.LoadScene();
     }
 
     #endregion

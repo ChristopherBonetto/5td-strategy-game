@@ -19,16 +19,8 @@ public class HFLevelInfoSO : ScriptableObject
     [SerializeField] private Object m_levelScene;
     public Object LevelScene { get => m_levelScene; }
 
-    private string m_levelSceneName;
-    public string LevelSceneName
-    {
-        get
-        {
-            return m_levelSceneName;
-        }
-        set
-        {
-            m_levelSceneName = value;
-        }
-    }
+
+    public int LevelSceneIndex;
+    
+
 }

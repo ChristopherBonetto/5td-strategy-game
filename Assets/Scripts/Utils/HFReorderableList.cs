@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+
+
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -176,3 +179,4 @@ public static class HFReorderableList
         public float? Width;
     }
 }
+#endif
