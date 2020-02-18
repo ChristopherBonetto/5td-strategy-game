@@ -13,5 +13,7 @@ public class HFScenesManagerEditor : Editor
         base.OnInspectorGUI();
 
         myTarget.TakeAllSceneInBuild();
+
+        myTarget.GiveIndexToAllLevels();
     }
 }

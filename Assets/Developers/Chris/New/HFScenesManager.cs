@@ -14,9 +14,10 @@ public class HFScenesManager : Singleton<HFScenesManager>
     private int m_sceneCount;
     public int SceneCount { get => m_sceneCount; }
 
+    //MUST TO REVIEW THIS VARIABLE. if setted as property the scene manager in build don't load right the scenes.
+    [HideInInspector]
     public List<string> AllScenes;
 
-    public Text ciao;
 
     private void Awake()
     {
@@ -27,13 +28,11 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         Scene currentScene = SceneManager.GetActiveScene();
         IndexCurrentScene = currentScene.buildIndex;
-
-        GiveIndexToAllLevels();
     }
     
    
 
-    #region Get Scenes
+    #region Get Scenes Reference
 
     public void TakeAllSceneInBuild()
     {
@@ -65,6 +64,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
         {
             int indexToAssign = AllScenes.FindIndex(x => x.Equals(inLevel.LevelScene.name));
             inLevel.LevelSceneIndex = indexToAssign;
+
+            Debug.Log("REFRESH : " + inLevel.LevelName + " REFRESHED INDEX/ADDED TO SCENES LIST");
         }
     }
 
@@ -72,11 +73,13 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     #region LOAD SCENE
 
+    //Generic Load
     public void LoadSceneFromIndex(int inSceneIndex)
     {
         SceneManager.LoadScene(inSceneIndex, LoadSceneMode.Single);
     }
 
+    //Load next scene
     public void LoadNextScene()
     {
         // Check if current scene index is smaller than the max scene count minus one
@@ -92,6 +95,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
+    //Load scene from name
     public void LoadFromName(string inName)
     {
         if (AllScenes.Contains(inName))
@@ -100,18 +104,25 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
+    #region Load Level Scene
+
+    //Giving a level info in input the corresponsive scene will be loaded
     public void LoadLevelFromLevelInfo(HFLevelInfoSO inLevel)
     {
         SceneManager.LoadScene(inLevel.LevelSceneIndex);
     }
 
+
     public void LoadLevelWithIndex(int inIndex)
     {
-        Debug.Log("To implement");
-        //SceneManager.LoadScene();
+        SceneManager.LoadScene(LevelContainer.Levels[inIndex].LevelSceneIndex);
     }
+    #endregion
+
 
     #endregion
+
+    #region WHEN A LEVEL IS LOADED
 
     public void OnLevelWasLoaded(int level)
     {
@@ -131,4 +142,6 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
 
     }
+
+    #endregion
 }

@@ -19,8 +19,8 @@ public class HFLevelInfoSO : ScriptableObject
     [SerializeField] private Object m_levelScene;
     public Object LevelScene { get => m_levelScene; }
 
-
+    //MUST TO REVIEW THIS VARIABLE. if setted as property the scene manager in build don't load right the scenes.
+    [HideInInspector]
     public int LevelSceneIndex;
-    
 
 }

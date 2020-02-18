@@ -13,16 +13,5 @@ public class HFLevelInfoEditor : Editor
 
         base.OnInspectorGUI();
 
-        //if(myTarget.LevelScene != null)
-        //{
-        //    //myTarget.LevelSceneName = myTarget.LevelScene.name;
-
-        //    myTarget.TakeLevelIndex();
-        //}
-        //else
-        //{
-        //    Debug.Log(myTarget.name + " need to assign a scene");
-        //}
-        
     }
 }

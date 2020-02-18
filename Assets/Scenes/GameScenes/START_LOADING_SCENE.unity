@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -158,61 +158,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &28052037
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 28052039}
-  - component: {fileID: 28052038}
-  m_Layer: 0
-  m_Name: ScenesManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &28052038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28052037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 583528691c465034286f3551cebbdb62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_levelContainer: {fileID: 11400000, guid: 9a8cdc43897506244afccedf0115bd81, type: 2}
-  IndexCurrentScene: 0
-  AllScenes:
-  - START_LOADING_SCENE
-  - StartGameAndWarRoom_SCENE
-  - Level_00
-  - Level_01
-  - Level_02
-  - Level_03
-  - Level_04
-  - Level_05
-  ciao: {fileID: 1440645040}
---- !u!4 &28052039
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 28052037}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.670963, y: -0.17042923, z: 7.862505}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &31578354
 GameObject:
   m_ObjectHideFlags: 0
@@ -534,11 +479,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: c39d05a0d41952544b348c1cd40a4747,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1008,11 +952,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 6f07b3e995c5cd24386ecb8efcb242df,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1516,11 +1459,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 9009908d3f823334d8c2ba5a2eed823e,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2923,11 +2865,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 36a40494066954948b47cd29f53ff20d,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
@@ -3380,11 +3321,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: cba93f32891522543b407c0b18ddc97d,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
@@ -4645,11 +4585,10 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 882467984}
         m_MethodName: OnClickSelectLevel
-        m_Mode: 2
+        m_Mode: 3
         m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 73076d57c4282614a916ffb2efd0ab0c,
-            type: 2}
-          m_ObjectArgumentAssemblyTypeName: HFLevelInfoSO, Assembly-CSharp
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
@@ -5095,3 +5034,77 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2135999945}
   m_CullTransparentMesh: 0
+--- !u!1001 &5579509070685819163
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5579509070678743902, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_Name
+      value: ScenesManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 18.670963
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.17042923
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.862505
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743900, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5579509070678743901, guid: e8e30e45e43c3734fa7ac201deeb0c0b,
+        type: 3}
+      propertyPath: ciao
+      value: 
+      objectReference: {fileID: 1440645040}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e8e30e45e43c3734fa7ac201deeb0c0b, type: 3}
