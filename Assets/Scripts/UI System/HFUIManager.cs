@@ -16,9 +16,9 @@ public class HFUIManager : Singleton<HFUIManager>
 
     #region Methods
 
-	void Awake()
+	protected void Awake()
 	{
-		m_graphicRaycaster = GetComponent<UnityEngine.UI.GraphicRaycaster>();
+    		m_graphicRaycaster = GetComponent<UnityEngine.UI.GraphicRaycaster>();
 	}
 
     /// <summary>

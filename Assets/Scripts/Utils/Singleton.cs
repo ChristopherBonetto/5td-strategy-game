@@ -28,13 +28,13 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     _instance = (T)FindObjectOfType(typeof(T));
 
-                    if (FindObjectsOfType(typeof(T)).Length > 1)
-                    {
-                        //Debug.LogError("[Singleton] Something went really wrong " +
-                        //    " - there should never be more than 1 singleton!" +
-                        //    " Reopening the scene might fix it.");
-                        return _instance;
-                    }
+                    //if (FindObjectsOfType(typeof(T)).Length > 1)
+                    //{
+                    //    //Debug.LogError("[Singleton] Something went really wrong " +
+                    //    //    " - there should never be more than 1 singleton!" +
+                    //    //    " Reopening the scene might fix it.");
+                    //    return _instance;
+                    //}
 
                     if (_instance == null)
                     {
@@ -60,10 +60,6 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 return _instance;
             }
         }
-        set
-        {
-            Instance = value;
-        }
     }
 
     private static bool applicationIsQuitting = false;
@@ -78,18 +74,5 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     public virtual void OnDestroy()
     {
         applicationIsQuitting = true;
-    }
-
-    internal void AwakeSingleton()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(Instance);
-        }
-    }
-
-    private void Awake()
-    {
-        AwakeSingleton();
     }
 }

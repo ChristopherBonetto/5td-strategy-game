@@ -113,8 +113,16 @@ namespace HF.WaveSystem
             HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
         }
 
+        private void Start()
+        {
+            // Wait for input at the beggining.
+            // Create a publc variable for this.
+            m_waitForInput = true;
+        }
+
         private void Update()
         {
+            // @TO DO: Works at state machine.
             CallNextMinorWave();
         }
 
@@ -205,7 +213,7 @@ namespace HF.WaveSystem
 
                             MinorWaveIndex++;
                         }
-                        else if (bh.MinorWaveType == MinorWaveType.Bulk)
+                        else if (bh.MinorWaveType == MinorWaveType.Bulk)    // @TEMP
                         {
                             if (m_currentDelayBetweenBulkSpawn <= 0)
                             {
@@ -226,7 +234,7 @@ namespace HF.WaveSystem
                             {
                                 m_currentDelayBetweenBulkSpawn = m_totalDelayBetweenBulkSpawn;
                             }
-                        }   // TEMP@
+                        }
                     }
                     else
                         m_currentTime -= Time.deltaTime;

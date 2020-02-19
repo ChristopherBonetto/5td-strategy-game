@@ -21,8 +21,7 @@ public abstract class HFUIControl : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        if (HFUIManager.Instance != null)
-            HFUIManager.Instance.RemoveControl(this);
+        HFUIManager.Instance.RemoveControl(this);
     }
 
 

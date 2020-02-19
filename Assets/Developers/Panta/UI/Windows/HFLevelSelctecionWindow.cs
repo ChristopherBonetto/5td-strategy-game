@@ -1,31 +1,57 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class HFLevelSelctecionWindow : HFUIControl
 {
     public override UIControlID Name => UIControlID.LevelSelection;
 
-    //public string SceneName;
+
+    // Serializefield
+
+    /// <summary>
+    /// it'sused as parent of buttons.
+    /// </summary>
+    public VerticalLayoutGroup ButtonsGrid;
+
+    [Header("Buttons Field")]
+
+    /// <summary>
+    /// Selection level button prefab.
+    /// </summary>
+    public HFButtonLevelSelection ButtonPrefab;
+
+    /// <summary>
+    /// Constant word present in every button. 
+    /// It will be followed by the index of the level.
+    /// </summary>
+    public string PrefixButtonText;
 
 
-    public void OnClickSelectLevel(int inIndex)
+    protected override void Start()
     {
-        // Invoke some event instead of running this method.
-        
-        HFScenesManager.Instance.LoadLevelWithIndex(inIndex);
+        HFUIManager.Instance.AddControl(this);
+        SpawnLevelButtons();
     }
 
-    public void OnClickLoadLevelFromInfo(HFLevelInfoSO inLevel)
+    private void SpawnLevelButtons()
     {
-        HFScenesManager.Instance.LoadLevelFromLevelInfo(inLevel);
+        List<HFLevelInfoSO> levels = HFScenesManager.Instance.LevelContainer.Levels;
+
+        for (int i = 0; i < levels.Count; i++)
+        {
+            HFButtonLevelSelection button = Instantiate(ButtonPrefab, ButtonsGrid.transform) as HFButtonLevelSelection;
+            button.Level = levels[i];
+            button.ButtonText.text = $"{PrefixButtonText}: {i}";
+        }
     }
 
-    public void OnClickBackToMainMenu()
+    public void OnClickBackToMainMenu() // => Wait war room details.
     {
-        // Turn off this window,
-        // Turn on main menu window.
-        HFUIManager.Instance.ShowAndHide(UIControlID.MainMenu, this);
+        HFScenesManager sceneManager = HFScenesManager.Instance;
+        sceneManager.LoadSceneFromIndex(sceneManager.IndexCurrentScene - 1);
     }
 }
+
