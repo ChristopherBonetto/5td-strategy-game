@@ -18,14 +18,9 @@ namespace HF.WaveSystem
         private HFWavesCollector m_WaveCollector;
 
         [SerializeField] private HFController m_Controller;
-        [SerializeField] private Button m_NextWavebutton;
         #endregion
 
         #region Private (single variables)
-        private int m_WaveIndex = 0;
-        private int m_MinorWaveIndex;
-        private int m_CountOfEnemiesKilled;
-
         private float m_currentTime;
         private bool m_waitForInput = false;
 
@@ -33,6 +28,9 @@ namespace HF.WaveSystem
         private int m_bulkSpawnedIndex;
         private float m_totalDelayBetweenBulkSpawn;
         private float m_currentDelayBetweenBulkSpawn;
+
+        // UI
+        private HFInGameWindow m_gameWindow;
         #endregion
 
         #region Property
@@ -48,6 +46,7 @@ namespace HF.WaveSystem
         /// </summary>
         public HFWavesCollector WaveCollector => m_WaveCollector;
 
+        private int m_WaveIndex = 0;
         /// <summary>
         /// Current index of the wave.
         /// </summary>
@@ -57,6 +56,7 @@ namespace HF.WaveSystem
             set { m_WaveIndex = value; }
         }
 
+        private int m_MinorWaveIndex;
         /// <summary>
         /// Current index of the minor wave.
         /// </summary>
@@ -91,6 +91,7 @@ namespace HF.WaveSystem
         /// </summary>
         public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);    // Do that every wave refresh.
 
+        private int m_CountOfEnemiesKilled;
         /// <summary>
         /// Count of enemies killed.
         /// </summary>
@@ -118,12 +119,15 @@ namespace HF.WaveSystem
             // Wait for input at the beggining.
             // Create a publc variable for this.
             m_waitForInput = true;
+
+            // Assign in game window.
+            m_gameWindow = HFUIManager.Instance.controls[UIControlID.InGameWindow] as HFInGameWindow;
         }
 
         private void Update()
         {
             // @TO DO: Works at state machine.
-            CallNextMinorWave();
+            ExecuteMinorWave();
         }
 
         /// <summary>
@@ -177,15 +181,16 @@ namespace HF.WaveSystem
                     else
                     {
                         // Show button in UI to start the next wave.
+                        HFInGameWindow gameWindow = HFUIManager.Instance.controls[UIControlID.InGameWindow] as HFInGameWindow;
+                        gameWindow.OnWaveEnd();
                         m_waitForInput = true;
-                        m_NextWavebutton.gameObject.SetActive(true);
                     }
                 }
             }
         }
 
         // This will be a state machine.
-        public void CallNextMinorWave() // => think about a state machine.
+        public void ExecuteMinorWave() // => think about a state machine.
         {
             if (!m_waitForInput)
             {
@@ -245,7 +250,7 @@ namespace HF.WaveSystem
         public void CallNextWave()
         {
             m_waitForInput = false;
-            m_NextWavebutton.gameObject.SetActive(false);
+            m_gameWindow.ButtonCallNextWave.gameObject.SetActive(false);
         }
     }
 }

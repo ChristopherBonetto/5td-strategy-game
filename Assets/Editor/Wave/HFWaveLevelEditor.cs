@@ -10,7 +10,6 @@ public class HFWaveLevelEditor : Editor
 {
     SerializedProperty m_waveCollector;
     SerializedProperty m_AIController;
-    SerializedProperty m_buttonNextWave;
 
     UnityEditorInternal.ReorderableList waev_list;
 
@@ -23,7 +22,6 @@ public class HFWaveLevelEditor : Editor
         // other variables creation
         m_waveCollector = this.serializedObject.FindProperty("m_WaveCollector");
         m_AIController = this.serializedObject.FindProperty("m_Controller");
-        m_buttonNextWave = this.serializedObject.FindProperty("m_NextWavebutton");
     }
 
     public override void OnInspectorGUI()
@@ -46,7 +44,6 @@ public class HFWaveLevelEditor : Editor
         // Create objects fields.
         EditorGUILayout.ObjectField(m_waveCollector);
         EditorGUILayout.ObjectField(m_AIController);
-        EditorGUILayout.ObjectField(m_buttonNextWave);
 
 
         this.serializedObject.ApplyModifiedProperties();
