@@ -30,6 +30,8 @@ namespace HF
 
 		private NavMeshAgent m_navAgent = null;
 
+		private NavMeshObstacle m_navObstacle = null;
+
 		private Animator m_anim = null;
 
 		private Collider m_collider = null;
@@ -59,7 +61,17 @@ namespace HF
 
 		/*** Commands */
 
+		[Space]
+		[Header("Commands")]
+
+		[SerializeField]
+		private float m_refreshDelay = 0.25f;
+
+		private float m_lastRefresh;
+
 		private Queue<IHFCommand> m_pendingCommands = new Queue<IHFCommand>();
+
+		private IHFCommand m_startCommand;
 
 		private IHFCommand m_currentCommand;
 
@@ -71,7 +83,7 @@ namespace HF
 
 		private bool m_isDirectMoving;
 
-		private Vector3 m_directDestination;
+		private Vector3 m_currentDestination;
 
 		private Vector3 m_lastPosition;
 
@@ -140,12 +152,14 @@ namespace HF
 			m_transform = transform;
 			m_renderer = GetComponentInChildren<Renderer>();
 			m_navAgent = GetComponent<NavMeshAgent>();
+			m_navObstacle = GetComponent<NavMeshObstacle>();
 			m_anim = GetComponent<Animator>();
 			m_collider = GetComponentInChildren<Collider>();
 
 			HFHelpers.NullCheck(gameObject, m_baseStats, "base stats");
 			HFHelpers.NullCheck(gameObject, m_renderer, "renderer");
 			HFHelpers.NullCheck(gameObject, m_navAgent, "navigation agent");
+			HFHelpers.NullCheck(gameObject, m_navObstacle, "navigation obstacle");
 			// #TEMP
 			//HFHelpers.NullCheck(gameObject, m_anim, "animator");
 			HFHelpers.NullCheck(gameObject, m_collider, "collider");
@@ -157,6 +171,9 @@ namespace HF
 			ResetHealth(true, true);
 
 			UnPossess();
+
+			m_lastAttackTime = -m_stats[HFStatistics.AttackRate];
+			m_lastRefresh = -m_refreshDelay;
 		}
 
 		void OnEnable()
@@ -176,6 +193,15 @@ namespace HF
 				return;
 			}
 
+			if (m_startCommand == null)
+			{
+				RefreshCommands();
+			}
+			else
+			{
+				m_startCommand = null;
+			}
+
 			if (m_isCommandComplete)
 			{
 				TryStartAction();
@@ -184,9 +210,16 @@ namespace HF
 			{
 				m_currentCommand.Perform();
 			}
-			else
+		}
+
+		private void HandleGameStateChange(GameStates newState)
+		{
+			if (newState == GameStates.EndLevel
+				&& m_baseStats.RewardCondition == HFRewardCondition.Survive
+				&& !IsKilled
+				&& ControllerType != InputType.Player)
 			{
-				RefreshCommands();
+				GainReward(Mathf.RoundToInt(m_stats[HFStatistics.RewardValue] * CurrentHealth / MaxHealth));
 			}
 		}
 
@@ -217,6 +250,7 @@ namespace HF
 			// Navigation update
 			m_navAgent.enabled = (m_stats[HFStatistics.Speed] > 0f);
 			m_navAgent.speed = m_stats[HFStatistics.Speed];
+			m_navObstacle.enabled = !m_navAgent.enabled;
 		}
 
 		private void UpdateModifiers()
@@ -280,12 +314,12 @@ namespace HF
 		/// <summary>
 		/// Assign reward
 		/// </summary>
-		private void GainReward()
+		private void GainReward(int value)
 		{
 			if (m_stats[HFStatistics.RewardValue] > 0f)
 			{
-				HFEventManager.TriggerEvent(HFEventID.GainReward, Mathf.Round(m_stats[HFStatistics.RewardValue]), this);
-				Debug.Log("Given reward: " + Mathf.Round(m_stats[HFStatistics.RewardValue]) + " by " + gameObject.name);
+				HFEventManager.TriggerEvent(HFEventID.GainReward, value, this);
+				Debug.Log("Given reward: " + value + " by " + gameObject.name);
 			}
 		}
 
@@ -315,20 +349,6 @@ namespace HF
 			ControllerType = InputType.None;
 			m_controller = null;
 			Team = 99;
-		}
-
-		private void HandleGameStateChange(GameStates newState)
-		{
-			if (newState == GameStates.EndLevel && m_baseStats.RewardCondition == HFRewardCondition.Survive && !IsKilled)
-			{
-				GainReward();
-			}
-		}
-
-		private void RefreshCommands()
-		{
-			ActionComplete(true);
-			AddCommand(new HFAttackCommand());
 		}
 
 		#endregion
@@ -377,7 +397,15 @@ namespace HF
 					m_currentCommand = nextCommand;
 					break;
 				}
+				else
+				{
+					nextCommand.Abort();
+				}
 				nextCommand = GetNextCommand();
+			}
+			if (nextCommand == null)
+			{
+				m_isCommandComplete = false;
 			}
 		}
 
@@ -409,6 +437,33 @@ namespace HF
 			m_currentCommand = null;
 		}
 
+		public void SetStartCommand(IHFCommand startCommand)
+		{
+			m_startCommand = startCommand;
+			SetCommand(startCommand);
+		}
+
+		private void RefreshCommands(bool bImmediate = false)
+		{
+			if (Time.time >= m_lastRefresh + m_refreshDelay || bImmediate)
+			{
+				m_lastRefresh = Time.time;
+				
+				if (FindNewTarget())
+				{
+					SetCommand(new HFAttackCommand());
+					if (ControllerType == InputType.AI && m_isMoving)
+					{
+						PauseMovement();
+					}
+				}
+				else
+				{
+					ActionComplete(true);
+				}
+			}
+		}
+
 		#endregion
 
 		#region Navigation
@@ -438,52 +493,76 @@ namespace HF
 
 		protected virtual void OnDestinationReached()
 		{
-			m_isMoving = false;
-			m_isDirectMoving = false;
-
-			UpdateLocation();
-			UpdateAnimState();
+			BreakMovement(true);
 
 			ActionComplete(true);
 		}
 
-		private void UpdateLocation()
+		private void PauseMovement()
 		{
-			// #TODO Snap location
-			Debug.Log(gameObject.name + " has reached destination.");
+			AddCommand(new HFMoveCommand(m_currentDestination, (m_isDirectMoving ? MovementType.Direct : MovementType.Agent)));
+
+			BreakMovement(false);
 		}
 
-		public bool SetMove(Vector3 position, MovementType moveType)
+		private void BreakMovement(bool bStop)
+		{
+			m_isMoving = !bStop;
+			m_isDirectMoving = false;
+
+			if (m_navAgent.enabled)
+			{
+				m_navAgent.isStopped = true;
+			}
+
+			UpdateAnimState();
+			UpdateAnimMoveSpeed();
+		}
+
+		private Vector3 SnapLocation(Vector3 location)
+		{
+			location /= HFGameParameters.TileSize;
+			location.x = Mathf.Round(location.x);
+			//location.y = Mathf.Round(location.y);
+			location.z = Mathf.Round(location.z);
+			location *= HFGameParameters.TileSize;
+
+			return location;
+		}
+
+		public bool SetMove(Vector3 destination, MovementType moveType)
 		{
 			if (m_stats[HFStatistics.Speed] <= 0f)
 			{
 				return false;
 			}
-
+			
 			m_isMoving = true;
 
 			m_lastPosition = m_transform.position;
+			destination = SnapLocation(destination);
+			m_currentDestination = destination;
 
 			if (moveType == MovementType.Agent)
 			{
 				m_isDirectMoving = false;
+				m_navAgent.isStopped = false;
 				m_navAgent.Warp(m_transform.position);
 				m_navAgent.ResetPath();
 				m_navAgent.updatePosition = true;
-				m_navAgent.SetDestination(position);
+				m_navAgent.SetDestination(destination);
 			}
 			else
 			{
 				m_isDirectMoving = true;
-				m_directDestination = position;
-				LookAt(position);
+				LookAt(destination);
 
 				// Teleport is a direct move but will reach destination on next frame and anim speed will be zero
 				if (moveType == MovementType.Teleport)
 				{
-					m_transform.position = position;
-					m_lastPosition = position;
-					m_navAgent.Warp(position);
+					m_transform.position = destination;
+					m_lastPosition = destination;
+					m_navAgent.Warp(destination);
 				}
 			}
 
@@ -494,9 +573,9 @@ namespace HF
 
 		private bool DirectMove()
 		{
-			m_transform.position = Vector3.Lerp(m_transform.position, m_directDestination, Time.deltaTime * m_stats[HFStatistics.Speed]);
+			m_transform.position = Vector3.Lerp(m_transform.position, m_currentDestination, Time.deltaTime * m_stats[HFStatistics.Speed]);
 
-			return (Vector3.SqrMagnitude(m_directDestination - m_transform.position) < 0.005f);
+			return (Vector3.SqrMagnitude(m_currentDestination - m_transform.position) < 0.005f);
 		}
 
 		private void LookAt(Vector3 position)
@@ -518,15 +597,17 @@ namespace HF
 		public bool FindNewTarget()
 		{
 			m_targetEnemy = null;
+			float unitDamage = m_stats[HFStatistics.UnitDamage];
+			float buildingDamage = m_stats[HFStatistics.BuildingDamage];
 
 			// Fail if can't deal any damage
-			if (m_stats[HFStatistics.BuildingDamage] == 0f && m_stats[HFStatistics.UnitDamage] == 0f)
+			if (unitDamage == 0f && buildingDamage == 0f)
 			{
 				return false;
 			}
 
-			// #TEMP Acquisition range is one tile unit larger than attack range
-			Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 1f) * HFGameParameters.TileSize, m_unitLayer);
+			// #TEMP Acquisition range could be larger than attack range
+			Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 0f) * HFGameParameters.TileSize, m_unitLayer);
 
 			if (colliders.Length > 0)
 			{
@@ -542,8 +623,13 @@ namespace HF
 					}
 
 					HFUnit testEnemy = testCollider.gameObject.GetComponentInParent<HFUnit>();
-					// Ignore already killed and disable friendly fire
-					if (!testEnemy || testEnemy.IsKilled || testEnemy.Team == Team)
+					// Ignore useless attacks and disable friendly fire
+					if (!testEnemy
+						|| testEnemy.IsKilled
+						|| testEnemy.Team == Team
+						|| !testEnemy.CanSufferDamage
+						|| (testEnemy.UnitType == HFUnitType.Unit && unitDamage == 0f)
+						|| (testEnemy.UnitType == HFUnitType.Castle && buildingDamage == 0f))
 					{
 						continue;
 					}
@@ -568,8 +654,6 @@ namespace HF
 			{
 				// Look at target
 				Vector3 direction = (m_targetEnemy.transform.position - m_transform.position);
-
-				// #TODO Move towards target
 
 				// #TODO Rotate shooting mesh towards target
 				//Quaternion lookDirection = Quaternion.LookRotation(direction);
@@ -614,13 +698,15 @@ namespace HF
 			else
 			{
 				// Lost target
-				UpdateAnimState();
 				m_targetEnemy = null;
+				UpdateAnimState();
 
 				if (m_currentCommand is HFAttackCommand)
 				{
 					m_currentCommand.End();
 				}
+
+				ActionComplete(true);
 			}
 		}
 
@@ -649,8 +735,8 @@ namespace HF
 
 		private bool IsInRange()
 		{
-			// #TEMP Acquisition range is one tile unit larger than attack range
-			return (Vector3.Magnitude(m_targetEnemy.transform.position - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 1f) * HFGameParameters.TileSize);
+			// #TEMP Acquisition range could be larger than attack range
+			return (Vector3.Magnitude(m_targetEnemy.transform.position - m_transform.position) <= (m_stats[HFStatistics.AttackRange] + 0f) * HFGameParameters.TileSize);
 		}
 		
 		#endregion
@@ -729,7 +815,6 @@ namespace HF
 		{
 			if (!CanSufferDamage)
 			{
-				Debug.Log(gameObject.name + " can't suffer damage");
 				return 0f;
 			}
 
@@ -754,8 +839,6 @@ namespace HF
 			}
 
 			float actualDamage = previous - CurrentHealth;
-
-			Debug.Log(gameObject.name + " has suffered damage: " + actualDamage.ToString());
 
 			if (CurrentHealth == 0f)
 			{
@@ -797,16 +880,21 @@ namespace HF
 		protected virtual void OnDeath()
 		{
 			IsKilled = true;
+			OnDestinationReached();
 			ActionComplete(false);
+
+			// #TEMP
+			m_navAgent.enabled = false;
+			m_navObstacle.enabled = true;
 
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
 
 			HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
 
-			if (m_baseStats.RewardCondition == HFRewardCondition.Kill)
+			if (m_baseStats.RewardCondition == HFRewardCondition.Kill && ControllerType != InputType.Player)
 			{
-				GainReward();
+				GainReward(Mathf.RoundToInt(m_stats[HFStatistics.RewardValue]));
 			}
 		}
 
