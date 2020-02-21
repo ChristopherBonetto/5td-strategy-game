@@ -14,14 +14,16 @@ public abstract class HFUIControl : MonoBehaviour
 
     protected virtual void Start()
     {
-        HFUIManager.Instance.AddControl(this);
+        if (HFUIManager.Instance != null)
+            HFUIManager.Instance.AddControl(this);
 
         this.gameObject.SetActive(false);
     }
 
     protected virtual void OnDestroy()
     {
-        HFUIManager.Instance.RemoveControl(this);
+        if (HFUIManager.Instance != null)
+            HFUIManager.Instance.RemoveControl(this);
     }
 
 

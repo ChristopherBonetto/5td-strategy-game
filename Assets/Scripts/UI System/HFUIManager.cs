@@ -3,22 +3,45 @@ using UnityEngine;
 
 public class HFUIManager : Singleton<HFUIManager>
 {
-	/* Components */
-
 	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
 
 	/// <summary>
 	/// Controls Collection.
 	/// Every key must provides only one value.
 	/// </summary>
-	public Dictionary<UIControlID, HFUIControl> controls = new Dictionary<UIControlID, HFUIControl>();
+	public Dictionary<UIControlID, HFUIControl> UIControls = new Dictionary<UIControlID, HFUIControl>();
+
+    private HFLoadingScreenWindow m_LoadingScreenWindow;
+    /// <summary>
+    /// Instance of the loading screen window in the scene.
+    /// </summary>
+    public HFLoadingScreenWindow LoadingScreenWindow
+    {
+        get 
+        { 
+            if (m_LoadingScreenWindow == null)
+            {
+                if (UIControls.ContainsKey(UIControlID.LoadingScreen))
+                    m_LoadingScreenWindow = UIControls[UIControlID.LoadingScreen] as HFLoadingScreenWindow;
+                else
+                {
+                    Debug.LogError("There is no loading screen in the scene");
+                    return null;
+                }
+            }
+            return m_LoadingScreenWindow;
+        }
+    }
 
 
     #region Methods
 
-	protected void Awake()
+    protected void Awake()
 	{
-    		m_graphicRaycaster = GetComponent<UnityEngine.UI.GraphicRaycaster>();
+    	m_graphicRaycaster = GetComponent<UnityEngine.UI.GraphicRaycaster>();
+
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
 	}
 
     /// <summary>
@@ -27,8 +50,8 @@ public class HFUIManager : Singleton<HFUIManager>
     /// </summary>
     public void AddControl(HFUIControl uiControl)
     {
-        if (uiControl != null && !controls.ContainsKey(uiControl.Name))
-            controls.Add(uiControl.Name, uiControl);
+        if (uiControl != null && !UIControls.ContainsKey(uiControl.Name))
+            UIControls.Add(uiControl.Name, uiControl);
     }
 
     /// <summary>
@@ -37,8 +60,8 @@ public class HFUIManager : Singleton<HFUIManager>
     /// </summary>
     public void RemoveControl(HFUIControl uiControl)
     {
-        if (uiControl != null && controls.ContainsKey(uiControl.Name))
-            controls.Remove(uiControl.Name);
+        if (uiControl != null && UIControls.ContainsKey(uiControl.Name))
+            UIControls.Remove(uiControl.Name);
     }
 
     /// <summary>
@@ -47,7 +70,7 @@ public class HFUIManager : Singleton<HFUIManager>
     /// </summary>
     public void Show(UIControlID id)
     {
-        if (controls.TryGetValue(id, out HFUIControl control))
+        if (UIControls.TryGetValue(id, out HFUIControl control))
         {
             control.OnShow();
         }
@@ -59,7 +82,7 @@ public class HFUIManager : Singleton<HFUIManager>
     /// </summary>
     public void Hide(UIControlID id)
     {
-        if (controls.TryGetValue(id, out HFUIControl control))
+        if (UIControls.TryGetValue(id, out HFUIControl control))
             control.OnHide();
     }
 
@@ -75,7 +98,7 @@ public class HFUIManager : Singleton<HFUIManager>
         if (id == controlToHide.Name) return;
 
 
-        if (controls.TryGetValue(id, out HFUIControl control))
+        if (UIControls.TryGetValue(id, out HFUIControl control))
         {
             // Show the control searched by name.
             if (!control.gameObject.activeSelf)

@@ -13,16 +13,16 @@ public class HFInGameWindow : HFUIControl
     public Button ButtonCallNextWave;
 
 
-    protected override void Start()
-    {
-        HFUIManager.Instance.AddControl(this);
-    }
-
     /// <summary>
     /// Trigger by the event when a wave end.
     /// </summary>
     public void OnWaveEnd()
     {
         ButtonCallNextWave.gameObject.SetActive(true);
+    }
+
+    public void OnClickCallNextWave()
+    {
+        HFEventManager.TriggerEvent(HFEventID.OnCallNextWave);
     }
 }

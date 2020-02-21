@@ -106,12 +106,13 @@ namespace HF.WaveSystem
         private void OnEnable()
         {
             HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
+            HFEventManager.SubscribeTo(HFEventID.OnCallNextWave, OnCallNextWave);
         }
 
         private void OnDisable()
         {
-            
             HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
+            HFEventManager.UnsubscribeFrom(HFEventID.OnCallNextWave, OnCallNextWave);
         }
 
         private void Start()
@@ -121,7 +122,7 @@ namespace HF.WaveSystem
             m_waitForInput = true;
 
             // Assign in game window.
-            m_gameWindow = HFUIManager.Instance.controls[UIControlID.InGameWindow] as HFInGameWindow;
+            m_gameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
         }
 
         private void Update()
@@ -181,8 +182,7 @@ namespace HF.WaveSystem
                     else
                     {
                         // Show button in UI to start the next wave.
-                        HFInGameWindow gameWindow = HFUIManager.Instance.controls[UIControlID.InGameWindow] as HFInGameWindow;
-                        gameWindow.OnWaveEnd();
+                        m_gameWindow.OnWaveEnd();
                         m_waitForInput = true;
                     }
                 }
@@ -247,7 +247,7 @@ namespace HF.WaveSystem
             }
         }
 
-        public void CallNextWave()
+        public void OnCallNextWave()
         {
             m_waitForInput = false;
             m_gameWindow.ButtonCallNextWave.gameObject.SetActive(false);

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HFMainMenuWindow : HFUIControl
 {
@@ -14,9 +15,7 @@ public class HFMainMenuWindow : HFUIControl
 
     public void OnClickStart()
     {
-        // Turn on level selection window,
-        // turn off this window.
-        HFScenesManager.Instance.LoadSceneFromIndex(1);
+        HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
 
         // Notify the game manager that the game is started.
         HFGameManager.Instance.CurrentGameState = GameStates.StartGame;

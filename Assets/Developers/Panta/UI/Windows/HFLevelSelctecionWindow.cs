@@ -32,7 +32,7 @@ public class HFLevelSelctecionWindow : HFUIControl
 
     protected override void Start()
     {
-        HFUIManager.Instance.AddControl(this);
+        base.Start();
         SpawnLevelButtons();
     }
 
@@ -50,8 +50,10 @@ public class HFLevelSelctecionWindow : HFUIControl
 
     public void OnClickBackToMainMenu() // => Wait war room details.
     {
-        HFScenesManager sceneManager = HFScenesManager.Instance;
-        sceneManager.LoadSceneFromIndex(sceneManager.IndexCurrentScene - 1);
+        HFUIManager.Instance.ShowAndHide(UIControlID.MainMenu, this);
+
+        //HFScenesManager sceneManager = HFScenesManager.Instance;
+        //sceneManager.LoadSceneFromIndex(sceneManager.IndexCurrentScene - 1);
     }
 }
 

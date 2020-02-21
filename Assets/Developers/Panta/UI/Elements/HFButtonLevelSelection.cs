@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HFButtonLevelSelection : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class HFButtonLevelSelection : MonoBehaviour
     /// </summary>
     public void OnClickLoadLevel()
     {
-        HFScenesManager.Instance.LoadLevelFromLevelInfo(Level);
+        // loading selected scene async.
+        HFUIManager.Instance.LoadingScreenWindow.OnShow(SceneManager.LoadSceneAsync(Level.LevelSceneIndex), UIControlID.LevelSelection, UIControlID.InGameWindow);
     }
 }

@@ -22,4 +22,5 @@ public enum HFEventID
     /// HFUnit unit
     /// </summary>
     OnUnitDeath,
+	OnCallNextWave,
 }
