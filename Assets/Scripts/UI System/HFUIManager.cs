@@ -38,7 +38,7 @@ public class HFUIManager : Singleton<HFUIManager>
 
     protected void Awake()
 	{
-    	m_graphicRaycaster = GetComponent<UnityEngine.UI.GraphicRaycaster>();
+    	m_graphicRaycaster = GetComponentInChildren<UnityEngine.UI.GraphicRaycaster>();
 
         if (Instance != null && Instance != this)
             Destroy(gameObject);
