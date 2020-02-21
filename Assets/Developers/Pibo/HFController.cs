@@ -29,8 +29,11 @@ namespace HF
 		{
 			for (int i = 0; i < m_possessedUnitsOnStart.Length; i++)
 			{
-				m_possessedUnitsOnStart[i].Possess(this);
-				m_possessedUnits.Add(m_possessedUnitsOnStart[i]);
+				if (m_possessedUnitsOnStart[i])
+				{
+					m_possessedUnitsOnStart[i].Possess(this);
+					m_possessedUnits.Add(m_possessedUnitsOnStart[i]);
+				}
 			}
 		}
 
@@ -105,12 +108,14 @@ namespace HF
 
 		#region Spawn
 
-		public void SpawnUnit(HFBaseStats stats, Vector3 location)
+		public virtual HFUnit SpawnUnit(HFBaseStats stats, Vector3 location)
 		{
 			HFUnit newUnit = Instantiate(m_unitPrefab, location, Quaternion.identity);
 			newUnit.SetStats(stats);
 			newUnit.Possess(this);
 			m_possessedUnits.Add(newUnit);
+
+			return newUnit;
 		}
 
 		#endregion
