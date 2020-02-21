@@ -65,10 +65,8 @@ namespace HF
 
 		private void OnCollisionEnter(Collision collision)
 		{
-			Debug.Log(collision.gameObject.name);
 			if (collision.collider == m_target.TargetCollider)
 			{
-				Debug.Log(m_target.gameObject.name);
 				if (m_target && m_target.enabled)
 				{
 					DamageInfo damageInfo = new DamageInfo(
