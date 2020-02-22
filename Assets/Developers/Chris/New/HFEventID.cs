@@ -19,8 +19,13 @@ public enum HFEventID
 	/// </summary>
 	GainReward,
     /// <summary>
-    /// HFUnit unit
+    /// HFUnit	unit
     /// </summary>
     OnUnitDeath,
+
 	OnCallNextWave,
+	/// <summary>
+	/// bool	isLevelCompleted,
+	/// </summary>
+	OnWaveEnd,
 }

@@ -7,30 +7,25 @@ namespace HF.WaveSystem
 {
     public class HFWaveLevel : MonoBehaviour
     {
-        #region Serializefield (single variables)
-        // e.g. 
-        // public var;
-        // [Serializefield] private var;
+        #region Serializefield
         [SerializeField]
         private List<Transform> m_SpawnPoints;
 
         [SerializeField] 
         private HFWavesCollector m_WaveCollector;
 
-        [SerializeField] private HFController m_Controller;
+        [SerializeField] 
+        private HFController m_Controller;
         #endregion
 
-        #region Private (single variables)
+        #region Private
         private float m_currentTime;
         private bool m_waitForInput = false;
 
-        // Bulk
+        // Variables used in bulk wave state
         private int m_bulkSpawnedIndex;
         private float m_totalDelayBetweenBulkSpawn;
         private float m_currentDelayBetweenBulkSpawn;
-
-        // UI
-        private HFInGameWindow m_gameWindow;
         #endregion
 
         #region Property
@@ -118,11 +113,7 @@ namespace HF.WaveSystem
         private void Start()
         {
             // Wait for input at the beggining.
-            // Create a publc variable for this.
             m_waitForInput = true;
-
-            // Assign in game window.
-            m_gameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
         }
 
         private void Update()
@@ -160,8 +151,8 @@ namespace HF.WaveSystem
             if (unit.Team == m_Controller.Team)
             {
                 CountOfEnemyKilled++;
-                Debug.Log(WaveIndex);
-                Debug.Log($"Total enemies killed: {CountOfEnemyKilled} / {GetTotalEnemiesOfTheWave}");
+                Debug.Log(WaveIndex);   // => UI feedback
+                Debug.Log($"Total enemies killed: {CountOfEnemyKilled} / {GetTotalEnemiesOfTheWave}");  // => UI feedback
 
                 if (WaveCleared())
                 {
@@ -182,7 +173,7 @@ namespace HF.WaveSystem
                     else
                     {
                         // Show button in UI to start the next wave.
-                        m_gameWindow.OnWaveEnd();
+                        HFEventManager.TriggerEvent(HFEventID.OnWaveEnd);
                         m_waitForInput = true;
                     }
                 }
@@ -247,10 +238,12 @@ namespace HF.WaveSystem
             }
         }
 
-        public void OnCallNextWave()
+        /// <summary>
+        /// Called when OnCallNextWave event is triggered.
+        /// </summary>
+        private void OnCallNextWave()
         {
             m_waitForInput = false;
-            m_gameWindow.ButtonCallNextWave.gameObject.SetActive(false);
         }
     }
 }

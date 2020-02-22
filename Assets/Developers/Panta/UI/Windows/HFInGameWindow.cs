@@ -13,16 +13,28 @@ public class HFInGameWindow : HFUIControl
     public Button ButtonCallNextWave;
 
 
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnWaveEnd, OnWaveEnd);
+    }
+
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnWaveEnd, OnWaveEnd);
+    }
+
+
     /// <summary>
     /// Trigger by the event when a wave end.
     /// </summary>
-    public void OnWaveEnd()
+    public void OnWaveEnd(bool isLevelCompleted)
     {
-        ButtonCallNextWave.gameObject.SetActive(true);
+        ButtonCallNextWave.gameObject.SetActive(!isLevelCompleted);
     }
 
     public void OnClickCallNextWave()
     {
+        ButtonCallNextWave.gameObject.SetActive(false);
         HFEventManager.TriggerEvent(HFEventID.OnCallNextWave);
     }
 }
