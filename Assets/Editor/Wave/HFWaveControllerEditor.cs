@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEditor;
 using HF.WaveSystem;
 
-[CustomEditor(typeof(HFWaveLevel))]
+[CustomEditor(typeof(HFWaveController))]
 [CanEditMultipleObjects]
-public class HFWaveLevelEditor : Editor
+public class HFWaveControllerEditor : Editor
 {
     SerializedProperty m_waveCollector;
     SerializedProperty m_AIController;
@@ -21,7 +21,7 @@ public class HFWaveLevelEditor : Editor
 
         // other variables creation
         m_waveCollector = this.serializedObject.FindProperty("m_WaveCollector");
-        m_AIController = this.serializedObject.FindProperty("m_Controller");
+        m_AIController = this.serializedObject.FindProperty("Controller");
     }
 
     public override void OnInspectorGUI()

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace HF.WaveSystem
 {
-    public class HFWaveLevel : MonoBehaviour
+    public class HFWaveController : MonoBehaviour
     {
         #region Serializefield
         [SerializeField]
@@ -14,21 +14,20 @@ namespace HF.WaveSystem
         [SerializeField] 
         private HFWavesCollector m_WaveCollector;
 
-        [SerializeField] 
-        private HFController m_Controller;
-        #endregion
-
-        #region Private
-        private float m_currentTime;
-        private bool m_waitForInput = false;
-
-        // Variables used in bulk wave state
-        private int m_bulkSpawnedIndex;
-        private float m_totalDelayBetweenBulkSpawn;
-        private float m_currentDelayBetweenBulkSpawn;
+        public HFController Controller;
         #endregion
 
         #region Property
+        /// <summary>
+        /// Curernt state of wave controller flow.
+        /// </summary>
+        public HFWaveControllerState CurrentState { get; set; }
+
+        /// <summary>
+        /// is it waiting for player input?
+        /// </summary>
+        public bool WaitForInput { get; private set; }
+
         /// <summary>
         /// Level's spawn points ordered from inspector.
         /// The ordered declare the spawn point ID.
@@ -113,13 +112,18 @@ namespace HF.WaveSystem
         private void Start()
         {
             // Wait for input at the beggining.
-            m_waitForInput = true;
+            WaitForInput = true;
+
+            // Init current State.
+            CurrentState = new HFCheckInputState();
         }
 
         private void Update()
         {
             // @TO DO: Works at state machine.
-            ExecuteMinorWave();
+            // Do we delay this actions?
+            CurrentState.HadnleExitCondition(this);
+            CurrentState.Update(this);
         }
 
         /// <summary>
@@ -148,7 +152,7 @@ namespace HF.WaveSystem
         public void OnEnemyKilled(HFUnit unit)
         {
             // only if the unit is marked as enemy do this function.
-            if (unit.Team == m_Controller.Team)
+            if (unit.Team == Controller.Team)
             {
                 CountOfEnemyKilled++;
                 Debug.Log(WaveIndex);   // => UI feedback
@@ -174,66 +178,8 @@ namespace HF.WaveSystem
                     {
                         // Show button in UI to start the next wave.
                         HFEventManager.TriggerEvent(HFEventID.OnWaveEnd);
-                        m_waitForInput = true;
+                        WaitForInput = true;
                     }
-                }
-            }
-        }
-
-        // This will be a state machine.
-        public void ExecuteMinorWave() // => think about a state machine.
-        {
-            if (!m_waitForInput)
-            {
-                if (MinorWaveIndex <= GetMinorWaves.Count - 1)
-                {
-                    if (m_currentTime <= 0)
-                    {
-                        HFWave.MinorWave bh = GetCurrentMinorWave;
-                        Debug.Log($"Wave {WaveIndex}, Minor wave {MinorWaveIndex}" + "\n" +
-                            $"{GetCurrentWave.name}");
-
-                        if (bh.MinorWaveType == MinorWaveType.Single)
-                        {
-                            // Spawn it
-                            Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
-                            m_Controller.SpawnUnit(GetCurrentMinorWave.UnitStatsData, position);
-
-                            MinorWaveIndex++;
-
-                            // Count ++ of the wave spawned.
-                        }
-                        else if (bh.MinorWaveType == MinorWaveType.Wait)
-                        {
-                            m_currentTime = bh.TimeToWait;
-
-                            MinorWaveIndex++;
-                        }
-                        else if (bh.MinorWaveType == MinorWaveType.Bulk)    // @TEMP
-                        {
-                            if (m_currentDelayBetweenBulkSpawn <= 0)
-                            {
-                                if (m_bulkSpawnedIndex < bh.AmountToSpawn)
-                                {
-                                    Vector3 position = SpawnPoints[GetCurrentMinorWave.SpawnPoint].position;
-                                    m_Controller.SpawnUnit(GetCurrentMinorWave.UnitStatsData, position);
-
-                                    m_bulkSpawnedIndex++;
-                                }
-                                else
-                                {
-                                    m_bulkSpawnedIndex = 0;
-                                    MinorWaveIndex++;
-                                }
-                            }
-                            else
-                            {
-                                m_currentDelayBetweenBulkSpawn = m_totalDelayBetweenBulkSpawn;
-                            }
-                        }
-                    }
-                    else
-                        m_currentTime -= Time.deltaTime;
                 }
             }
         }
@@ -243,7 +189,7 @@ namespace HF.WaveSystem
         /// </summary>
         private void OnCallNextWave()
         {
-            m_waitForInput = false;
+            WaitForInput = false;
         }
     }
 }
