@@ -38,7 +38,7 @@ public class HFLevelSelctecionWindow : HFUIControl
 
     private void SpawnLevelButtons()
     {
-        List<HFLevelInfoSO> levels = HFScenesManager.Instance.LevelContainer.Levels;
+        List<HFLevelInfoSO> levels = HFLevelManager.Instance.LevelContainer.Levels;
 
         for (int i = 0; i < levels.Count; i++)
         {
