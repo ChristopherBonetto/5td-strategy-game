@@ -115,7 +115,7 @@ namespace HF.WaveSystem
             WaitForInput = true;
 
             // Init current State.
-            CurrentState = new HFCheckTimeElapsedState();
+            CurrentState = HFWaveControllerState.CheckingTimeElapsed;
             WaveIndex = 0;
             MinorWaveIndex = 0;
         }
