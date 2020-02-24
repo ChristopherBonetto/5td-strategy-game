@@ -51,9 +51,6 @@ public class HFLevelSelctecionWindow : HFUIControl
     public void OnClickBackToMainMenu() // => Wait war room details.
     {
         HFUIManager.Instance.ShowAndHide(UIControlID.MainMenu, this);
-
-        //HFScenesManager sceneManager = HFScenesManager.Instance;
-        //sceneManager.LoadSceneFromIndex(sceneManager.IndexCurrentScene - 1);
     }
 }
 

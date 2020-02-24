@@ -17,6 +17,8 @@ public class HFMainMenuWindow : HFUIControl
     {
         HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
 
+        HFScenesManager.Instance.LoadSceneFromIndex(1);
+
         // Notify the game manager that the game is started.
         HFGameManager.Instance.CurrentGameState = GameStates.StartGame;
     }
