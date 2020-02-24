@@ -18,6 +18,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
     [HideInInspector]
     public List<string> AllScenes;
 
+    public HFLevelInfoSO CurrentLevelSelected = null;
+
 
     private void Awake()
     {
@@ -29,8 +31,9 @@ public class HFScenesManager : Singleton<HFScenesManager>
         Scene currentScene = SceneManager.GetActiveScene();
         IndexCurrentScene = currentScene.buildIndex;
     }
+
     
-   
+
 
     #region Get Scenes Reference
 
@@ -76,7 +79,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     //Generic Load
     public void LoadSceneFromIndex(int inSceneIndex)
     {
-        SceneManager.LoadScene(inSceneIndex, LoadSceneMode.Single);
+        SceneManager.LoadSceneAsync(inSceneIndex, LoadSceneMode.Single);
     }
 
     //Load next scene
@@ -86,12 +89,12 @@ public class HFScenesManager : Singleton<HFScenesManager>
         if (IndexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
         {
             // Load next scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
         }
         else
         {
             // Load war room
-            SceneManager.LoadScene(1);
+            SceneManager.LoadSceneAsync(1);
         }
     }
 
@@ -100,7 +103,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         if (AllScenes.Contains(inName))
         {
-            SceneManager.LoadScene(inName);
+            SceneManager.LoadSceneAsync(inName);
         }
     }
 
@@ -109,13 +112,15 @@ public class HFScenesManager : Singleton<HFScenesManager>
     //Giving a level info in input the corresponsive scene will be loaded
     public void LoadLevelFromLevelInfo(HFLevelInfoSO inLevel)
     {
-        SceneManager.LoadScene(inLevel.LevelSceneIndex);
+        CurrentLevelSelected = inLevel;
+        SceneManager.LoadSceneAsync(inLevel.LevelSceneIndex);
     }
 
 
     public void LoadLevelWithIndex(int inIndex)
     {
-        SceneManager.LoadScene(LevelContainer.Levels[inIndex].LevelSceneIndex);
+        CurrentLevelSelected = LevelContainer.Levels[inIndex];
+        SceneManager.LoadSceneAsync(LevelContainer.Levels[inIndex].LevelSceneIndex);
     }
     #endregion
 
@@ -144,4 +149,21 @@ public class HFScenesManager : Singleton<HFScenesManager>
     }
 
     #endregion
+
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
+    }
+
+    public void GiveAllReferenceToTheSelectedLevel(GameStates inState)
+    {
+        if (inState == GameStates.InitializeLevel)
+        {
+            HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, CurrentLevelSelected);
+        }
+    }
 }

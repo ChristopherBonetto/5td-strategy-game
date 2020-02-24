@@ -23,8 +23,25 @@ public class HFLevelManager : Singleton<HFLevelManager>
     // We need this to save datas.
 
 
+    public HFLevelInfoSO CurrentLevel = null;
+
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<HFLevelInfoSO>(HFEventID.OnInitializeLevel, TakeCurrentLevel);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<HFLevelInfoSO>(HFEventID.OnInitializeLevel, TakeCurrentLevel);
+    }
+
     private void Start()
     {
         LevelsCompleted = new bool[LevelContainer.Levels.Count];
+    }
+
+
+    public void TakeCurrentLevel(HFLevelInfoSO inLevel)
+    {
+        CurrentLevel = inLevel;
     }
 }

@@ -22,8 +22,12 @@ public enum HFEventID
     /// HFUnit	unit
     /// </summary>
     OnUnitDeath,
+    /// <summary>
+    /// HFLevelInfoSO
+    /// </summary>
+    OnInitializeLevel,
 
-	OnCallNextWave,
+    OnCallNextWave,
 	/// <summary>
 	/// bool	isLevelCompleted,
 	/// </summary>

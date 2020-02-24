@@ -107,7 +107,6 @@ public class HFGameManager : Singleton<HFGameManager>
                 break;
 
             case GameStates.EndLevel:
-                
                 break;
 
             case GameStates.Pause:
