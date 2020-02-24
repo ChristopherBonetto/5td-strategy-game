@@ -115,15 +115,23 @@ namespace HF.WaveSystem
             WaitForInput = true;
 
             // Init current State.
-            CurrentState = new HFCheckInputState();
+            CurrentState = new HFCheckTimeElapsedState();
+            WaveIndex = 0;
+            MinorWaveIndex = 0;
         }
 
         private void Update()
         {
             // @TO DO: Works at state machine.
             // Do we delay this actions?
-            CurrentState.HadnleExitCondition(this);
-            CurrentState.Update(this);
+            if (!WaitForInput)
+            {
+                if (MinorWaveIndex < GetMinorWaves.Count)
+                {
+                    CurrentState.HadnleExitCondition(this);
+                    CurrentState.Update(this);
+                }
+            }
         }
 
         /// <summary>
@@ -160,6 +168,7 @@ namespace HF.WaveSystem
 
                 if (WaveCleared())
                 {
+                    WaitForInput = true;
 
                     // Reset the count of enemies killed.
                     CountOfEnemyKilled = 0;
@@ -168,17 +177,14 @@ namespace HF.WaveSystem
                     // Reset the MinorWaveIndex.
                     MinorWaveIndex = 0;
 
-
                     if (LevelCleared())
                     {
-                        // Show end level results.
                         Debug.Log("End Level");
                     }
                     else
                     {
                         // Show button in UI to start the next wave.
-                        HFEventManager.TriggerEvent(HFEventID.OnWaveEnd);
-                        WaitForInput = true;
+                        HFEventManager.TriggerEvent<bool>(HFEventID.OnWaveEnd, false);
                     }
                 }
             }

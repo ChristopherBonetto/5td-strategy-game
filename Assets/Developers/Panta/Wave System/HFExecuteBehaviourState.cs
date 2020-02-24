@@ -30,6 +30,6 @@ public class HFExecuteBehaviourState : HFWaveControllerState
             waveController.MinorWaveIndex++;
         }
 
-        waveController.CurrentState = CheckingInput;
+        waveController.CurrentState = CheckingTimeElapsed;
     }
 }
