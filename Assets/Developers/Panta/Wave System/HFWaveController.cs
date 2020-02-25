@@ -96,6 +96,8 @@ namespace HF.WaveSystem
         }
         #endregion
 
+        private HFInGameWindow m_inGameWindow;
+
         private void OnEnable()
         {
             HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
@@ -117,6 +119,10 @@ namespace HF.WaveSystem
             CurrentState = HFWaveControllerState.CheckingTimeElapsed;
             WaveIndex = 0;
             MinorWaveIndex = 0;
+
+            m_inGameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
+            m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
+            m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
         }
 
         private void Update()
@@ -173,6 +179,9 @@ namespace HF.WaveSystem
                     }
                     else
                     {
+                        m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
+                        m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
+
                         // Show button in UI to start the next wave.
                         HFEventManager.TriggerEvent<bool>(HFEventID.OnWaveEnd, false);
                     }

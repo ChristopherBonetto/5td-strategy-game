@@ -8,6 +8,16 @@ public class HFInGameWindow : HFUIControl
     public override UIControlID Name => UIControlID.InGameWindow;
 
     /// <summary>
+    /// All info displayed about wave.
+    /// </summary>
+    public HFWaveInfoUIElement WaveInfoUIElement;
+
+    /// <summary>
+    /// All info displayed about enemies.
+    /// </summary>
+    public HFEnemyInfoUIElement EnemyInfoUIElement;
+
+    /// <summary>
     /// "Call next wave" button.
     /// </summary>
     public Button ButtonCallNextWave;

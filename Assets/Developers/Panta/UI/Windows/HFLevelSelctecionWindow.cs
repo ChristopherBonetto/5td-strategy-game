@@ -17,7 +17,7 @@ public class HFLevelSelctecionWindow : HFUIControl
     /// Text of the level 
     /// Change when the mouse overlay the buttons
     /// </summary>
-    public HFLevelDescrition LevelDescription;
+    public HFLevelDescritionUIElement LevelDescription;
 
     [Header("Buttons Field")]
 
@@ -41,7 +41,7 @@ public class HFLevelSelctecionWindow : HFUIControl
 
     private void SpawnLevelButtons()
     {
-        List<HFLevelInfoSO> levels = HFLevelManager.Instance.LevelContainer.Levels;
+        List<HFLevelInfoSO> levels = HFScenesManager.Instance.LevelContainer.Levels;
 
         SetDefaultLevelDescription(levels[0]);
 
