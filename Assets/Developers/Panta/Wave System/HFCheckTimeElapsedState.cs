@@ -8,14 +8,11 @@ public class HFCheckTimeElapsedState : HFWaveControllerState
     public float TimeToElaps;
     public float TimeElapsed;
 
-    public override void HadnleExitCondition(HFWaveController waveController)
+    public override void Update(HFWaveController waveController)
     {
         if (TimeElapsed >= TimeToElaps)
             waveController.CurrentState = ExecutingBehaviour;
-    }
-
-    public override void Update(HFWaveController waveController)
-    {
-        TimeElapsed += Time.deltaTime;
+        else
+            TimeElapsed += Time.deltaTime;
     }
 }

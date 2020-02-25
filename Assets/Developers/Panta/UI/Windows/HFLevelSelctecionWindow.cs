@@ -8,13 +8,16 @@ public class HFLevelSelctecionWindow : HFUIControl
 {
     public override UIControlID Name => UIControlID.LevelSelection;
 
-
-    // Serializefield
-
     /// <summary>
     /// it'sused as parent of buttons.
     /// </summary>
     public VerticalLayoutGroup ButtonsGrid;
+
+    /// <summary>
+    /// Text of the level 
+    /// Change when the mouse overlay the buttons
+    /// </summary>
+    public HFLevelDescrition LevelDescription;
 
     [Header("Buttons Field")]
 
@@ -40,6 +43,8 @@ public class HFLevelSelctecionWindow : HFUIControl
     {
         List<HFLevelInfoSO> levels = HFLevelManager.Instance.LevelContainer.Levels;
 
+        SetDefaultLevelDescription(levels[0]);
+
         for (int i = 0; i < levels.Count; i++)
         {
             HFButtonLevelSelection button = Instantiate(ButtonPrefab, ButtonsGrid.transform) as HFButtonLevelSelection;
@@ -51,6 +56,12 @@ public class HFLevelSelctecionWindow : HFUIControl
     public void OnClickBackToMainMenu() // => Wait war room details.
     {
         HFUIManager.Instance.ShowAndHide(UIControlID.MainMenu, this);
+    }
+
+    private void SetDefaultLevelDescription(HFLevelInfoSO info)
+    {
+        LevelDescription.LevelName.text = info.LevelName;
+        LevelDescription.LevelDescrition.text = info.m_levelDescription;
     }
 }
 

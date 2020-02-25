@@ -5,10 +5,6 @@ using HF.WaveSystem;
 
 public class HFExecuteBehaviourState : HFWaveControllerState
 {
-    public override void HadnleExitCondition(HFWaveController waveController)
-    {
-    }
-
     public override void Update(HFWaveController waveController)
     {
         HFWave.MinorWave mw = waveController.GetCurrentMinorWave;

@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class HFButtonLevelSelection : MonoBehaviour
 {
+    public bool ClearTextOnPointerExit;
+
     /// <summary>
     /// S.O. of the level.
     /// </summary>
@@ -31,5 +33,24 @@ public class HFButtonLevelSelection : MonoBehaviour
         HFLevelManager.Instance.LastLevelPlayed = Level;
 
         HFScenesManager.Instance.LoadLevelFromLevelInfo(Level);
+    }
+
+    public void OnPointEnter()
+    {
+        HFLevelSelctecionWindow window = HFUIManager.Instance.UIControls[UIControlID.LevelSelection] as HFLevelSelctecionWindow;
+
+        window.LevelDescription.LevelName.text = Level.LevelName;
+        window.LevelDescription.LevelDescrition.text = Level.m_levelDescription;
+    }
+
+    public void OnPointExit()
+    {
+        if (ClearTextOnPointerExit)
+        {
+            HFLevelSelctecionWindow window = HFUIManager.Instance.UIControls[UIControlID.LevelSelection] as HFLevelSelctecionWindow;
+
+            window.LevelDescription.LevelName.text = "";
+            window.LevelDescription.LevelDescrition.text = "";
+        }
     }
 }

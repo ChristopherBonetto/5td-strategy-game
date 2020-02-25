@@ -17,7 +17,12 @@ namespace HF.WaveSystem
         public HFController Controller;
         #endregion
 
-        #region Property
+        /// <summary>
+        /// Level's spawn points ordered from inspector.
+        /// The ordered declare the spawn point ID.
+        /// </summary>
+        public List<Transform> SpawnPoints => m_SpawnPoints;
+
         /// <summary>
         /// Curernt state of wave controller flow.
         /// </summary>
@@ -28,12 +33,7 @@ namespace HF.WaveSystem
         /// </summary>
         public bool WaitForInput { get; private set; }
 
-        /// <summary>
-        /// Level's spawn points ordered from inspector.
-        /// The ordered declare the spawn point ID.
-        /// </summary>
-        public List<Transform> SpawnPoints => m_SpawnPoints;
-
+        #region Wave variables
         /// <summary>
         /// Collection of all level's waves.
         /// It's only to read purpose.
@@ -94,7 +94,6 @@ namespace HF.WaveSystem
             get { return m_CountOfEnemiesKilled; }
             set { m_CountOfEnemiesKilled = value; }
         }
-
         #endregion
 
         private void OnEnable()
@@ -114,7 +113,7 @@ namespace HF.WaveSystem
             // Wait for input at the beggining.
             WaitForInput = true;
 
-            // Init current State.
+            // Initialization.
             CurrentState = HFWaveControllerState.CheckingTimeElapsed;
             WaveIndex = 0;
             MinorWaveIndex = 0;
@@ -122,16 +121,9 @@ namespace HF.WaveSystem
 
         private void Update()
         {
-            // @TO DO: Works at state machine.
-            // Do we delay this actions?
             if (!WaitForInput)
-            {
                 if (MinorWaveIndex < GetMinorWaves.Count)
-                {
-                    CurrentState.HadnleExitCondition(this);
                     CurrentState.Update(this);
-                }
-            }
         }
 
         /// <summary>
@@ -170,11 +162,9 @@ namespace HF.WaveSystem
                 {
                     WaitForInput = true;
 
-                    // Reset the count of enemies killed.
+                    // Reset all count and index
                     CountOfEnemyKilled = 0;
-                    // increase the WaveIndex.
                     WaveIndex++;
-                    // Reset the MinorWaveIndex.
                     MinorWaveIndex = 0;
 
                     if (LevelCleared())
