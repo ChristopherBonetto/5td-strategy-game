@@ -27,9 +27,10 @@ public class HFEnemyInfoUIElement : MonoBehaviour
 
         for (int i = 0; i < wave.MinorWavesCollection.Count; i++)
         {
-            Debug.Log(wave.MinorWavesCollection[i].MinorWaveType);
-            if (wave.MinorWavesCollection[i].MinorWaveType == MinorWaveType.Single)
+            if (wave.MinorWavesCollection[i].MinorWaveType != MinorWaveType.Wait)
+            {
                 AddNewIcon(wave.MinorWavesCollection[i].UnitStatsData);
+            }
         }
     }
 
@@ -39,6 +40,5 @@ public class HFEnemyInfoUIElement : MonoBehaviour
         icon.sprite = stats.Icon;
 
         EnemiesTroopIcons.Add(icon);
-        Debug.Log(EnemiesTroopIcons.Count);
     }
 }

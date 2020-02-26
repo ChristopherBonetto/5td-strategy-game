@@ -11,19 +11,16 @@ public class HFWaveEditor : Editor
     SerializedProperty m_list;
     List<HFWave.MinorWave> m_typedList;
 
-    // Resources
-    Texture2D deleteButton;
-
     void OnEnable()
     {
         HFWave m_target = (HFWave)target;
+
+        // Null check
         if (m_target.MinorWavesCollection == null)
             m_target.MinorWavesCollection = new List<HFWave.MinorWave>();
+
         m_typedList = m_target.MinorWavesCollection;
         m_list = serializedObject.FindProperty("MinorWavesCollection");
-
-        // Resources
-        deleteButton = Resources.Load<Texture2D>("Editor/custom_editor_button_delete");
     }
 
     public override void OnInspectorGUI()
@@ -90,6 +87,15 @@ public class HFWaveEditor : Editor
                     EditorGUILayout.Space();
 
                     timeToWait.floatValue = EditorGUILayout.FloatField("Time to wait", timeToWait.floatValue);
+                }
+                else if (m_typedList[i].MinorWaveType == MinorWaveType.Bulk)
+                {
+                    EditorGUILayout.Space();
+
+                    unitStatsData.objectReferenceValue = EditorGUILayout.ObjectField("unit stats data", unitStatsData.objectReferenceValue, typeof(HFBaseStats));
+                    amountToSpawn.intValue = EditorGUILayout.IntField("Amount to spawn", amountToSpawn.intValue);
+                    spawnPoint.intValue = EditorGUILayout.IntField("Spawn Point ID", spawnPoint.intValue);
+                    timeToWait.floatValue = EditorGUILayout.FloatField("Delay from spawn", timeToWait.floatValue);
                 }
             }
         }

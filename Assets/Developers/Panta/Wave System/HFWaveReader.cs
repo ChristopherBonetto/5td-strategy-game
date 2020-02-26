@@ -37,6 +37,8 @@ namespace HF.WaveSystem
             {
                 if (w.MinorWaveType == MinorWaveType.Single)
                     n++;
+                else if (w.MinorWaveType == MinorWaveType.Bulk)
+                    n += w.AmountToSpawn;
             }
             return n;
         }
