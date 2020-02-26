@@ -17,6 +17,8 @@ public class HFWaveEditor : Editor
     void OnEnable()
     {
         HFWave m_target = (HFWave)target;
+        if (m_target.MinorWavesCollection == null)
+            m_target.MinorWavesCollection = new List<HFWave.MinorWave>();
         m_typedList = m_target.MinorWavesCollection;
         m_list = serializedObject.FindProperty("MinorWavesCollection");
 
