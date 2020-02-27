@@ -13,19 +13,26 @@ public enum HFEventID
 	/// GameStates newState
 	/// </summary>
 	OnGameStateChanged,
-	/// <summary>
-	/// float	rewardValue,
-	/// HFUnit	instigatorUnit
-	/// </summary>
-	GainReward,
-    /// <summary>
-    /// HFUnit	unit
-    /// </summary>
-    OnUnitDeath,
+
     /// <summary>
     /// HFLevelInfoSO
     /// </summary>
     OnInitializeLevel,
+    /// <summary>
+    /// 
+    /// </summary>
+    OnEndLevel,
+
+    /// <summary>
+    /// float	rewardValue,
+    /// HFUnit	instigatorUnit
+    /// </summary>
+    GainReward,
+    /// <summary>
+    /// HFUnit	unit
+    /// </summary>
+    OnUnitDeath,
+    
 
     OnCallNextWave,
 	/// <summary>

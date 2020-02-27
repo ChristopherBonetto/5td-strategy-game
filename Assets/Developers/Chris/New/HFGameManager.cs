@@ -40,7 +40,14 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public List<HFGMStateSO> ListOfStates = new List<HFGMStateSO>();
 
-    
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelCondition);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnEndLevel, EndLevelCondition);
+    }
 
     private void Awake()
     {
@@ -58,21 +65,25 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (preState)
         {
             case GameStates.LoadStartingInfo:
+                //try to load player file
+                //if doesn't file any file it will create a new one
                 LoadPlayerProfile();
                 break;
 
             case GameStates.StartGame:
-                
-                StartGameScene();
+                //used to take all the player info and if the player want load another file info
                 break;
 
             case GameStates.WarRoom:
+                //level selection
                 break;
 
             case GameStates.InitializeLevel:
+                //give info to all
                 break;
 
             case GameStates.PlayingLevel:
+                //level in play
                 break;
 
             case GameStates.EndLevel:
@@ -148,11 +159,15 @@ public class HFGameManager : Singleton<HFGameManager>
         Debug.Log("Load player info method");
     }
 
-    public void StartGameScene()
+    
+    public void EndLevelCondition(bool inBool)
     {
-        
+        ChangeGMState(GameStates.EndLevel);
     }
 
-
-    
+    public void StartGame()
+    {
+        //will be replace when the player has been positioned all his units in game.
+        CurrentGameState = GameStates.PlayingLevel;
+    }
 }

@@ -21,6 +21,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
     public HFLevelInfoSO CurrentLevelSelected = null;
 
 
+    
+
     private void Awake()
     {
         DontDestroyOnLoad(this);
@@ -79,7 +81,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     //Generic Load
     public void LoadSceneFromIndex(int inSceneIndex)
     {
-        SceneManager.LoadSceneAsync(inSceneIndex, LoadSceneMode.Single);
+        SceneManager.LoadScene(inSceneIndex);
     }
 
     //Load next scene
@@ -114,6 +116,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         CurrentLevelSelected = inLevel;
         SceneManager.LoadSceneAsync(inLevel.LevelSceneIndex);
+
     }
 
 
@@ -153,10 +156,14 @@ public class HFScenesManager : Singleton<HFScenesManager>
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
+
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelProvvisory);
     }
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
+
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelProvvisory);
     }
 
     public void GiveAllReferenceToTheSelectedLevel(GameStates inState)
@@ -165,5 +172,10 @@ public class HFScenesManager : Singleton<HFScenesManager>
         {
             HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, CurrentLevelSelected);
         }
+    }
+
+    public void EndLevelProvvisory(bool inValue)
+    {
+        Debug.Log("LIVELLO CORRENTE VINTO");
     }
 }
