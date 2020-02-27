@@ -249,6 +249,12 @@ namespace HF
 
 		public void Specialize(HFBaseStats newStats)
 		{
+			if (newStats == null)
+			{
+				Debug.LogWarning("Missing new base stats for specialization on unit " + gameObject.name);
+				return;
+			}
+
 			SetStats(newStats);
 			m_currentLevel = 1;
 			m_upgrades.Clear();
