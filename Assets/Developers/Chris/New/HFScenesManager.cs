@@ -174,8 +174,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
-    public void EndLevelProvvisory(bool inValue)
+    public void EndLevelProvvisory(bool winCondition)
     {
-        Debug.Log("LIVELLO CORRENTE VINTO");
+        Debug.Log("LIVELLO CORRENTE " + (winCondition ? "VINTO" : "PERSO"));
     }
 }
