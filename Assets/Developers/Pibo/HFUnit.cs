@@ -26,7 +26,7 @@ namespace HF
 
 		private Transform m_transform = null;
 
-		private Renderer m_renderer = null;
+		private Renderer[] m_renderers = new Renderer[0];
 
 		private NavMeshAgent m_navAgent = null;
 
@@ -52,6 +52,14 @@ namespace HF
 		private List<IHFStatModifier> m_mods;
 
 		public HFUnitType UnitType => m_baseStats.UnitType;
+
+		private Transform m_base = null;
+
+		private Transform m_meshes = null;
+
+		private HFUnitVisuals m_visuals;
+
+		private int m_currentLevel;
 
 		/*** Input */
 
@@ -150,14 +158,17 @@ namespace HF
 		void Awake()
 		{
 			m_transform = transform;
-			m_renderer = GetComponentInChildren<Renderer>();
+			m_renderers = GetComponentsInChildren<Renderer>();
 			m_navAgent = GetComponent<NavMeshAgent>();
 			m_navObstacle = GetComponent<NavMeshObstacle>();
 			m_anim = GetComponent<Animator>();
 			m_collider = GetComponentInChildren<Collider>();
 
+			m_base = m_transform.Find("Base");
+			m_meshes = m_transform.Find("Meshes");
+
 			HFHelpers.NullCheck(gameObject, m_baseStats, "base stats");
-			HFHelpers.NullCheck(gameObject, m_renderer, "renderer");
+			HFHelpers.NullCheck(gameObject, m_renderers, "renderers");
 			HFHelpers.NullCheck(gameObject, m_navAgent, "navigation agent");
 			HFHelpers.NullCheck(gameObject, m_navObstacle, "navigation obstacle");
 			// #TEMP
@@ -236,6 +247,41 @@ namespace HF
 		#endregion
 
 		#region Statistics
+
+		public void LoadVisuals()
+		{
+			if (!m_baseStats.Visuals)
+			{
+				Debug.LogWarning("No base visuals for stats " + m_baseStats.name);
+				return;
+			}
+			HFUnitVisuals newVisuals = Instantiate(m_baseStats.Visuals, m_meshes);
+			if (newVisuals.Visuals.Length < m_currentLevel)
+			{
+				Destroy(newVisuals);
+				Debug.LogWarning("No visuals for level " + m_currentLevel + " in " + newVisuals.name);
+				return;
+			}
+			m_visuals = newVisuals;
+			m_collider = m_visuals.Target;
+
+			// #TEMP Disable placeholder visuals
+			for (int i = m_base.childCount - 1; i >= 0; i--)
+			{
+				m_base.GetChild(i).gameObject.SetActive(false);
+			}
+
+			// Update level visuals
+			foreach (GameObject mesh in newVisuals.Visuals[m_currentLevel - 1].List)
+			{
+				mesh.SetActive(true);
+			}
+
+			// Update renderers for selection
+			m_renderers = GetComponentsInChildren<Renderer>();
+			// Update bullet spawn point
+			m_spawnPoint = m_meshes.GetComponentInChildren<HFBulletSpawn>().transform;
+		}
 
 		public void SetStats(HFBaseStats newStats)
 		{
@@ -662,14 +708,13 @@ namespace HF
 		{
 			if (m_targetEnemy && IsInRange() && m_targetEnemy.enabled && !m_targetEnemy.IsKilled)
 			{
-				// Look at target
 				Vector3 direction = (m_targetEnemy.transform.position - m_transform.position);
+				Transform rotatingMesh = (m_visuals.UsesPivot ? m_visuals.Pivot : m_transform);
 
-				// #TODO Rotate shooting mesh towards target
-				//Quaternion lookDirection = Quaternion.LookRotation(direction);
-
-				//m_mesh.transform.rotation = Quaternion.Lerp(m_mesh.transform.rotation, lookDirection, Time.deltaTime * 3f);
-				//m_mesh.transform.rotation = Quaternion.Euler(0, m_mesh.transform.rotation.eulerAngles.y, 0);
+				// Look at target
+				Quaternion lookDirection = Quaternion.LookRotation(direction);
+				rotatingMesh.rotation = Quaternion.Lerp(rotatingMesh.rotation, lookDirection, Time.deltaTime * 3f);
+				rotatingMesh.rotation = Quaternion.Euler(0, rotatingMesh.rotation.eulerAngles.y, 0);
 
 				// Wait for cooldown
 				float rateOfFire = m_stats[HFStatistics.AttackRate];
@@ -693,8 +738,7 @@ namespace HF
 						{
 							shootAngle = 180f;
 						}
-						// #TODO Only calculate angle based on rotating mesh
-						float targetAngle = Vector3.Angle(m_transform.forward, direction);
+						float targetAngle = Vector3.Angle(rotatingMesh.forward, direction);
 						float targetDistance = direction.magnitude;
 
 						if (Mathf.Abs(targetAngle) < shootAngle && targetDistance < attackDistance * HFGameParameters.TileSize)
@@ -799,7 +843,10 @@ namespace HF
 			m_isSelected = true;
 			if (m_selectedMaterial)
 			{
-				m_renderer.material = m_selectedMaterial;
+				foreach (Renderer renderer in m_renderers)
+				{
+					renderer.material = m_selectedMaterial;
+				}
 			}
 		}
 
@@ -808,7 +855,10 @@ namespace HF
 			m_isSelected = false;
 			if (m_unselectedMaterial)
 			{
-				m_renderer.material = m_unselectedMaterial;
+				foreach (Renderer renderer in m_renderers)
+				{
+					renderer.material = m_unselectedMaterial;
+				}
 			}
 		}
 

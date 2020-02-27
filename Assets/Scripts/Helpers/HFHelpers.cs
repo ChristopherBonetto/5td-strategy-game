@@ -105,6 +105,17 @@
 		}
 	}
 
+	public static void NullCheck(UnityEngine.GameObject holder, UnityEngine.Object[] references, string logName)
+	{
+		foreach (UnityEngine.Object reference in references)
+		{
+			if (!reference)
+			{
+				UnityEngine.Debug.LogError(holder.name + " has a missing reference in " + logName + " array.");
+			}
+		}
+	}
+
 	#endregion
 }
 

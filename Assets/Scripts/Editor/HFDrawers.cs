@@ -5,15 +5,15 @@ using UnityEditor;
 
 public class HFEditorHelper : Editor
 {
-	public static void ShowList(SerializedProperty list, bool includeChildren)
+	public static void ShowList(SerializedProperty list, bool includeChildren, string displayName = "")
 	{
 		EditorGUILayout.Space();
-		EditorGUILayout.LabelField(list.displayName); //EditorGUILayout.PropertyField(list);
+		string label = (displayName != "" ? displayName : list.displayName);
+		EditorGUILayout.LabelField(label);
 		list.isExpanded = true;
 		EditorGUI.indentLevel += 1;
 		if (list.isExpanded && includeChildren)
 		{
-			//EditorGUILayout.PropertyField(list.FindPropertyRelative("Array.size"));
 			if (list.arraySize == 0 && GUILayout.Button("+", EditorStyles.miniButton))
 			{
 				list.arraySize += 1;
@@ -52,6 +52,8 @@ public class HFBaseStatsEditor : Editor
 		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("UnitType"));
 		EditorGUILayout.Space();
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("Visuals"));
+		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("RewardCondition"));
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_floatStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_intStats"), true);
@@ -70,6 +72,27 @@ public class HFStatUpgradeEditor : Editor
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_floatAddModifiers"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_pctModifiers"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_intAddModifiers"), true);
+		serializedObject.ApplyModifiedProperties();
+	}
+}
+
+[CustomEditor(typeof(HF.HFUnitVisuals), true)]
+public class HFUnitVisualsEditor : Editor
+{
+	public override void OnInspectorGUI()
+	{
+		serializedObject.Update();
+		EditorGUILayout.LabelField("Pivot", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("m_pivot"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("m_usesPivot"));
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Target", EditorStyles.boldLabel);
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("m_target"));
+		EditorGUILayout.Space();
+		EditorGUILayout.LabelField("Level Meshes", EditorStyles.boldLabel);
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_visuals").GetArrayElementAtIndex(0).FindPropertyRelative("List"), true, "Level 1");
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_visuals").GetArrayElementAtIndex(1).FindPropertyRelative("List"), true, "Level 2");
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_visuals").GetArrayElementAtIndex(2).FindPropertyRelative("List"), true, "Level 3");
 		serializedObject.ApplyModifiedProperties();
 	}
 }

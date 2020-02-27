@@ -70,6 +70,8 @@ public class HFBaseStats : ScriptableObject
 	public HFUnitType UnitType = HFUnitType.PlaceHolder;
 
 	[SerializeField]
+	public HF.HFUnitVisuals Visuals = null;
+	[SerializeField]
 	public HFRewardCondition RewardCondition = HFRewardCondition.NoReward;
 
 	void OnValidate()
