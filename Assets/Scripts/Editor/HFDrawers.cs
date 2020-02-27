@@ -54,6 +54,9 @@ public class HFBaseStatsEditor : Editor
 		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("Visuals"));
 		EditorGUILayout.Space();
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_levels").GetArrayElementAtIndex(0).FindPropertyRelative("List"), true, "Level 2 upgrades");
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_levels").GetArrayElementAtIndex(1).FindPropertyRelative("List"), true, "Level 3 upgrades");
+		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("RewardCondition"));
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_floatStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_intStats"), true);

@@ -146,7 +146,7 @@ namespace HF
 		public virtual HFUnit SpawnUnit(HFBaseStats stats, Vector3 location)
 		{
 			HFUnit newUnit = Instantiate(m_unitPrefab, location, Quaternion.identity);
-			newUnit.SetStats(stats);
+			newUnit.Specialize(stats);
 			newUnit.Possess(this);
 			m_possessedUnits.Add(newUnit);
 

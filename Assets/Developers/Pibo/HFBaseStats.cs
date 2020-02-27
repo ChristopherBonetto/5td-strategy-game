@@ -63,6 +63,12 @@ public class HFBoolKV : HFKeyVal<bool>
 [CreateAssetMenu(fileName = "Stats_", menuName = "GoodNorth/Statistics")]
 public class HFBaseStats : ScriptableObject
 {
+	[Serializable]
+	public struct Upgrades
+	{
+		public List<HFStatUpgrade> List;
+	}
+
 	[SerializeField]
 	public Sprite Icon = null;
 
@@ -71,6 +77,11 @@ public class HFBaseStats : ScriptableObject
 
 	[SerializeField]
 	public HF.HFUnitVisuals Visuals = null;
+
+	[SerializeField]
+	private Upgrades[] m_levels = new Upgrades[3];
+	public Upgrades[] Levels => m_levels;
+
 	[SerializeField]
 	public HFRewardCondition RewardCondition = HFRewardCondition.NoReward;
 

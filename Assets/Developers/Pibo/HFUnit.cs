@@ -47,8 +47,7 @@ namespace HF
 		private HFBaseStats m_baseStats = null;
 		private Dictionary<HFStatistics, float> m_stats;
 
-		[SerializeField]
-		private HFStatUpgrade[] m_upgrades = new HFStatUpgrade[0];
+		private List<HFStatUpgrade> m_upgrades = new List<HFStatUpgrade>();
 		private List<IHFStatModifier> m_mods;
 
 		public HFUnitType UnitType => m_baseStats.UnitType;
@@ -248,6 +247,28 @@ namespace HF
 
 		#region Statistics
 
+		public void Specialize(HFBaseStats newStats)
+		{
+			SetStats(newStats);
+			m_currentLevel = 1;
+			m_upgrades.Clear();
+			LoadVisuals();
+		}
+
+		public void Upgrade()
+		{
+			if (m_currentLevel <= m_baseStats.Levels.Length)
+			{
+				foreach (HFStatUpgrade upgrade in m_baseStats.Levels[m_currentLevel - 1].List)
+				{
+					m_upgrades.Add(upgrade);
+				}
+				UpdateStats();
+				m_currentLevel++;
+				LoadVisuals();
+			}
+		}
+
 		public void LoadVisuals()
 		{
 			if (!m_baseStats.Visuals)
@@ -312,7 +333,7 @@ namespace HF
 		private void UpdateModifiers()
 		{
 			m_mods.Clear();
-			for (int i = 0; i < m_upgrades.Length; i++)
+			for (int i = 0; i < m_upgrades.Count; i++)
 			{
 				if (m_upgrades[i])
 				{
