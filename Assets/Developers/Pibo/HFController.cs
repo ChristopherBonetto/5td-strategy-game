@@ -25,8 +25,31 @@ namespace HF
 
 		#region Core loop
 
-		void Start()
+		void OnEnable()
 		{
+			Debug.Log("Subscribe");
+			HFEventManager.SubscribeTo(HFEventID.OnLevelReady, ReceiveLevelReady);
+			HFEventManager.SubscribeTo<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
+			HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
+		}
+
+		void OnDisable()
+		{
+			Debug.Log("Unsubscribe");
+			HFEventManager.UnsubscribeFrom(HFEventID.OnLevelReady, ReceiveLevelReady);
+			HFEventManager.UnsubscribeFrom<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
+			HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
+		}
+
+		void Update()
+		{
+			TrySelect();
+			TryInteract();
+		}
+
+		private void ReceiveLevelReady()
+		{
+			Debug.Log("Possess");
 			for (int i = 0; i < m_possessedUnitsOnStart.Length; i++)
 			{
 				if (m_possessedUnitsOnStart[i])
@@ -37,10 +60,22 @@ namespace HF
 			}
 		}
 
-		void Update()
+		private void HandlePreGameStateChange(GameStates oldState, GameStates newState)
 		{
-			TrySelect();
-			TryInteract();
+		}
+
+		private void HandleGameStateChange(GameStates newState)
+		{
+			if (newState == GameStates.EndLevel)
+			{
+				for (int i = 0; i < m_possessedUnits.Count; i++)
+				{
+					if (m_possessedUnits[i])
+					{
+						m_possessedUnits[i].UnPossess();
+					}
+				}
+			}
 		}
 
 		#endregion

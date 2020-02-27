@@ -28,7 +28,7 @@ public class HFGameManager : Singleton<HFGameManager>
             if (CheckNextState(value))
             {
                 //Used to reset somethings before change state
-                //ActionBeforeChangeGMState(m_currentGameState, value);
+                ActionBeforeChangeGMState(m_currentGameState, value);
 
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
@@ -43,17 +43,20 @@ public class HFGameManager : Singleton<HFGameManager>
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelCondition);
+		HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
     }
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnEndLevel, EndLevelCondition);
+		HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
     }
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
     }
-    private void Start()
+
+	private void Start()
     {
         CurrentGameState = GameStates.LoadStartingInfo;
     }
@@ -96,9 +99,10 @@ public class HFGameManager : Singleton<HFGameManager>
                 break;
         }
         Debug.Log("Do something before change " + preState + " in " + postState);
-    }
+		HFEventManager.TriggerEvent<GameStates, GameStates>(HFEventID.OnBeforeChangeState, preState, postState);
+	}
 
-    public void ActionAfterChangeGMState(GameStates inState)
+	public void ActionAfterChangeGMState(GameStates inState)
     {
         switch (inState)
         {
@@ -129,6 +133,14 @@ public class HFGameManager : Singleton<HFGameManager>
         HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, inState);
     }
 
+	// #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
+	private void CheckCastle(HF.HFUnit killedUnit)
+	{
+		if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
+		{
+			EndLevelCondition(false);
+		}
+	}
 
     public bool CheckNextState(GameStates newState)
     {
@@ -160,14 +172,15 @@ public class HFGameManager : Singleton<HFGameManager>
     }
 
     
-    public void EndLevelCondition(bool inBool)
+    public void EndLevelCondition(bool winCondition)
     {
         ChangeGMState(GameStates.EndLevel);
     }
 
+	// Currently this is called by the wave controller when it has loaded level info
     public void StartGame()
     {
         //will be replace when the player has been positioned all his units in game.
-        CurrentGameState = GameStates.PlayingLevel;
+        //CurrentGameState = GameStates.PlayingLevel;
     }
 }

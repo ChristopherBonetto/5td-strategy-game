@@ -18,10 +18,14 @@ public enum HFEventID
     /// HFLevelInfoSO
     /// </summary>
     OnInitializeLevel,
-    /// <summary>
-    /// 
-    /// </summary>
-    OnEndLevel,
+	/// <summary>
+	/// empty
+	/// </summary>
+	OnLevelReady,
+	/// <summary>
+	/// bool	winCondition
+	/// </summary>
+	OnEndLevel,
 
     /// <summary>
     /// float	rewardValue,
@@ -38,5 +42,5 @@ public enum HFEventID
 	/// <summary>
 	/// bool	isLevelCompleted,
 	/// </summary>
-	OnWaveEnd,
+	OnWaveEnd
 }

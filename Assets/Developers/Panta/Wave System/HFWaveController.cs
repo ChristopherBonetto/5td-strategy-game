@@ -114,6 +114,7 @@ namespace HF.WaveSystem
         {
             // Wait for input at the beggining.
             WaitForInput = true;
+			HFEventManager.TriggerEvent(HFEventID.OnLevelReady);
 
             // Initialization.
             CurrentState = HFWaveControllerState.CheckingTimeElapsed;
@@ -197,7 +198,12 @@ namespace HF.WaveSystem
         /// </summary>
         private void OnCallNextWave()
         {
-            WaitForInput = false;
+			if (WaitForInput)
+			{
+				// #TEMP Change to playing level through event where needed once everything is set in the level
+				HFGameManager.Instance.CurrentGameState = GameStates.PlayingLevel;
+				WaitForInput = false;
+			}
         }
     }
 }

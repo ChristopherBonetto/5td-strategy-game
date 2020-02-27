@@ -178,17 +178,19 @@ namespace HF
 
 		void OnEnable()
 		{
+			HFEventManager.SubscribeTo<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 		}
 
 		void OnDisable()
 		{
+			HFEventManager.UnsubscribeFrom<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 		}
 
 		void Update()
 		{
-			if (IsKilled)
+			if (IsKilled || !m_controller)
 			{
 				return;
 			}
@@ -212,14 +214,22 @@ namespace HF
 			}
 		}
 
-		private void HandleGameStateChange(GameStates newState)
+		private void HandlePreGameStateChange(GameStates oldState, GameStates newState)
 		{
 			if (newState == GameStates.EndLevel
 				&& m_baseStats.RewardCondition == HFRewardCondition.Survive
 				&& !IsKilled
-				&& ControllerType != InputType.Player)
+				&& ControllerType == InputType.Player)
+				{
+					GainReward(Mathf.RoundToInt(m_stats[HFStatistics.RewardValue] * CurrentHealth / MaxHealth));
+				}
+		}
+
+		private void HandleGameStateChange(GameStates newState)
+		{
+			if (newState == GameStates.InitializeLevel)
 			{
-				GainReward(Mathf.RoundToInt(m_stats[HFStatistics.RewardValue] * CurrentHealth / MaxHealth));
+				Specialize(m_baseStats);
 			}
 		}
 
