@@ -179,7 +179,8 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public void StartGame()
     {
-        //will be replace when the player has been positioned all his units in game.
-        CurrentGameState = GameStates.PlayingLevel;
+		//will be replace when the player has been positioned all his units in game.
+		HFEventManager.TriggerEvent(HFEventID.OnLevelReady);
+		CurrentGameState = GameStates.PlayingLevel;
     }
 }

@@ -114,7 +114,6 @@ namespace HF.WaveSystem
         {
             // Wait for input at the beggining.
             WaitForInput = true;
-			HFEventManager.TriggerEvent(HFEventID.OnLevelReady);
 
             // Initialization.
             CurrentState = HFWaveControllerState.CheckingTimeElapsed;
