@@ -177,10 +177,9 @@ public class HFGameManager : Singleton<HFGameManager>
         ChangeGMState(GameStates.EndLevel);
     }
 
-	// Currently this is called by the wave controller when it has loaded level info
     public void StartGame()
     {
         //will be replace when the player has been positioned all his units in game.
-        //CurrentGameState = GameStates.PlayingLevel;
+        CurrentGameState = GameStates.PlayingLevel;
     }
 }

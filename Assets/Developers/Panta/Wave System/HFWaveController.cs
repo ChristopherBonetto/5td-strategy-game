@@ -200,8 +200,6 @@ namespace HF.WaveSystem
         {
 			if (WaitForInput)
 			{
-				// #TEMP Change to playing level through event where needed once everything is set in the level
-				HFGameManager.Instance.CurrentGameState = GameStates.PlayingLevel;
 				WaitForInput = false;
 			}
         }
