@@ -6,9 +6,9 @@ using UnityEngine;
 /// </summary>
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
-    private static T _instance;
+    protected static T _instance;
 
-    private static object _lock = new object();
+    protected static object _lock = new object();
 
     public static T Instance
     {
@@ -54,7 +54,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private static bool applicationIsQuitting = false;
+    protected static bool applicationIsQuitting = false;
     /// <summary>
     /// When Unity quits, it destroys objects in a random order.
     /// In principle, a Singleton is only destroyed when application quits.

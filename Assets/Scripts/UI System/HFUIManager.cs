@@ -1,8 +1,54 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEngine.SceneManagement;
+#endif
+
 public class HFUIManager : Singleton<HFUIManager>
 {
+    // Override how it get the instance
+    // If the instance is = null, then load it from resources.
+    new public static HFUIManager Instance
+    {
+        get
+        {
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = (HFUIManager)FindObjectOfType(typeof(HFUIManager));
+
+                    if (_instance == null)
+                    {
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/UIManager"));
+                        _instance = outGO.GetComponent<HFUIManager>();
+
+#if UNITY_EDITOR
+                        // I have to force the subscribes of the UI Controls
+                        Canvas outCanvas = FindObjectOfType<Canvas>();
+                        foreach (var uiControl in outCanvas.GetComponentsInChildren<HFUIControl>())
+                        {
+                            _instance.AddControl(uiControl);
+                            uiControl.OnHide();
+                            uiControl.IsInEditorMode = true;
+                        }
+#endif
+
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                        DontDestroyOnLoad(_instance);
+                }
+
+                return _instance;
+            }
+        }
+    }
+
 	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
 
 	/// <summary>
@@ -10,28 +56,6 @@ public class HFUIManager : Singleton<HFUIManager>
 	/// Every key must provides only one value.
 	/// </summary>
 	public Dictionary<UIControlID, HFUIControl> UIControls = new Dictionary<UIControlID, HFUIControl>();
-
-    private HFLoadingScreenWindow m_LoadingScreenWindow;
-    /// <summary>
-    /// Instance of the loading screen window in the scene.
-    /// </summary>
-    public HFLoadingScreenWindow LoadingScreenWindow
-    {
-        get 
-        { 
-            if (m_LoadingScreenWindow == null)
-            {
-                if (UIControls.ContainsKey(UIControlID.LoadingScreen))
-                    m_LoadingScreenWindow = UIControls[UIControlID.LoadingScreen] as HFLoadingScreenWindow;
-                else
-                {
-                    Debug.LogError("There is no loading screen in the scene");
-                    return null;
-                }
-            }
-            return m_LoadingScreenWindow;
-        }
-    }
 
 
     #region Methods
@@ -42,7 +66,25 @@ public class HFUIManager : Singleton<HFUIManager>
 
         if (Instance != null && Instance != this)
             Destroy(gameObject);
-	}
+    }
+
+#if UNITY_EDITOR
+    private void Start()
+    {
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Show(UIControlID.MainMenu);
+        }
+        else if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            Show(UIControlID.LevelSelection);
+        }
+        else if (SceneManager.GetActiveScene().buildIndex > 1)
+        {
+            Show(UIControlID.InGameWindow);
+        }
+    }
+#endif
 
     /// <summary>
     /// Add new UIControl
@@ -110,6 +152,12 @@ public class HFUIManager : Singleton<HFUIManager>
         }
         else
             throw new System.Exception("Control with " + id + " id, doesn't exist or it's not register.");
+    }
+
+    public HFUIControl GetUIControl(UIControlID uIControlID)
+    {
+        if (UIControls.TryGetValue(uIControlID, out HFUIControl value)) return value;
+        return value;
     }
 
 	/// <summary>

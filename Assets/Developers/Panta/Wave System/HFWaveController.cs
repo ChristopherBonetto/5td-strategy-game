@@ -120,7 +120,7 @@ namespace HF.WaveSystem
             WaveIndex = 0;
             MinorWaveIndex = 0;
 
-            m_inGameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
+            m_inGameWindow = HFUIManager.Instance.GetUIControl(UIControlID.InGameWindow) as HFInGameWindow;
             m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
             m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
         }
