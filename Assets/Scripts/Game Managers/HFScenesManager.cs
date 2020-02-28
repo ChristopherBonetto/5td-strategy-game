@@ -6,8 +6,7 @@ using UnityEngine.UI;
 
 public class HFScenesManager : Singleton<HFScenesManager>
 {
-    [SerializeField] private HFLevelContainerSO m_levelContainer;
-    public HFLevelContainerSO LevelContainer { get => m_levelContainer; }
+    #region Scene variables
 
     public int IndexCurrentScene = 0;
 
@@ -18,10 +17,28 @@ public class HFScenesManager : Singleton<HFScenesManager>
     [HideInInspector]
     public List<string> AllScenes;
 
-    public HFLevelInfoSO CurrentLevelSelected = null;
+    #endregion
 
+    #region Levels variables
 
-    
+    [SerializeField] private HFLevelContainerSO m_levelContainer;
+    public HFLevelContainerSO LevelContainer { get => m_levelContainer; }
+
+    private HFLevelInfoSO m_currentLevelSelected = null;
+    public HFLevelInfoSO CurrentLevelSelected
+    {
+        get
+        {
+            return m_currentLevelSelected;
+        }
+        set
+        {
+            m_currentLevelSelected = value;
+        }
+    }
+
+    #endregion
+
 
     private void Awake()
     {
@@ -32,10 +49,29 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         Scene currentScene = SceneManager.GetActiveScene();
         IndexCurrentScene = currentScene.buildIndex;
+
+        CheckCurrentScene(IndexCurrentScene);
     }
 
     
-
+    public void CheckCurrentScene(int inValue)
+    {
+        switch (inValue)
+        {
+            case 0:
+                HFGameManager.Instance.CurrentGameState = GameStates.LoadStartingInfo;
+                Debug.Log("Sei partito nella scene load");
+                break;
+            case 1:
+                HFGameManager.Instance.CurrentGameState = GameStates.WarRoom;
+                Debug.Log("Sei partito nella level selection");
+                break;
+            default:
+                m_currentLevelSelected = LevelContainer.Levels[inValue];
+                HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
+                break;
+        }
+    }
 
     #region Get Scenes Reference
 
@@ -109,12 +145,14 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
-    #region Load Level Scene
+    #endregion
+
+    #region LOAD LEVEL SCENE
 
     //Giving a level info in input the corresponsive scene will be loaded
     public void LoadLevelFromLevelInfo(HFLevelInfoSO inLevel)
     {
-        CurrentLevelSelected = inLevel;
+        m_currentLevelSelected = inLevel;
         SceneManager.LoadSceneAsync(inLevel.LevelSceneIndex);
 
     }
@@ -122,15 +160,12 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     public void LoadLevelWithIndex(int inIndex)
     {
-        CurrentLevelSelected = LevelContainer.Levels[inIndex];
+        m_currentLevelSelected = LevelContainer.Levels[inIndex];
         SceneManager.LoadSceneAsync(LevelContainer.Levels[inIndex].LevelSceneIndex);
     }
     #endregion
 
-
-    #endregion
-
-    #region WHEN A LEVEL IS LOADED
+    #region WHEN A SCENE IS LOADED
 
     public void OnLevelWasLoaded(int level)
     {
@@ -170,7 +205,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         if (inState == GameStates.InitializeLevel)
         {
-            HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, CurrentLevelSelected);
+            Debug.Log("PASSATE LE INFO DEL LIVELLO CORRENTE");
+            HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, m_currentLevelSelected);
         }
     }
 

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public enum GameStates
 {
+    None,
     LoadStartingInfo,
     StartGame,
     WarRoom,
@@ -16,7 +17,7 @@ public enum GameStates
 
 public class HFGameManager : Singleton<HFGameManager>
 {
-    private GameStates m_currentGameState = GameStates.LoadStartingInfo;
+    public GameStates m_currentGameState = GameStates.None;
     public GameStates CurrentGameState
     {
         get
@@ -28,7 +29,7 @@ public class HFGameManager : Singleton<HFGameManager>
             if (CheckNextState(value))
             {
                 //Used to reset somethings before change state
-                ActionBeforeChangeGMState(m_currentGameState, value);
+                //ActionBeforeChangeGMState(m_currentGameState, value);
 
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
@@ -55,12 +56,6 @@ public class HFGameManager : Singleton<HFGameManager>
     {
         DontDestroyOnLoad(this);
     }
-
-	private void Start()
-    {
-        CurrentGameState = GameStates.LoadStartingInfo;
-    }
-
 
 
     public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
@@ -110,6 +105,7 @@ public class HFGameManager : Singleton<HFGameManager>
                 break;
 
             case GameStates.StartGame:
+                
                 break;
 
             case GameStates.WarRoom:
@@ -119,6 +115,7 @@ public class HFGameManager : Singleton<HFGameManager>
                 break;
 
             case GameStates.PlayingLevel:
+                HFEventManager.TriggerEvent(HFEventID.OnLevelReady);
                 break;
 
             case GameStates.EndLevel:
@@ -175,12 +172,5 @@ public class HFGameManager : Singleton<HFGameManager>
     public void EndLevelCondition(bool winCondition)
     {
         ChangeGMState(GameStates.EndLevel);
-    }
-
-    public void StartGame()
-    {
-		//will be replace when the player has been positioned all his units in game.
-		HFEventManager.TriggerEvent(HFEventID.OnLevelReady);
-		CurrentGameState = GameStates.PlayingLevel;
     }
 }

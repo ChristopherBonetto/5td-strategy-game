@@ -47,4 +47,9 @@ public class HFInGameWindow : HFUIControl
         ButtonCallNextWave.gameObject.SetActive(false);
         HFEventManager.TriggerEvent(HFEventID.OnCallNextWave);
     }
+
+    public void StartTemporaryGame()
+    {
+        HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
+    }
 }
