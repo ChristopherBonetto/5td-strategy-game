@@ -6,6 +6,36 @@ using UnityEngine.UI;
 
 public class HFScenesManager : Singleton<HFScenesManager>
 {
+    new public static HFScenesManager Instance
+    {
+        get
+        {
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = (HFScenesManager)FindObjectOfType(typeof(HFScenesManager));
+
+
+                    if (_instance == null)
+                    {
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/ScenesManager"));
+                        _instance = outGO.GetComponent<HFScenesManager>();
+
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                        DontDestroyOnLoad(_instance);
+                }
+                
+                return _instance;
+            }
+        }
+    }
+
     #region Scene variables
 
     public int IndexCurrentScene = 0;
@@ -42,9 +72,9 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
     }
-
     void Start()
     {
         Scene currentScene = SceneManager.GetActiveScene();
@@ -183,7 +213,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
         {
             HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
         }
-
+                
     }
 
     #endregion

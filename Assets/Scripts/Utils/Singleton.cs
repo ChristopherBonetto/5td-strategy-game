@@ -28,6 +28,7 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
                 {
                     _instance = (T)FindObjectOfType(typeof(T));
 
+
                     if (_instance == null)
                     {
                         GameObject singleton = new GameObject();

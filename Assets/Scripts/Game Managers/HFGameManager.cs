@@ -17,6 +17,34 @@ public enum GameStates
 
 public class HFGameManager : Singleton<HFGameManager>
 {
+    new public static HFGameManager Instance
+    {
+        get
+        {
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = (HFGameManager)FindObjectOfType(typeof(HFGameManager));
+
+                    if (_instance == null)
+                    {
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/GameManager"));
+                        _instance = outGO.GetComponent<HFGameManager>();
+
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                        DontDestroyOnLoad(_instance);
+                }
+                return _instance;
+            }
+        }
+    }
+
     public GameStates m_currentGameState = GameStates.None;
     public GameStates CurrentGameState
     {
@@ -54,9 +82,9 @@ public class HFGameManager : Singleton<HFGameManager>
 
     private void Awake()
     {
-        DontDestroyOnLoad(this);
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
     }
-
 
     public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
     {
@@ -130,15 +158,6 @@ public class HFGameManager : Singleton<HFGameManager>
         HFEventManager.TriggerEvent<GameStates>(HFEventID.OnGameStateChanged, inState);
     }
 
-	// #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
-	private void CheckCastle(HF.HFUnit killedUnit)
-	{
-		if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
-		{
-			EndLevelCondition(false);
-		}
-	}
-
     public bool CheckNextState(GameStates newState)
     {
         for(int i = 0; i < ListOfStates.Count; i++)
@@ -157,17 +176,26 @@ public class HFGameManager : Singleton<HFGameManager>
         }
         return false;
     }
-
+	
     public void ChangeGMState(GameStates newState)
     {
         CurrentGameState = newState;
     }
 
+    // #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
+	private void CheckCastle(HF.HFUnit killedUnit)
+	{
+		if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
+		{
+			EndLevelCondition(false);
+		}
+	}
+
+
     public void LoadPlayerProfile()
     {
         Debug.Log("Load player info method");
     }
-
     
     public void EndLevelCondition(bool winCondition)
     {
