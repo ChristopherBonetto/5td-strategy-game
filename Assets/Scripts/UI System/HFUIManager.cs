@@ -34,6 +34,7 @@ public class HFUIManager : Singleton<HFUIManager>
                         {
                             _instance.AddControl(uiControl);
                             uiControl.OnHide();
+
                             uiControl.IsInEditorMode = true;
                         }
 #endif
@@ -56,9 +57,7 @@ public class HFUIManager : Singleton<HFUIManager>
 	/// Every key must provides only one value.
 	/// </summary>
 	public Dictionary<UIControlID, HFUIControl> UIControls = new Dictionary<UIControlID, HFUIControl>();
-
-
-    #region Methods
+    public HFUIControl LastUIControlActivated;
 
     protected void Awake()
 	{
@@ -68,24 +67,36 @@ public class HFUIManager : Singleton<HFUIManager>
             Destroy(gameObject);
     }
 
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+    }
+
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+    }
+
 #if UNITY_EDITOR
     private void Start()
     {
-        if (SceneManager.GetActiveScene().buildIndex == 0)
-        {
-            Show(UIControlID.MainMenu);
-        }
-        else if (SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            Show(UIControlID.LevelSelection);
-        }
-        else if (SceneManager.GetActiveScene().buildIndex > 1)
-        {
-            Show(UIControlID.InGameWindow);
-        }
+            if (SceneManager.GetActiveScene().buildIndex == 0)
+            {
+                Show(UIControlID.MainMenu);
+            }
+            else if (SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                Show(UIControlID.LevelSelection);
+            }
+            else if (SceneManager.GetActiveScene().buildIndex > 1)
+            {
+                Show(UIControlID.InGameWindow);
+            }
     }
 #endif
 
+
+    #region UI Methods
     /// <summary>
     /// Add new UIControl
     /// <see cref="UIControl"/>
@@ -115,6 +126,7 @@ public class HFUIManager : Singleton<HFUIManager>
         if (UIControls.TryGetValue(id, out HFUIControl control))
         {
             control.OnShow();
+            LastUIControlActivated = control;
         }
     }
 
@@ -180,4 +192,27 @@ public class HFUIManager : Singleton<HFUIManager>
 	}
 
 	#endregion
+
+    private void OnGameStateChange(GameStates inState)
+    {
+        if (LastUIControlActivated == null) LastUIControlActivated = UIControls[UIControlID.MainMenu];
+
+        switch (inState)
+        {
+            case GameStates.StartGame:
+                ShowAndHide(UIControlID.MainMenu, LastUIControlActivated);
+                break;
+            case GameStates.WarRoom:
+                ShowAndHide(UIControlID.LevelSelection, LastUIControlActivated);
+                break;
+            case GameStates.InitializeLevel:
+                ShowAndHide(UIControlID.InGameWindow, LastUIControlActivated);
+                break;
+
+                // Put other conditions...
+
+            default:
+                return;
+        }
+    }
 }

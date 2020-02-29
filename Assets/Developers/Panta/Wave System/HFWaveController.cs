@@ -38,7 +38,7 @@ namespace HF.WaveSystem
         /// Collection of all level's waves.
         /// It's only to read purpose.
         /// </summary>
-        public HFWavesCollector WaveCollector => m_WaveCollector;
+        public HFWavesCollector WaveCollector { get; set; }
 
         private int m_WaveIndex = 0;
         /// <summary>
@@ -112,6 +112,16 @@ namespace HF.WaveSystem
 
         private void Start()
         {
+            // Get wave collector
+            HFScenesManager sm = HFScenesManager.Instance;
+            if (sm.CurrentLevelSelected != null) WaveCollector = sm.CurrentLevelSelected.LevelWavesInfo;
+            else
+            {
+                Debug.LogWarning($"There isn't a WaveCollection assets to level {sm.CurrentLevelSelected}" +
+                    $"I give a default one");
+                WaveCollector = sm.LevelContainer.Levels[0].LevelWavesInfo;
+            }
+
             // Wait for input at the beggining.
             WaitForInput = true;
 
