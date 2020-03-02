@@ -27,20 +27,6 @@ public class HFUIManager : Singleton<HFUIManager>
                         GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/UIManager"));
                         _instance = outGO.GetComponent<HFUIManager>();
 
-#if UNITY_EDITOR
-                        // I have to force the subscribes of the UI Controls
-                        Canvas outCanvas = FindObjectOfType<Canvas>();
-                        foreach (var uiControl in outCanvas.GetComponentsInChildren<HFUIControl>())
-                        {
-                            // Add control
-                            _instance.AddControl(uiControl);
-                            // Hide panel/window
-                            uiControl.OnHide();
-                            // Notify that is in the editor mode.
-                            uiControl.IsInEditorMode = true;
-                        }
-#endif
-
                         DontDestroyOnLoad(_instance);
                     }
                     else
@@ -54,11 +40,40 @@ public class HFUIManager : Singleton<HFUIManager>
 
 	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
 
+    private Dictionary<UIControlID, HFUIControl> m_UIControls;
 	/// <summary>
 	/// Controls Collection.
 	/// Every key must provides only one value.
 	/// </summary>
-	public Dictionary<UIControlID, HFUIControl> UIControls = new Dictionary<UIControlID, HFUIControl>();
+	public Dictionary<UIControlID, HFUIControl> UIControls
+    {
+        get
+        {
+            if (m_UIControls == null)
+            {
+                m_UIControls = new Dictionary<UIControlID, HFUIControl>();
+
+                // I have to force the subscribes of the UI Controls
+                Canvas outCanvas = FindObjectOfType<Canvas>();
+                foreach (var uiControl in outCanvas.GetComponentsInChildren<HFUIControl>())
+                {
+                    // Add control
+                    _instance.AddControl(uiControl);
+                    // Hide panel/window
+                    uiControl.OnHide();
+                    // Notify that is in the editor mode.
+                    uiControl.IsInEditorMode = true;
+                }
+
+                // I init the the variable here because the trigger can happen before start.
+                // I store the last window enabled to allow the UI system run also in editor mode,
+                // but can help also in build mode.
+                LastUIControlActivated = UIControls[UIControlID.MainMenu];
+            }
+            return m_UIControls;
+        }
+    }
+
     public HFUIControl LastUIControlActivated;
 
     protected void Awake()
@@ -173,12 +188,6 @@ public class HFUIManager : Singleton<HFUIManager>
             throw new System.Exception("Control with " + id + " id, doesn't exist or it's not register.");
     }
 
-    public HFUIControl GetUIControl(UIControlID uIControlID)
-    {
-        if (UIControls.TryGetValue(uIControlID, out HFUIControl value)) return value;
-        return value;
-    }
-
 	/// <summary>
 	/// Check if mouse is over a raycast target
 	/// </summary>
@@ -202,12 +211,6 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnGameStateChange(GameStates inState)
     {
-        if (UIControls == null) return;
-        // I init the the variable here because the trigger can happen before start.
-        // I store the last window enabled to allow the UI system run also in editor mode,
-        // but can help also in build mode.
-        if (LastUIControlActivated == null) LastUIControlActivated = UIControls[UIControlID.MainMenu];
-
         // Handle all game state variables.
         switch (inState)
         {

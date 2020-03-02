@@ -125,7 +125,9 @@ namespace HF.WaveSystem
         {
             // Try to get wave collector.
             HFScenesManager sm = HFScenesManager.Instance;
-            if (sm.CurrentLevelSelected != null) WaveCollector = sm.CurrentLevelSelected.LevelWavesInfo;
+            if (sm.CurrentLevelSelected != null &&
+                sm.CurrentLevelSelected.LevelWavesInfo != null)
+                WaveCollector = sm.CurrentLevelSelected.LevelWavesInfo;
             // If there isn't, get a ddefault one.
             else
             {
@@ -142,7 +144,7 @@ namespace HF.WaveSystem
             WaveIndex = 0;
             MinorWaveIndex = 0;
 
-            m_inGameWindow = HFUIManager.Instance.GetUIControl(UIControlID.InGameWindow) as HFInGameWindow;
+            m_inGameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
             m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
             m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
         }
@@ -205,12 +207,12 @@ namespace HF.WaveSystem
                     }
                     else
                     {
+                        // TODO: work on what react through event and what not. 
+
                         // Update window/panel.
                         m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
                         m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
-
-                        // Show button in UI to start the next wave.
-                        HFEventManager.TriggerEvent<bool>(HFEventID.OnWaveEnd, false);
+                        m_inGameWindow.ActiveNextWaveButton();
                     }
                 }
             }
@@ -221,10 +223,10 @@ namespace HF.WaveSystem
         /// </summary>
         private void OnCallNextWave()
         {
-			if (WaitForInput)
-			{
-				WaitForInput = false;
-			}
+            if (WaitForInput)
+            {
+                WaitForInput = false;
+            }
         }
 
         private void ResetCounts(params int[] counts)

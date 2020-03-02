@@ -18,6 +18,11 @@ public class HFInGameWindow : HFUIControl
     public HFEnemyInfoUIElement EnemyInfoUIElement;
 
     /// <summary>
+    /// Used when level end.
+    /// </summary>
+    public Button ButtonReturnToLevelSelection;
+
+    /// <summary>
     /// "Call next wave" button.
     /// </summary>
     public Button ButtonCallNextWave;
@@ -25,27 +30,41 @@ public class HFInGameWindow : HFUIControl
 
     private void OnEnable()
     {
-        HFEventManager.SubscribeTo<bool>(HFEventID.OnWaveEnd, OnWaveEnd);
+        HFEventManager.SubscribeTo<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
     }
 
     private void OnDisable()
     {
-        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnWaveEnd, OnWaveEnd);
+        HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
     }
-
 
     /// <summary>
     /// Trigger by the event when a wave end.
     /// </summary>
-    public void OnWaveEnd(bool isLevelCompleted)
+    public void ActiveNextWaveButton()
     {
-        ButtonCallNextWave.gameObject.SetActive(!isLevelCompleted);
+        ButtonCallNextWave.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Invoked through event
+    /// </summary>
+    /// <param name="isWin"></param>
+    public void OnEndLevel(HFLevelInfoSO level, bool isWin)
+    {
+        ButtonReturnToLevelSelection.gameObject.SetActive(true);
     }
 
     public void OnClickCallNextWave()
     {
         ButtonCallNextWave.gameObject.SetActive(false);
         HFEventManager.TriggerEvent(HFEventID.OnCallNextWave);
+    }
+
+    public void ReturnToLevelSelection()
+    {
+        HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
+        HFScenesManager.Instance.LoadSceneFromIndex(1);
     }
 
     public void StartTemporaryGame()
