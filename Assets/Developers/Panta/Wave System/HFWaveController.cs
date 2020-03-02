@@ -201,7 +201,7 @@ namespace HF.WaveSystem
                     if (LevelCleared())
                     {
                         //Set the game in win condition.
-                        HFEventManager.TriggerEvent<bool>(HFEventID.OnEndLevel, true);
+                        HFScenesManager.Instance.EndCurrentLevel(true);
                     }
                     else
                     {

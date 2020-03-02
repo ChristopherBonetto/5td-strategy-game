@@ -57,7 +57,7 @@ public class HFGameManager : Singleton<HFGameManager>
             if (CheckNextState(value))
             {
                 //Used to reset somethings before change state
-                //ActionBeforeChangeGMState(m_currentGameState, value);
+                ActionBeforeChangeGMState(m_currentGameState, value);
 
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
@@ -69,22 +69,14 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public List<HFGMStateSO> ListOfStates = new List<HFGMStateSO>();
 
-    private void OnEnable()
-    {
-        HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelCondition);
-		HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
-    }
-    private void OnDisable()
-    {
-        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnEndLevel, EndLevelCondition);
-		HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
-    }
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
     }
+
+    #region GAME STATE SYSTEM, and trigger event.
 
     public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
     {
@@ -176,29 +168,18 @@ public class HFGameManager : Singleton<HFGameManager>
         }
         return false;
     }
+
+    #endregion
+
 	
     public void ChangeGMState(GameStates newState)
     {
         CurrentGameState = newState;
     }
-
-    // #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
-	private void CheckCastle(HF.HFUnit killedUnit)
-	{
-		if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
-		{
-			EndLevelCondition(false);
-		}
-	}
-
+    
 
     public void LoadPlayerProfile()
     {
         Debug.Log("Load player info method");
-    }
-    
-    public void EndLevelCondition(bool winCondition)
-    {
-        ChangeGMState(GameStates.EndLevel);
     }
 }

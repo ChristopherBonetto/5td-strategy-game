@@ -83,7 +83,60 @@ public class HFScenesManager : Singleton<HFScenesManager>
         CheckCurrentScene(IndexCurrentScene);
     }
 
-    
+
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
+
+        HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
+
+        HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
+    }
+
+    public void GiveAllReferenceToTheSelectedLevel(GameStates inState)
+    {
+        if (inState == GameStates.InitializeLevel)
+        {
+            Debug.Log("PASSATE LE INFO DEL LIVELLO CORRENTE");
+
+            if(CurrentLevelSelected != null)
+            {
+                HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, CurrentLevelSelected);
+            }
+            else
+            {
+                CurrentLevelSelected = LevelContainer.Levels[0];
+                HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, CurrentLevelSelected);
+            }
+            
+        }
+    }
+
+    // #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
+    private void CheckCastle(HF.HFUnit killedUnit)
+    {
+        if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
+        {
+            EndCurrentLevel(false);
+        }
+    }
+
+    public void EndCurrentLevel(bool winCondition)
+    {
+        HFGameManager.Instance.ChangeGMState(GameStates.EndLevel);
+
+        Debug.Log(CurrentLevelSelected.LevelName + " winned : " + winCondition);
+        HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, CurrentLevelSelected, winCondition);
+
+        CurrentLevelSelected = null;
+    }
+
+    #region SCENE METHODS
+
     public void CheckCurrentScene(int inValue)
     {
         switch (inValue)
@@ -97,7 +150,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
                 Debug.Log("Sei partito nella level selection");
                 break;
             default:
-                m_currentLevelSelected = LevelContainer.Levels[inValue];
+                CurrentLevelSelected = LevelContainer.Levels[inValue];
                 HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
                 break;
         }
@@ -182,7 +235,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     //Giving a level info in input the corresponsive scene will be loaded
     public void LoadLevelFromLevelInfo(HFLevelInfoSO inLevel)
     {
-        m_currentLevelSelected = inLevel;
+        CurrentLevelSelected = inLevel;
         SceneManager.LoadSceneAsync(inLevel.LevelSceneIndex);
 
     }
@@ -190,7 +243,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     public void LoadLevelWithIndex(int inIndex)
     {
-        m_currentLevelSelected = LevelContainer.Levels[inIndex];
+        CurrentLevelSelected = LevelContainer.Levels[inIndex];
         SceneManager.LoadSceneAsync(LevelContainer.Levels[inIndex].LevelSceneIndex);
     }
     #endregion
@@ -218,30 +271,5 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     #endregion
 
-    private void OnEnable()
-    {
-        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
-
-        HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelProvvisory);
-    }
-    private void OnDisable()
-    {
-        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
-
-        HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, EndLevelProvvisory);
-    }
-
-    public void GiveAllReferenceToTheSelectedLevel(GameStates inState)
-    {
-        if (inState == GameStates.InitializeLevel)
-        {
-            Debug.Log("PASSATE LE INFO DEL LIVELLO CORRENTE");
-            HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, m_currentLevelSelected);
-        }
-    }
-
-    public void EndLevelProvvisory(bool winCondition)
-    {
-        Debug.Log("LIVELLO CORRENTE " + (winCondition ? "VINTO" : "PERSO"));
-    }
+    #endregion
 }
