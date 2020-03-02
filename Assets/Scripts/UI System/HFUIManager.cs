@@ -202,6 +202,7 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnGameStateChange(GameStates inState)
     {
+        if (UIControls == null) return;
         // I init the the variable here because the trigger can happen before start.
         // I store the last window enabled to allow the UI system run also in editor mode,
         // but can help also in build mode.
