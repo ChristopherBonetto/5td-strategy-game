@@ -32,9 +32,11 @@ public class HFUIManager : Singleton<HFUIManager>
                         Canvas outCanvas = FindObjectOfType<Canvas>();
                         foreach (var uiControl in outCanvas.GetComponentsInChildren<HFUIControl>())
                         {
+                            // Add control
                             _instance.AddControl(uiControl);
+                            // Hide panel/window
                             uiControl.OnHide();
-
+                            // Notify that is in the editor mode.
                             uiControl.IsInEditorMode = true;
                         }
 #endif
@@ -69,17 +71,22 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnEnable()
     {
+        // Listen to game manager state changes
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
     }
 
     private void OnDisable()
     {
+        //Stop to listen to game manager state changes
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
     }
 
 #if UNITY_EDITOR
     private void Start()
     {
+        // I need this part of code because if we start from a scene that isn't the first one
+        // game manager doesn't send notification. So i need scene refereces.
+
             if (SceneManager.GetActiveScene().buildIndex == 0)
             {
                 Show(UIControlID.MainMenu);
@@ -195,8 +202,12 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnGameStateChange(GameStates inState)
     {
+        // I init the the variable here because the trigger can happen before start.
+        // I store the last window enabled to allow the UI system run also in editor mode,
+        // but can help also in build mode.
         if (LastUIControlActivated == null) LastUIControlActivated = UIControls[UIControlID.MainMenu];
 
+        // Handle all game state variables.
         switch (inState)
         {
             case GameStates.StartGame:

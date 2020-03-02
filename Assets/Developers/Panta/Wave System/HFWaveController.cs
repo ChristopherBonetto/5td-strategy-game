@@ -11,9 +11,6 @@ namespace HF.WaveSystem
         [SerializeField]
         private List<Transform> m_SpawnPoints;
 
-        [SerializeField] 
-        private HFWavesCollector m_WaveCollector;
-
         public HFController Controller;
         #endregion
 
@@ -23,22 +20,26 @@ namespace HF.WaveSystem
         /// </summary>
         public List<Transform> SpawnPoints => m_SpawnPoints;
 
+
         /// <summary>
         /// Curernt state of wave controller flow.
         /// </summary>
         public HFWaveControllerState CurrentState { get; set; }
+
 
         /// <summary>
         /// is it waiting for player input?
         /// </summary>
         public bool WaitForInput { get; private set; }
 
-        #region Wave variables
+        #region Wave's management variables
+
         /// <summary>
         /// Collection of all level's waves.
         /// It's only to read purpose.
         /// </summary>
         public HFWavesCollector WaveCollector { get; set; }
+
 
         private int m_WaveIndex = 0;
         /// <summary>
@@ -50,6 +51,7 @@ namespace HF.WaveSystem
             set { m_WaveIndex = value; }
         }
 
+
         private int m_MinorWaveIndex;
         /// <summary>
         /// Current index of the minor wave.
@@ -60,30 +62,36 @@ namespace HF.WaveSystem
             set { m_MinorWaveIndex = value; }
         }
 
+
         /// <summary>
         /// Get number of waves
         /// </summary>
         public List<HFWave> GetWaves => WaveCollector.WavesCollection;
+
 
         /// <summary>
         /// Get current wave.
         /// </summary>
         public HFWave GetCurrentWave => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)];
 
+
         /// <summary>
         /// Get number of minor waves of the current wave
         /// </summary>
         public List<HFWave.MinorWave> GetMinorWaves => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)].MinorWavesCollection;
+
 
         /// <summary>
         /// Get Current minor wave.
         /// </summary>
         public HFWave.MinorWave GetCurrentMinorWave => GetCurrentWave.MinorWavesCollection[MinorWaveIndex];
 
+
         /// <summary>
         /// Get number of all enemies in the current wave.
         /// </summary>
         public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);    // Do that every wave refresh.
+
 
         private int m_CountOfEnemiesKilled;
         /// <summary>
@@ -94,9 +102,12 @@ namespace HF.WaveSystem
             get { return m_CountOfEnemiesKilled; }
             set { m_CountOfEnemiesKilled = value; }
         }
+
         #endregion
 
-        private HFInGameWindow m_inGameWindow;
+        private HFInGameWindow m_inGameWindow;  // I'm not sure that is good to store into a variable...
+
+        #region Monobehaviour cycle
 
         private void OnEnable()
         {
@@ -112,9 +123,10 @@ namespace HF.WaveSystem
 
         private void Start()
         {
-            // Get wave collector
+            // Try to get wave collector.
             HFScenesManager sm = HFScenesManager.Instance;
             if (sm.CurrentLevelSelected != null) WaveCollector = sm.CurrentLevelSelected.LevelWavesInfo;
+            // If there isn't, get a ddefault one.
             else
             {
                 Debug.LogWarning($"There isn't a WaveCollection assets to level {sm.CurrentLevelSelected}" +
@@ -122,7 +134,7 @@ namespace HF.WaveSystem
                 WaveCollector = sm.LevelContainer.Levels[0].LevelWavesInfo;
             }
 
-            // Wait for input at the beggining.
+            // Wait for player's input.
             WaitForInput = true;
 
             // Initialization.
@@ -141,6 +153,8 @@ namespace HF.WaveSystem
                 if (MinorWaveIndex < GetMinorWaves.Count)
                     CurrentState.Update(this);
         }
+
+        #endregion
 
         /// <summary>
         /// Check if the level is cleared.
@@ -167,31 +181,31 @@ namespace HF.WaveSystem
         /// </summary>
         public void OnEnemyKilled(HFUnit unit)
         {
-            // only if the unit is marked as enemy do this function.
+            // Is it an enemy?
             if (unit.Team == Controller.Team)
             {
                 CountOfEnemyKilled++;
-                Debug.Log(WaveIndex);   // => UI feedback
-                Debug.Log($"Total enemies killed: {CountOfEnemyKilled} / {GetTotalEnemiesOfTheWave}");  // => UI feedback
+                // Show in the UI this infos:
+                // Wave index,
+                // Enemies Killed / Total enemies in the wave.
 
                 if (WaveCleared())
                 {
                     WaitForInput = true;
 
-                    // Reset all count and index
-                    CountOfEnemyKilled = 0;
-                    WaveIndex++;
-                    MinorWaveIndex = 0;
+                    // Reset all count and index.
+                    ResetCounts(CountOfEnemyKilled, MinorWaveIndex);
+                    // Increment wave index.
+                    IncrementCounts(1, WaveIndex);
 
                     if (LevelCleared())
                     {
                         //Set the game in win condition.
                         HFEventManager.TriggerEvent<bool>(HFEventID.OnEndLevel, true);
-
-                        Debug.Log("End Level");
                     }
                     else
                     {
+                        // Update window/panel.
                         m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
                         m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
 
@@ -211,6 +225,18 @@ namespace HF.WaveSystem
 			{
 				WaitForInput = false;
 			}
+        }
+
+        private void ResetCounts(params int[] counts)
+        {
+            for (int i = 0; i < counts.Length; i++)
+                counts[i] = 0;
+        }
+
+        private void IncrementCounts(int amountToIncrement, params int[] counts)
+        {
+            for (int i = 0; i < counts.Length; i++)
+                counts[i] += amountToIncrement;
         }
     }
 }
