@@ -182,4 +182,12 @@ public class HFGameManager : Singleton<HFGameManager>
     {
         Debug.Log("Load player info method");
     }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            HFScenesManager.Instance.EndCurrentLevel(true);
+        }
+    }
 }

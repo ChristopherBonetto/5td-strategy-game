@@ -111,13 +111,13 @@ namespace HF.WaveSystem
 
         private void OnEnable()
         {
-            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
+            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnGenericUnitDeath, OnEnemyKilled);
             HFEventManager.SubscribeTo(HFEventID.OnCallNextWave, OnCallNextWave);
         }
 
         private void OnDisable()
         {
-            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
+            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnGenericUnitDeath, OnEnemyKilled);
             HFEventManager.UnsubscribeFrom(HFEventID.OnCallNextWave, OnCallNextWave);
         }
 

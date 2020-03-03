@@ -88,13 +88,13 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
 
-        HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
+        HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnGenericUnitDeath, CheckWhichUnitDeath);
     }
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
 
-        HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, CheckCastle);
+        HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnGenericUnitDeath, CheckWhichUnitDeath);
     }
 
     public void GiveAllReferenceToTheSelectedLevel(GameStates inState)
@@ -117,11 +117,15 @@ public class HFScenesManager : Singleton<HFScenesManager>
     }
 
     // #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
-    private void CheckCastle(HF.HFUnit killedUnit)
+    private void CheckWhichUnitDeath(HF.HFUnit killedUnit)
     {
         if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
         {
             EndCurrentLevel(false);
+        }
+        else if(killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType != HFUnitType.Castle)
+        {
+            HFEventManager.TriggerEvent<HF.HFUnit>(HFEventID.OnPlayerUnitDeath, killedUnit);
         }
     }
 

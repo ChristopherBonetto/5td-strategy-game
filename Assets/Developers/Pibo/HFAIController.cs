@@ -19,5 +19,8 @@ namespace HF
 
 			return newUnit;
 		}
-	}
+
+        public override void CheckDeathUnits()
+        { }
+    }
 }

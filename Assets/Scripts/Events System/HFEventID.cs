@@ -35,8 +35,12 @@ public enum HFEventID
     /// <summary>
     /// HFUnit	unit
     /// </summary>
-    OnUnitDeath,
-    
+    OnGenericUnitDeath,
+    /// <summary>
+    /// HFUnit	unit
+    /// </summary>
+    OnPlayerUnitDeath,
+
 
     OnCallNextWave,
 	/// <summary>

@@ -21,6 +21,10 @@ namespace HF
 
 		public Material BaseMaterial;
 
+        public List<HFUnit> DeathUnits = new List<HFUnit>();
+        public float TimeToRespawn = 3f;
+        private float timer = 0;
+
 		#endregion
 
 		#region Core loop
@@ -31,6 +35,9 @@ namespace HF
 			HFEventManager.SubscribeTo(HFEventID.OnLevelReady, ReceiveLevelReady);
 			HFEventManager.SubscribeTo<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
+
+            if (Team == 0)
+                HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnPlayerUnitDeath, AddUnitToDeathList);
 		}
 
 		void OnDisable()
@@ -39,12 +46,17 @@ namespace HF
 			HFEventManager.UnsubscribeFrom(HFEventID.OnLevelReady, ReceiveLevelReady);
 			HFEventManager.UnsubscribeFrom<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
-		}
+
+            if(Team == 0)
+                HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnPlayerUnitDeath, AddUnitToDeathList);
+        }
 
 		void Update()
 		{
 			TrySelect();
 			TryInteract();
+
+            CheckDeathUnits();
 		}
 
 		private void ReceiveLevelReady()
@@ -152,6 +164,38 @@ namespace HF
 
 			return newUnit;
 		}
+
+        public void AddUnitToDeathList(HFUnit inUnit)
+        {
+            DeathUnits.Add(inUnit);
+        }
+
+        public virtual void CheckDeathUnits()
+        {
+            if(DeathUnits.Count > 0)
+            {
+                if (Timer(TimeToRespawn))
+                {
+                    SpawnUnit(DeathUnits[0].BaseStats, Vector3.zero);
+                    DeathUnits.RemoveAt(0);
+                }
+            }
+        }
+
+        public bool Timer(float inDestinationTime)
+        {
+            timer += Time.deltaTime;
+
+            if(timer >= inDestinationTime)
+            {
+                timer = 0;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
 		#endregion
 	}

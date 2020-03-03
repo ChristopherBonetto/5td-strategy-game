@@ -45,6 +45,8 @@ namespace HF
 
 		[SerializeField]
 		private HFBaseStats m_baseStats = null;
+        public HFBaseStats BaseStats { get => m_baseStats; }
+
 		private Dictionary<HFStatistics, float> m_stats;
 
 		private List<HFStatUpgrade> m_upgrades = new List<HFStatUpgrade>();
@@ -977,7 +979,7 @@ namespace HF
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
 
-			HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
+			HFEventManager.TriggerEvent(HFEventID.OnGenericUnitDeath, this);
 
 			if (m_baseStats.RewardCondition == HFRewardCondition.Kill && ControllerType != InputType.Player)
 			{
