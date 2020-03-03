@@ -8,7 +8,6 @@ using HF.WaveSystem;
 [CanEditMultipleObjects]
 public class HFWaveControllerEditor : Editor
 {
-    SerializedProperty m_waveCollector;
     SerializedProperty m_AIController;
 
     UnityEditorInternal.ReorderableList waev_list;
@@ -20,7 +19,6 @@ public class HFWaveControllerEditor : Editor
         this.waev_list = HFReorderableList.CreateAutoLayout(property);
 
         // other variables creation
-        m_waveCollector = this.serializedObject.FindProperty("m_WaveCollector");
         m_AIController = this.serializedObject.FindProperty("Controller");
     }
 
@@ -42,7 +40,6 @@ public class HFWaveControllerEditor : Editor
 
 
         // Create objects fields.
-        EditorGUILayout.ObjectField(m_waveCollector);
         EditorGUILayout.ObjectField(m_AIController);
 
 
