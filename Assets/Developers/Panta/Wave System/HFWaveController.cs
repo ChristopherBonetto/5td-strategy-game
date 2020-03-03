@@ -196,9 +196,10 @@ namespace HF.WaveSystem
                     WaitForInput = true;
 
                     // Reset all count and index.
-                    ResetCounts(CountOfEnemyKilled, MinorWaveIndex);
+                    CountOfEnemyKilled++;
+                    MinorWaveIndex++;
                     // Increment wave index.
-                    IncrementCounts(1, WaveIndex);
+                    WaveIndex++;
 
                     if (LevelCleared())
                     {
@@ -227,18 +228,6 @@ namespace HF.WaveSystem
             {
                 WaitForInput = false;
             }
-        }
-
-        private void ResetCounts(params int[] counts)
-        {
-            for (int i = 0; i < counts.Length; i++)
-                counts[i] = 0;
-        }
-
-        private void IncrementCounts(int amountToIncrement, params int[] counts)
-        {
-            for (int i = 0; i < counts.Length; i++)
-                counts[i] += amountToIncrement;
         }
     }
 }
