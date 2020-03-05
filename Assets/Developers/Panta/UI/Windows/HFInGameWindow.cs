@@ -7,15 +7,29 @@ public class HFInGameWindow : HFUIControl
 {
     public override UIControlID Name => UIControlID.InGameWindow;
 
-    /// <summary>
-    /// All info displayed about wave.
-    /// </summary>
-    public HFWaveInfoUIElement WaveInfoUIElement;
+    [Header("Wave Info Field")]
 
     /// <summary>
-    /// All info displayed about enemies.
+    /// Number of wave compleated.
     /// </summary>
-    public HFEnemyInfoUIElement EnemyInfoUIElement;
+    public Text waveProgressionInfo;
+
+    /// <summary>
+    /// real time passed.
+    /// </summary>
+    public Text TimeElapsed;
+
+    [Header("Enemies info")]
+
+    // This variables will be inside a class
+    // to allow us to manage the ally infos too.
+    // when created this class it will be filered in a dictionary.
+
+    public Image EnemyIconPrefab;
+    public HorizontalLayoutGroup EnemyIconsGridParent;
+    public List<Image> EnemiesTroopIcons;
+
+    [Header("Generic buttons")]
 
     /// <summary>
     /// Used when level end.
@@ -27,37 +41,14 @@ public class HFInGameWindow : HFUIControl
     /// </summary>
     public Button ButtonCallNextWave;
 
-
-    private void OnEnable()
+    protected override void Start()
     {
-        HFEventManager.SubscribeTo<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
-    }
-
-    private void OnDisable()
-    {
-        HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
-    }
-
-    /// <summary>
-    /// Trigger by the event when a wave end.
-    /// </summary>
-    public void ActiveNextWaveButton()
-    {
-        ButtonCallNextWave.gameObject.SetActive(true);
-    }
-
-    /// <summary>
-    /// Invoked through event
-    /// </summary>
-    /// <param name="isWin"></param>
-    public void OnEndLevel(HFLevelInfoSO level, bool isWin)
-    {
-        ButtonReturnToLevelSelection.gameObject.SetActive(true);
+        base.Start();
+        EnemiesTroopIcons = new List<Image>();
     }
 
     public void OnClickCallNextWave()
     {
-        ButtonCallNextWave.gameObject.SetActive(false);
         HFEventManager.TriggerEvent(HFEventID.OnCallNextWave);
     }
 

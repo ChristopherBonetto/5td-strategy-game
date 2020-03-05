@@ -133,6 +133,85 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!1 &2317909191972990187
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8912427163227247524}
+  - component: {fileID: 1774070280512371337}
+  - component: {fileID: 5566655144266723235}
+  m_Layer: 5
+  m_Name: Text "Time elapsed"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &8912427163227247524
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2317909191972990187}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4549631180584716534}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 160, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &1774070280512371337
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2317909191972990187}
+  m_CullTransparentMesh: 0
+--- !u!114 &5566655144266723235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2317909191972990187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 0
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: New Text
 --- !u!1 &4549631179922888998
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +608,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4549631180449448858}
   - component: {fileID: 4549631180449448856}
-  - component: {fileID: 4549631180449448859}
   m_Layer: 5
   m_Name: Enemies Info Container
   m_TagString: Untagged
@@ -581,21 +659,6 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
---- !u!114 &4549631180449448859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4549631180449448861}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1115f29119f97a49a57d90ede75451b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  IconsParentGrid: {fileID: 4549631180449448856}
-  Prefab: {fileID: 8126212374745686734, guid: d891335d9c3872541a7f29e15bc0c232, type: 3}
-  EnemiesTroopIcons: []
 --- !u!1 &4549631180584716521
 GameObject:
   m_ObjectHideFlags: 0
@@ -626,6 +689,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4549631180411977740}
+  - {fileID: 8912427163227247524}
   m_Father: {fileID: 4549631180893072357}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -760,7 +824,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4549631180893072357}
-  - component: {fileID: 4549631180893072354}
   m_Layer: 5
   m_Name: Wave info container
   m_TagString: Untagged
@@ -788,20 +851,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &4549631180893072354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4549631180893072356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4970ddfe140a5c4f977b4f6f37cad81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waveProgressionInfo: {fileID: 4549631180411977741}
-  TimePassed: {fileID: 0}
 --- !u!1 &4549631181002954356
 GameObject:
   m_ObjectHideFlags: 0
@@ -900,7 +949,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e357312717917934e811e5ce0b24456b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LastUIControlActivated: {fileID: 0}
 --- !u!1 &4549631181259013367
 GameObject:
   m_ObjectHideFlags: 0
@@ -1606,11 +1654,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ee327dc3403a144a842c7a6f7dba68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaveInfoUIElement: {fileID: 4549631180893072354}
-  EnemyInfoUIElement: {fileID: 4549631180449448859}
+  waveProgressionInfo: {fileID: 4549631180411977741}
+  TimeElapsed: {fileID: 5566655144266723235}
+  EnemyIconPrefab: {fileID: 8126212374745686734, guid: d891335d9c3872541a7f29e15bc0c232,
+    type: 3}
+  EnemyIconsGridParent: {fileID: 4549631180449448856}
+  EnemiesTroopIcons: []
   ButtonReturnToLevelSelection: {fileID: 6512087952466865645}
   ButtonCallNextWave: {fileID: 6612975940553994905}
-  ButtonToGoInPlay: {fileID: 4549631181845151018}
 --- !u!1 &6612975940553994907
 GameObject:
   m_ObjectHideFlags: 0

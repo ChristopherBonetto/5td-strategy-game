@@ -41,10 +41,9 @@ public enum HFEventID
     /// </summary>
     OnPlayerUnitDeath,
 
-
-    OnCallNextWave,
 	/// <summary>
-	/// bool	isLevelCompleted,
+	/// int current wave,
+	/// int total waves,
 	/// </summary>
-	OnWaveEnd
+    OnCallNextWave,
 }

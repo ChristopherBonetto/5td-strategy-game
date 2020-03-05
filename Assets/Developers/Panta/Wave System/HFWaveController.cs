@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace HF.WaveSystem
 {
+    [RequireComponent(typeof(HFWaveView))]
     public class HFWaveController : MonoBehaviour
     {
         #region Serializefield
@@ -105,9 +106,15 @@ namespace HF.WaveSystem
 
         #endregion
 
-        private HFInGameWindow m_inGameWindow;  // I'm not sure that is good to store into a variable...
+        private HFWaveView m_waveView;
 
         #region Monobehaviour cycle
+
+        private void Awake()
+        {
+            m_waveView = GetComponent<HFWaveView>();
+            if (m_waveView == null) gameObject.AddComponent<HFWaveView>();
+        }
 
         private void OnEnable()
         {
@@ -123,6 +130,30 @@ namespace HF.WaveSystem
 
         private void Start()
         {
+            Init();
+
+            // Update view.
+            m_waveView.UpdateWaveInfo(1, GetWaves.Count);
+            m_waveView.EnableButtonToCallnextWave(true);
+        }
+
+        private void Update()
+        {
+            if (!WaitForInput)
+                if (MinorWaveIndex < GetMinorWaves.Count)
+                    CurrentState.Update(this);
+        }
+
+        #endregion
+
+        private void Init()
+        {
+            WaitForInput = true;
+
+            CurrentState = HFWaveControllerState.CheckingTimeElapsed;
+            WaveIndex = 0;
+            MinorWaveIndex = 0;
+
             // Try to get wave collector.
             HFScenesManager sm = HFScenesManager.Instance;
             if (sm.CurrentLevelSelected != null &&
@@ -135,28 +166,7 @@ namespace HF.WaveSystem
                     $"I give a default one");
                 WaveCollector = sm.LevelContainer.Levels[0].LevelWavesInfo;
             }
-
-            // Wait for player's input.
-            WaitForInput = true;
-
-            // Initialization.
-            CurrentState = HFWaveControllerState.CheckingTimeElapsed;
-            WaveIndex = 0;
-            MinorWaveIndex = 0;
-
-            m_inGameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
-            m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
-            m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
         }
-
-        private void Update()
-        {
-            if (!WaitForInput)
-                if (MinorWaveIndex < GetMinorWaves.Count)
-                    CurrentState.Update(this);
-        }
-
-        #endregion
 
         /// <summary>
         /// Check if the level is cleared.
@@ -208,12 +218,7 @@ namespace HF.WaveSystem
                     }
                     else
                     {
-                        // TODO: work on what react through event and what not. 
-
-                        // Update window/panel.
-                        m_inGameWindow.WaveInfoUIElement.UpdateWaveInfoDisplayed(WaveIndex, GetWaves.Count);
-                        m_inGameWindow.EnemyInfoUIElement.SetEnemiesInfo(GetCurrentWave);
-                        m_inGameWindow.ActiveNextWaveButton();
+                        m_waveView.EnableButtonToCallnextWave(true);
                     }
                 }
             }
@@ -227,6 +232,9 @@ namespace HF.WaveSystem
             if (WaitForInput)
             {
                 WaitForInput = false;
+                m_waveView.EnableButtonToCallnextWave(false);
+                m_waveView.UpdateWaveInfo(Mathf.Min(WaveIndex + 1, GetWaves.Count), GetWaves.Count);
+                m_waveView.SetEnemiesInfo(GetCurrentWave);
             }
         }
     }

@@ -54,6 +54,9 @@ public class HFUIManager : Singleton<HFUIManager>
                 m_UIControls = new Dictionary<UIControlID, HFUIControl>();
 
                 // I have to force the subscribes of the UI Controls
+                // Event invoked from Game manager can cause a null reference 
+                // because windows aren't subscribed yet.
+                // This chink of code is run only one time. (it's not too bad)
                 Canvas outCanvas = FindObjectOfType<Canvas>();
                 foreach (var uiControl in outCanvas.GetComponentsInChildren<HFUIControl>())
                 {
@@ -74,7 +77,7 @@ public class HFUIManager : Singleton<HFUIManager>
         }
     }
 
-    public HFUIControl LastUIControlActivated;
+    public HFUIControl LastUIControlActivated { get; set; }
 
     protected void Awake()
 	{
@@ -102,18 +105,18 @@ public class HFUIManager : Singleton<HFUIManager>
         // I need this part of code because if we start from a scene that isn't the first one
         // game manager doesn't send notification. So i need scene refereces.
 
-            if (SceneManager.GetActiveScene().buildIndex == 0)
-            {
-                Show(UIControlID.MainMenu);
-            }
-            else if (SceneManager.GetActiveScene().buildIndex == 1)
-            {
-                Show(UIControlID.LevelSelection);
-            }
-            else if (SceneManager.GetActiveScene().buildIndex > 1)
-            {
-                Show(UIControlID.InGameWindow);
-            }
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            Show(UIControlID.MainMenu);
+        }
+        else if (SceneManager.GetActiveScene().buildIndex == 1)
+        {
+            Show(UIControlID.LevelSelection);
+        }
+        else if (SceneManager.GetActiveScene().buildIndex > 1)
+        {
+            Show(UIControlID.InGameWindow);
+        }
     }
 #endif
 
