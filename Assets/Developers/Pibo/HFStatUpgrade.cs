@@ -13,6 +13,9 @@ public class HFStatUpgrade : ScriptableObject, IHFStatModifier
 	[SerializeField]
 	HFIntKV[] m_intAddModifiers = new HFIntKV[0];
 
+	[SerializeField]
+	HFStringKV[] m_stringModifiers = new HFStringKV[0];
+
 	public IEnumerable<float> GetFloatAddModifiers(HFStatistics stat)
 	{
 		for (int i = 0; i < m_floatAddModifiers.Length; i++)
@@ -42,6 +45,17 @@ public class HFStatUpgrade : ScriptableObject, IHFStatModifier
 			if (m_intAddModifiers[i].Key == stat)
 			{
 				yield return m_intAddModifiers[i].Value;
+			}
+		}
+	}
+
+	public IEnumerable<string> GetStringModifiers(HFStatistics stat)
+	{
+		for (int i = 0; i < m_stringModifiers.Length; i++)
+		{
+			if (m_stringModifiers[i].Key == stat)
+			{
+				yield return m_stringModifiers[i].Value;
 			}
 		}
 	}

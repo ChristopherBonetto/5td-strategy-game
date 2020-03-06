@@ -75,6 +75,7 @@ public class HFStatUpgradeEditor : Editor
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_floatAddModifiers"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_pctModifiers"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_intAddModifiers"), true);
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_stringModifiers"), true);
 		serializedObject.ApplyModifiedProperties();
 	}
 }

@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public enum HFEventID
+﻿public enum HFEventID
 {
 	/// <summary>
 	/// GameStates preState,
@@ -35,11 +31,7 @@ public enum HFEventID
     /// <summary>
     /// HFUnit	unit
     /// </summary>
-    OnGenericUnitDeath,
-    /// <summary>
-    /// HFUnit	unit
-    /// </summary>
-    OnPlayerUnitDeath,
+    OnUnitDeath,
 
 	/// <summary>
 	/// int current wave,

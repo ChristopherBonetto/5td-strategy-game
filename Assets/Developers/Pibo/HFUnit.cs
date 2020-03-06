@@ -48,6 +48,7 @@ namespace HF
         public HFBaseStats BaseStats { get => m_baseStats; }
 
 		private Dictionary<HFStatistics, float> m_stats;
+		private Dictionary<HFStatistics, string> m_stringStats;
 
 		private List<HFStatUpgrade> m_upgrades = new List<HFStatUpgrade>();
 		private List<IHFStatModifier> m_mods;
@@ -249,6 +250,16 @@ namespace HF
 
 		#region Statistics
 
+		public float GetStat(HFStatistics stat)
+		{
+			return (m_stats.ContainsKey(stat) ? m_stats[stat] : 0f);
+		}
+
+		public string GetStringStat(HFStatistics stat)
+		{
+			return (m_stringStats.ContainsKey(stat) ? m_stringStats[stat] : "");
+		}
+
 		public void Specialize(HFBaseStats newStats)
 		{
 			if (newStats == null)
@@ -257,9 +268,12 @@ namespace HF
 				return;
 			}
 
-			SetStats(newStats);
 			m_currentLevel = 1;
+
+			// Set base stats
+			SetStats(newStats);
 			m_upgrades.Clear();
+
 			LoadVisuals();
 		}
 
@@ -267,12 +281,15 @@ namespace HF
 		{
 			if (m_currentLevel <= m_baseStats.Levels.Length)
 			{
+				m_currentLevel++;
+
+				// Upgrade stats
 				foreach (HFStatUpgrade upgrade in m_baseStats.Levels[m_currentLevel - 1].List)
 				{
 					m_upgrades.Add(upgrade);
 				}
 				UpdateStats();
-				m_currentLevel++;
+
 				LoadVisuals();
 			}
 		}
@@ -329,6 +346,12 @@ namespace HF
 				m_stats.Add(stat, CalculateStat(stat));
 			}
 
+			m_stringStats.Clear();
+			foreach (HFStatistics stat in allStats)
+			{
+				m_stringStats.Add(stat, ParseStat(stat));
+			}
+
 			// IHFDamageable update
 			ResetHealth(false, false);
 
@@ -351,9 +374,9 @@ namespace HF
 		}
 
 		/// <summary>
-		/// Calculate modified value for a given statistic
+		/// Calculate modified value for a given float statistic
 		/// </summary>
-		/// <param name="stat">Statistic type</param>
+		/// <param name="stat">Statistic name</param>
 		/// <returns>Statistic value</returns>
 		private float CalculateStat(HFStatistics stat)
 		{
@@ -361,9 +384,19 @@ namespace HF
 		}
 
 		/// <summary>
+		/// Parse modified value for a given string statistic
+		/// </summary>
+		/// <param name="stat">Statistic name</param>
+		/// <returns>Statistic value</returns>
+		private string ParseStat(HFStatistics stat)
+		{
+			return GetStringModifiers(stat);
+		}
+
+		/// <summary>
 		/// Calculate all additive modifiers for a given statistic
 		/// </summary>
-		/// <param name="stat">Statistic type</param>
+		/// <param name="stat">Statistic name</param>
 		/// <returns>Sum of additive modifiers</returns>
 		private float GetAddModifiers(HFStatistics stat)
 		{
@@ -381,7 +414,7 @@ namespace HF
 		/// <summary>
 		/// Calculate all percentage modifiers for a given statistic
 		/// </summary>
-		/// <param name="stat">Statistic type</param>
+		/// <param name="stat">Statistic name</param>
 		/// <returns>Sum of percentage modifiers</returns>
 		private float GetPctModifiers(HFStatistics stat)
 		{
@@ -394,6 +427,24 @@ namespace HF
 				}
 			}
 			return totalPct / 100f;
+		}
+
+		/// <summary>
+		/// Parse all string modifiers for a given statistic
+		/// </summary>
+		/// <param name="stat">Statistic name</param>
+		/// <returns>Final value</returns>
+		private string GetStringModifiers(HFStatistics stat)
+		{
+			string value = m_baseStats.GetString(stat);
+			foreach (IHFStatModifier mod in m_mods)
+			{
+				foreach (string newValue in mod.GetStringModifiers(stat))
+				{
+					value = newValue;
+				}
+			}
+			return value;
 		}
 
 		/// <summary>
@@ -979,7 +1030,7 @@ namespace HF
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
 
-			HFEventManager.TriggerEvent(HFEventID.OnGenericUnitDeath, this);
+			HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
 
 			if (m_baseStats.RewardCondition == HFRewardCondition.Kill && ControllerType != InputType.Player)
 			{
