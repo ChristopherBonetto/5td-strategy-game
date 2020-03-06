@@ -24,6 +24,7 @@ public enum HFStatistics
 	RewardValue = 9,
 	ShootAngle = 10,
 	BulletSpeed = 11,
+	UnitRespawnDelay = 12,
 
 
 	Name = 20,

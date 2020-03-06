@@ -20,7 +20,7 @@ namespace HF
 			return newUnit;
 		}
 
-        public override void CheckDeathUnits()
+        public override void Respawn()
         { }
     }
 }

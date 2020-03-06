@@ -21,9 +21,8 @@ namespace HF
 
 		public Material BaseMaterial;
 
-        public List<HFUnit> DeathUnits = new List<HFUnit>();
-        public float TimeToRespawn = 3f;
-        private float timer = 0;
+        private List<HFUnit> m_respawnUnits = new List<HFUnit>();
+        private float m_respawnTimer;
 
 		#endregion
 
@@ -31,24 +30,22 @@ namespace HF
 
 		void OnEnable()
 		{
-			Debug.Log("Subscribe");
 			HFEventManager.SubscribeTo(HFEventID.OnLevelReady, ReceiveLevelReady);
 			HFEventManager.SubscribeTo<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 
             if (Team == 0)
-                HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnPlayerUnitDeath, AddUnitToDeathList);
+                HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
 		}
 
 		void OnDisable()
 		{
-			Debug.Log("Unsubscribe");
 			HFEventManager.UnsubscribeFrom(HFEventID.OnLevelReady, ReceiveLevelReady);
 			HFEventManager.UnsubscribeFrom<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 
             if(Team == 0)
-                HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnPlayerUnitDeath, AddUnitToDeathList);
+                HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
         }
 
 		void Update()
@@ -56,7 +53,7 @@ namespace HF
 			TrySelect();
 			TryInteract();
 
-            CheckDeathUnits();
+            Respawn();
 		}
 
 		private void ReceiveLevelReady()
@@ -165,30 +162,36 @@ namespace HF
 			return newUnit;
 		}
 
-        public void AddUnitToDeathList(HFUnit inUnit)
-        {
-            DeathUnits.Add(inUnit);
+        public void ReceiveUnitDeath(HFUnit inUnit)
+		{
+			if (inUnit && inUnit.ControllerType == HF.InputType.Player && inUnit.UnitType == HFUnitType.Unit)
+			{
+				m_respawnUnits.Add(inUnit);
+			}
         }
 
-        public virtual void CheckDeathUnits()
+        public virtual void Respawn()
         {
-            if(DeathUnits.Count > 0)
+            if(m_respawnUnits.Count > 0)
             {
-                if (Timer(TimeToRespawn))
+                if (Timer(m_respawnUnits[0].GetStat(HFStatistics.UnitRespawnDelay)))
                 {
-                    SpawnUnit(DeathUnits[0].BaseStats, Vector3.zero);
-                    DeathUnits.RemoveAt(0);
+					Vector3 respawnPosition = Random.onUnitSphere * Random.Range(0f, HFGameParameters.TileSize);
+					respawnPosition.y = 0f;
+					Debug.Log("Respawn unit " + m_respawnUnits[0].GetStringStat(HFStatistics.Name) + " at " + respawnPosition.ToString());
+                    SpawnUnit(m_respawnUnits[0].BaseStats, respawnPosition);
+                    m_respawnUnits.RemoveAt(0);
                 }
             }
         }
 
         public bool Timer(float inDestinationTime)
         {
-            timer += Time.deltaTime;
+            m_respawnTimer += Time.deltaTime;
 
-            if(timer >= inDestinationTime)
+            if(m_respawnTimer >= inDestinationTime)
             {
-                timer = 0;
+                m_respawnTimer = 0f;
                 return true;
             }
             else
