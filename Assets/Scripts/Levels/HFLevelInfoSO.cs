@@ -23,4 +23,10 @@ public class HFLevelInfoSO : ScriptableObject
     [HideInInspector]
     public int LevelSceneIndex;
 
+    public bool m_levelCompleted = false;
+
+    public void CompleteLevel()
+    {
+        m_levelCompleted = true;
+    }
 }

@@ -69,6 +69,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     #endregion
 
+    #region MONOBEHAVIOUR CYCLE
 
     private void Awake()
     {
@@ -83,6 +84,9 @@ public class HFScenesManager : Singleton<HFScenesManager>
         CheckCurrentScene(IndexCurrentScene);
     }
 
+    #endregion
+
+    #region EVENTS
 
     private void OnEnable()
     {
@@ -97,6 +101,11 @@ public class HFScenesManager : Singleton<HFScenesManager>
         HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, CheckWhichUnitDeath);
     }
 
+    #endregion
+
+    #region LEVEL METHODS
+
+    //Call to all the subscribers the info's level.
     public void GiveAllReferenceToTheSelectedLevel(GameStates inState)
     {
         if (inState == GameStates.InitializeLevel)
@@ -135,6 +144,25 @@ public class HFScenesManager : Singleton<HFScenesManager>
         CurrentLevelSelected = null;
     }
 
+    //public int ReturnIndexLastLevelCompleted()
+    //{
+    //    int index = 0;
+
+    //    List<HFLevelInfoSO> tempList = LevelContainer.Levels;
+    //    Debug.Log(LevelContainer.Levels.Count);
+        
+    //    for(int i = 0; i < tempList.Count; i++)
+    //    {
+    //        if (tempList[i].m_levelCompleted)
+    //        {
+    //            index++;
+    //        }
+    //    }
+    //    return index = Mathf.Clamp(index,0,LevelContainer.Levels.Count);
+    //}
+
+    #endregion
+
     #region SCENE METHODS
 
     public void CheckCurrentScene(int inValue)
@@ -155,6 +183,23 @@ public class HFScenesManager : Singleton<HFScenesManager>
                 break;
         }
     }
+
+    //public (int,int) TakeLevelInterval()
+    //{
+    //    int firstLevel = 0;
+    //    int lastLevel = 0;
+
+    //    for(int i = 0; i < LevelContainer.Levels.Count; i++)
+    //    {
+    //        int tempValue = LevelContainer.Levels[i].LevelSceneIndex;
+
+    //        if(tempValue >= firstLevel)
+    //        {
+    //            firstLevel = tempValue;
+    //        }
+
+    //    }        
+    //}
 
     #region Get Scenes Reference
 
@@ -178,19 +223,27 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         for (int i = 0; i < LevelContainer.Levels.Count; i++)
         {
-            GiveIndexToALevel(LevelContainer.Levels[i]);
+            if (GiveIndexToALevel(LevelContainer.Levels[i]))
+            {
+                Debug.Log("REFRESH : " + LevelContainer.Levels[i].LevelName + " REFRESHED INDEX/ADDED TO SCENES LIST");
+            }
+            else
+            {
+                //not refreshed because not finded;
+            }
         }
+        //LevelContainer.Levels.Sort((x, y) => x.CompareTo(y));
     }
 
-    public void GiveIndexToALevel(HFLevelInfoSO inLevel)
+    public bool GiveIndexToALevel(HFLevelInfoSO inLevel)
     {
         if (AllScenes.Contains(inLevel.LevelScene.name))
         {
             int indexToAssign = AllScenes.FindIndex(x => x.Equals(inLevel.LevelScene.name));
             inLevel.LevelSceneIndex = indexToAssign;
-
-            Debug.Log("REFRESH : " + inLevel.LevelName + " REFRESHED INDEX/ADDED TO SCENES LIST");
+            return true;
         }
+        return false;
     }
 
     #endregion

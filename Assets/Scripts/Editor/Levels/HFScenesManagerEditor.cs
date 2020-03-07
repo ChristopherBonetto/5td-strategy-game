@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(HFScenesManager))]
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(HFScenesManager),true)]
 public class HFScenesManagerEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -14,6 +16,16 @@ public class HFScenesManagerEditor : Editor
 
         myTarget.TakeAllSceneInBuild();
 
-        myTarget.GiveIndexToAllLevels();
+        if(myTarget.LevelContainer != null)
+        {
+            myTarget.GiveIndexToAllLevels();
+        }
+        else
+        {
+            Debug.Log("There is no Level Container to read all levels");
+        }
+        
     }
 }
+
+#endif
