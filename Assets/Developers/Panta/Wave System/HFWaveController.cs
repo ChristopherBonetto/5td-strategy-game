@@ -135,6 +135,7 @@ namespace HF.WaveSystem
             // Update view.
             m_waveView.UpdateWaveInfo(1, GetWaves.Count);
             m_waveView.EnableButtonToCallnextWave(true);
+            m_waveView.TimerActivated = false;
         }
 
         private void Update()
@@ -197,9 +198,6 @@ namespace HF.WaveSystem
             if (unit.Team == Controller.Team)
             {
                 CountOfEnemyKilled++;
-                // Show in the UI this infos:
-                // Wave index,
-                // Enemies Killed / Total enemies in the wave.
 
                 if (WaveCleared())
                 {
@@ -219,6 +217,7 @@ namespace HF.WaveSystem
                     else
                     {
                         m_waveView.EnableButtonToCallnextWave(true);
+                        m_waveView.TimerActivated = false;
                     }
                 }
             }
@@ -235,6 +234,7 @@ namespace HF.WaveSystem
                 m_waveView.EnableButtonToCallnextWave(false);
                 m_waveView.UpdateWaveInfo(Mathf.Min(WaveIndex + 1, GetWaves.Count), GetWaves.Count);
                 m_waveView.SetEnemiesInfo(GetCurrentWave);
+                m_waveView.TimerActivated = true;
             }
         }
     }

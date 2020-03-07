@@ -27,6 +27,7 @@ public class HFInGameWindow : HFUIControl
 
     public Image EnemyIconPrefab;
     public HorizontalLayoutGroup EnemyIconsGridParent;
+    public List<HFBaseStats> EnemiesTroopsStats;
     public List<Image> EnemiesTroopIcons;
 
     [Header("Generic buttons")]
@@ -45,6 +46,7 @@ public class HFInGameWindow : HFUIControl
     {
         base.Start();
         EnemiesTroopIcons = new List<Image>();
+        EnemiesTroopsStats = new List<HFBaseStats>();
     }
 
     public void OnClickCallNextWave()
