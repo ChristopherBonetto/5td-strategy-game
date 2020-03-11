@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
 
 public class HFScenesManager : Singleton<HFScenesManager>
 {
@@ -67,6 +69,20 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
+    private int m_levelCompletedCount = 0;
+    public int LevelCompletedCount
+    {
+        get
+        {
+            CountHowMuchLevelAreCompleted(0);
+            return m_levelCompletedCount;
+        }
+        set
+        {
+            m_levelCompletedCount = value;
+        }
+    }
+
     #endregion
 
     #region MONOBEHAVIOUR CYCLE
@@ -75,6 +91,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
+
     }
     void Start()
     {
@@ -82,6 +99,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
         IndexCurrentScene = currentScene.buildIndex;
 
         CheckCurrentScene(IndexCurrentScene);
+
+        Debug.Log(LevelCompletedCount);
     }
 
     #endregion
@@ -144,22 +163,24 @@ public class HFScenesManager : Singleton<HFScenesManager>
         CurrentLevelSelected = null;
     }
 
-    //public int ReturnIndexLastLevelCompleted()
-    //{
-    //    int index = 0;
 
-    //    List<HFLevelInfoSO> tempList = LevelContainer.Levels;
-    //    Debug.Log(LevelContainer.Levels.Count);
-        
-    //    for(int i = 0; i < tempList.Count; i++)
-    //    {
-    //        if (tempList[i].m_levelCompleted)
-    //        {
-    //            index++;
-    //        }
-    //    }
-    //    return index = Mathf.Clamp(index,0,LevelContainer.Levels.Count);
-    //}
+    public void CountHowMuchLevelAreCompleted(int inIndex)
+    {
+        if(inIndex <= LevelContainer.Levels.Count - 1)
+        {
+            if (LevelContainer.Levels[inIndex].m_levelCompleted)
+            {
+                inIndex++;
+                m_levelCompletedCount = inIndex;
+                CountHowMuchLevelAreCompleted(inIndex);
+            }
+            else
+            {
+                return;
+            }
+        }
+        return;
+    }
 
     #endregion
 
@@ -167,39 +188,48 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
     public void CheckCurrentScene(int inValue)
     {
-        switch (inValue)
+        (int, int) levelInterval = TakeLevelInterval();
+
+        if(inValue == 0)
         {
-            case 0:
-                HFGameManager.Instance.CurrentGameState = GameStates.LoadStartingInfo;
-                Debug.Log("Sei partito nella scene load");
-                break;
-            case 1:
-                HFGameManager.Instance.CurrentGameState = GameStates.WarRoom;
-                Debug.Log("Sei partito nella level selection");
-                break;
-            default:
-                CurrentLevelSelected = LevelContainer.Levels[inValue];
-                HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
-                break;
+            HFGameManager.Instance.CurrentGameState = GameStates.LoadStartingInfo;
+            Debug.Log("Sei partito nella scene load");
+            return;
+        }
+        else if(inValue == 1)
+        {
+            HFGameManager.Instance.CurrentGameState = GameStates.WarRoom;
+            Debug.Log("Sei partito nella level selection");
+            return;
+        }
+        else if(inValue >= levelInterval.Item1 && inValue <= levelInterval.Item2)
+        {
+            CurrentLevelSelected = LevelContainer.Levels[inValue];
+            HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
+            Debug.Log("Stai giocando un livello");
+            return;
+        }
+        else
+        {
+            Debug.Log("SCENA DI TEST");
         }
     }
 
-    //public (int,int) TakeLevelInterval()
-    //{
-    //    int firstLevel = 0;
-    //    int lastLevel = 0;
+    
 
-    //    for(int i = 0; i < LevelContainer.Levels.Count; i++)
-    //    {
-    //        int tempValue = LevelContainer.Levels[i].LevelSceneIndex;
+    public (int, int) TakeLevelInterval()
+    {
+        List<HFLevelInfoSO> tempList = LevelContainer.Levels;
 
-    //        if(tempValue >= firstLevel)
-    //        {
-    //            firstLevel = tempValue;
-    //        }
+        int LevelsCount = tempList.Count;
 
-    //    }        
-    //}
+        int firstLevel = tempList[0].LevelSceneIndex;
+        int lastLevel = tempList[LevelsCount -1].LevelSceneIndex;
+
+        return (firstLevel, lastLevel);
+    }
+
+
 
     #region Get Scenes Reference
 
@@ -217,6 +247,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
                 AllScenes.Add(tempSceneName);
             }
         }
+        LevelContainer.SorLevelByIndex();
     }
 
     public void GiveIndexToAllLevels()
@@ -232,7 +263,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
                 //not refreshed because not finded;
             }
         }
-        //LevelContainer.Levels.Sort((x, y) => x.CompareTo(y));
+        
     }
 
     public bool GiveIndexToALevel(HFLevelInfoSO inLevel)
