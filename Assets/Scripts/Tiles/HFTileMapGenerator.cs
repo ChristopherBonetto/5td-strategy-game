@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿#if UNITY_EDITOR
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Tilemaps;
 
-public class HFTileMapGenerator : MonoBehaviour
+public class HFTileMapGenerator
 {
     #region Tilemap Reader
 
@@ -122,6 +123,8 @@ public class HFTileMapGenerator : MonoBehaviour
         get => m_TileMapLayers != null ? m_TileMapLayers : m_TileMapLayers = new Dictionary<int, GameObject>();
     }
 
+    private Mesh m_mapMeshGenerated = null;
+
     #endregion
 
     /// <summary>
@@ -183,7 +186,7 @@ public class HFTileMapGenerator : MonoBehaviour
                     }
                 }
 
-                Instantiate(
+                GameObject.Instantiate(
                     objectToSpawn,
                     container.TileMap.CellToLocalInterpolated(position + new Vector3(0.5f, 0.5f, 0.5f)) + Vector3.up * container.TileMap.transform.position.y,
                     Quaternion.identity,
@@ -227,24 +230,55 @@ public class HFTileMapGenerator : MonoBehaviour
         m_LevelParent.transform.rotation = Quaternion.identity;
     }
 
-    public void DestroyLevelGenerated()
+    public void GenerateTerrainMesh()
     {
-        TileMapLayers.Clear();
-        m_Terrain = null;
-        DestroyImmediate(m_LevelParent);
+        MeshCombiner mesh = m_Terrain.GetComponent<MeshCombiner>();
+
+        if (mesh == null)
+        {
+            m_Terrain.AddComponent(typeof(MeshCombiner));
+            mesh = m_Terrain.GetComponent<MeshCombiner>();
+            mesh.CreateMultiMaterialMesh = true;
+            mesh.DeactivateCombinedChildren = true;
+        }
+        mesh.CombineMeshes(false);
+        m_mapMeshGenerated = m_Terrain.GetComponent<MeshFilter>().sharedMesh;
     }
 
-    public void PushLevelAsPrefab(GameObject level)
+    public void AddMeshColliderToTerrain()
     {
-        // Set the path as within the Assets folder,
-        // and name it as the GameObject's name with the .Prefab format
-        string localPath = "Assets/Prefabs/LevelCreated/" + "Level_00" + ".prefab";
+        if (m_Terrain.GetComponent<MeshCollider>() == null)
+        {
+            m_Terrain.AddComponent(typeof(MeshCollider));
+        }
+    }
 
+    public void DestroyLevelGenerated()
+    {
+        if (m_LevelParent == null) return;
+
+        TileMapLayers.Clear();
+        m_Terrain = null;
+        m_mapMeshGenerated = null;
+        GameObject.DestroyImmediate(m_LevelParent);
+    }
+
+    public void PushLevelAsPrefab(GameObject level, ref string localPath)
+    {
         // Make sure the file name is unique, in case an existing Prefab has the same name.
         localPath = AssetDatabase.GenerateUniqueAssetPath(localPath);
 
         // Create the new Prefab.
         PrefabUtility.SaveAsPrefabAsset(level, localPath);
+    }
+
+    public void PushMesh(ref string path)
+    {
+        // Make sure the file name is unique, in case an existing Prefab has the same name.
+        path = AssetDatabase.GenerateUniqueAssetPath(path);
+
+        // Create the new Prefab.
+        AssetDatabase.CreateAsset(m_mapMeshGenerated, path);
     }
 
     private void ResetGameObjectValue(GameObject go)
@@ -253,3 +287,4 @@ public class HFTileMapGenerator : MonoBehaviour
         go.transform.rotation = Quaternion.identity;
     }
 }
+#endif
