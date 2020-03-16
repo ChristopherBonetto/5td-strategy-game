@@ -21,6 +21,9 @@ namespace HF
 
 		public Material BaseMaterial;
 
+		[SerializeField]
+		private HFSpawnPoint m_respawnPoint = null;
+
         private List<HFUnit> m_respawnUnits = new List<HFUnit>();
         private float m_respawnTimer;
 
@@ -34,8 +37,10 @@ namespace HF
 			HFEventManager.SubscribeTo<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 
-            if (Team == 0)
+            if (Team == HFGameParameters.PlayerTeam)
+			{
                 HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
+			}
 		}
 
 		void OnDisable()
@@ -44,8 +49,10 @@ namespace HF
 			HFEventManager.UnsubscribeFrom<GameStates, GameStates>(HFEventID.OnBeforeChangeState, HandlePreGameStateChange);
 			HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 
-            if(Team == 0)
+            if(Team == HFGameParameters.PlayerTeam)
+			{
                 HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
+			}
         }
 
 		void Update()
@@ -152,9 +159,12 @@ namespace HF
 
 		#region Spawn
 
-		public virtual HFUnit SpawnUnit(HFBaseStats stats, Vector3 location)
+		public virtual HFUnit SpawnUnit(HFBaseStats stats, HFSpawnPoint spawnPoint)
 		{
-			HFUnit newUnit = Instantiate(m_unitPrefab, location, Quaternion.identity);
+// 			Vector3 randomOffset = Random.onUnitSphere * Random.Range(0f, HFGameParameters.TileSize);
+// 			randomOffset.y = 0f;
+			Vector3 spawnPosition = spawnPoint.SpawnPosition;
+			HFUnit newUnit = Instantiate(m_unitPrefab, spawnPosition, Quaternion.identity);
 			newUnit.Specialize(stats);
 			newUnit.Possess(this);
 			m_possessedUnits.Add(newUnit);
@@ -162,7 +172,7 @@ namespace HF
 			return newUnit;
 		}
 
-        public void ReceiveUnitDeath(HFUnit inUnit)
+        private void ReceiveUnitDeath(HFUnit inUnit)
 		{
 			if (inUnit && inUnit.ControllerType == HF.InputType.Player && inUnit.UnitType == HFUnitType.Unit)
 			{
@@ -174,18 +184,16 @@ namespace HF
         {
             if(m_respawnUnits.Count > 0)
             {
-                if (Timer(m_respawnUnits[0].GetStat(HFStatistics.UnitRespawnDelay)))
+                if (RespawnTimer(m_respawnUnits[0].GetStat(HFStatistics.UnitRespawnDelay)))
                 {
-					Vector3 respawnPosition = Random.onUnitSphere * Random.Range(0f, HFGameParameters.TileSize);
-					respawnPosition.y = 0f;
-					Debug.Log("Respawn unit " + m_respawnUnits[0].GetStringStat(HFStatistics.Name) + " at " + respawnPosition.ToString());
-                    SpawnUnit(m_respawnUnits[0].BaseStats, respawnPosition);
+					Debug.Log("Respawn unit " + m_respawnUnits[0].GetStringStat(HFStatistics.Name) + " at " + m_respawnPoint.gameObject.name);
+                    SpawnUnit(m_respawnUnits[0].BaseStats, m_respawnPoint);
                     m_respawnUnits.RemoveAt(0);
                 }
             }
         }
 
-        public bool Timer(float inDestinationTime)
+        private bool RespawnTimer(float inDestinationTime)
         {
             m_respawnTimer += Time.deltaTime;
 

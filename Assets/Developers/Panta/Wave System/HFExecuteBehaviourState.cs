@@ -14,8 +14,7 @@ public class HFExecuteBehaviourState : HFWaveControllerState
 
         if (mw.MinorWaveType == MinorWaveType.Single)
         {
-            Vector3 position = waveController.SpawnPoints[mw.SpawnPoint].position;
-            waveController.Controller.SpawnUnit(mw.UnitStatsData, position);
+            waveController.Controller.SpawnUnit(mw.UnitStatsData, waveController.SpawnPoints[mw.SpawnPoint]);
 
             waveController.MinorWaveIndex++;
 
@@ -33,8 +32,7 @@ public class HFExecuteBehaviourState : HFWaveControllerState
             CheckingTimeElapsed.TimeToElaps = mw.TimeToWait;
             CheckingTimeElapsed.TimeElapsed = 0;
 
-            Vector3 position = waveController.SpawnPoints[mw.SpawnPoint].position;
-            waveController.Controller.SpawnUnit(mw.UnitStatsData, position);
+            waveController.Controller.SpawnUnit(mw.UnitStatsData, waveController.SpawnPoints[mw.SpawnPoint]);
 
             m_amountOfTroopSpawned++;
             if (m_amountOfTroopSpawned >= mw.AmountToSpawn)

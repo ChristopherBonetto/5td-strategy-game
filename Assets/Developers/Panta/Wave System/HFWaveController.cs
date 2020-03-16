@@ -10,7 +10,7 @@ namespace HF.WaveSystem
     {
         #region Serializefield
         [SerializeField]
-        private List<Transform> m_SpawnPoints;
+        private List<HFSpawnPoint> m_SpawnPoints;
 
         public HFController Controller;
         #endregion
@@ -19,7 +19,7 @@ namespace HF.WaveSystem
         /// Level's spawn points ordered from inspector.
         /// The ordered declare the spawn point ID.
         /// </summary>
-        public List<Transform> SpawnPoints => m_SpawnPoints;
+        public List<HFSpawnPoint> SpawnPoints => m_SpawnPoints;
 
 
         /// <summary>
@@ -196,7 +196,7 @@ namespace HF.WaveSystem
         public void OnEnemyKilled(HFUnit unit)
         {
             // Is it an enemy?
-            if (unit.Team == Controller.Team)
+            if (unit.Team != HFGameParameters.PlayerTeam)
             {
                 CountOfEnemyKilled++;
 

@@ -147,7 +147,7 @@ public static class JsonHelper
 
 #region Extensions
 
-public static class ExtensionMethods
+public static class HFExtensionMethods
 {
 	public static string ToTitleCase(this string s)
 	{

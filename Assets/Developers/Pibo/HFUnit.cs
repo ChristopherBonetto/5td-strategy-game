@@ -18,7 +18,7 @@ namespace HF
 		Direct = 2
 	}
 
-	public class HFUnit : MonoBehaviour, IHFDamageable
+	public class HFUnit : MonoBehaviour, IHFDamageable, IHFTargetable
 	{
 		#region Variables
 
@@ -78,6 +78,8 @@ namespace HF
 		private float m_refreshDelay = 0.25f;
 
 		private float m_lastRefresh;
+
+		private bool m_shouldSkipRefresh;
 
 		private Queue<IHFCommand> m_pendingCommands = new Queue<IHFCommand>();
 
@@ -153,6 +155,10 @@ namespace HF
 		/// </summary>
 		public bool IsKilled { get; protected set; }
 
+		/*** IHFTargetable interface */
+
+		public Vector3 Position => m_transform.position.SnapLocation();
+
 		#endregion
 
 		#region Core loop
@@ -209,14 +215,7 @@ namespace HF
 				return;
 			}
 
-			if (m_startCommand == null)
-			{
-				RefreshCommands();
-			}
-			else
-			{
-				m_startCommand = null;
-			}
+			RefreshCommands();
 
 			if (m_isCommandComplete)
 			{
@@ -224,7 +223,7 @@ namespace HF
 			}
 			else if (m_currentCommand != null)
 			{
-				m_currentCommand.Perform();
+				m_currentCommand.Perform(this);
 			}
 		}
 
@@ -485,7 +484,7 @@ namespace HF
 		{
 			ControllerType = InputType.None;
 			m_controller = null;
-			Team = 99;
+			Team = HFGameParameters.NoTeam;
 		}
 
 		#endregion
@@ -536,7 +535,7 @@ namespace HF
 				}
 				else
 				{
-					nextCommand.Abort();
+					nextCommand.Abort(this);
 				}
 				nextCommand = GetNextCommand();
 			}
@@ -567,10 +566,10 @@ namespace HF
 			{
 				ClearCommands();
 
-				//m_currentCommand?.Abort();
+				//m_currentCommand?.Abort(this);
 			}
 
-			//m_currentCommand?.End();
+			//m_currentCommand?.End(this);
 			m_currentCommand = null;
 		}
 
@@ -578,10 +577,17 @@ namespace HF
 		{
 			m_startCommand = startCommand;
 			SetCommand(startCommand);
+			m_shouldSkipRefresh = true;
 		}
 
 		private void RefreshCommands(bool bImmediate = false)
 		{
+			if (m_shouldSkipRefresh)
+			{
+				m_shouldSkipRefresh = false;
+				return;
+			}
+
 			if (Time.time >= m_lastRefresh + m_refreshDelay || bImmediate)
 			{
 				m_lastRefresh = Time.time;
@@ -656,17 +662,6 @@ namespace HF
 			UpdateAnimMoveSpeed();
 		}
 
-		private Vector3 SnapLocation(Vector3 location)
-		{
-			location /= HFGameParameters.TileSize;
-			location.x = Mathf.Round(location.x);
-			//location.y = Mathf.Round(location.y);
-			location.z = Mathf.Round(location.z);
-			location *= HFGameParameters.TileSize;
-
-			return location;
-		}
-
 		public bool SetMove(Vector3 destination, MovementType moveType)
 		{
 			if (m_stats[HFStatistics.Speed] <= 0f)
@@ -677,7 +672,7 @@ namespace HF
 			m_isMoving = true;
 
 			m_lastPosition = m_transform.position;
-			destination = SnapLocation(destination);
+			destination = destination.SnapLocation();
 			m_currentDestination = destination;
 
 			if (moveType == MovementType.Agent)
@@ -689,7 +684,7 @@ namespace HF
 				m_navAgent.updatePosition = true;
 				m_navAgent.SetDestination(destination);
 			}
-			else
+			else // Direct or Teleport
 			{
 				m_isDirectMoving = true;
 				LookAt(destination);
@@ -838,7 +833,7 @@ namespace HF
 
 				if (m_currentCommand is HFAttackCommand)
 				{
-					m_currentCommand.End();
+					m_currentCommand.End(this);
 				}
 
 				ActionComplete(true);
@@ -899,20 +894,27 @@ namespace HF
 
 		#endregion
 
-		#region Interactions
+		#region Target
 
-		public virtual bool TryInteraction(HFUnit otherUnit)
+		public bool TryInteraction(HFUnit otherUnit)
 		{
 			Debug.Log(gameObject.name + " interacts with " + otherUnit.gameObject.name);
 
 			if (otherUnit != this && otherUnit.Team != Team)
 			{
 				// #TEMP
-				MeleeAttack(otherUnit);
+				//MeleeAttack(otherUnit);
+				AddCommand(otherUnit.GetDefaultInteraction());
 			}
 
 			ActionComplete(true);
 			return true;
+		}
+
+		public IHFCommand GetDefaultInteraction()
+		{
+			Debug.Log(gameObject.name + " returns interaction at " + Position.ToString());
+			return new HFMoveCommand(Position);
 		}
 
 		#endregion
@@ -1065,8 +1067,6 @@ namespace HF
 
 	public class HFMoveCommand : IHFCommand
 	{
-		private HFUnit m_unit;
-
 		private readonly Vector3 m_destination;
 		private readonly MovementType m_moveType;
 
@@ -1078,32 +1078,34 @@ namespace HF
 
 		public bool Start(HFUnit unit)
 		{
-			m_unit = unit;
-
-			return (m_unit != null && m_unit.SetMove(m_destination, m_moveType));
+			return (unit != null && unit.SetMove(m_destination, m_moveType));
 		}
 
-		public void Perform()
+		public void Perform(HFUnit unit)
 		{
-			if (m_unit.WaitForDestination())
+			if (!unit)
 			{
-				End();
+				Abort(unit);
+				return;
+			}
+
+			if (unit.WaitForDestination())
+			{
+				End(unit);
 			}
 		}
 
-		public void Abort()
+		public void Abort(HFUnit unit)
 		{
-			End();
+			End(unit);
 		}
 
-		public void End()
+		public void End(HFUnit unit)
 		{ }
 	}
 
 	public class HFInteractCommand : IHFCommand
 	{
-		private HFUnit m_unit;
-
 		private readonly HFUnit m_otherUnit;
 
 		public HFInteractCommand(HFUnit otherUnit)
@@ -1113,25 +1115,29 @@ namespace HF
 
 		public bool Start(HFUnit unit)
 		{
-			m_unit = unit;
-
-			return (m_unit != null && m_otherUnit != null);
+			return (unit != null && m_otherUnit != null);
 		}
 
-		public void Perform()
+		public void Perform(HFUnit unit)
 		{
-			if (m_unit.TryInteraction(m_otherUnit))
+			if (!unit)
 			{
-				End();
+				Abort(unit);
+				return;
+			}
+
+			if (unit.TryInteraction(m_otherUnit))
+			{
+				End(unit);
 			}
 		}
 
-		public void Abort()
+		public void Abort(HFUnit unit)
 		{
-			End();
+			End(unit);
 		}
 
-		public void End()
+		public void End(HFUnit unit)
 		{ }
 	}
 
@@ -1144,24 +1150,28 @@ namespace HF
 
 		public bool Start(HFUnit unit)
 		{
-			m_unit = unit;
-
-			return (m_unit != null && m_unit.FindNewTarget());
+			return (unit != null && unit.FindNewTarget());
 		}
 
-		public void Perform()
+		public void Perform(HFUnit unit)
 		{
-			m_unit.TryAttack();
+			if (!unit)
+			{
+				Abort(unit);
+				return;
+			}
+
+			unit.TryAttack();
 		}
 
-		public void Abort()
+		public void Abort(HFUnit unit)
 		{
-			End();
+			End(unit);
 		}
 
-		public void End()
+		public void End(HFUnit unit)
 		{
-			m_unit.ActionComplete(true);
+			unit.ActionComplete(true);
 		}
 	}
 

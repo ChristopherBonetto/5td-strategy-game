@@ -10,12 +10,11 @@ namespace HF
 		protected override void TryInteract()
 		{ }
 
-		public override HFUnit SpawnUnit(HFBaseStats stats, Vector3 location)
+		public override HFUnit SpawnUnit(HFBaseStats stats, HFSpawnPoint spawnPoint)
 		{
-			HFUnit newUnit = base.SpawnUnit(stats, location);
+			HFUnit newUnit = base.SpawnUnit(stats, spawnPoint);
 
-			Vector3 destination = new Vector3(20f, 0f, 0f);
-			newUnit.SetStartCommand(new HFMoveCommand(destination));
+			newUnit.SetStartCommand(new HFMoveCommand(spawnPoint.TargetPosition));
 
 			return newUnit;
 		}
