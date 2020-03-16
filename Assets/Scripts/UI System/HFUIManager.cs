@@ -173,6 +173,12 @@ public class HFUIManager : Singleton<HFUIManager>
     /// </summary>
     public void ShowAndHide(UIControlID id, HFUIControl controlToHide)
     {
+		if (!controlToHide)
+		{
+			Debug.LogWarning("Received request to hide a null UIControl when showing " + id.ToString());
+			return;
+		}
+		
         // If they are the same control... return
         if (id == controlToHide.Name) return;
 
