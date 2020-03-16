@@ -83,7 +83,7 @@ public class HFLoadingScreenWindow : HFUIControl
         m_isLoading = true;
     }
 
-    public void OnHide()
+    public override void OnHide()
     {
         gameObject.SetActive(false);
 

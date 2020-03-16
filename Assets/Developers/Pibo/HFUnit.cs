@@ -178,6 +178,7 @@ namespace HF
 			HFHelpers.NullCheck(gameObject, m_collider, "collider");
 
 			m_stats = new Dictionary<HFStatistics, float>();
+			m_stringStats = new Dictionary<HFStatistics, string>();
 			m_mods = new List<IHFStatModifier>();
 			UpdateStats();
 

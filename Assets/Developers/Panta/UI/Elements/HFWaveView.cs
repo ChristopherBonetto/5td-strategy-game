@@ -21,7 +21,7 @@ public class HFWaveView : MonoBehaviour
         HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
     }
 
-    private void Start()
+    public void Init()
     {
         m_inGameWindow = HFUIManager.Instance.UIControls[UIControlID.InGameWindow] as HFInGameWindow;
         m_inGameWindow.TimeElapsed.text = "";

@@ -113,7 +113,7 @@ namespace HF.WaveSystem
         private void Awake()
         {
             m_waveView = GetComponent<HFWaveView>();
-            if (m_waveView == null) gameObject.AddComponent<HFWaveView>();
+            if (m_waveView == null) m_waveView = gameObject.AddComponent<HFWaveView>();
         }
 
         private void OnEnable()
@@ -132,7 +132,8 @@ namespace HF.WaveSystem
         {
             Init();
 
-            // Update view.
+			// Update view.
+			m_waveView.Init();
             m_waveView.UpdateWaveInfo(1, GetWaves.Count);
             m_waveView.EnableButtonToCallnextWave(true);
             m_waveView.TimerActivated = false;
