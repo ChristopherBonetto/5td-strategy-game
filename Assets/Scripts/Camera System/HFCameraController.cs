@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class HFCameraController : MonoBehaviour
 {
     private Camera m_cam;
     private Transform m_transform;
@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour
     private float m_ActualMouseYValue;
     public float ActualMouseYValue => m_ActualMouseYValue;
 
-    public const float X_MIN_ANGLE = 10.0f;
+    public const float X_MIN_ANGLE = 20.0f;
     public const float X_MAX_ANGLE = 50.0f;
 
 
@@ -108,6 +108,6 @@ public class CameraController : MonoBehaviour
     private void UpdateFielOfView()
     {
         m_cam.fieldOfView -= Input.mouseScrollDelta.y * ScrollSensitivity;
-        m_cam.fieldOfView = Mathf.Clamp(m_cam.fieldOfView, 50.0f, 70.0f);
+        m_cam.fieldOfView = Mathf.Clamp(m_cam.fieldOfView, 30.0f, 60.0f);
     }
 }

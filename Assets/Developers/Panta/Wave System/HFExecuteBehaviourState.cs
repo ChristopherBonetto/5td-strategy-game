@@ -15,9 +15,7 @@ public class HFExecuteBehaviourState : HFWaveControllerState
         if (mw.MinorWaveType == MinorWaveType.Single)
         {
             waveController.Controller.SpawnUnit(mw.UnitStatsData, waveController.SpawnPoints[mw.SpawnPoint]);
-
             waveController.MinorWaveIndex++;
-
             // Count ++ of the wave spawned.
         }
         else if (mw.MinorWaveType == MinorWaveType.Wait)
@@ -36,7 +34,10 @@ public class HFExecuteBehaviourState : HFWaveControllerState
 
             m_amountOfTroopSpawned++;
             if (m_amountOfTroopSpawned >= mw.AmountToSpawn)
+            {
+                m_amountOfTroopSpawned = 0;
                 waveController.MinorWaveIndex++;
+            }
         }
 
         waveController.CurrentState = CheckingTimeElapsed;

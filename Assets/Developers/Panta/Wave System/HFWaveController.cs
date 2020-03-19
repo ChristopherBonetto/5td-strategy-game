@@ -199,14 +199,15 @@ namespace HF.WaveSystem
             if (unit.Team != HFGameParameters.PlayerTeam)
             {
                 CountOfEnemyKilled++;
+                Debug.Log(CountOfEnemyKilled);
 
                 if (WaveCleared())
                 {
                     WaitForInput = true;
 
                     // Reset all count and index.
-                    CountOfEnemyKilled++;
-                    MinorWaveIndex++;
+                    CountOfEnemyKilled = 0;
+                    MinorWaveIndex = 0;
                     // Increment wave index.
                     WaveIndex++;
 
