@@ -52,7 +52,7 @@ public class HFUIManager : Singleton<HFUIManager>
             if (m_UIControls == null)
             {
                 m_UIControls = new Dictionary<UIControlID, HFUIControl>();
-
+#if UNITY_EDITOR
                 // I have to force the subscribes of the UI Controls
                 // Event invoked from Game manager can cause a null reference 
                 // because windows aren't subscribed yet.
@@ -72,6 +72,7 @@ public class HFUIManager : Singleton<HFUIManager>
                 // I store the last window enabled to allow the UI system run also in editor mode,
                 // but can help also in build mode.
                 LastUIControlActivated = UIControls[UIControlID.MainMenu];
+#endif
             }
             return m_UIControls;
         }
@@ -120,7 +121,6 @@ public class HFUIManager : Singleton<HFUIManager>
     }
 #endif
 
-
     #region UI Methods
     /// <summary>
     /// Add new UIControl
@@ -130,6 +130,8 @@ public class HFUIManager : Singleton<HFUIManager>
     {
         if (uiControl != null && !UIControls.ContainsKey(uiControl.Name))
             UIControls.Add(uiControl.Name, uiControl);
+
+        Debug.Log(uiControl.Name);
     }
 
     /// <summary>
@@ -220,23 +222,23 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnGameStateChange(GameStates inState)
     {
-        // Handle all game state variables.
-        switch (inState)
-        {
-            case GameStates.StartGame:
-                ShowAndHide(UIControlID.MainMenu, LastUIControlActivated);
-                break;
-            case GameStates.WarRoom:
-                ShowAndHide(UIControlID.LevelSelection, LastUIControlActivated);
-                break;
-            case GameStates.InitializeLevel:
-                ShowAndHide(UIControlID.InGameWindow, LastUIControlActivated);
-                break;
+        //// Handle all game state variables.
+        //switch (inState)
+        //{
+        //    case GameStates.StartGame:
+        //        ShowAndHide(UIControlID.MainMenu, LastUIControlActivated);
+        //        break;
+        //    case GameStates.WarRoom:
+        //        ShowAndHide(UIControlID.LevelSelection, LastUIControlActivated);
+        //        break;
+        //    case GameStates.InitializeLevel:
+        //        ShowAndHide(UIControlID.InGameWindow, LastUIControlActivated);
+        //        break;
 
-                // Put other conditions...
+        //        // Put other conditions...
 
-            default:
-                return;
-        }
+        //    default:
+        //        return;
+        //}
     }
 }

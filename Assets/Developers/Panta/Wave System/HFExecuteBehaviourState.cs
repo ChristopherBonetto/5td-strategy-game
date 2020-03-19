@@ -10,7 +10,7 @@ public class HFExecuteBehaviourState : HFWaveControllerState
 
     public override void Update(HFWaveController waveController)
     {
-        HFWave.MinorWave mw = waveController.GetCurrentMinorWave;
+        HFWaveModel.MinorWave mw = waveController.GetCurrentMinorWave;
 
         if (mw.MinorWaveType == MinorWaveType.Single)
         {

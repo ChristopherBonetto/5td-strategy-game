@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using HF.WaveSystem;
 
-[CustomEditor(typeof(HFWavesCollector))]
+[CustomEditor(typeof(HFWavesCollection))]
 [CanEditMultipleObjects]
 public class HFWavesCollectorEditor : Editor
 {

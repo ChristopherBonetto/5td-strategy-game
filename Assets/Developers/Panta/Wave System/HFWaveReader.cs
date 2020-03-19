@@ -11,7 +11,7 @@ namespace HF.WaveSystem
         /// </summary>
         /// <param name="wave"></param>
         /// <returns></returns>
-        public static int GetNumberOfWaves(HFWave wave)
+        public static int GetNumberOfWaves(HFWaveModel wave)
         {
             int n = 0;
 
@@ -29,7 +29,7 @@ namespace HF.WaveSystem
         /// </summary>
         /// <param name="wave"></param>
         /// <returns></returns>
-        public static int GetNumberOfEnemiesInTheWave(HFWave wave)
+        public static int GetNumberOfEnemiesInTheWave(HFWaveModel wave)
         {
             int n = 0;
 

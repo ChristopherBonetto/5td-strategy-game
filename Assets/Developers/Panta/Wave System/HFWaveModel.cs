@@ -21,7 +21,7 @@ namespace HF.WaveSystem
     }
 
     [CreateAssetMenu(fileName = "L_00_Wave_00", menuName = "Human Factor/Wave/New Wave")]
-    public class HFWave : ScriptableObject
+    public class HFWaveModel : ScriptableObject
     {
         /// <summary>
         /// Collection of minor wave.

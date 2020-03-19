@@ -4,20 +4,20 @@ using UnityEngine;
 using UnityEditor;
 using HF.WaveSystem;
 
-[CustomEditor(typeof(HFWave))]
+[CustomEditor(typeof(HFWaveModel))]
 public class HFWaveEditor : Editor
 {
-    HFWave m_target;
+    HFWaveModel m_target;
     SerializedProperty m_list;
-    List<HFWave.MinorWave> m_typedList;
+    List<HFWaveModel.MinorWave> m_typedList;
 
     void OnEnable()
     {
-        HFWave m_target = (HFWave)target;
+        HFWaveModel m_target = (HFWaveModel)target;
 
         // Null check
         if (m_target.MinorWavesCollection == null)
-            m_target.MinorWavesCollection = new List<HFWave.MinorWave>();
+            m_target.MinorWavesCollection = new List<HFWaveModel.MinorWave>();
 
         m_typedList = m_target.MinorWavesCollection;
         m_list = serializedObject.FindProperty("MinorWavesCollection");
@@ -107,7 +107,7 @@ public class HFWaveEditor : Editor
 
         if (GUILayout.Button("Add New Behaviour"))
         {
-            m_typedList.Add(new HFWave.MinorWave());
+            m_typedList.Add(new HFWaveModel.MinorWave());
         }
 
         serializedObject.ApplyModifiedProperties();

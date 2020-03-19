@@ -1,0 +1,64 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class HFWaveInfoUIElement : MonoBehaviour
+{
+    [SerializeField]
+    private Text m_waveInfo;
+
+    private bool m_enableTimer;
+    private float m_lastTimeRecorded;
+
+    [SerializeField]
+    private Text m_timeElapsed;
+
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo(HFEventID.OnWaveEnd, OnWaveEnd);
+        HFEventManager.SubscribeTo(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
+        HFEventManager.SubscribeTo<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
+    }
+
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveEnd, OnWaveEnd);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
+        HFEventManager.UnsubscribeFrom<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
+    }
+
+    private void Update()
+    {
+        if (m_enableTimer)
+            ExecuteTimer();
+    }
+
+    private void ExecuteTimer()
+    {
+        int minutes = (int)Time.time / 60;
+        int seconds = (int)Time.time % 60;
+        m_timeElapsed.text = $"{minutes} : {seconds}";
+    }
+
+    private void OnWaveIndexUpdate(int currentWave, int totalWave)
+    {
+        m_waveInfo.text = $"{currentWave} / {totalWave}";
+    }
+
+    private void OnEnemyKilled()
+    {
+        // Feature...
+        // Support enemy count
+    }
+
+    private void OnNewWaveBegin()
+    {
+        m_enableTimer = true;
+    }
+
+    private void OnWaveEnd()
+    {
+        m_enableTimer = false;
+    }
+}

@@ -213,22 +213,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Castle
       objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_baseStats
-      value: 
-      objectReference: {fileID: 11400000, guid: 02733e4323045284e8c801bcc2e334a6,
-        type: 2}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6586665596188115619, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -300,6 +284,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5933523151122703823, guid: 778277acafb7a9c42b0521530e7c4155,
         type: 3}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_baseStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 02733e4323045284e8c801bcc2e334a6,
+        type: 2}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ed914895fe79ae46b106e7f590ade19, type: 3}
 --- !u!1 &113025360
@@ -1111,7 +1111,7 @@ GameObject:
   - component: {fileID: 1098709330}
   - component: {fileID: 1098709329}
   m_Layer: 0
-  m_Name: WavesLevel
+  m_Name: Wave Controller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1129,12 +1129,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ce9f210e9ff2374ba3c5842a436bb16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 1884967832}
   m_SpawnPoints:
   - {fileID: 567958968}
   - {fileID: 1629366486}
   - {fileID: 353330513}
   - {fileID: 483310210}
-  Controller: {fileID: 1884967832}
 --- !u!4 &1098709330
 Transform:
   m_ObjectHideFlags: 0
@@ -1446,22 +1446,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: CastleAI
       objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_baseStats
-      value: 
-      objectReference: {fileID: 11400000, guid: 02733e4323045284e8c801bcc2e334a6,
-        type: 2}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6586665596188115619, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1533,6 +1517,22 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5933523151122703823, guid: 778277acafb7a9c42b0521530e7c4155,
         type: 3}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_baseStats
+      value: 
+      objectReference: {fileID: 11400000, guid: 02733e4323045284e8c801bcc2e334a6,
+        type: 2}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ed914895fe79ae46b106e7f590ade19, type: 3}
 --- !u!1 &1604490896
@@ -1969,22 +1969,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Turret
       objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_baseStats
-      value: 
-      objectReference: {fileID: 11400000, guid: de18a4da181857043827658d046683da,
-        type: 2}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6586665596188115619, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2040,6 +2024,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3070083877907318289, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8245893083629340642, guid: 7247b538840fd134b9652e5d9bb4bc67,
+        type: 3}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_baseStats
+      value: 
+      objectReference: {fileID: 11400000, guid: de18a4da181857043827658d046683da,
+        type: 2}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7098128706294640185, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2055,12 +2061,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3070083877907318289, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -8245893083629340642, guid: 7247b538840fd134b9652e5d9bb4bc67,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ed914895fe79ae46b106e7f590ade19, type: 3}
 --- !u!1 &1884967831
@@ -2182,22 +2182,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Turret (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_baseStats
-      value: 
-      objectReference: {fileID: 11400000, guid: de18a4da181857043827658d046683da,
-        type: 2}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6586665596188115619, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2253,6 +2237,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3070083877907318289, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8245893083629340642, guid: 7247b538840fd134b9652e5d9bb4bc67,
+        type: 3}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_baseStats
+      value: 
+      objectReference: {fileID: 11400000, guid: de18a4da181857043827658d046683da,
+        type: 2}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7098128706294640185, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2268,12 +2274,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3070083877907318289, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -8245893083629340642, guid: 7247b538840fd134b9652e5d9bb4bc67,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ed914895fe79ae46b106e7f590ade19, type: 3}
 --- !u!1 &1974381262
@@ -2333,22 +2333,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Turret (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_baseStats
-      value: 
-      objectReference: {fileID: 11400000, guid: de18a4da181857043827658d046683da,
-        type: 2}
-    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_upgrades.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6586665596188115619, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2404,6 +2388,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3070083877907318289, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -8245893083629340642, guid: 7247b538840fd134b9652e5d9bb4bc67,
+        type: 3}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_baseStats
+      value: 
+      objectReference: {fileID: 11400000, guid: de18a4da181857043827658d046683da,
+        type: 2}
+    - target: {fileID: 6586665596188115620, guid: 2ed914895fe79ae46b106e7f590ade19,
+        type: 3}
+      propertyPath: m_upgrades.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7098128706294640185, guid: 2ed914895fe79ae46b106e7f590ade19,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -2419,12 +2425,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 3070083877907318289, guid: 2ed914895fe79ae46b106e7f590ade19,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -8245893083629340642, guid: 7247b538840fd134b9652e5d9bb4bc67,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ed914895fe79ae46b106e7f590ade19, type: 3}
 --- !u!1 &2016887205

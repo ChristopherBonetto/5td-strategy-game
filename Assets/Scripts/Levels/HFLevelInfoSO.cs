@@ -10,8 +10,8 @@ public class HFLevelInfoSO : ScriptableObject
     [SerializeField] private string m_levelName;
     public string LevelName { get => m_levelName;}
 
-    [SerializeField] private HFWavesCollector m_levelWavesInfo;
-    public HFWavesCollector LevelWavesInfo { get => m_levelWavesInfo; }
+    [SerializeField] private HFWavesCollection m_levelWavesInfo;
+    public HFWavesCollection LevelWavesInfo { get => m_levelWavesInfo; }
     
 
     [TextArea] public string m_levelDescription;

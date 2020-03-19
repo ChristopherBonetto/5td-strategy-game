@@ -5,138 +5,122 @@ using UnityEngine.UI;
 
 namespace HF.WaveSystem
 {
-    [RequireComponent(typeof(HFWaveView))]
     public class HFWaveController : MonoBehaviour
     {
-        #region Serializefield
-        [SerializeField]
-        private List<HFSpawnPoint> m_SpawnPoints;
+        //----------------------------------------------
+        // The wave collection has stored the waves.
+        // Waves have a sequence  of behaviour that the
+        // state machine perform.
+        //----------------------------------------------
+
+        private HFWavesCollection m_WaveCollection;
+        public HFWavesCollection WaveCollection { get { return m_WaveCollection; } }
 
         public HFController Controller;
-        #endregion
 
-        /// <summary>
-        /// Level's spawn points ordered from inspector.
-        /// The ordered declare the spawn point ID.
-        /// </summary>
+
+        //----------------------------------------------
+        // Wave controller in order to run, it needs the 
+        // reference to spawn points (of the enemies unity).
+        // A state machine manage the behaviour of the wave
+        // that can be: Signle, wait, bulk. 
+        /// <see cref="HFWaveControllerState"/>.
+        //----------------------------------------------
+
+        [SerializeField]
+        private List<HFSpawnPoint> m_SpawnPoints;
         public List<HFSpawnPoint> SpawnPoints => m_SpawnPoints;
 
+        private HFWaveControllerState m_CurrentState;
+        public HFWaveControllerState CurrentState
+        {
+            get { return m_CurrentState; }
+            set { m_CurrentState = value; }
+        }
 
-        /// <summary>
-        /// Curernt state of wave controller flow.
-        /// </summary>
-        public HFWaveControllerState CurrentState { get; set; }
+        private bool m_WaitForInput;
+        public bool WaitForInput 
+        { 
+            get { return m_WaitForInput; }
+            set { m_WaitForInput = value; }
+        }
 
 
-        /// <summary>
-        /// is it waiting for player input?
-        /// </summary>
-        public bool WaitForInput { get; private set; }
+        //----------------------------------------------
+        // Indexes take care about the position of the 
+        // wave behaviour sequence.
+        // Also the wave controller has a count of enemies
+        // killed.
+        //----------------------------------------------
 
-        #region Wave's management variables
-
-        /// <summary>
-        /// Collection of all level's waves.
-        /// It's only to read purpose.
-        /// </summary>
-        public HFWavesCollector WaveCollector { get; set; }
-
+        #region Count and indexes
 
         private int m_WaveIndex = 0;
-        /// <summary>
-        /// Current index of the wave.
-        /// </summary>
         public int WaveIndex
         {
             get { return m_WaveIndex; }
             set { m_WaveIndex = value; }
         }
 
-
         private int m_MinorWaveIndex;
-        /// <summary>
-        /// Current index of the minor wave.
-        /// </summary>
         public int MinorWaveIndex
         {
             get { return m_MinorWaveIndex; }
-            set { m_MinorWaveIndex = value; }
+            set 
+            { 
+                m_MinorWaveIndex = value; 
+                // Update the view
+            }
         }
 
-
-        /// <summary>
-        /// Get number of waves
-        /// </summary>
-        public List<HFWave> GetWaves => WaveCollector.WavesCollection;
-
-
-        /// <summary>
-        /// Get current wave.
-        /// </summary>
-        public HFWave GetCurrentWave => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)];
-
-
-        /// <summary>
-        /// Get number of minor waves of the current wave
-        /// </summary>
-        public List<HFWave.MinorWave> GetMinorWaves => GetWaves[Mathf.Clamp(m_WaveIndex, 0, GetWaves.Count - 1)].MinorWavesCollection;
-
-
-        /// <summary>
-        /// Get Current minor wave.
-        /// </summary>
-        public HFWave.MinorWave GetCurrentMinorWave => GetCurrentWave.MinorWavesCollection[MinorWaveIndex];
-
-
-        /// <summary>
-        /// Get number of all enemies in the current wave.
-        /// </summary>
-        public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);    // Do that every wave refresh.
-
-
-        private int m_CountOfEnemiesKilled;
-        /// <summary>
-        /// Count of enemies killed.
-        /// </summary>
+        private int m_CountOfEnemyKilled;
         public int CountOfEnemyKilled
         {
-            get { return m_CountOfEnemiesKilled; }
-            set { m_CountOfEnemiesKilled = value; }
+            get { return m_CountOfEnemyKilled; }
+            set { m_CountOfEnemyKilled = value; }
         }
 
         #endregion
 
-        private HFWaveView m_waveView;
+        //----------------------------------------------
+        // Some usefull properties.
+        //----------------------------------------------
+
+        #region Utils
+
+        public List<HFWaveModel> GetWaves => WaveCollection.WavesCollection;
+        public HFWaveModel GetCurrentWave => GetWaves[Mathf.Min(WaveIndex, GetWaves.Count - 1)];
+
+        public List<HFWaveModel.MinorWave> GetMinorWaves => GetWaves[Mathf.Min(WaveIndex, GetWaves.Count - 1)].MinorWavesCollection;
+        public HFWaveModel.MinorWave GetCurrentMinorWave => GetCurrentWave.MinorWavesCollection[m_MinorWaveIndex];
+
+        public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);
+
+        #endregion
 
         #region Monobehaviour cycle
 
-        private void Awake()
-        {
-            m_waveView = GetComponent<HFWaveView>();
-            if (m_waveView == null) m_waveView = gameObject.AddComponent<HFWaveView>();
-        }
-
         private void OnEnable()
         {
-            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
-            HFEventManager.SubscribeTo(HFEventID.OnCallNextWave, OnCallNextWave);
+            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
+            HFEventManager.SubscribeTo(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
+            HFEventManager.SubscribeTo(HFEventID.OnWaveEnd, OnWaveEnd);
         }
 
         private void OnDisable()
         {
-            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnEnemyKilled);
-            HFEventManager.UnsubscribeFrom(HFEventID.OnCallNextWave, OnCallNextWave);
+            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
+            HFEventManager.UnsubscribeFrom(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
+            HFEventManager.UnsubscribeFrom(HFEventID.OnWaveEnd, OnWaveEnd);
         }
 
         private void Start()
         {
-            Init();
+            if (HFUIManager.Instance != null) Debug.Log("");
 
-			// Update view.
-			m_waveView.Init();
-            m_waveView.UpdateWaveInfo(1, GetWaves.Count);
-            m_waveView.EnableButtonToCallnextWave(true);
-            m_waveView.TimerActivated = false;
+            Initialize();
+
+            HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
         }
 
         private void Update()
@@ -148,96 +132,91 @@ namespace HF.WaveSystem
 
         #endregion
 
-        private void Init()
+        private void Initialize()
         {
-            WaitForInput = true;
+            // Don't trigger the event.
+            m_WaitForInput = true;
 
-            CurrentState = HFWaveControllerState.CheckingTimeElapsed;
-            WaveIndex = 0;
-            MinorWaveIndex = 0;
+            CurrentState = new HFCheckTimeElapsedState();
 
-            // Try to get wave collector.
+
             HFScenesManager sm = HFScenesManager.Instance;
-            if (sm.CurrentLevelSelected != null &&
-                sm.CurrentLevelSelected.LevelWavesInfo != null)
-                WaveCollector = sm.CurrentLevelSelected.LevelWavesInfo;
+            if (sm.CurrentLevelSelected != null && sm.CurrentLevelSelected.LevelWavesInfo != null)
+                m_WaveCollection = sm.CurrentLevelSelected.LevelWavesInfo;
             // If there isn't, get a ddefault one.
             else
             {
                 Debug.LogWarning($"There isn't a WaveCollection assets to level {sm.CurrentLevelSelected}" +
                     $"I give a default one");
-                WaveCollector = sm.LevelContainer.Levels[0].LevelWavesInfo;
+                m_WaveCollection = sm.LevelContainer.Levels[0].LevelWavesInfo;
             }
+
+            ResetAllCounts();
         }
 
-        /// <summary>
-        /// Check if the level is cleared.
-        /// This check is evaluated every time the wave is cleared.
-        /// </summary>
-        /// <returns></returns>
+
         public bool LevelCleared()
         {
             return WaveIndex > GetWaves.Count - 1;
         }
 
-        /// <summary>
-        /// check if the wave is cleared.
-        /// This check is evaluated every kill confirmed.
-        /// </summary>
-        /// <returns></returns>
         public bool WaveCleared()
         {
             return CountOfEnemyKilled >= GetTotalEnemiesOfTheWave;
         }
 
-        /// <summary>
-        /// Invoke from event when a enemy troop is killed.
-        /// </summary>
-        public void OnEnemyKilled(HFUnit unit)
+
+        public void OnUnitDeath(HFUnit unit)
         {
             // Is it an enemy?
             if (unit.Team != HFGameParameters.PlayerTeam)
             {
                 CountOfEnemyKilled++;
-                Debug.Log(CountOfEnemyKilled);
 
                 if (WaveCleared())
                 {
-                    WaitForInput = true;
-
-                    // Reset all count and index.
-                    CountOfEnemyKilled = 0;
-                    MinorWaveIndex = 0;
-                    // Increment wave index.
-                    WaveIndex++;
+                    HFEventManager.TriggerEvent(HFEventID.OnWaveEnd);
 
                     if (LevelCleared())
                     {
                         //Set the game in win condition.
                         HFScenesManager.Instance.EndCurrentLevel(true);
                     }
-                    else
-                    {
-                        m_waveView.EnableButtonToCallnextWave(true);
-                        m_waveView.TimerActivated = false;
-                    }
                 }
             }
         }
 
-        /// <summary>
-        /// Called when OnCallNextWave event is triggered.
-        /// </summary>
-        private void OnCallNextWave()
+        public void ResetAllCounts()
         {
-            if (WaitForInput)
-            {
-                WaitForInput = false;
-                m_waveView.EnableButtonToCallnextWave(false);
-                m_waveView.UpdateWaveInfo(Mathf.Min(WaveIndex + 1, GetWaves.Count), GetWaves.Count);
-                m_waveView.SetEnemiesInfo(GetCurrentWave);
-                m_waveView.TimerActivated = true;
-            }
+            WaveIndex = 0;
+            MinorWaveIndex = 0;
+            CountOfEnemyKilled = 0;
         }
+
+        #region Events
+
+        private void OnNewWaveBegin()
+        {
+            // This check is used to do not 
+            // increment index at the start.
+            if (WaveCleared())
+            {
+                WaveIndex++;
+            }
+
+            HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Max(m_WaveIndex, 1), GetWaves.Count);
+
+            CountOfEnemyKilled = 0;
+            MinorWaveIndex = 0;
+
+            WaitForInput = false;
+        }
+
+        private void OnWaveEnd()
+        {
+            WaitForInput = true;
+        }
+
+        #endregion
     }
 }
