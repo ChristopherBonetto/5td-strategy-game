@@ -11,29 +11,36 @@ public class HFCameraController : MonoBehaviour
 
     [SerializeField]
     private Transform m_Target;
-    public Transform Target => m_Target;
+
+    [SerializeField]
+    private float m_CameraMovementSpeed;
 
     [SerializeField]
 	private float m_DistanceFromTarget = 10.0f;
-    public float DistanceFromTarget => m_DistanceFromTarget;
+
+    [SerializeField]
+    private Collider m_Bounds;
+
 
     [Header("Mouse variables")]
 
     [SerializeField]
     private float m_SensitivityOnXAngle = 1.0f;
-    public float SensitivityOnXAngle => m_SensitivityOnXAngle;
 
     [SerializeField]
     private float m_SensitivityOnYAngle = 0.1f;
-    public float SensitivityOnYAngle => m_SensitivityOnYAngle;
 
-    [SerializeField]
+    [SerializeField, Range(0.05f, 1)]
     private float m_AngularFriction = 0.1f;
-    public float AngularFriction => m_AngularFriction;
 
     [SerializeField]
     private float m_ScrollSensitivity;
-    public float ScrollSensitivity => m_ScrollSensitivity;
+
+    [SerializeField]
+    private float m_ScrollSpeed;
+
+    private float m_ActualMouseScrollValue;
+
 
 
     //------------------------------------------------
@@ -48,16 +55,10 @@ public class HFCameraController : MonoBehaviour
     //------------------------------------------------
 
     private float m_CurrentAngleY;
-    public float CurrentAngleY => m_CurrentAngleY;
-
     private float m_CurrentAngleX;
-    public float CurrentAngleX => m_CurrentAngleX;
 
     private float m_ActualMouseXValue;
-    public float ActualMouseXValue => m_ActualMouseXValue;
-
     private float m_ActualMouseYValue;
-    public float ActualMouseYValue => m_ActualMouseYValue;
 
     public const float X_MIN_ANGLE = 20.0f;
     public const float X_MAX_ANGLE = 50.0f;
@@ -68,46 +69,87 @@ public class HFCameraController : MonoBehaviour
     {
         m_transform = transform;
         m_cam = Camera.main;
+        m_ActualMouseScrollValue = m_cam.fieldOfView;
     }
 
     private void Update()
     {
         Rotate();
         UpdateFielOfView();
+        MoveTarget();
     }
 
     private void LateUpdate()
     {
-        Vector3 direction = new Vector3(0, 0, -DistanceFromTarget);
-        Quaternion rotation = Quaternion.Euler(CurrentAngleX, CurrentAngleY, 0);
-        m_transform.position = Target.position + rotation * direction;
-        m_transform.LookAt(Target);
+        Vector3 direction = new Vector3(0, 0, -m_DistanceFromTarget);
+        Quaternion rotation = Quaternion.Euler(m_CurrentAngleX, m_CurrentAngleY, 0);
+        m_transform.position = m_Target.position + rotation * direction;
+        m_transform.LookAt(m_Target);
+
+        m_cam.fieldOfView = Mathf.Lerp(m_cam.fieldOfView, m_ActualMouseScrollValue, Time.deltaTime * m_ScrollSpeed);
     }
 
     private void Rotate()
     {
-        if (Input.GetMouseButton(1))
+        // GetMouseButton(2) = click on scroll wheel
+        if (Input.GetMouseButton(2))
         {
-            m_ActualMouseXValue = Input.GetAxis("Mouse X");
-            m_ActualMouseYValue -= Input.GetAxis("Mouse Y");
+            m_ActualMouseXValue = Input.GetAxis("Mouse X") * m_SensitivityOnXAngle;
+            m_ActualMouseYValue = -Input.GetAxis("Mouse Y") * m_SensitivityOnXAngle;
         }
-        else if (!Input.GetMouseButton(1))
+        // GetMouseButton(2) = click on scroll wheel
+        else if (!Input.GetMouseButton(2))
         {
-            if (ActualMouseXValue != 0 || ActualMouseYValue != 0)
+            if (m_ActualMouseXValue != 0 || m_ActualMouseYValue != 0)
             {
-                m_ActualMouseXValue -= (m_ActualMouseXValue * AngularFriction);
-                m_ActualMouseYValue -= (m_ActualMouseYValue * AngularFriction);
+                m_ActualMouseXValue -= (m_ActualMouseXValue * m_AngularFriction);
+                m_ActualMouseYValue -= (m_ActualMouseYValue * m_AngularFriction);
             }
         }
 
-        m_CurrentAngleX += m_ActualMouseYValue * SensitivityOnXAngle;
-        m_CurrentAngleY += m_ActualMouseXValue * SensitivityOnYAngle;
+        m_CurrentAngleX += m_ActualMouseYValue;
+        m_CurrentAngleY += m_ActualMouseXValue;
+
         m_CurrentAngleX = Mathf.Clamp(m_CurrentAngleX, X_MIN_ANGLE, X_MAX_ANGLE);
     }
 
     private void UpdateFielOfView()
     {
-        m_cam.fieldOfView -= Input.mouseScrollDelta.y * ScrollSensitivity;
-        m_cam.fieldOfView = Mathf.Clamp(m_cam.fieldOfView, 30.0f, 60.0f);
+        m_ActualMouseScrollValue += -Input.GetAxis("Mouse ScrollWheel") * m_ScrollSensitivity;
+        m_ActualMouseScrollValue = Mathf.Clamp(m_ActualMouseScrollValue, 30.0f, 60.0f);
+    }
+
+    private void MoveTarget()
+    {
+        var x = Input.GetAxis("Horizontal");
+        var z = Input.GetAxis("Vertical");
+
+
+        if (x != 0 || z != 0)
+        {
+            Vector3 forwardDir = (m_Target.position - m_transform.position).normalized;
+            forwardDir.y = 0;
+
+            float speedOnX = x * m_CameraMovementSpeed * Time.deltaTime;
+            float speedOnZ = z * m_CameraMovementSpeed * Time.deltaTime;
+
+            Vector3 origin = m_Bounds.bounds.center;
+            float minBoundOnX = origin.x - m_Bounds.bounds.extents.x;
+            float maxBoundOnX = origin.x + m_Bounds.bounds.extents.x;
+            float minBoundOnZ = origin.z - m_Bounds.bounds.extents.z;
+            float maxBoundOnZ = origin.z + m_Bounds.bounds.extents.z;
+
+            if (speedOnX > 0 && m_Target.position.x < maxBoundOnX)
+                m_Target.position += m_transform.right * speedOnX;
+
+            if (speedOnX < 0 && m_Target.position.x > minBoundOnX)
+                m_Target.position += m_transform.right * speedOnX;
+
+            if (speedOnZ > 0 && m_Target.position.z < maxBoundOnZ)
+                m_Target.position += forwardDir * speedOnZ;
+
+            if (speedOnZ < 0 && m_Target.position.z > minBoundOnZ)
+                m_Target.position += forwardDir * speedOnZ;
+        }
     }
 }
