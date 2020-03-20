@@ -59,6 +59,7 @@ public class HFInGameWindow : HFUIControl
 
     public void ReturnToLevelSelection()
     {
+        HFGameManager.Instance.ChangeGMState(GameStates.Pause);
         HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
         HFScenesManager.Instance.LoadSceneFromIndex(1);
     }

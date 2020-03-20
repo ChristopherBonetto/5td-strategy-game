@@ -43,7 +43,7 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     private void OnWaveIndexUpdate(int currentWave, int totalWave)
     {
-        m_waveInfo.text = $"{currentWave} / {totalWave}";
+        m_waveInfo.text = $"Wave: {currentWave} / {totalWave}";
     }
 
     private void OnEnemyKilled()

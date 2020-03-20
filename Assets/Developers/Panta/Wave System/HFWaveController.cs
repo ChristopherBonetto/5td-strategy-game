@@ -62,6 +62,8 @@ namespace HF.WaveSystem
             set 
             {
                 m_WaveIndex = value;
+
+                // Update the view.
                 HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Max(WaveIndex + 1, 1), GetWaves.Count);
             }
         }
@@ -218,6 +220,9 @@ namespace HF.WaveSystem
         private void OnWaveEnd()
         {
             WaveIndex++;
+
+            // Check if the level is cleared.
+            // if it is, trigger the end level.
 
             if (LevelCleared())
             {
