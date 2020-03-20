@@ -99,6 +99,22 @@ namespace HF
 
 		private Vector3 m_lastPosition;
 
+		/*** Soldiers */
+
+		private List<HFSoldier> m_soldiers = new List<HFSoldier>();
+
+		private int m_activeSoldiersCount;
+
+		private float m_respawnTimer;
+
+		private bool m_needsRespawn;
+
+		/*** Carry */
+
+		private HFUnit m_carriedTower;
+
+		private bool m_isCarried;
+
 		/*** Attack */
 
 		[Space]
@@ -128,6 +144,10 @@ namespace HF
 
 		private bool m_isSelected;
 
+		/*** IHFTargetable interface */
+
+		public Vector3 Position => m_transform.position.SnapLocation();
+
 		/*** IHFDamageable interface */
 
 		/// <summary>
@@ -154,10 +174,6 @@ namespace HF
 		/// Killed flag
 		/// </summary>
 		public bool IsKilled { get; protected set; }
-
-		/*** IHFTargetable interface */
-
-		public Vector3 Position => m_transform.position.SnapLocation();
 
 		#endregion
 
@@ -224,6 +240,16 @@ namespace HF
 			else if (m_currentCommand != null)
 			{
 				m_currentCommand.Perform(this);
+			}
+
+			// #TEMP soldiers
+			if (m_needsRespawn && Team == HFGameParameters.PlayerTeam) //&& !isClashing
+			{
+				m_respawnTimer += Time.deltaTime;
+				if (m_respawnTimer >= m_stats[HFStatistics.SoldierRespawnDelay])
+				{
+					RespawnSoldier();
+				}
 			}
 		}
 
@@ -724,6 +750,115 @@ namespace HF
 
 		#endregion
 
+		#region Soldiers
+
+		public void SpawnUnits()
+		{
+			GameObject m_soldierPrefab = m_visuals.gameObject;
+
+			int soldierCount = (int)m_stats[HFStatistics.SoldiersPerUnit];
+			float tileSize = HFGameParameters.TileSize;
+
+			HFSoldier newSoldier;
+			Vector3 spawnPosition = m_transform.position;
+			spawnPosition.x = m_transform.position.x - tileSize * 0.25f;
+			for (int i = 0; i < 2; i++)
+			{
+				spawnPosition.x += tileSize * 0.5f * i;
+				spawnPosition.y = 0f;
+				spawnPosition.z = m_transform.position.z - tileSize * 0.25f;
+				for (int j = 0; j < Mathf.RoundToInt(soldierCount / 2); j++)
+				{
+					// Spawn if less than limit and not already active in that position
+					if (m_soldiers.Count < soldierCount && j * (i + 1) >= m_activeSoldiersCount)
+					{
+						spawnPosition.z += 1f / (soldierCount / 2f) * j;
+						newSoldier = Instantiate(m_soldierPrefab, spawnPosition, Quaternion.identity, m_transform).AddComponent<HFSoldier>();
+						m_soldiers.Add(newSoldier);
+					}
+				}
+			}
+		}
+
+		private void RespawnSoldier()
+		{
+			bool bContinueRespawn = false;
+
+			for (int i = 0; i < m_soldiers.Count; i++)
+			{
+				if (!m_soldiers[i].gameObject.activeSelf)
+				{
+					m_soldiers[i].gameObject.SetActive(true);
+					break;
+				}
+			}
+			for (int i = 0; i < m_soldiers.Count; i++)
+			{
+				if (!m_soldiers[i].gameObject.activeSelf)
+				{
+					bContinueRespawn = true;
+					break;
+				}
+			}
+
+			m_respawnTimer = 0f;
+			m_needsRespawn = bContinueRespawn;
+		}
+
+		#endregion
+
+		#region Carry
+
+		private bool CanCarry()
+		{
+			return (m_carriedTower == null
+				&& UnitType == HFUnitType.Unit
+				&& m_stats[HFStatistics.CarryCapacity] > 0f
+				);
+		}
+
+		public bool CanBeCarried()
+		{
+			return (!m_isCarried
+				&& UnitType == HFUnitType.Turret
+				&& m_stats[HFStatistics.Weight] > 0f
+			);
+		}
+
+		public void SetCarried(bool bInIsCarried)
+		{
+			m_isCarried = bInIsCarried;
+		}
+
+		public bool TryCarry(HFUnit tower)
+		{
+			bool bCanCarry = (tower
+				&& tower.CanBeCarried()
+				&& CanCarry()
+				&& m_stats[HFStatistics.CarryCapacity] >= tower.GetStat(HFStatistics.Weight)
+			); //!IsClashing
+
+			if (bCanCarry)
+			{
+				m_carriedTower = tower;
+				m_carriedTower.SetCarried(true);
+			}
+			return bCanCarry;
+		}
+
+		public bool Drop()
+		{
+			bool bCanDrop = (m_carriedTower != null); //!targetTile.HasTower
+			if (bCanDrop)
+			{
+				m_carriedTower.SetCarried(false);
+				m_carriedTower = null;
+			}
+			return bCanDrop;
+		}
+
+		#endregion
+
 		#region Attack
 
 		public bool FindNewTarget()
@@ -894,31 +1029,6 @@ namespace HF
 
 		#endregion
 
-		#region Target
-
-		public bool TryInteraction(HFUnit otherUnit)
-		{
-			Debug.Log(gameObject.name + " interacts with " + otherUnit.gameObject.name);
-
-			if (otherUnit != this && otherUnit.Team != Team)
-			{
-				// #TEMP
-				//MeleeAttack(otherUnit);
-				AddCommand(otherUnit.GetDefaultInteraction());
-			}
-
-			ActionComplete(true);
-			return true;
-		}
-
-		public IHFCommand GetDefaultInteraction()
-		{
-			Debug.Log(gameObject.name + " returns interaction at " + Position.ToString());
-			return new HFMoveCommand(Position);
-		}
-
-		#endregion
-
 		#region Selection
 
 		public void Select()
@@ -943,6 +1053,31 @@ namespace HF
 					renderer.material = m_unselectedMaterial;
 				}
 			}
+		}
+
+		#endregion
+
+		#region IHFTargetable interface
+
+		public bool TryInteraction(HFUnit otherUnit)
+		{
+			Debug.Log(gameObject.name + " interacts with " + otherUnit.gameObject.name);
+
+			if (otherUnit != this && otherUnit.Team != Team)
+			{
+				// #TEMP
+				//MeleeAttack(otherUnit);
+				AddCommand(otherUnit.GetDefaultInteraction());
+			}
+
+			ActionComplete(true);
+			return true;
+		}
+
+		public IHFCommand GetDefaultInteraction()
+		{
+			Debug.Log(gameObject.name + " returns interaction at " + Position.ToString());
+			return new HFMoveCommand(Position);
 		}
 
 		#endregion

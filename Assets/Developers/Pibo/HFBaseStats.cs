@@ -25,6 +25,8 @@ public enum HFStatistics
 	ShootAngle = 10,
 	BulletSpeed = 11,
 	UnitRespawnDelay = 12,
+	SoldierRespawnDelay = 13,
+	SoldiersPerUnit = 14,
 
 
 	Name = 20,
