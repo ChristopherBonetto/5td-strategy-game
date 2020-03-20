@@ -1028,7 +1028,10 @@ namespace HF
 
 			// #TEMP
 			m_navAgent.enabled = false;
-			m_navObstacle.enabled = true;
+			if (UnitType != HFUnitType.Unit)
+			{
+				m_navObstacle.enabled = true;
+			}
 
 			// #TEMP
 			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
