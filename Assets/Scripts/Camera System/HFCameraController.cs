@@ -10,13 +10,13 @@ public class HFCameraController : MonoBehaviour
     [Header("Camera variables")]
 
     [SerializeField]
-    private Transform m_Target;
+    private Transform m_target;
 
     [SerializeField]
-    private float m_CameraMovementSpeed;
+    private float m_cameraMovementSpeed;
 
     [SerializeField]
-	private float m_DistanceFromTarget = 10.0f;
+	private float m_distanceFromTarget = 10.0f;
 
     [SerializeField]
     private Collider m_Bounds;
@@ -25,21 +25,20 @@ public class HFCameraController : MonoBehaviour
     [Header("Mouse variables")]
 
     [SerializeField]
-    private float m_SensitivityOnXAngle = 1.0f;
+    private float m_sensitivityOnXAngle = 1.0f;
 
     [SerializeField]
-    private float m_SensitivityOnYAngle = 0.1f;
+    private float m_sensitivityOnYAngle = 0.1f;
 
     [SerializeField, Range(0.05f, 1)]
-    private float m_AngularFriction = 0.1f;
+    private float m_angularFriction = 0.1f;
 
     [SerializeField]
-    private float m_ScrollSensitivity;
+    private float m_scrollSensitivity;
 
     [SerializeField]
-    private float m_ScrollSpeed;
-
-    private float m_ActualMouseScrollValue;
+    private float m_scrollSpeed;
+    private float m_actualMouseScrollValue;
 
 
 
@@ -54,11 +53,11 @@ public class HFCameraController : MonoBehaviour
     // Constant variables clamp the rotation on X axis.
     //------------------------------------------------
 
-    private float m_CurrentAngleY;
-    private float m_CurrentAngleX;
+    private float m_currentAngleY;
+    private float m_currentAngleX;
 
-    private float m_ActualMouseXValue;
-    private float m_ActualMouseYValue;
+    private float m_actualMouseXValue;
+    private float m_actualMouseYValue;
 
     public const float X_MIN_ANGLE = 20.0f;
     public const float X_MAX_ANGLE = 50.0f;
@@ -69,7 +68,7 @@ public class HFCameraController : MonoBehaviour
     {
         m_transform = transform;
         m_cam = Camera.main;
-        m_ActualMouseScrollValue = m_cam.fieldOfView;
+        m_actualMouseScrollValue = m_cam.fieldOfView;
     }
 
     private void Update()
@@ -81,12 +80,12 @@ public class HFCameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 direction = new Vector3(0, 0, -m_DistanceFromTarget);
-        Quaternion rotation = Quaternion.Euler(m_CurrentAngleX, m_CurrentAngleY, 0);
-        m_transform.position = m_Target.position + rotation * direction;
-        m_transform.LookAt(m_Target);
+        Vector3 direction = new Vector3(0, 0, -m_distanceFromTarget);
+        Quaternion rotation = Quaternion.Euler(m_currentAngleX, m_currentAngleY, 0);
+        m_transform.position = m_target.position + rotation * direction;
+        m_transform.LookAt(m_target);
 
-        m_cam.fieldOfView = Mathf.Lerp(m_cam.fieldOfView, m_ActualMouseScrollValue, Time.deltaTime * m_ScrollSpeed);
+        m_cam.fieldOfView = Mathf.Lerp(m_cam.fieldOfView, m_actualMouseScrollValue, Time.deltaTime * m_scrollSpeed);
     }
 
     private void Rotate()
@@ -94,29 +93,29 @@ public class HFCameraController : MonoBehaviour
         // GetMouseButton(2) = click on scroll wheel
         if (Input.GetMouseButton(2))
         {
-            m_ActualMouseXValue = Input.GetAxis("Mouse X") * m_SensitivityOnXAngle;
-            m_ActualMouseYValue = -Input.GetAxis("Mouse Y") * m_SensitivityOnXAngle;
+            m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
+            m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
         }
         // GetMouseButton(2) = click on scroll wheel
         else if (!Input.GetMouseButton(2))
         {
-            if (m_ActualMouseXValue != 0 || m_ActualMouseYValue != 0)
+            if (m_actualMouseXValue != 0 || m_actualMouseYValue != 0)
             {
-                m_ActualMouseXValue -= (m_ActualMouseXValue * m_AngularFriction);
-                m_ActualMouseYValue -= (m_ActualMouseYValue * m_AngularFriction);
+                m_actualMouseXValue -= (m_actualMouseXValue * m_angularFriction);
+                m_actualMouseYValue -= (m_actualMouseYValue * m_angularFriction);
             }
         }
 
-        m_CurrentAngleX += m_ActualMouseYValue;
-        m_CurrentAngleY += m_ActualMouseXValue;
+        m_currentAngleX += m_actualMouseYValue;
+        m_currentAngleY += m_actualMouseXValue;
 
-        m_CurrentAngleX = Mathf.Clamp(m_CurrentAngleX, X_MIN_ANGLE, X_MAX_ANGLE);
+        m_currentAngleX = Mathf.Clamp(m_currentAngleX, X_MIN_ANGLE, X_MAX_ANGLE);
     }
 
     private void UpdateFielOfView()
     {
-        m_ActualMouseScrollValue += -Input.GetAxis("Mouse ScrollWheel") * m_ScrollSensitivity;
-        m_ActualMouseScrollValue = Mathf.Clamp(m_ActualMouseScrollValue, 30.0f, 60.0f);
+        m_actualMouseScrollValue += -Input.GetAxis("Mouse ScrollWheel") * m_scrollSensitivity;
+        m_actualMouseScrollValue = Mathf.Clamp(m_actualMouseScrollValue, 30.0f, 60.0f);
     }
 
     private void MoveTarget()
@@ -127,11 +126,11 @@ public class HFCameraController : MonoBehaviour
 
         if (x != 0 || z != 0)
         {
-            Vector3 forwardDir = (m_Target.position - m_transform.position).normalized;
+            Vector3 forwardDir = (m_target.position - m_transform.position).normalized;
             forwardDir.y = 0;
 
-            float speedOnX = x * m_CameraMovementSpeed * Time.deltaTime;
-            float speedOnZ = z * m_CameraMovementSpeed * Time.deltaTime;
+            float speedOnX = x * m_cameraMovementSpeed * Time.deltaTime;
+            float speedOnZ = z * m_cameraMovementSpeed * Time.deltaTime;
 
             Vector3 origin = m_Bounds.bounds.center;
             float minBoundOnX = origin.x - m_Bounds.bounds.extents.x;
@@ -139,17 +138,11 @@ public class HFCameraController : MonoBehaviour
             float minBoundOnZ = origin.z - m_Bounds.bounds.extents.z;
             float maxBoundOnZ = origin.z + m_Bounds.bounds.extents.z;
 
-            if (speedOnX > 0 && m_Target.position.x < maxBoundOnX)
-                m_Target.position += m_transform.right * speedOnX;
+            m_target.position += forwardDir * speedOnZ + m_transform.right * speedOnX;
 
-            if (speedOnX < 0 && m_Target.position.x > minBoundOnX)
-                m_Target.position += m_transform.right * speedOnX;
-
-            if (speedOnZ > 0 && m_Target.position.z < maxBoundOnZ)
-                m_Target.position += forwardDir * speedOnZ;
-
-            if (speedOnZ < 0 && m_Target.position.z > minBoundOnZ)
-                m_Target.position += forwardDir * speedOnZ;
+            float clampOnX = Mathf.Clamp(m_target.position.x, minBoundOnX, maxBoundOnX);
+            float clampOnZ = Mathf.Clamp(m_target.position.z, minBoundOnZ, maxBoundOnZ);
+            m_target.position = new Vector3(clampOnX, m_target.position.y, clampOnZ);
         }
     }
 }
