@@ -9,8 +9,6 @@ namespace HF.WaveSystem
         /// <summary>
         /// Get numbers of "minor" wave that spawn enemies.
         /// </summary>
-        /// <param name="wave"></param>
-        /// <returns></returns>
         public static int GetNumberOfWaves(HFWaveModel wave)
         {
             int n = 0;
@@ -27,8 +25,6 @@ namespace HF.WaveSystem
         /// <summary>
         /// Get numbers of all enemies in the wave, (even if they are death).
         /// </summary>
-        /// <param name="wave"></param>
-        /// <returns></returns>
         public static int GetNumberOfEnemiesInTheWave(HFWaveModel wave)
         {
             int n = 0;

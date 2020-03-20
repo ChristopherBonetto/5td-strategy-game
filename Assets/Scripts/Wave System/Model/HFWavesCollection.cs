@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace HF.WaveSystem
 {
-    [CreateAssetMenu(fileName = "WaveCollect_L_00", menuName = "Human Factor/Wave/Collector")]
+    [CreateAssetMenu(fileName = "WaveCollect_L_00", menuName = "Human Factor/Wave/Collection")]
     public class HFWavesCollection : ScriptableObject
     {
 		[SerializeField]

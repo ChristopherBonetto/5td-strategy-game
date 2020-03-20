@@ -6,8 +6,11 @@ namespace HF.WaveSystem
 {
     public abstract class HFWaveControllerState
     {
+        //---------------------------------------------
         // Static instance of all states.
         // I don't need to create an instance of those.
+        //---------------------------------------------
+
         private static HFCheckTimeElapsedState m_CheckingTimeElapsed;
         public static HFCheckTimeElapsedState CheckingTimeElapsed
         { 
@@ -18,6 +21,7 @@ namespace HF.WaveSystem
                 return m_CheckingTimeElapsed;
             }
         }
+
         private static HFExecuteBehaviourState m_ExecutingBehaviour;
         public static HFExecuteBehaviourState ExecutingBehaviour
         {
