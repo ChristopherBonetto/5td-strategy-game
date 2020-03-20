@@ -59,7 +59,11 @@ namespace HF.WaveSystem
         public int WaveIndex
         {
             get { return m_WaveIndex; }
-            set { m_WaveIndex = value; }
+            set 
+            {
+                m_WaveIndex = value;
+                HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Max(WaveIndex + 1, 1), GetWaves.Count);
+            }
         }
 
         private int m_MinorWaveIndex;
@@ -176,16 +180,15 @@ namespace HF.WaveSystem
                 if (WaveCleared())
                 {
                     HFEventManager.TriggerEvent(HFEventID.OnWaveEnd);
-
-                    if (LevelCleared())
-                    {
-                        //Set the game in win condition.
-                        HFScenesManager.Instance.EndCurrentLevel(true);
-                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Reset waveIndex,
+        /// Minor wave index.
+        /// Count of enemy killed.
+        /// </summary>
         public void ResetAllCounts()
         {
             WaveIndex = 0;
@@ -195,26 +198,31 @@ namespace HF.WaveSystem
 
         #region Events
 
+        //-------------------------------------------
+        // This event will be triggered by UI button.
+        //-------------------------------------------
+
         private void OnNewWaveBegin()
         {
-            // This check is used to do not 
-            // increment index at the start.
-            if (WaveCleared())
-            {
-                WaveIndex++;
-            }
-
-            HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Max(m_WaveIndex, 1), GetWaves.Count);
-
             CountOfEnemyKilled = 0;
             MinorWaveIndex = 0;
 
             WaitForInput = false;
         }
 
+        //-------------------------------------------
+        // This event will be triggered when the wave 
+        // is cleared.
+        //-------------------------------------------
+
         private void OnWaveEnd()
         {
-            WaitForInput = true;
+            WaveIndex++;
+
+            if (LevelCleared())
+            {
+                WaitForInput = true;
+            }
         }
 
         #endregion

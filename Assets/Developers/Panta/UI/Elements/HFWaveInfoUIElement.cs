@@ -52,6 +52,8 @@ public class HFWaveInfoUIElement : MonoBehaviour
         // Support enemy count
     }
 
+    #region Events
+
     private void OnNewWaveBegin()
     {
         m_enableTimer = true;
@@ -61,4 +63,6 @@ public class HFWaveInfoUIElement : MonoBehaviour
     {
         m_enableTimer = false;
     }
+
+    #endregion
 }

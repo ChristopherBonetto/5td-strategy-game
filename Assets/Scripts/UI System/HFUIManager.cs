@@ -222,23 +222,23 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnGameStateChange(GameStates inState)
     {
-        //// Handle all game state variables.
-        //switch (inState)
-        //{
-        //    case GameStates.StartGame:
-        //        ShowAndHide(UIControlID.MainMenu, LastUIControlActivated);
-        //        break;
-        //    case GameStates.WarRoom:
-        //        ShowAndHide(UIControlID.LevelSelection, LastUIControlActivated);
-        //        break;
-        //    case GameStates.InitializeLevel:
-        //        ShowAndHide(UIControlID.InGameWindow, LastUIControlActivated);
-        //        break;
+        // Handle all game state variables.
+        switch (inState)
+        {
+            case GameStates.StartGame:
+                ShowAndHide(UIControlID.MainMenu, LastUIControlActivated);
+                break;
+            case GameStates.WarRoom:
+                ShowAndHide(UIControlID.LevelSelection, LastUIControlActivated);
+                break;
+            case GameStates.InitializeLevel:
+                ShowAndHide(UIControlID.InGameWindow, LastUIControlActivated);
+                break;
 
-        //        // Put other conditions...
+            // Put other conditions...
 
-        //    default:
-        //        return;
-        //}
+            default:
+                return;
+        }
     }
 }
