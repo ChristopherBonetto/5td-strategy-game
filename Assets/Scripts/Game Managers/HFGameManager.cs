@@ -69,20 +69,16 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public List<HFGMStateSO> ListOfStates = new List<HFGMStateSO>();
 
-    public HFPlayerData PlayerData = null;
-
-    public bool playerDataExist
+    public HFPlayerData m_playerData = null;
+    public HFPlayerData PlayerData
     {
         get
         {
-            if(PlayerData != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return m_playerData;
+        }
+        set
+        {
+            m_playerData = value;
         }
     }
 
@@ -100,7 +96,6 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (preState)
         {
             case GameStates.LoadStartingInfo:
-                PlayerData = HFSavingManager.LoadGame("NoName");
                 break;
 
             case GameStates.StartGame:
@@ -137,7 +132,9 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (inState)
         {
             case GameStates.LoadStartingInfo:
-                if(PlayerData != null)
+                PlayerData = HFSavingManager.LoadGame("NoName");
+
+                if (PlayerData != null)
                 {
                     HFScenesManager.Instance.ActivateDeactivateLevels(PlayerData.LevelsCompletedCounter);
                     CurrentGameState = GameStates.StartGame;
@@ -199,7 +196,5 @@ public class HFGameManager : Singleton<HFGameManager>
     {
         CurrentGameState = newState;
     }
-    
 
-    
 }
