@@ -301,11 +301,13 @@ namespace HF
 			m_upgrades.Clear();
 
 			LoadVisuals();
+
+			HFEventManager.TriggerEvent<HFUnit>(HFEventID.OnUnitSpecialized, this);
 		}
 
 		public void Upgrade()
 		{
-			if (m_currentLevel <= m_baseStats.Levels.Length)
+			if (CanUpgrade())
 			{
 				m_currentLevel++;
 
@@ -483,6 +485,16 @@ namespace HF
 				HFEventManager.TriggerEvent(HFEventID.GainReward, value, this);
 				Debug.Log("Given reward: " + value + " by " + gameObject.name);
 			}
+		}
+
+		public int GetMaxLevel()
+		{
+			return m_baseStats.Levels.Length;
+		}
+
+		public bool CanUpgrade()
+		{
+			return (m_currentLevel <= m_baseStats.Levels.Length);
 		}
 
 		#endregion
@@ -1033,6 +1045,7 @@ namespace HF
 
 		public void Select()
 		{
+			HFEventManager.TriggerEvent<HFUnit>(HFEventID.OnUnitSelected, this);
 			m_isSelected = true;
 			if (m_selectedMaterial)
 			{
@@ -1045,6 +1058,7 @@ namespace HF
 
 		public void Unselect()
 		{
+			HFEventManager.TriggerEvent<HFUnit>(HFEventID.OnUnitSelected, null);
 			m_isSelected = false;
 			if (m_unselectedMaterial)
 			{
