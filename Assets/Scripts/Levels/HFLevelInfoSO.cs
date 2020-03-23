@@ -29,4 +29,9 @@ public class HFLevelInfoSO : ScriptableObject
     {
         m_levelCompleted = true;
     }
+
+    public void ResetLevel()
+    {
+        m_levelCompleted = false;
+    }
 }

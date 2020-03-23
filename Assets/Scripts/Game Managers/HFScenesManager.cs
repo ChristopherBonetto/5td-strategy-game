@@ -69,19 +69,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
         }
     }
 
-    private int m_levelCompletedCount = 0;
-    public int LevelCompletedCount
-    {
-        get
-        {
-            CountHowMuchLevelAreCompleted(0);
-            return m_levelCompletedCount;
-        }
-        set
-        {
-            m_levelCompletedCount = value;
-        }
-    }
+    public int LevelCompletedCount { get => CountHowMuchLevelAreCompleted(); }
+    
 
     #endregion
 
@@ -101,14 +90,6 @@ public class HFScenesManager : Singleton<HFScenesManager>
         CheckCurrentScene(IndexCurrentScene);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            CountHowMuchLevelAreCompleted();
-            Debug.Log(m_levelCompletedCount);
-        }
-    }
 
     #endregion
 
@@ -147,8 +128,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
                 CurrentLevelSelected = LevelContainer.Levels[0];
                 HFEventManager.TriggerEvent<HFLevelInfoSO>(HFEventID.OnInitializeLevel, CurrentLevelSelected);
             }
-            
         }
+        
     }
 
     // #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
@@ -173,26 +154,43 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
         HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, CurrentLevelSelected, winCondition);
 
+        HFGameManager.Instance.PlayerData.LevelsCompletedCounter++;
+        HFGameManager.Instance.PlayerData.SavePlayerData();
+
         CurrentLevelSelected = null;
     }
 
-
-    public void CountHowMuchLevelAreCompleted(int inIndex = 0)
+    public void ActivateDeactivateLevels(int inValue)
     {
-        if(inIndex <= LevelContainer.Levels.Count - 1)
+        for (int i = 0; i <= LevelContainer.Levels.Count - 1; i++)
         {
-            if (LevelContainer.Levels[inIndex].m_levelCompleted)
+            if(i < inValue)
             {
-                inIndex++;
-                m_levelCompletedCount = inIndex;
-                CountHowMuchLevelAreCompleted(inIndex);
+                LevelContainer.Levels[i].CompleteLevel();
             }
             else
             {
-                return;
+                LevelContainer.Levels[i].ResetLevel();
             }
         }
-        return;
+    }
+
+    public int CountHowMuchLevelAreCompleted()
+    {
+        int counter = 0;
+
+        for(counter = 0; counter <= LevelContainer.Levels.Count -1;)
+        {
+            if (LevelContainer.Levels[counter].m_levelCompleted)
+            {
+                counter++;
+            }
+            else
+            {
+                break;
+            }
+        }
+        return counter;
     }
 
     #endregion

@@ -131,7 +131,7 @@ public class HFUIManager : Singleton<HFUIManager>
         if (uiControl != null && !UIControls.ContainsKey(uiControl.Name))
             UIControls.Add(uiControl.Name, uiControl);
 
-        Debug.Log(uiControl.Name);
+        //Debug.Log(uiControl.Name);
     }
 
     /// <summary>

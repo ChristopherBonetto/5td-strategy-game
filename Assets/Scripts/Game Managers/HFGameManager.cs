@@ -69,12 +69,29 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public List<HFGMStateSO> ListOfStates = new List<HFGMStateSO>();
 
+    public HFPlayerData PlayerData = null;
+
+    public bool playerDataExist
+    {
+        get
+        {
+            if(PlayerData != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 
     private void Awake()
     {
         if (Instance != null && Instance != this)
             Destroy(gameObject);
     }
+
 
     #region GAME STATE SYSTEM, and trigger event.
 
@@ -83,9 +100,7 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (preState)
         {
             case GameStates.LoadStartingInfo:
-                //try to load player file
-                //if doesn't file any file it will create a new one
-                LoadPlayerProfile();
+                PlayerData = HFSavingManager.LoadGame("NoName");
                 break;
 
             case GameStates.StartGame:
@@ -113,7 +128,7 @@ public class HFGameManager : Singleton<HFGameManager>
             default:
                 break;
         }
-        Debug.Log("Do something before change " + preState + " in " + postState);
+        //Debug.Log("Do something before change " + preState + " in " + postState);
 		HFEventManager.TriggerEvent<GameStates, GameStates>(HFEventID.OnBeforeChangeState, preState, postState);
 	}
 
@@ -122,10 +137,18 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (inState)
         {
             case GameStates.LoadStartingInfo:
+                if(PlayerData != null)
+                {
+                    HFScenesManager.Instance.ActivateDeactivateLevels(PlayerData.LevelsCompletedCounter);
+                    CurrentGameState = GameStates.StartGame;
+                }
+                else
+                {
+                    Debug.Log("Impossible to take player data from load");
+                }
                 break;
 
             case GameStates.StartGame:
-                
                 break;
 
             case GameStates.WarRoom:
@@ -178,16 +201,5 @@ public class HFGameManager : Singleton<HFGameManager>
     }
     
 
-    public void LoadPlayerProfile()
-    {
-        Debug.Log("Load player info method");
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            HFScenesManager.Instance.EndCurrentLevel(true);
-        }
-    }
+    
 }
