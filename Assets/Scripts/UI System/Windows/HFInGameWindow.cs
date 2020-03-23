@@ -63,4 +63,11 @@ public class HFInGameWindow : HFUIControl
         HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
         HFScenesManager.Instance.LoadSceneFromIndex(1);
     }
+
+    public void WinLevel()
+    {
+        HFScenesManager.Instance.EndCurrentLevel(true);
+        HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
+        HFScenesManager.Instance.LoadSceneFromIndex(1);
+    }
 }

@@ -99,8 +99,15 @@ public class HFScenesManager : Singleton<HFScenesManager>
         IndexCurrentScene = currentScene.buildIndex;
 
         CheckCurrentScene(IndexCurrentScene);
+    }
 
-        Debug.Log(LevelCompletedCount);
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            CountHowMuchLevelAreCompleted();
+            Debug.Log(m_levelCompletedCount);
+        }
     }
 
     #endregion
@@ -158,13 +165,19 @@ public class HFScenesManager : Singleton<HFScenesManager>
         HFGameManager.Instance.ChangeGMState(GameStates.EndLevel);
 
         Debug.Log(CurrentLevelSelected.LevelName + " winned : " + winCondition);
+
+        if (winCondition)
+        {
+            CurrentLevelSelected.CompleteLevel();
+        }
+
         HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, CurrentLevelSelected, winCondition);
 
         CurrentLevelSelected = null;
     }
 
 
-    public void CountHowMuchLevelAreCompleted(int inIndex)
+    public void CountHowMuchLevelAreCompleted(int inIndex = 0)
     {
         if(inIndex <= LevelContainer.Levels.Count - 1)
         {
