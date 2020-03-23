@@ -24,7 +24,7 @@
 	OnEndLevel,
 
     /// <summary>
-    /// float	rewardValue,
+    /// int	rewardValue,
     /// HFUnit	instigatorUnit
     /// </summary>
     GainReward,

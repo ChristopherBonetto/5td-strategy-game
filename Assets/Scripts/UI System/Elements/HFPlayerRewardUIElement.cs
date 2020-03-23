@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using HF;
 
@@ -9,14 +7,16 @@ public class HFPlayerRewardUIElement : MonoBehaviour
     public Image RewardIcon;
     public Text RewardText;
 
+	private int m_value;
+
     private void OnEnable()
     {
-        HFEventManager.SubscribeTo<float, HFUnit>(HFEventID.GainReward, OnGainReward);
+        HFEventManager.SubscribeTo<int, HFUnit>(HFEventID.GainReward, OnGainReward);
     }
 
     private void OnDisable()
     {
-        HFEventManager.UnsubscribeFrom<float, HFUnit>(HFEventID.GainReward, OnGainReward);
+        HFEventManager.UnsubscribeFrom<int, HFUnit>(HFEventID.GainReward, OnGainReward);
     }
 
     private void Start()
@@ -26,11 +26,13 @@ public class HFPlayerRewardUIElement : MonoBehaviour
 
     public void ResetValue()
     {
+		m_value = 0;
         RewardText.text = "0";
     }
 
-    public void OnGainReward(float value, HFUnit unit)
+    public void OnGainReward(int value, HFUnit unit)
     {
-        RewardText.text += ((int)value).ToString();
+		m_value += value;
+        RewardText.text = m_value.ToString();
     }
 }

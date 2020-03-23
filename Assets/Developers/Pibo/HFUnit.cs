@@ -480,9 +480,9 @@ namespace HF
 		/// </summary>
 		private void GainReward(int value)
 		{
-			if (m_stats[HFStatistics.RewardValue] > 0f)
+			if (value > 0)
 			{
-				HFEventManager.TriggerEvent(HFEventID.GainReward, value, this);
+				HFEventManager.TriggerEvent<int, HFUnit>(HFEventID.GainReward, value, this);
 				Debug.Log("Given reward: " + value + " by " + gameObject.name);
 			}
 		}
