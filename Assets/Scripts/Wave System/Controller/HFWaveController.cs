@@ -31,6 +31,15 @@ namespace HF.WaveSystem
         private List<HFSpawnPoint> m_SpawnPoints;
         public List<HFSpawnPoint> SpawnPoints => m_SpawnPoints;
 
+        private HFSingleState m_SingleState;
+        public HFSingleState SingleState => m_SingleState;
+
+        private HFBulkState m_BulkState;
+        public HFBulkState BulkState => m_BulkState;
+
+        private HFWaitState m_WaitState;
+        public HFWaitState WaitState => m_WaitState;
+
         private HFWaveControllerState m_CurrentState;
         public HFWaveControllerState CurrentState
         {
@@ -64,7 +73,7 @@ namespace HF.WaveSystem
                 m_WaveIndex = value;
 
                 // Update the view.
-                HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Max(WaveIndex + 1, 1), GetWaves.Count);
+                HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Min(WaveIndex + 1, GetWaves.Count), GetWaves.Count);
             }
         }
 
@@ -98,7 +107,7 @@ namespace HF.WaveSystem
         public HFWaveModel GetCurrentWave => GetWaves[Mathf.Min(WaveIndex, GetWaves.Count - 1)];
 
         public List<HFWaveModel.MinorWave> GetMinorWaves => GetWaves[Mathf.Min(WaveIndex, GetWaves.Count - 1)].MinorWavesCollection;
-        public HFWaveModel.MinorWave GetCurrentMinorWave => GetCurrentWave.MinorWavesCollection[m_MinorWaveIndex];
+        public HFWaveModel.MinorWave GetCurrentMinorWave => GetCurrentWave.MinorWavesCollection[Mathf.Min(MinorWaveIndex, GetMinorWaves.Count - 1)];
 
         public int GetTotalEnemiesOfTheWave => HFWaveReader.GetNumberOfEnemiesInTheWave(GetCurrentWave);
 
@@ -122,18 +131,28 @@ namespace HF.WaveSystem
 
         private void Start()
         {
+#if UNITY_EDITOR
             if (HFUIManager.Instance != null) Debug.Log("");
+#endif
 
             Initialize();
+            ResetAllCounts();
 
             HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
+
+            InitState();
         }
 
         private void Update()
         {
             if (!WaitForInput)
+            {
                 if (MinorWaveIndex < GetMinorWaves.Count)
+                {
                     CurrentState.Update(this);
+                    CurrentState.HandleExitCondition(this);
+                }
+            }
         }
 
         #endregion
@@ -142,9 +161,6 @@ namespace HF.WaveSystem
         {
             // Don't trigger the event.
             m_WaitForInput = true;
-
-            CurrentState = new HFCheckTimeElapsedState();
-
 
             HFScenesManager sm = HFScenesManager.Instance;
             if (sm.CurrentLevelSelected != null && sm.CurrentLevelSelected.LevelWavesInfo != null)
@@ -156,8 +172,26 @@ namespace HF.WaveSystem
                     $"I give a default one");
                 m_WaveCollection = sm.LevelContainer.Levels[0].LevelWavesInfo;
             }
+        }
 
-            ResetAllCounts();
+        private void InitState()
+        {
+            m_SingleState = new HFSingleState(this);
+            m_BulkState = new HFBulkState(this);
+            m_WaitState = new HFWaitState(this);
+
+            switch (GetCurrentMinorWave.MinorWaveType)
+            {
+                case MinorWaveType.Bulk:
+                    CurrentState = BulkState;
+                    break;
+                case MinorWaveType.Single:
+                    CurrentState = SingleState;
+                    break;
+                case MinorWaveType.Wait:
+                    CurrentState = WaitState;
+                    break;
+            }
         }
 
 
