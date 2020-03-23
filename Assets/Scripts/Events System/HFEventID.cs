@@ -28,10 +28,30 @@
     /// HFUnit	instigatorUnit
     /// </summary>
     GainReward,
+
+
+	//----------------------------------------------------------------------------------
+	// Units
+	//----------------------------------------------------------------------------------
+
     /// <summary>
     /// HFUnit	unit
     /// </summary>
     OnUnitDeath,
+
+	/// <summary>
+	/// 1) <see cref="HF.HFUnit"/> unit
+	/// </summary>
+	OnUnitSelected,
+	/// <summary>
+	/// 1) <see cref="HF.HFUnit"/> unit
+	/// </summary>
+	OnUnitSpecialized,
+
+
+	//----------------------------------------------------------------------------------
+	// Wave
+	//----------------------------------------------------------------------------------
 
 	/// <summary>
 	/// This one differ from <see cref="HFEventID.OnUnitDeath"/>.
@@ -47,11 +67,4 @@
 	OnWaveIndexUpdate,
 	OnNewWaveBegin,
 	OnWaveEnd,
-
-
-	/// <summary>
-	/// int current wave,
-	/// int total waves,
-	/// </summary>
-    OnCallNextWave,
 }
