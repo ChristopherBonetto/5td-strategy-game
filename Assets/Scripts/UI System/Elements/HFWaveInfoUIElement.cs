@@ -9,10 +9,13 @@ public class HFWaveInfoUIElement : MonoBehaviour
     private Text m_waveInfo;
 
     private bool m_enableTimer;
-    private float m_lastTimeRecorded;
 
     [SerializeField]
-    private Text m_timeElapsed;
+    private Text m_timeElapsedText;
+
+    // the time elapsed without consider the pause
+    //between waves.
+    private float m_timeElapsed;
 
     private void OnEnable()
     {
@@ -36,9 +39,10 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     private void ExecuteTimer()
     {
-        int minutes = (int)Time.time / 60;
-        int seconds = (int)Time.time % 60;
-        m_timeElapsed.text = $"{minutes} : {seconds}";
+        m_timeElapsed += Time.deltaTime;
+        int minutes = (int)(m_timeElapsed) / 60;
+        int seconds = (int)(m_timeElapsed) % 60;
+        m_timeElapsedText.text = $"{minutes} : {seconds}";
     }
 
     private void OnWaveIndexUpdate(int currentWave, int totalWave)
