@@ -154,8 +154,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
         HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, CurrentLevelSelected, winCondition);
 
-        HFGameManager.Instance.PlayerData.LevelsCompletedCounter++;
-        HFGameManager.Instance.PlayerData.SavePlayerData();
+        HFGameManager.Instance.PlayerData.RefreshPlayerData();
 
         CurrentLevelSelected = null;
     }

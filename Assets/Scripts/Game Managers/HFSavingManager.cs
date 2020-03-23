@@ -73,7 +73,7 @@ public static class HFSavingManager
         {
             HFPlayerData newPlayerData = new HFPlayerData();
             name = newPlayerData.PlayerName;
-            newPlayerData.SavePlayerData();
+            newPlayerData.InitSaveData();
         }
 
 
@@ -131,20 +131,18 @@ public class HFPlayerData
     //Other stuff
 
 
-    public HFPlayerData(HFPlayerData inData)
-    {
-        PlayerName = inData.PlayerName;
-        LevelsCompletedCounter = inData.LevelsCompletedCounter;
-    }
-
     public HFPlayerData()
     {
         PlayerName = "NoName";
         LevelsCompletedCounter = 0;
     }
 
+    public void InitSaveData()
+    {
+        HFSavingManager.SaveGame(this, PlayerName);
+    }
 
-    public void SavePlayerData()
+    public void RefreshPlayerData()
     {
         LevelsCompletedCounter = HFScenesManager.Instance.LevelCompletedCount;
         HFSavingManager.SaveGame(this, PlayerName);
