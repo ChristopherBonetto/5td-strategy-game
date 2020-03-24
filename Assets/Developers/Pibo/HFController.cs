@@ -24,7 +24,7 @@ namespace HF
 		[SerializeField]
 		private HFSpawnPoint m_respawnPoint = null;
 
-        private List<HFUnit> m_respawnUnits = new List<HFUnit>();
+        private List<HFBaseStats> m_respawnUnits = new List<HFBaseStats>();
         private float m_respawnTimer;
 
 		#endregion
@@ -55,17 +55,16 @@ namespace HF
 			}
         }
 
-		void Update()
+		protected virtual void Update()
 		{
 			TrySelect();
 			TryInteract();
 
-            Respawn();
+            TryRespawn();
 		}
 
 		private void ReceiveLevelReady()
 		{
-			Debug.Log("Possess");
 			for (int i = 0; i < m_possessedUnitsOnStart.Length; i++)
 			{
 				if (m_possessedUnitsOnStart[i])
@@ -101,7 +100,7 @@ namespace HF
 		/// <summary>
 		/// Update unit selection on mouse click
 		/// </summary>
-		protected virtual void TrySelect()
+		private void TrySelect()
 		{
 			if (Input.GetMouseButtonDown(0) && !HFUIManager.Instance.IsMouseOverUI())
 			{
@@ -136,7 +135,7 @@ namespace HF
 		/// <summary>
 		/// Try interact with unit
 		/// </summary>
-		protected virtual void TryInteract()
+		private void TryInteract()
 		{
 			if (m_currentSelection && Input.GetMouseButtonDown(1) && !HFUIManager.Instance.IsMouseOverUI())
 			{
@@ -161,10 +160,7 @@ namespace HF
 
 		public virtual HFUnit SpawnUnit(HFBaseStats stats, HFSpawnPoint spawnPoint)
 		{
-// 			Vector3 randomOffset = Random.onUnitSphere * Random.Range(0f, HFGameParameters.TileSize);
-// 			randomOffset.y = 0f;
-			Vector3 spawnPosition = spawnPoint.SpawnPosition;
-			HFUnit newUnit = Instantiate(m_unitPrefab, spawnPosition, Quaternion.identity);
+			HFUnit newUnit = Instantiate(m_unitPrefab, spawnPoint.SpawnPosition, spawnPoint.SpawnRotation);
 			newUnit.Specialize(stats);
 			newUnit.Possess(this);
 			m_possessedUnits.Add(newUnit);
@@ -176,20 +172,17 @@ namespace HF
 		{
 			if (inUnit && inUnit.ControllerType == HF.InputType.Player && inUnit.UnitType == HFUnitType.Unit)
 			{
-				m_respawnUnits.Add(inUnit);
+				m_respawnUnits.Add(inUnit.BaseStats);
 			}
         }
 
-        public virtual void Respawn()
+        private void TryRespawn()
         {
-            if(m_respawnUnits.Count > 0)
+            if(m_respawnUnits.Count > 0 && RespawnTimer(m_respawnUnits[0].GetFloat(HFStatistics.UnitRespawnDelay)))
             {
-                if (RespawnTimer(m_respawnUnits[0].GetStat(HFStatistics.UnitRespawnDelay)))
-                {
-					Debug.Log("Respawn unit " + m_respawnUnits[0].GetStringStat(HFStatistics.Name) + " at " + m_respawnPoint.gameObject.name);
-                    SpawnUnit(m_respawnUnits[0].BaseStats, m_respawnPoint);
-                    m_respawnUnits.RemoveAt(0);
-                }
+                SpawnUnit(m_respawnUnits[0], m_respawnPoint);
+                m_respawnUnits.RemoveAt(0);
+                m_respawnTimer = 0f;
             }
         }
 
@@ -197,15 +190,7 @@ namespace HF
         {
             m_respawnTimer += Time.deltaTime;
 
-            if(m_respawnTimer >= inDestinationTime)
-            {
-                m_respawnTimer = 0f;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+			return (m_respawnTimer >= inDestinationTime);
         }
 
 		#endregion

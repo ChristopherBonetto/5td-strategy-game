@@ -4,10 +4,7 @@ namespace HF
 {
 	public class HFAIController : HFController
 	{
-		protected override void TrySelect()
-		{ }
-
-		protected override void TryInteract()
+		protected override void Update()
 		{ }
 
 		public override HFUnit SpawnUnit(HFBaseStats stats, HFSpawnPoint spawnPoint)
@@ -18,8 +15,5 @@ namespace HF
 
 			return newUnit;
 		}
-
-        public override void Respawn()
-        { }
     }
 }
