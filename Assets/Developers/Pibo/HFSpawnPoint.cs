@@ -15,6 +15,7 @@ namespace HF
 
 		public Vector3 TargetPosition => m_target.GetComponent<IHFTargetable>().Position;
 		public Vector3 SpawnPosition => transform.position.SnapLocation();
+		public Quaternion SpawnRotation => transform.rotation;
 
 #if UNITY_EDITOR
 		void OnValidate()

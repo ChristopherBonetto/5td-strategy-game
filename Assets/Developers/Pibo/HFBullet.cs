@@ -20,73 +20,66 @@ namespace HF
 
 	public class HFBullet : MonoBehaviour
 	{
-		private bool m_isExploding = false;
-
 		private HFUnit m_target;
 
 		[SerializeField]
 		private Renderer m_mesh = null;
 
 		[SerializeField]
-		private ParticleSystem m_explosionParticle = null;
+		private ParticleSystem m_explosionHit = null;
+
+		[SerializeField]
+		private ParticleSystem m_explosionMissed = null;
 
 		private Transform m_transform;
+
+		private Rigidbody m_rigidbody;
 
 		private HFBulletParameters m_parameters = new HFBulletParameters();
 
 		private void Awake()
 		{
 			m_transform = transform;
+			m_rigidbody = GetComponent<Rigidbody>();
 
-			Destroy(gameObject, 2f);
+			Destroy(gameObject, 1.5f);
 		}
 
-		void Update()
+		void Start()
 		{
-			if (!m_isExploding)
-			{
-				MoveToTarget();
-			}
+			m_rigidbody.AddRelativeForce(0f, 0f, m_parameters.Speed, ForceMode.VelocityChange);
 		}
 
-		private void MoveToTarget()
+		private void OnTriggerEnter(Collider other)
 		{
-			m_transform.position += m_transform.forward * m_parameters.Speed * Time.deltaTime;
-
-			if (m_target && !m_target.IsKilled)
+			// Ignore self
+			if (m_parameters.Instigator.Colliders.Contains(other))
 			{
-				m_transform.LookAt(m_target.TargetCollider.bounds.center);
+				return;
 			}
-			else
+
+			bool bHit = false;
+			m_target = other.gameObject.GetComponentInParent<HFUnit>();
+			if (m_target && m_target.enabled)
 			{
-				Destroy(gameObject);
+				bHit = true;
+				DamageInfo damageInfo = new DamageInfo(
+					m_parameters.Instigator,
+					m_parameters.UnitDamage,
+					m_parameters.BuildingDamage
+					);
+				m_target.TakeDamage(damageInfo);
 			}
-		}
 
-		private void OnCollisionEnter(Collision collision)
-		{
-			if (collision.collider == m_target.TargetCollider)
+			ParticleSystem explosion = (bHit ? m_explosionHit : m_explosionMissed);
+			if (explosion)
 			{
-				if (m_target && m_target.enabled)
-				{
-					DamageInfo damageInfo = new DamageInfo(
-						m_parameters.Instigator,
-						m_parameters.UnitDamage,
-						m_parameters.BuildingDamage
-						);
-					m_target.TakeDamage(damageInfo);
-				}
-
-				m_isExploding = true;
-				if (m_explosionParticle)
-				{
-					m_explosionParticle.Play();
-				}
-
-				m_mesh.enabled = false;
-
-				Destroy(gameObject, 1f);
+				explosion.Play();
 			}
+
+			m_mesh.enabled = false;
+
+			Destroy(gameObject, 0.5f);
 		}
 
 		public void SetTarget(HFUnit inTarget)
