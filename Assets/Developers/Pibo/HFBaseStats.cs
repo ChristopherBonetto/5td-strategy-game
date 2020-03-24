@@ -26,7 +26,7 @@ public enum HFStatistics
 	BulletSpeed = 11,
 	UnitRespawnDelay = 12,
 	SoldierRespawnDelay = 13,
-	SoldiersPerUnit = 14,
+	//SoldiersPerUnit = 14,
 
 
 	Name = 20,
@@ -79,6 +79,9 @@ public class HFBaseStats : ScriptableObject
 	public HFUnitType UnitType = HFUnitType.PlaceHolder;
 
 	[SerializeField]
+	public int SoldiersPerUnit = 1;
+
+	[SerializeField]
 	public HF.HFUnitVisuals Visuals = null;
 
 	[SerializeField]
@@ -90,6 +93,7 @@ public class HFBaseStats : ScriptableObject
 
 	void OnValidate()
 	{
+		SoldiersPerUnit = Mathf.Max(1, SoldiersPerUnit);
 		UpdateAll();
 	}
 

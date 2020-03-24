@@ -20,11 +20,7 @@ namespace HF
 		public bool UsesPivot => m_usesPivot;
 
 		[SerializeField]
-		private Collider m_target = null;
-		public Collider Target => m_target;
-
-		[SerializeField]
 		private LevelMeshes[] m_visuals = new LevelMeshes[3];
-		public LevelMeshes[] Visuals => m_visuals;
+		public LevelMeshes[] LevelVisuals => m_visuals;
 	}
 }

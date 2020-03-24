@@ -34,9 +34,8 @@ namespace HF
 
 		private Animator m_anim = null;
 
-		private Collider m_collider = null;
-
-		public Collider TargetCollider => m_collider;
+		private List<Collider> m_colliders = new List<Collider>();
+		public List<Collider> Colliders => m_colliders;
 
 		/*** Statistics */
 
@@ -45,7 +44,7 @@ namespace HF
 
 		[SerializeField]
 		private HFBaseStats m_baseStats = null;
-        public HFBaseStats BaseStats { get => m_baseStats; }
+        public HFBaseStats BaseStats => m_baseStats; // #TEMP
 
 		private Dictionary<HFStatistics, float> m_stats;
 		private Dictionary<HFStatistics, string> m_stringStats;
@@ -55,13 +54,7 @@ namespace HF
 
 		public HFUnitType UnitType => m_baseStats.UnitType;
 
-		private Transform m_base = null;
-
-		private Transform m_meshes = null;
-
-		private HFUnitVisuals m_visuals;
-
-		private int m_currentLevel;
+		public int CurrentLevel { get; protected set; }
 
 		/*** Input */
 
@@ -125,9 +118,6 @@ namespace HF
 
 		private LayerMask m_unitLayer = 1 << 0;
 
-		[SerializeField]
-		private Transform m_spawnPoint = null;
-
 		private HFUnit m_targetEnemy;
 
 		private float m_lastAttackTime;
@@ -153,7 +143,7 @@ namespace HF
 		/// <summary>
 		/// Max health
 		/// </summary>
-		public float MaxHealth => m_stats[HFStatistics.MaxHealth];
+		public float MaxHealth => m_stats[HFStatistics.MaxHealth] * m_baseStats.SoldiersPerUnit;
 
 		/// <summary>
 		/// Current health
@@ -186,18 +176,13 @@ namespace HF
 			m_navAgent = GetComponent<NavMeshAgent>();
 			m_navObstacle = GetComponent<NavMeshObstacle>();
 			m_anim = GetComponent<Animator>();
-			m_collider = GetComponentInChildren<Collider>();
-
-			m_base = m_transform.Find("Base");
-			m_meshes = m_transform.Find("Meshes");
-
+			
 			HFHelpers.NullCheck(gameObject, m_baseStats, "base stats");
 			HFHelpers.NullCheck(gameObject, m_renderers, "renderers");
 			HFHelpers.NullCheck(gameObject, m_navAgent, "navigation agent");
 			HFHelpers.NullCheck(gameObject, m_navObstacle, "navigation obstacle");
 			// #TEMP
 			//HFHelpers.NullCheck(gameObject, m_anim, "animator");
-			HFHelpers.NullCheck(gameObject, m_collider, "collider");
 
 			m_stats = new Dictionary<HFStatistics, float>();
 			m_stringStats = new Dictionary<HFStatistics, string>();
@@ -242,7 +227,6 @@ namespace HF
 				m_currentCommand.Perform(this);
 			}
 
-			// #TEMP soldiers
 			if (m_needsRespawn && Team == HFGameParameters.PlayerTeam) //&& !isClashing
 			{
 				m_respawnTimer += Time.deltaTime;
@@ -276,16 +260,6 @@ namespace HF
 
 		#region Statistics
 
-		public float GetStat(HFStatistics stat)
-		{
-			return (m_stats.ContainsKey(stat) ? m_stats[stat] : 0f);
-		}
-
-		public string GetStringStat(HFStatistics stat)
-		{
-			return (m_stringStats.ContainsKey(stat) ? m_stringStats[stat] : "");
-		}
-
 		public void Specialize(HFBaseStats newStats)
 		{
 			if (newStats == null)
@@ -294,73 +268,66 @@ namespace HF
 				return;
 			}
 
-			m_currentLevel = 1;
-
 			// Set base stats
-			SetStats(newStats);
+			m_baseStats = newStats;
+			CurrentLevel = 0;
 			m_upgrades.Clear();
 
 			LoadVisuals();
 
-			HFEventManager.TriggerEvent<HFUnit>(HFEventID.OnUnitSpecialized, this);
+			Upgrade();
+
+			ResetHealth(true, false);
+
+			HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this);
 		}
 
 		public void Upgrade()
 		{
 			if (CanUpgrade())
 			{
-				m_currentLevel++;
+				CurrentLevel++;
 
 				// Upgrade stats
-				foreach (HFStatUpgrade upgrade in m_baseStats.Levels[m_currentLevel - 1].List)
+				foreach (HFStatUpgrade upgrade in m_baseStats.Levels[CurrentLevel - 1].List)
 				{
 					m_upgrades.Add(upgrade);
 				}
 				UpdateStats();
 
-				LoadVisuals();
+				UpdateVisuals();
 			}
 		}
 
-		public void LoadVisuals()
+		private void LoadVisuals()
 		{
-			if (!m_baseStats.Visuals)
+			HFUnitVisuals visualsPrefab = m_baseStats.Visuals;
+
+			if (!visualsPrefab)
 			{
 				Debug.LogWarning("No base visuals for stats " + m_baseStats.name);
 				return;
 			}
-			HFUnitVisuals newVisuals = Instantiate(m_baseStats.Visuals, m_meshes);
-			if (newVisuals.Visuals.Length < m_currentLevel)
-			{
-				Destroy(newVisuals);
-				Debug.LogWarning("No visuals for level " + m_currentLevel + " in " + newVisuals.name);
-				return;
-			}
-			m_visuals = newVisuals;
-			m_collider = m_visuals.Target;
 
 			// #TEMP Disable placeholder visuals
-			for (int i = m_base.childCount - 1; i >= 0; i--)
-			{
-				m_base.GetChild(i).gameObject.SetActive(false);
-			}
+			Transform placeHolder = m_transform.Find("PlaceHolder");
+			DestroyImmediate(placeHolder.gameObject);
 
-			// Update level visuals
-			foreach (GameObject mesh in newVisuals.Visuals[m_currentLevel - 1].List)
-			{
-				mesh.SetActive(true);
-			}
-
-			// Update renderers for selection
-			m_renderers = GetComponentsInChildren<Renderer>();
-			// Update bullet spawn point
-			m_spawnPoint = m_meshes.GetComponentInChildren<HFBulletSpawn>().transform;
+			SpawnUnits(visualsPrefab);
 		}
 
-		public void SetStats(HFBaseStats newStats)
+		private void UpdateVisuals()
 		{
-			m_baseStats = newStats;
-			UpdateStats();
+			foreach (HFSoldier soldier in m_soldiers)
+			{
+				soldier.SetVisualsLevel(CurrentLevel);
+
+				// Update colliders for targets
+				m_colliders.Add(soldier.Target);
+
+				// Update renderers for selection
+				m_renderers = GetComponentsInChildren<Renderer>();
+			}
 		}
 
 		private void UpdateStats()
@@ -384,9 +351,19 @@ namespace HF
 			ResetHealth(false, false);
 
 			// Navigation update
+			float agentSize = HFGameParameters.TileSize;
 			m_navAgent.enabled = (m_stats[HFStatistics.Speed] > 0f);
-			m_navAgent.speed = m_stats[HFStatistics.Speed];
+			if (m_navAgent.enabled)
+			{
+				m_navAgent.speed = m_stats[HFStatistics.Speed];
+				m_navAgent.radius = agentSize;
+			}
 			m_navObstacle.enabled = !m_navAgent.enabled;
+			if (m_navObstacle.enabled)
+			{
+				m_navObstacle.size = new Vector3(agentSize, agentSize, agentSize);
+				m_navObstacle.center = 0.5f * new Vector3(0f, m_navObstacle.size.y, 0f);
+			}
 		}
 
 		private void UpdateModifiers()
@@ -482,9 +459,18 @@ namespace HF
 		{
 			if (value > 0)
 			{
-				HFEventManager.TriggerEvent<int, HFUnit>(HFEventID.GainReward, value, this);
-				Debug.Log("Given reward: " + value + " by " + gameObject.name);
+				HFEventManager.TriggerEvent(HFEventID.GainReward, value, this);
 			}
+		}
+
+		public float GetStat(HFStatistics stat)
+		{
+			return (m_stats.ContainsKey(stat) ? m_stats[stat] : 0f);
+		}
+
+		public string GetStringStat(HFStatistics stat)
+		{
+			return (m_stringStats.ContainsKey(stat) ? m_stringStats[stat] : "");
 		}
 
 		public int GetMaxLevel()
@@ -494,7 +480,7 @@ namespace HF
 
 		public bool CanUpgrade()
 		{
-			return (m_currentLevel <= m_baseStats.Levels.Length);
+			return (CurrentLevel <= m_baseStats.Levels.Length);
 		}
 
 		#endregion
@@ -510,11 +496,18 @@ namespace HF
 				return;
 			}
 
+			if (CurrentLevel == 0)
+			{
+				Debug.LogError(gameObject.name + " has no initialized stats. InitializeLevel has not been called.");
+				return;
+			}
+
 			ControllerType = (controller is HFAIController ? InputType.AI : InputType.Player);
 			Team = controller.Team;
 			m_unselectedMaterial = controller.BaseMaterial;
 			m_controller = controller;
 
+			// #TEMP Assign material
 			Unselect();
 		}
 
@@ -764,46 +757,85 @@ namespace HF
 
 		#region Soldiers
 
-		public void SpawnUnits()
+		private void SpawnUnits(HFUnitVisuals baseVisuals)
 		{
-			GameObject m_soldierPrefab = m_visuals.gameObject;
-
-			int soldierCount = (int)m_stats[HFStatistics.SoldiersPerUnit];
-			float tileSize = HFGameParameters.TileSize;
-
+			GameObject m_soldierPrefab = baseVisuals.gameObject;
 			HFSoldier newSoldier;
-			Vector3 spawnPosition = m_transform.position;
-			spawnPosition.x = m_transform.position.x - tileSize * 0.25f;
+
+			void SpawnSoldier(Vector3 localPosition, float phase)
+			{
+				newSoldier = Instantiate(m_soldierPrefab, m_transform).AddComponent<HFSoldier>();
+				newSoldier.transform.localPosition = localPosition;
+				newSoldier.Init(this, phase);
+				m_soldiers.Add(newSoldier);
+				m_activeSoldiersCount++;
+			}
+
+			int soldierTotal = m_baseStats.SoldiersPerUnit;
+
+			if (soldierTotal == 1)
+			{
+				SpawnSoldier(Vector3.zero, 0f);
+				return;
+			}
+
+			// If there are multiple soldiers, they are spawned in two rows
+
+			float tileSize = HFGameParameters.TileSize;
+			int soldiersPerRow = Mathf.RoundToInt(soldierTotal / 2);
+			float soldierSpacerOnRow = tileSize / (float)soldiersPerRow;
+			float soldierSpacerOnColumn = tileSize / 2f;
+			float phaseSpacer = 1f / soldierTotal;
+
+			float startX = (-tileSize + soldierSpacerOnRow) / 2f;
+			float startZ = -tileSize * 0.25f;
+			Vector3 localSpawnPosition = new Vector3(startX, 0f, startZ);
+
 			for (int i = 0; i < 2; i++)
 			{
-				spawnPosition.x += tileSize * 0.5f * i;
-				spawnPosition.y = 0f;
-				spawnPosition.z = m_transform.position.z - tileSize * 0.25f;
-				for (int j = 0; j < Mathf.RoundToInt(soldierCount / 2); j++)
+				localSpawnPosition.x = startX;
+				localSpawnPosition.z += soldierSpacerOnColumn * i;
+				for (int j = 0; j < soldiersPerRow; j++)
 				{
 					// Spawn if less than limit and not already active in that position
-					if (m_soldiers.Count < soldierCount && j * (i + 1) >= m_activeSoldiersCount)
+					if (m_soldiers.Count < soldierTotal && j + (i * soldiersPerRow) >= m_activeSoldiersCount)
 					{
-						spawnPosition.z += 1f / (soldierCount / 2f) * j;
-						newSoldier = Instantiate(m_soldierPrefab, spawnPosition, Quaternion.identity, m_transform).AddComponent<HFSoldier>();
-						m_soldiers.Add(newSoldier);
+						localSpawnPosition.x += soldierSpacerOnRow * j;
+						SpawnSoldier(localSpawnPosition, j + (i * soldiersPerRow) * phaseSpacer);
 					}
 				}
 			}
 		}
 
+		private void DisableSoldier()
+		{
+			for (int i = 0; i < m_soldiers.Count; i++)
+			{
+				if (m_soldiers[i].gameObject.activeSelf)
+				{
+					m_soldiers[i].gameObject.SetActive(false);
+					m_activeSoldiersCount--;
+					break;
+				}
+			}
+
+			m_respawnTimer = 0f;
+			m_needsRespawn = true;
+		}
+
 		private void RespawnSoldier()
 		{
-			bool bContinueRespawn = false;
-
 			for (int i = 0; i < m_soldiers.Count; i++)
 			{
 				if (!m_soldiers[i].gameObject.activeSelf)
 				{
 					m_soldiers[i].gameObject.SetActive(true);
+					m_activeSoldiersCount++;
 					break;
 				}
 			}
+
+			bool bContinueRespawn = false;
 			for (int i = 0; i < m_soldiers.Count; i++)
 			{
 				if (!m_soldiers[i].gameObject.activeSelf)
@@ -895,14 +927,22 @@ namespace HF
 				for (int i = 0; i < colliders.Length; i++)
 				{
 					Collider testCollider = colliders[i];
-					// Ignore self
-					if (testCollider == m_collider)
+
+					// Ignore if alreaady have a closer target
+					float testDistance = Vector3.Magnitude(testCollider.gameObject.transform.position - m_soldiers[0].BulletSpawn.position);
+					if (testDistance >= targetDistance)
 					{
 						continue;
 					}
 
-					HFUnit testEnemy = testCollider.gameObject.GetComponentInParent<HFUnit>();
+					// Ignore self
+					if (m_colliders.Contains(testCollider))
+					{
+						continue;
+					}
+
 					// Ignore useless attacks and disable friendly fire
+					HFUnit testEnemy = testCollider.gameObject.GetComponentInParent<HFUnit>();
 					if (!testEnemy
 						|| testEnemy.IsKilled
 						|| testEnemy.Team == Team
@@ -913,12 +953,8 @@ namespace HF
 						continue;
 					}
 
-					float testDistance = Vector3.Magnitude(testEnemy.transform.position - m_transform.position);
-					if (testDistance < targetDistance)
-					{
-						m_targetEnemy = testEnemy;
-						targetDistance = testDistance;
-					}
+					m_targetEnemy = testEnemy;
+					targetDistance = testDistance;
 				}
 			}
 
@@ -927,17 +963,17 @@ namespace HF
 			return (m_targetEnemy != null);
 		}
 
-		public void TryAttack()
+		public void AttackAction()
 		{
 			if (m_targetEnemy && IsInRange() && m_targetEnemy.enabled && !m_targetEnemy.IsKilled)
 			{
 				Vector3 direction = (m_targetEnemy.transform.position - m_transform.position);
-				Transform rotatingMesh = (m_visuals.UsesPivot ? m_visuals.Pivot : m_transform);
+				Transform rotatingMesh = (m_soldiers[0].LoadedVisuals.UsesPivot ? m_soldiers[0].LoadedVisuals.Pivot : m_transform);
 
 				// Look at target
 				Quaternion lookDirection = Quaternion.LookRotation(direction);
 				rotatingMesh.rotation = Quaternion.Lerp(rotatingMesh.rotation, lookDirection, Time.deltaTime * 3f);
-				rotatingMesh.rotation = Quaternion.Euler(0, rotatingMesh.rotation.eulerAngles.y, 0);
+				rotatingMesh.rotation = Quaternion.Euler(0f, rotatingMesh.rotation.eulerAngles.y, 0f);
 
 				// Wait for cooldown
 				float rateOfFire = m_stats[HFStatistics.AttackRate];
@@ -993,21 +1029,28 @@ namespace HF
 				this,
 				m_stats[HFStatistics.UnitDamage],
 				m_stats[HFStatistics.BuildingDamage]
-				);
+			);
 			target.TakeDamage(damageInfo);
 		}
 
 		private void RangedAttack(HFUnit target)
 		{
-			HFBullet bullet = Instantiate(m_bulletPrefab, m_spawnPoint.position, m_spawnPoint.rotation);
-			HFBulletParameters bulletParams = new HFBulletParameters(
-				this,
-				m_stats[HFStatistics.UnitDamage],
-				m_stats[HFStatistics.BuildingDamage],
-				m_stats[HFStatistics.BulletSpeed]
-				);
-			bullet.SetParameters(bulletParams);
-			bullet.SetTarget(target);
+			float speedModifier = Vector3.Magnitude(target.transform.position - m_transform.position) / m_stats[HFStatistics.AttackRange];
+			foreach (HFSoldier soldier in m_soldiers)
+			{
+				if (soldier.gameObject.activeSelf)
+				{
+					HFBullet bullet = Instantiate(m_bulletPrefab, soldier.BulletSpawn.position, soldier.BulletSpawn.rotation);
+					HFBulletParameters bulletParams = new HFBulletParameters(
+						this,
+						m_stats[HFStatistics.UnitDamage],
+						m_stats[HFStatistics.BuildingDamage],
+						m_stats[HFStatistics.BulletSpeed] * speedModifier
+					);
+					bullet.SetParameters(bulletParams);
+					bullet.SetTarget(target);
+				}
+			}
 		}
 
 		private bool IsInRange()
@@ -1045,7 +1088,7 @@ namespace HF
 
 		public void Select()
 		{
-			HFEventManager.TriggerEvent<HFUnit>(HFEventID.OnUnitSelected, this);
+			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, this);
 			m_isSelected = true;
 			if (m_selectedMaterial)
 			{
@@ -1058,7 +1101,7 @@ namespace HF
 
 		public void Unselect()
 		{
-			HFEventManager.TriggerEvent<HFUnit>(HFEventID.OnUnitSelected, null);
+			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as HFUnit);
 			m_isSelected = false;
 			if (m_unselectedMaterial)
 			{
@@ -1075,7 +1118,7 @@ namespace HF
 
 		public bool TryInteraction(HFUnit otherUnit)
 		{
-			Debug.Log(gameObject.name + " interacts with " + otherUnit.gameObject.name);
+			//Debug.Log(gameObject.name + " interacts with " + otherUnit.gameObject.name);
 
 			if (otherUnit != this && otherUnit.Team != Team)
 			{
@@ -1090,7 +1133,7 @@ namespace HF
 
 		public IHFCommand GetDefaultInteraction()
 		{
-			Debug.Log(gameObject.name + " returns interaction at " + Position.ToString());
+			//Debug.Log(gameObject.name + " returns interaction at " + Position.ToString());
 			return new HFMoveCommand(Position);
 		}
 
@@ -1117,6 +1160,7 @@ namespace HF
 			}
 
 			float previous = CurrentHealth;
+
 			float receivedDamage = (
 				UnitType == HFUnitType.Unit
 				? info.UnitAmount
@@ -1132,6 +1176,12 @@ namespace HF
 
 			float actualDamage = previous - CurrentHealth;
 
+			// Compare current health with single unit's health
+			int soldiers = m_activeSoldiersCount - Mathf.CeilToInt(CurrentHealth / m_stats[HFStatistics.MaxHealth]);
+			for (int i = 0; i < soldiers; i++)
+			{
+				DisableSoldier();
+			}
 			if (CurrentHealth == 0f)
 			{
 				CanSufferDamage = false;
@@ -1158,7 +1208,7 @@ namespace HF
 
 			if (info.Amount > 0f && CanSufferDamage)
 			{
-				CurrentHealth = Mathf.Min(previous + info.Amount, m_stats[HFStatistics.MaxHealth]);
+				CurrentHealth = Mathf.Min(previous + info.Amount, MaxHealth);
 			}
 
 			float actualHeal = CurrentHealth - previous;
@@ -1175,15 +1225,11 @@ namespace HF
 			OnDestinationReached();
 			ActionComplete(false);
 
-			// #TEMP
-			m_navAgent.enabled = false;
-			if (UnitType != HFUnitType.Unit)
-			{
-				m_navObstacle.enabled = true;
-			}
-
-			// #TEMP
-			transform.localScale = new Vector3(transform.localScale.x, 0.1f, transform.localScale.z);
+// 			m_navAgent.enabled = false;
+// 			if (UnitType != HFUnitType.Unit)
+// 			{
+// 				m_navObstacle.enabled = true;
+// 			}
 
 			HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
 
@@ -1191,6 +1237,8 @@ namespace HF
 			{
 				GainReward(Mathf.RoundToInt(m_stats[HFStatistics.RewardValue]));
 			}
+
+			gameObject.SetActive(false);
 		}
 
 		/// <summary>
@@ -1204,9 +1252,8 @@ namespace HF
 
 			if (!IsKilled)
 			{
-				float maxHealth = m_stats[HFStatistics.MaxHealth];
-				CurrentHealth = (bCurrentToMax ? maxHealth : Mathf.Min(CurrentHealth, maxHealth));
-				CanSufferDamage = (maxHealth > 0f);
+				CurrentHealth = (bCurrentToMax ? MaxHealth : Mathf.Min(CurrentHealth, MaxHealth));
+				CanSufferDamage = (MaxHealth > 0f);
 			}
 		}
 
@@ -1313,7 +1360,7 @@ namespace HF
 				return;
 			}
 
-			unit.TryAttack();
+			unit.AttackAction();
 		}
 
 		public void Abort(HFUnit unit)

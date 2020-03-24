@@ -51,11 +51,13 @@ public class HFBaseStatsEditor : Editor
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("Icon"));
 		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("UnitType"));
+		EditorGUILayout.PropertyField(serializedObject.FindProperty("SoldiersPerUnit"));
 		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("Visuals"));
 		EditorGUILayout.Space();
-		HFEditorHelper.ShowList(serializedObject.FindProperty("m_levels").GetArrayElementAtIndex(0).FindPropertyRelative("List"), true, "Level 2 upgrades");
-		HFEditorHelper.ShowList(serializedObject.FindProperty("m_levels").GetArrayElementAtIndex(1).FindPropertyRelative("List"), true, "Level 3 upgrades");
+		// Level 1 upgrades are hidden
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_levels").GetArrayElementAtIndex(1).FindPropertyRelative("List"), true, "Level 2 upgrades");
+		HFEditorHelper.ShowList(serializedObject.FindProperty("m_levels").GetArrayElementAtIndex(2).FindPropertyRelative("List"), true, "Level 3 upgrades");
 		EditorGUILayout.Space();
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("RewardCondition"));
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_floatStats"), true);
@@ -89,9 +91,6 @@ public class HFUnitVisualsEditor : Editor
 		EditorGUILayout.LabelField("Pivot", EditorStyles.boldLabel);
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("m_pivot"));
 		EditorGUILayout.PropertyField(serializedObject.FindProperty("m_usesPivot"));
-		EditorGUILayout.Space();
-		EditorGUILayout.LabelField("Target", EditorStyles.boldLabel);
-		EditorGUILayout.PropertyField(serializedObject.FindProperty("m_target"));
 		EditorGUILayout.Space();
 		EditorGUILayout.LabelField("Level Meshes", EditorStyles.boldLabel);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_visuals").GetArrayElementAtIndex(0).FindPropertyRelative("List"), true, "Level 1");
