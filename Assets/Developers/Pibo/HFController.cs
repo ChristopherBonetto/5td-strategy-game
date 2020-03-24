@@ -59,7 +59,7 @@ namespace HF
 		{
 			TrySelect();
 			TryInteract();
-
+			TryCarry();
             TryRespawn();
 		}
 
@@ -151,6 +151,14 @@ namespace HF
 						m_currentSelection.SetCommand(new HFMoveCommand(testHit.point));
 					}
 				}
+			}
+		}
+
+		private void TryCarry()
+		{
+			if (m_currentSelection && Input.GetKeyDown(KeyCode.C))
+			{
+				m_currentSelection.CarryAction();
 			}
 		}
 

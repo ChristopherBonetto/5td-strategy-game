@@ -104,6 +104,9 @@ namespace HF
 
 		/*** Carry */
 
+		[SerializeField]
+		private float m_carriedScale = 0.2f;
+
 		private HFUnit m_carriedTower;
 
 		private bool m_isCarried;
@@ -858,7 +861,8 @@ namespace HF
 			return (m_carriedTower == null
 				&& UnitType == HFUnitType.Unit
 				&& m_stats[HFStatistics.CarryCapacity] > 0f
-				);
+				&& !IsKilled
+			);
 		}
 
 		public bool CanBeCarried()
@@ -866,38 +870,121 @@ namespace HF
 			return (!m_isCarried
 				&& UnitType == HFUnitType.Turret
 				&& m_stats[HFStatistics.Weight] > 0f
+				&& !IsKilled
 			);
 		}
 
 		public void SetCarried(bool bInIsCarried)
 		{
+			Unselect();
+
 			m_isCarried = bInIsCarried;
+
+			// Set activation
+
+			enabled = !bInIsCarried;
+
+			foreach (HFSoldier soldier in m_soldiers)
+			{
+				soldier.Target.enabled = !bInIsCarried;
+			}
+
+			m_navObstacle.enabled = !bInIsCarried;
+
+			// Set transform
+
+			float scaleFactor = (bInIsCarried ? m_carriedScale : 1f);
+			Vector3 newScale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
+			m_transform.localScale = newScale;
+
+			Vector3 newPosition = m_transform.position;
+			newPosition.y += 2f * (bInIsCarried ? 1f : -1f);
+			m_transform.position = (bInIsCarried ? newPosition : m_transform.position.SnapLocation());
+
+			m_transform.rotation = (bInIsCarried ? m_transform.rotation : Quaternion.identity);
+		}
+
+		public void CarryAction()
+		{
+			if (!m_carriedTower)
+			{
+				if (!CanCarry())
+				{
+					return;
+				}
+
+				Collider[] colliders = Physics.OverlapSphere(m_transform.position, HFGameParameters.TileSize, m_unitLayer);
+				if (colliders.Length > 0)
+				{
+					float targetDistance = Mathf.Infinity;
+					HFUnit targetTurret = null;
+
+					for (int i = 0; i < colliders.Length; i++)
+					{
+						Collider testCollider = colliders[i];
+
+						// Ignore if alreaady have a closer target
+						float testDistance = Vector3.Magnitude(testCollider.gameObject.transform.position - m_soldiers[0].BulletSpawn.position);
+						if (testDistance >= targetDistance)
+						{
+							continue;
+						}
+
+						// Ignore self
+						if (m_colliders.Contains(testCollider))
+						{
+							continue;
+						}
+
+						// Check interaction conditions
+						HFUnit testTurret = testCollider.gameObject.GetComponentInParent<HFUnit>();
+						float currentCarry = m_stats[HFStatistics.CarryCapacity] * m_activeSoldiersCount;
+						if (!testTurret
+							|| !testTurret.CanBeCarried()
+							|| testTurret.Team != Team
+							|| currentCarry < testTurret.GetStat(HFStatistics.Weight))
+						{
+							continue;
+						}
+
+						targetTurret = testTurret;
+						targetDistance = testDistance;
+					}
+
+					TryCarry(targetTurret);
+				}
+			}
+			else
+			{
+				TryDrop();
+			}
 		}
 
 		public bool TryCarry(HFUnit tower)
 		{
-			bool bCanCarry = (tower
-				&& tower.CanBeCarried()
-				&& CanCarry()
-				&& m_stats[HFStatistics.CarryCapacity] >= tower.GetStat(HFStatistics.Weight)
-			); //!IsClashing
+			bool bCanCarry = (tower != null); //!IsClashing
 
 			if (bCanCarry)
 			{
 				m_carriedTower = tower;
 				m_carriedTower.SetCarried(true);
+				m_carriedTower.transform.parent = m_transform;
 			}
+
 			return bCanCarry;
 		}
 
-		public bool Drop()
+		public bool TryDrop()
 		{
 			bool bCanDrop = (m_carriedTower != null); //!targetTile.HasTower
+
 			if (bCanDrop)
 			{
+				m_carriedTower.transform.parent = null;
 				m_carriedTower.SetCarried(false);
 				m_carriedTower = null;
 			}
+
 			return bCanDrop;
 		}
 
@@ -908,6 +995,13 @@ namespace HF
 		public bool FindNewTarget()
 		{
 			m_targetEnemy = null;
+
+			// Fail if carrying a tower
+			if (m_carriedTower)
+			{
+				return false;
+			}
+
 			float unitDamage = m_stats[HFStatistics.UnitDamage];
 			float buildingDamage = m_stats[HFStatistics.BuildingDamage];
 
@@ -965,7 +1059,11 @@ namespace HF
 
 		public void AttackAction()
 		{
-			if (m_targetEnemy && IsInRange() && m_targetEnemy.enabled && !m_targetEnemy.IsKilled)
+			if (m_targetEnemy
+				&& IsInRange()
+				&& m_targetEnemy.enabled
+				&& !m_targetEnemy.IsKilled
+				&& !m_carriedTower)
 			{
 				Vector3 direction = (m_targetEnemy.transform.position - m_transform.position);
 				Transform rotatingMesh = (m_soldiers[0].LoadedVisuals.UsesPivot ? m_soldiers[0].LoadedVisuals.Pivot : m_transform);
