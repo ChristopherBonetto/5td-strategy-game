@@ -4,8 +4,10 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.Tilemaps;
 
+
 namespace UnityEngine
 {
+
     [CreateAssetMenu(menuName = "Human Factor/Tile Map/new RuleTileContainer")]
     public class HFRuleTileContainer : ScriptableObject
     {
@@ -69,7 +71,7 @@ namespace UnityEngine
             /// The output GameObject for this Rule.
             /// </summary>
             public GameObject m_GameObject;
-            public bool m_RandomPrefab = true;
+            public bool m_RandomPrefab = false;
             public GameObject m_RandomGameObject;
             public HFRuleTileContainer m_RuleTileContainer;
             /// <summary>
