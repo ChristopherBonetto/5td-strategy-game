@@ -480,6 +480,13 @@ namespace UnityEditor
             float y = rect.yMin;
             GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Game Object");
             tilingRule.m_GameObject = (GameObject)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_GameObject, typeof(GameObject), false);
+
+            y += k_SingleLineHeight;
+            tilingRule.m_RandomPrefab = EditorGUI.ToggleLeft(new Rect(rect.xMin, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_RandomPrefab);
+            if (tilingRule.m_RandomPrefab)
+            {
+                tilingRule.m_RuleTileContainer = (HFRuleTileContainer)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_RuleTileContainer, typeof(HFRuleTileContainer), false);
+            }
             y += k_SingleLineHeight;
             GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Collider");
             tilingRule.m_ColliderType = (Tile.ColliderType)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_ColliderType);

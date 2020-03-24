@@ -6,6 +6,12 @@ using UnityEngine.Tilemaps;
 
 namespace UnityEngine
 {
+    [CreateAssetMenu(menuName = "Human Factor/Tile Map/new RuleTileContainer")]
+    public class HFRuleTileContainer : ScriptableObject
+    {
+        public GameObject[] RulePrefabs;
+    }
+
     /// <summary>
     /// Generic visual tile for creating different tilesets like terrain, pipeline, random or animated tiles.
     /// This is templated to accept a Neighbor Rule Class for Custom Rules.
@@ -63,6 +69,9 @@ namespace UnityEngine
             /// The output GameObject for this Rule.
             /// </summary>
             public GameObject m_GameObject;
+            public bool m_RandomPrefab = true;
+            public GameObject m_RandomGameObject;
+            public HFRuleTileContainer m_RuleTileContainer;
             /// <summary>
             /// The output Animation Speed for this Rule.
             /// </summary>
@@ -354,7 +363,24 @@ namespace UnityEngine
                             break;
                     }
                     tileData.transform = transform;
-                    tileData.gameObject = rule.m_GameObject;
+
+                    if ((rule.m_RandomPrefab) && (rule.m_RuleTileContainer != null) && (rule.m_RuleTileContainer.RulePrefabs.Length > 0))
+                    {
+                        long hash = position.x;
+                        hash = (hash + 0xabcd1234) + (hash << 15);
+                        hash = (hash + 0x0987efab) ^ (hash >> 11);
+                        hash ^= position.y;
+                        hash = (hash + 0x46ac12fd) + (hash << 7);
+                        hash = (hash + 0xbe9730af) ^ (hash << 11);
+                        var oldState = Random.state;
+                        Random.InitState((int)hash);
+                        tileData.gameObject = rule.m_RuleTileContainer.RulePrefabs[(int)(rule.m_RuleTileContainer.RulePrefabs.Length * Random.value)];
+                        Random.state = oldState;
+                    }
+                    else
+                    {
+                        tileData.gameObject = rule.m_GameObject;
+                    }
                     tileData.colliderType = rule.m_ColliderType;
                     break;
                 }

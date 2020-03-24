@@ -9,7 +9,7 @@ public class HFTileMapGenerator
     #region Tilemap Reader
 
     /// <summary>
-    /// Store the Grid's children that has TileMap and TileMapRenderer Components.
+    /// Store the Grid's children that has TileMap Component.
     /// </summary>
     [System.Serializable]
     public class TileMapContainer
@@ -20,6 +20,11 @@ public class HFTileMapGenerator
         [Tooltip("Used to filter layers")]
         public string Tag = "";
 
+
+        //--------------------------------------------------
+        // Tilemap bounds
+        //--------------------------------------------------
+
         /// <summary>
         /// Get the total columns of the tilemap
         /// </summary>
@@ -28,16 +33,18 @@ public class HFTileMapGenerator
         /// Get the total row of the tilemap
         /// </summary>
         public readonly int Rows;
-
         /// <summary>
         /// Get the bounds area of the tilemap
         /// </summary>
         public readonly BoundsInt Area = new BoundsInt(Vector3Int.zero, Vector3Int.zero);
-
         public readonly Tilemap TileMap;
 
-        private Dictionary<Vector3Int, HFRuleTileCustom> m_TilesToSpawn;
 
+        //---------------------------------------------------
+        // Store the tile to spawn in every position drawn.
+        //---------------------------------------------------
+
+        private Dictionary<Vector3Int, HFRuleTileCustom> m_TilesToSpawn;
         /// <summary>
         /// Get all stored tiles in the tilemap.
         /// </summary>
@@ -46,6 +53,10 @@ public class HFTileMapGenerator
             get => m_TilesToSpawn != null ? m_TilesToSpawn : m_TilesToSpawn = new Dictionary<Vector3Int, HFRuleTileCustom>();
         }
 
+
+        //---------------------------------------------------
+        // Constructor
+        //---------------------------------------------------
 
         public TileMapContainer(Tilemap _tileMap, BoundsInt _area)
         {
@@ -100,24 +111,30 @@ public class HFTileMapGenerator
 
     #region Editor Creation Map
 
+    //------------------------------------------------------
+    // It's the Grid (the father of all tiles).
+    // This will be the upper most gameObject of the level.
+    //------------------------------------------------------
+
     private GameObject m_LevelParent = null;
-    /// <summary>
-    /// It's the parent of the level prefab,
-    /// represent the grid in the tilemap system
-    /// </summary>
     public GameObject LevelParent => m_LevelParent;
     
+
+    //------------------------------------------------------
+    // Terrain is the gameObject that handle all prefabs that
+    // compose the terrain of the level, this will be used to 
+    // generate and combine the mesh.
+    //------------------------------------------------------
+
     private GameObject m_Terrain = null;
-    /// <summary>
-    /// It's the terrain layer tilemap,
-    /// respresent the tilemap where terrain it's drew.
-    /// </summary>
     public GameObject Terrain => m_Terrain;
 
+
+    //------------------------------------------------------
+    // All tilemaps under the Grid component.
+    //------------------------------------------------------
+
     private Dictionary<int, GameObject> m_TileMapLayers;
-    /// <summary>
-    /// Get the tilemap children
-    /// </summary>
     public Dictionary<int, GameObject> TileMapLayers 
     {
         get => m_TileMapLayers != null ? m_TileMapLayers : m_TileMapLayers = new Dictionary<int, GameObject>();
@@ -162,6 +179,7 @@ public class HFTileMapGenerator
                 TileMapLayers[container.TileMap.GetHashCode()] : 
                 Terrain;
 
+            // Without this tiles don't give us the data we need.
             // Force all tile to refresh.
             // This means that update all tile data for every tile.
             container.TileMap.RefreshAllTiles();
@@ -171,20 +189,38 @@ public class HFTileMapGenerator
                 // It's used only to match the rule mathod.
                 Matrix4x4 identity = Matrix4x4.identity;
 
-                // Initialize the gameObject to spawn
+                // Initialize the gameObject to spawn to default.
                 GameObject objectToSpawn = container.TilesToSpawn[position].m_DefaultGameObject;
 
-                // Check if the rule matchs
+                // Check if the rule matches
                 foreach (RuleTile.TilingRule rule in container.TilesToSpawn[position].m_TilingRules)
                 {
                     if (container.TilesToSpawn[position].RuleMatches(rule, position, container.TilesToSpawn[position].ITilemap, ref identity))
                     {
-                        // Set the gameObejct
-                        objectToSpawn = rule.m_GameObject;
-                        objectToSpawn.transform.rotation = Quaternion.identity;
+                        // To get the right gameobject
+                        // first we create a tile data, tile data contains all data of the tile (prefab also).
+                        // The we fill the TileData with the TileData at the position declared.
+                        TileData data = new TileData();
+                        container.TilesToSpawn[position].GetTileData(position, container.TilesToSpawn[position].ITilemap, ref data);
+
+
+                        // Handle null condition.
+
+                        if (data.gameObject != null)
+                        {
+                            objectToSpawn = data.gameObject;
+                            objectToSpawn.transform.rotation = Quaternion.identity;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"The tile at position: {position} has no prefab, so i spawn the default one.");
+                        }
+
                         break;
                     }
                 }
+
+                // Instantiate GameObject with an offset.
 
                 GameObject.Instantiate(
                     objectToSpawn,

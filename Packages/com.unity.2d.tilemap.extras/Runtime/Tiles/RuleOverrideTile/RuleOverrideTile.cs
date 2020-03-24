@@ -219,8 +219,10 @@ namespace UnityEngine.Tilemaps
                     originalGameObjects.Add(m_Tile.m_DefaultGameObject);
 
                 foreach (RuleTile.TilingRule rule in m_Tile.m_TilingRules)
+                {
                     if (rule.m_GameObject && !originalGameObjects.Contains(rule.m_GameObject))
                         originalGameObjects.Add(rule.m_GameObject);
+                }
             }
 
             validCount = originalGameObjects.Count;
@@ -253,7 +255,7 @@ namespace UnityEngine.Tilemaps
                     rule.m_Sprites[i] = this[sprite] ?? sprite;
                 }
 
-                rule.m_GameObject = this[rule.m_GameObject] ?? rule.m_GameObject;
+                 rule.m_GameObject = this[rule.m_GameObject] ?? rule.m_GameObject;
             }
         }
 
