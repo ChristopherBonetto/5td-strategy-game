@@ -7,13 +7,6 @@ using UnityEngine.Tilemaps;
 
 namespace UnityEngine
 {
-
-    [CreateAssetMenu(menuName = "Human Factor/Tile Map/new RuleTileContainer")]
-    public class HFRuleTileContainer : ScriptableObject
-    {
-        public GameObject[] RulePrefabs;
-    }
-
     /// <summary>
     /// Generic visual tile for creating different tilesets like terrain, pipeline, random or animated tiles.
     /// This is templated to accept a Neighbor Rule Class for Custom Rules.
@@ -73,7 +66,7 @@ namespace UnityEngine
             public GameObject m_GameObject;
             public bool m_RandomPrefab = false;
             public GameObject m_RandomGameObject;
-            public HFRuleTileContainer m_RuleTileContainer;
+            public RandomRuleTileContainer m_RuleTileContainer;
             /// <summary>
             /// The output Animation Speed for this Rule.
             /// </summary>

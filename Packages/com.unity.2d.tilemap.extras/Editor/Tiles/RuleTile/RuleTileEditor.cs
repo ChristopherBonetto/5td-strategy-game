@@ -485,7 +485,7 @@ namespace UnityEditor
             tilingRule.m_RandomPrefab = EditorGUI.ToggleLeft(new Rect(rect.xMin, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_RandomPrefab);
             if (tilingRule.m_RandomPrefab)
             {
-                tilingRule.m_RuleTileContainer = (HFRuleTileContainer)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_RuleTileContainer, typeof(HFRuleTileContainer), false);
+                tilingRule.m_RuleTileContainer = (RandomRuleTileContainer)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_RuleTileContainer, typeof(RandomRuleTileContainer), false);
             }
             y += k_SingleLineHeight;
             GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Collider");
