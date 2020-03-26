@@ -65,7 +65,6 @@ namespace UnityEngine
             /// </summary>
             public GameObject m_GameObject;
             public bool m_RandomPrefab = false;
-            public GameObject m_RandomGameObject;
             public RandomRuleTileContainer m_RuleTileContainer;
             /// <summary>
             /// The output Animation Speed for this Rule.
