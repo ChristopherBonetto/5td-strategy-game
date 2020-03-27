@@ -642,13 +642,10 @@ namespace UnityEngine
                 case TilingRule.Neighbor.This: return other == this;
                 case TilingRule.Neighbor.NotThis: return other != this;
                 case TilingRule.Neighbor.CompatibleTile:
-                    foreach (var rule in m_TilingRules)
+                    foreach (var compatible in m_TilingRules[neighbor].m_Compatibilities)
                     {
-                        foreach (var compatible in rule.m_Compatibilities)
-                        {
-                            if (compatible != other)
-                                return false;
-                        }
+                        if (compatible != other)
+                            return false;
                     }
                     return true;
             }
