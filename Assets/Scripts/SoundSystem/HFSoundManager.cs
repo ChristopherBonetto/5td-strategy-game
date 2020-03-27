@@ -6,34 +6,43 @@ using FMODUnity;
 using FMOD.Studio;
 using System.Linq;
 
-public class SoundManager : Singleton<SoundManager>
+public class HFSoundManager : Singleton<HFSoundManager>
 {
-    public Dictionary<string, CustomEvent> EventsDictionary = new Dictionary<string, CustomEvent>();
+    public Dictionary<string, HFCustomEvent> EventsDictionary = new Dictionary<string, HFCustomEvent>();
 
     public Dictionary<string, Bus> BusesDictionary = new Dictionary<string, Bus>();
 
-    [UnityEngine.SerializeField, EventRef] private string m_mainTrackPath;
-    private CustomEvent m_mainTrackEvent;
+    //[UnityEngine.SerializeField, EventRef] private string m_mainTrackPath;
+    //private CustomEvent m_mainTrackEvent;
 
     #region  Unity Event
 
-    private void OnEnable()
-    {
-        HFEventManager.SubscribeTo<bool>(HFEventID.OnFinishedLoadEvents, TakeEvents);
-    }
-    private void OnDisable()
-    {
-        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnFinishedLoadEvents, TakeEvents);
-    }
+    //private void OnEnable()
+    //{
+    //    HFEventManager.SubscribeTo<bool>(HFEventID.OnFinishedLoadEvents, TakeEvents);
+    //}
+    //private void OnDisable()
+    //{
+    //    HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnFinishedLoadEvents, TakeEvents);
+    //}
 
-    public void TakeEvents(bool inValue)
-    {
-        if (inValue)
-        {
-            m_mainTrackEvent = GetEventFromDictionaryPath(m_mainTrackPath);
-            m_mainTrackEvent.Play();
-        }
-    }
+    //public void TakeEvents(bool inValue)
+    //{
+    //    if (inValue)
+    //    {
+    //        if (m_mainTrackPath != null)
+    //        {
+    //            m_mainTrackEvent = GetEventFromDictionaryPath(m_mainTrackPath);
+
+    //            //m_mainTrackEvent.EventDescription.is3D(out bool is3D);
+
+    //            //if (!is3D)
+    //            //{
+    //            //    m_mainTrackEvent.Play();
+    //            //}
+    //        }
+    //    }
+    //}
 
     #endregion
 
@@ -41,7 +50,7 @@ public class SoundManager : Singleton<SoundManager>
 
     #region Add event
 
-    public void AddEventToDictionary(string inPath, CustomEvent inEvent)
+    public void AddEventToDictionary(string inPath, HFCustomEvent inEvent)
     {
         EventsDictionary.Add(inPath, inEvent);
     }
@@ -50,12 +59,12 @@ public class SoundManager : Singleton<SoundManager>
 
     #region Get events
 
-    public CustomEvent GetEventFromDictionaryIndex(int inValue)
+    public HFCustomEvent GetEventFromDictionaryIndex(int inValue)
     {
         return EventsDictionary.ElementAt(inValue).Value;
     }
 
-    public CustomEvent GetEventFromDictionaryPath(string inPath)
+    public HFCustomEvent GetEventFromDictionaryPath(string inPath)
     {
         if (EventsDictionary.ContainsKey(inPath))
         {

@@ -6,7 +6,7 @@ using System.Collections;
 using System;
 using System.Linq;
 
-public class CustomFmodDatabase : Singleton<CustomFmodDatabase>
+public class HFCustomFmodDatabase : Singleton<HFCustomFmodDatabase>
 {
     //STUDIO VARIABLES
     private FMOD.Studio.System m_system = new FMOD.Studio.System();
@@ -16,7 +16,7 @@ public class CustomFmodDatabase : Singleton<CustomFmodDatabase>
     private string[] m_banksPath = null;
     private List<Bank> m_loadedBanks = new List<Bank>();
 
-    private const string assetsPath = "/Audio/Desktop/";
+    private const string assetsPath = "/FmodBuilds/Desktop/";
     private const string bankExtension = ".bank";
 
     private int m_pendingEvents = 0;
@@ -168,7 +168,7 @@ public class CustomFmodDatabase : Singleton<CustomFmodDatabase>
     //Take all pending events and try to add them to the final list. 
     private IEnumerator LoadPendingEventDescriptions(EventDescription[] inPendingEvents)
     {
-        List<CustomEvent> tempList = new List<CustomEvent>();
+        List<HFCustomEvent> tempList = new List<HFCustomEvent>();
 
         foreach (EventDescription description in inPendingEvents)
         {
@@ -184,7 +184,7 @@ public class CustomFmodDatabase : Singleton<CustomFmodDatabase>
 
             m_pendingEvents--;
 
-            tempList.Add(new CustomEvent(description));
+            tempList.Add(new HFCustomEvent(description));
             yield return null;
         }
         //If all events finded from banks as been loaded right so READY.
@@ -208,7 +208,7 @@ public class CustomFmodDatabase : Singleton<CustomFmodDatabase>
     //Find all buses from RuntimeManager checking if their name if equal to the bus prefix + the bus name.
     public void FindBuses()
     {
-        SoundManager tempRef = SoundManager.Instance;
+        HFSoundManager tempRef = HFSoundManager.Instance;
 
         for (int i = 0; i < m_busesNames.Length; i++)
         {
@@ -227,7 +227,7 @@ public class CustomFmodDatabase : Singleton<CustomFmodDatabase>
     //Tell to fmod that it will must release all his references to events, bank and system.
     private void ReleaseFmodFromDatabase()
     {
-        SoundManager.Instance.ReleaseEventsFromDicionary();
+        HFSoundManager.Instance.ReleaseEventsFromDicionary();
 
         foreach (Bank bank in m_loadedBanks)
         {
