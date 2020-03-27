@@ -10,10 +10,10 @@ public enum Ambience
     Cave
 }
 
-public class AmbienceSwitcher : Singleton<AmbienceSwitcher>
+public class HFAmbienceSwitcher : Singleton<HFAmbienceSwitcher>
 {
     [UnityEngine.SerializeField, EventRef] private string m_ambienceSwitcherPath;
-    private CustomEvent m_ambienceSwitcherEvent;
+    private HFCustomEvent m_ambienceSwitcherEvent;
 
     private Ambience m_currentAmbience = Ambience.OutdoorNight;
 
@@ -30,7 +30,7 @@ public class AmbienceSwitcher : Singleton<AmbienceSwitcher>
     {
         if (inValue)
         {
-            SoundManager tempIstance = SoundManager.Instance;
+            HFSoundManager tempIstance = HFSoundManager.Instance;
 
             m_ambienceSwitcherEvent = tempIstance.GetEventFromDictionaryPath(m_ambienceSwitcherPath);
             m_ambienceSwitcherEvent.Play();

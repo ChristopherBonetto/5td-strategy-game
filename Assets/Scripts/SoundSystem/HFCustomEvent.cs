@@ -5,7 +5,7 @@ using FMOD.Studio;
 using FMODUnity;
 
 [System.Serializable]
-public class CustomEvent
+public class HFCustomEvent
 {
     [UnityEngine.SerializeField, EventRef] private string m_eventPath = "";
     public string EventPath
@@ -49,15 +49,16 @@ public class CustomEvent
     public EventDescription EventDescription { get => m_eventDescription; }
 
     private EventInstance m_eventIstance = new EventInstance();
+    public EventInstance EventIstance { get => m_eventIstance; }
 
-    public CustomEvent(EventDescription inDescription)
+    public HFCustomEvent(EventDescription inDescription)
     {
         this.m_eventDescription = inDescription;
 
         if (TakeAllInfoFromDescription())
         {
             m_eventIstance = RuntimeManager.CreateInstance(m_eventPath);
-            SoundManager.Instance.AddEventToDictionary(EventPath, this);
+            HFSoundManager.Instance.AddEventToDictionary(EventPath, this);
         }
     }
     
@@ -69,7 +70,6 @@ public class CustomEvent
     public bool TakeAllInfoFromDescription()
     {
         FMOD.RESULT res;
-
 
         res = m_eventDescription.getParameterDescriptionCount(out int paramsFinded);
 

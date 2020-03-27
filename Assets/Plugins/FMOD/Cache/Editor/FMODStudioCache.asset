@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Turrets/Ballista/New Event
   guid: 7cfa069520118b4a9aab1d1cc3760c39
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -23,6 +22,185 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 420
+--- !u!114 &-6962956475834679422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Turrets/Cannon/cannon_shoot
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Turrets/Cannon/cannon_shoot
+  guid: 665cb5cd5a6de74cb28605f38a477800
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 545
+--- !u!114 &-6929032904255590462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/BowAttack/unit_bowattack
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/BowAttack/unit_bowattack
+  guid: 3d129f295ca9184daa4f829f364b8329
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &-6531444342781809465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  guid: 69b70467eeaf1040a4f5684717b62010
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 475
+--- !u!114 &-6017421315079100940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  guid: 5f85e0934c51164dbdf231be80821fba
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 358
+--- !u!114 &-5549006551884887209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/BowAttack/unit_bowattack
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/BowAttack/unit_bowattack
+  guid: 3d129f295ca9184daa4f829f364b8329
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &-5436783630859085995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637209101222253291
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &-4754029507863266805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Hit 2/unit_hit2
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Hit 2/unit_hit2
+  guid: 52b15d62565fbb47b284243783869242
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 60
+--- !u!114 &-4633059202986949155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/MoveComandSound/unit_movecomand
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/MoveComandSound/unit_movecomand
+  guid: 909ca7580c0715458d9825b8427f20bf
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 47
 --- !u!114 &-4552265867793607977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40,7 +218,7 @@ MonoBehaviour:
   lastModified: 637209068551809092
   LoadResult: 0
   FileSizes: []
-  Exists: 1
+  Exists: 0
 --- !u!114 &-4068567425517090132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55,8 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/Death/New Event
   guid: 6887daefa1422f4aa3192bf1eb12743b
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -64,6 +241,47 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 502
+--- !u!114 &-3856972590921103010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/BowAttack/unit_bowattack
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/BowAttack/unit_bowattack
+  guid: 3d129f295ca9184daa4f829f364b8329
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &-3246698541748941420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637209091307742758
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-3167729885220682930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,8 +296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/SpearAttack/New Event
   guid: 31b2618f8adac54a846b8b0b65b6acd3
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -87,6 +304,98 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 560
+--- !u!114 &-2681265852453232108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Turrets/Cannon/cannon_shoot
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Turrets/Cannon/cannon_shoot
+  guid: 665cb5cd5a6de74cb28605f38a477800
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 545
+--- !u!114 &-2489756452072067985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  guid: 69b70467eeaf1040a4f5684717b62010
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 475
+--- !u!114 &-2197076576031704369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Hit 2/unit_hit2
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Hit 2/unit_hit2
+  guid: 52b15d62565fbb47b284243783869242
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 60
+--- !u!114 &-1938438375682392385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  guid: 69b70467eeaf1040a4f5684717b62010
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 475
 --- !u!114 &-1803343579460060497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,8 +410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/Hit/New Event
   guid: b8dfcd32fe5dbd4fb028ea918f6843af
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -110,6 +418,52 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 219
+--- !u!114 &-1174929953772275798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Turrets/Ballista/ballista_shoot
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Turrets/Ballista/ballista_shoot
+  guid: 7cfa069520118b4a9aab1d1cc3760c39
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 420
+--- !u!114 &-991401638015037583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Death/unit_death
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Death/unit_death
+  guid: 6887daefa1422f4aa3192bf1eb12743b
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 502
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -123,25 +477,25 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: 5915443862301819332}
-  - {fileID: -4552265867793607977}
+  - {fileID: 3886991910002265404}
+  - {fileID: -5436783630859085995}
   EditorEvents:
-  - {fileID: -3167729885220682930}
-  - {fileID: 361056133051988463}
-  - {fileID: 1188727983979992272}
-  - {fileID: 6343743446171672224}
-  - {fileID: 6823072936320120294}
-  - {fileID: -4068567425517090132}
-  - {fileID: 5987745706738327672}
-  - {fileID: -8255937633077920039}
-  - {fileID: 6710186271195615218}
-  - {fileID: -1803343579460060497}
+  - {fileID: 2612067665616045947}
+  - {fileID: -3856972590921103010}
+  - {fileID: -4754029507863266805}
+  - {fileID: 5829764507306868248}
+  - {fileID: 4548237494952202967}
+  - {fileID: 770818897003621318}
+  - {fileID: -1938438375682392385}
+  - {fileID: -1174929953772275798}
+  - {fileID: 1121121052059870179}
+  - {fileID: 4731410582908433027}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -4552265867793607977}
+  - {fileID: -5436783630859085995}
   StringsBanks:
-  - {fileID: 5915443862301819332}
-  stringsBankWriteTime: 637209068551858956
+  - {fileID: 3886991910002265404}
+  stringsBankWriteTime: 637209101222303145
   cacheVersion: 3
 --- !u!114 &361056133051988463
 MonoBehaviour:
@@ -157,8 +511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/BowAttack/New Event
   guid: 3d129f295ca9184daa4f829f364b8329
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -166,6 +519,52 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 560
+--- !u!114 &770818897003621318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Death/unit_death
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Death/unit_death
+  guid: 6887daefa1422f4aa3192bf1eb12743b
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 502
+--- !u!114 &1121121052059870179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/MoveComandSound/unit_movecomand
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/MoveComandSound/unit_movecomand
+  guid: 909ca7580c0715458d9825b8427f20bf
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 47
 --- !u!114 &1188727983979992272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,8 +579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/Hit 2/New Event
   guid: 52b15d62565fbb47b284243783869242
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -189,6 +587,299 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 60
+--- !u!114 &2535294799720239920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/MoveComandSound/unit_movecomand
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/MoveComandSound/unit_movecomand
+  guid: 909ca7580c0715458d9825b8427f20bf
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 47
+--- !u!114 &2612067665616045947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/SpearAttack/unit_spearattack
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/SpearAttack/unit_spearattack
+  guid: 31b2618f8adac54a846b8b0b65b6acd3
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &3831158675917631199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/SpearAttack/unit_spearattack
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/SpearAttack/unit_spearattack
+  guid: 31b2618f8adac54a846b8b0b65b6acd3
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &3886991910002265404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FmodBuilds/Desktop/Master.strings.bank
+  SubDir: 
+  lastModified: 637209101222303145
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 1364
+  Exists: 1
+--- !u!114 &4361192093959570713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  guid: 5f85e0934c51164dbdf231be80821fba
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 358
+--- !u!114 &4548237494952202967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Turrets/Cannon/cannon_shoot
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Turrets/Cannon/cannon_shoot
+  guid: 665cb5cd5a6de74cb28605f38a477800
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 545
+--- !u!114 &4714174644164649468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Hit 2/unit_hit2
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Hit 2/unit_hit2
+  guid: 52b15d62565fbb47b284243783869242
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 60
+--- !u!114 &4731410582908433027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Hit/unit_hit
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Hit/unit_hit
+  guid: b8dfcd32fe5dbd4fb028ea918f6843af
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 219
+--- !u!114 &4911549793895988811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/SpearAttack/unit_spearattack
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/SpearAttack/unit_spearattack
+  guid: 31b2618f8adac54a846b8b0b65b6acd3
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &5774689958509250683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Turrets/Ballista/ballista_shoot
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Turrets/Ballista/ballista_shoot
+  guid: 7cfa069520118b4a9aab1d1cc3760c39
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 420
+--- !u!114 &5829764507306868248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  guid: 5f85e0934c51164dbdf231be80821fba
+  Banks:
+  - {fileID: -5436783630859085995}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 358
+--- !u!114 &5885459563717405960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Hit/unit_hit
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Hit/unit_hit
+  guid: b8dfcd32fe5dbd4fb028ea918f6843af
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 219
+--- !u!114 &5908348700489791480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FmodBuilds/Desktop/Master.strings.bank
+  SubDir: 
+  lastModified: 637209093595267405
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 1306
+  Exists: 1
 --- !u!114 &5915443862301819332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,11 +894,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FmodBuilds/Desktop/Master.strings.bank
   SubDir: 
-  lastModified: 637209068551858956
+  lastModified: 637209091307812570
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1256
+    Value: 1306
   Exists: 1
 --- !u!114 &5987745706738327672
 MonoBehaviour:
@@ -223,8 +914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/SwordSlash/New Event
   guid: 69b70467eeaf1040a4f5684717b62010
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -246,8 +936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/LiftTurret/New Event
   guid: 5f85e0934c51164dbdf231be80821fba
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -255,6 +944,29 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 358
+--- !u!114 &6631326691594037579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Hit/unit_hit
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Hit/unit_hit
+  guid: b8dfcd32fe5dbd4fb028ea918f6843af
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 219
 --- !u!114 &6710186271195615218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -269,8 +981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Units/MoveComandSound/New Event
   guid: 909ca7580c0715458d9825b8427f20bf
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -292,8 +1003,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Turrets/Cannon/New Event
   guid: 665cb5cd5a6de74cb28605f38a477800
-  Banks:
-  - {fileID: -4552265867793607977}
+  Banks: []
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -301,3 +1011,85 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 545
+--- !u!114 &7105305868036515374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637209093595217540
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
+--- !u!114 &7339604462968206315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637209093595217540
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &7492142220271813852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Units/Death/unit_death
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Units/Death/unit_death
+  guid: 6887daefa1422f4aa3192bf1eb12743b
+  Banks:
+  - {fileID: 7339604462968206315}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 502
+--- !u!114 &8449282424963636012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/GameSounds/Turrets/Ballista/ballista_shoot
+  m_EditorClassIdentifier: 
+  Path: event:/GameSounds/Turrets/Ballista/ballista_shoot
+  guid: 7cfa069520118b4a9aab1d1cc3760c39
+  Banks:
+  - {fileID: -3246698541748941420}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 420
