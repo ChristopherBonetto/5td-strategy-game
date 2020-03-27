@@ -57,9 +57,17 @@ public class HFCustomEvent
 
         if (TakeAllInfoFromDescription())
         {
-            m_eventIstance = RuntimeManager.CreateInstance(m_eventPath);
-            HFSoundManager.Instance.AddEventToDictionary(EventPath, this);
+            m_eventDescription.createInstance(out EventInstance instance);
+            m_eventIstance = instance;
+            HFSoundManager.Instance.AddNewElementToDictionary(EventPath, this);
         }
+    }
+
+
+    public bool isPlaying()
+    {
+        m_eventIstance.getPlaybackState(out PLAYBACK_STATE playingState);
+        return m_eventIstance.isValid() && (playingState != PLAYBACK_STATE.STOPPED);
     }
     
     public bool CheckForErrors()
@@ -104,6 +112,7 @@ public class HFCustomEvent
 
     public void Play()
     {
+        if(!isPlaying())
         m_eventIstance.start();
     }
 

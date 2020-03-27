@@ -6,7 +6,7 @@ using System.Collections;
 using System;
 using System.Linq;
 
-public class HFCustomFmodDatabase : Singleton<HFCustomFmodDatabase>
+public class HFFmodDatabase : Singleton<HFFmodDatabase>
 {
     //STUDIO VARIABLES
     private FMOD.Studio.System m_system = new FMOD.Studio.System();

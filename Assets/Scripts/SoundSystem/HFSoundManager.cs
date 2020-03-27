@@ -8,67 +8,48 @@ using System.Linq;
 
 public class HFSoundManager : Singleton<HFSoundManager>
 {
-    public Dictionary<string, HFCustomEvent> EventsDictionary = new Dictionary<string, HFCustomEvent>();
+    public Dictionary<string, List<HFCustomEvent> > EventsDictionary = new Dictionary<string, List<HFCustomEvent> >();
 
     public Dictionary<string, Bus> BusesDictionary = new Dictionary<string, Bus>();
 
-    //[UnityEngine.SerializeField, EventRef] private string m_mainTrackPath;
-    //private CustomEvent m_mainTrackEvent;
 
-    #region  Unity Event
+    #region Dictionary
 
-    //private void OnEnable()
-    //{
-    //    HFEventManager.SubscribeTo<bool>(HFEventID.OnFinishedLoadEvents, TakeEvents);
-    //}
-    //private void OnDisable()
-    //{
-    //    HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnFinishedLoadEvents, TakeEvents);
-    //}
+    #region Add dictionary event
 
-    //public void TakeEvents(bool inValue)
-    //{
-    //    if (inValue)
-    //    {
-    //        if (m_mainTrackPath != null)
-    //        {
-    //            m_mainTrackEvent = GetEventFromDictionaryPath(m_mainTrackPath);
-
-    //            //m_mainTrackEvent.EventDescription.is3D(out bool is3D);
-
-    //            //if (!is3D)
-    //            //{
-    //            //    m_mainTrackEvent.Play();
-    //            //}
-    //        }
-    //    }
-    //}
-
-    #endregion
-
-    #region CustomEvents
-
-    #region Add event
-
-    public void AddEventToDictionary(string inPath, HFCustomEvent inEvent)
+    public void AddNewElementToDictionary(string inPath, HFCustomEvent inEventsList)
     {
-        EventsDictionary.Add(inPath, inEvent);
+        if (!EventsDictionary.ContainsKey(inPath))
+        {
+            List<HFCustomEvent> tempList = new List<HFCustomEvent>();
+            tempList.Add(inEventsList);
+            EventsDictionary.Add(inPath, tempList);
+        }
+        else
+        {
+            EventsDictionary[inPath].Add(inEventsList);
+        }
+        Debug.Log("Added " + EventsDictionary[inPath].Count + " " + inPath);
     }
 
     #endregion
 
     #region Get events
 
-    public HFCustomEvent GetEventFromDictionaryIndex(int inValue)
-    {
-        return EventsDictionary.ElementAt(inValue).Value;
-    }
-
-    public HFCustomEvent GetEventFromDictionaryPath(string inPath)
+    public HFCustomEvent GetFreeEventFromDictionaryKey(string inPath)
     {
         if (EventsDictionary.ContainsKey(inPath))
         {
-            return EventsDictionary[inPath];
+            EventDescription tempDesc = EventsDictionary[inPath].ElementAt(0).EventDescription;
+
+            foreach(HFCustomEvent instance in EventsDictionary[inPath])
+            {
+                if (!instance.isPlaying())
+                {
+                    return instance;
+                }
+            }
+            return new HFCustomEvent(tempDesc); 
         }
         return null;
     }
@@ -79,10 +60,13 @@ public class HFSoundManager : Singleton<HFSoundManager>
 
     public void ReleaseEventsFromDicionary()
     {
-        foreach(string key in EventsDictionary.Keys)
+        foreach (string key in EventsDictionary.Keys)
         {
-            EventsDictionary[key].EventDescription.releaseAllInstances();
-            EventsDictionary[key].EventDescription.unloadSampleData();
+            foreach(HFCustomEvent instance in EventsDictionary[key])
+            {
+                instance.EventDescription.releaseAllInstances();
+                instance.EventDescription.unloadSampleData();
+            }
         }
         EventsDictionary.Clear();
     }
