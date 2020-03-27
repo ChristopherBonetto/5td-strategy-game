@@ -478,6 +478,7 @@ namespace UnityEditor
         public void RuleInspectorOnGUI(Rect rect, RuleTile.TilingRuleOutput tilingRule)
         {
             float y = rect.yMin;
+            float x = rect.xMin;
             GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Game Object");
             tilingRule.m_GameObject = (GameObject)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_GameObject, typeof(GameObject), false);
 
@@ -488,45 +489,62 @@ namespace UnityEditor
                 tilingRule.m_RuleTileContainer = (RandomRuleTileContainer)EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), "", tilingRule.m_RuleTileContainer, typeof(RandomRuleTileContainer), false);
             }
             y += k_SingleLineHeight;
-            GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Collider");
-            tilingRule.m_ColliderType = (Tile.ColliderType)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_ColliderType);
+            //GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Collider");
+            //tilingRule.m_ColliderType = (Tile.ColliderType)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_ColliderType);
+
+            //-----------------------------------------------------------------------------------------------------------------------------------
+            GUI.Label(new Rect (rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Compatileble");
+            EditorGUI.BeginChangeCheck();
+            int newLength = EditorGUI.DelayedIntField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Compatibilities.Length);
+            if (EditorGUI.EndChangeCheck())
+                Array.Resize(ref tilingRule.m_Compatibilities, Math.Max(newLength, 0));
             y += k_SingleLineHeight;
-            GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Output");
-            tilingRule.m_Output = (RuleTile.TilingRule.OutputSprite)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Output);
-            y += k_SingleLineHeight;
 
-            if (tilingRule.m_Output == RuleTile.TilingRule.OutputSprite.Animation)
+
+            for (int i = 0; i < tilingRule.m_Compatibilities.Length; i++)
             {
-                GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Speed");
-                tilingRule.m_AnimationSpeed = EditorGUI.FloatField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_AnimationSpeed);
-                y += k_SingleLineHeight;
+                tilingRule.m_Compatibilities[i] = EditorGUI.ObjectField(new Rect(x, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Compatibilities[i], typeof(HFRuleTileCustom), false) as HFRuleTileCustom;
+                x += k_LabelWidth + 40;
             }
-            if (tilingRule.m_Output == RuleTile.TilingRule.OutputSprite.Random)
-            {
-                GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Noise");
-                tilingRule.m_PerlinScale = EditorGUI.Slider(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_PerlinScale, 0.001f, 0.999f);
-                y += k_SingleLineHeight;
+            //-----------------------------------------------------------------------------------------------------------------------------------
 
-                GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Shuffle");
-                tilingRule.m_RandomTransform = (RuleTile.TilingRule.Transform)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_RandomTransform);
-                y += k_SingleLineHeight;
-            }
+            //y += k_SingleLineHeight;
+            //GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Output");
+            //tilingRule.m_Output = (RuleTile.TilingRule.OutputSprite)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Output);
+            //y += k_SingleLineHeight;
 
-            if (tilingRule.m_Output != RuleTile.TilingRule.OutputSprite.Single)
-            {
-                GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Size");
-                EditorGUI.BeginChangeCheck();
-                int newLength = EditorGUI.DelayedIntField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Sprites.Length);
-                if (EditorGUI.EndChangeCheck())
-                    Array.Resize(ref tilingRule.m_Sprites, Math.Max(newLength, 1));
-                y += k_SingleLineHeight;
+            //if (tilingRule.m_Output == RuleTile.TilingRule.OutputSprite.Animation)
+            //{
+            //    GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Speed");
+            //    tilingRule.m_AnimationSpeed = EditorGUI.FloatField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_AnimationSpeed);
+            //    y += k_SingleLineHeight;
+            //}
+            //if (tilingRule.m_Output == RuleTile.TilingRule.OutputSprite.Random)
+            //{
+            //    GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Noise");
+            //    tilingRule.m_PerlinScale = EditorGUI.Slider(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_PerlinScale, 0.001f, 0.999f);
+            //    y += k_SingleLineHeight;
 
-                for (int i = 0; i < tilingRule.m_Sprites.Length; i++)
-                {
-                    tilingRule.m_Sprites[i] = EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Sprites[i], typeof(Sprite), false) as Sprite;
-                    y += k_SingleLineHeight;
-                }
-            }
+            //    GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Shuffle");
+            //    tilingRule.m_RandomTransform = (RuleTile.TilingRule.Transform)EditorGUI.EnumPopup(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_RandomTransform);
+            //    y += k_SingleLineHeight;
+            //}
+
+            //if (tilingRule.m_Output != RuleTile.TilingRule.OutputSprite.Single)
+            //{
+            //GUI.Label(new Rect(rect.xMin, y, k_LabelWidth, k_SingleLineHeight), "Size");
+            //EditorGUI.BeginChangeCheck();
+            //int newLength1 = EditorGUI.DelayedIntField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Compatibilities.Length);
+            //if (EditorGUI.EndChangeCheck())
+            //    Array.Resize(ref tilingRule.m_Sprites, Math.Max(newLength1, 1));
+            //y += k_SingleLineHeight;
+
+            //for (int i = 0; i < tilingRule.m_Sprites.Length; i++)
+            //{
+            //    tilingRule.m_Sprites[i] = EditorGUI.ObjectField(new Rect(rect.xMin + k_LabelWidth, y, rect.width - k_LabelWidth, k_SingleLineHeight), tilingRule.m_Sprites[i], typeof(Sprite), false) as Sprite;
+            //    y += k_SingleLineHeight;
+            //}
+            //}
         }
 
         public override bool HasPreviewGUI()

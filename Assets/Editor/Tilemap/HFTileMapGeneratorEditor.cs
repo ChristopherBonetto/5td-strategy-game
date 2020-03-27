@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(HFTileMapGenerator))]
 public class HFTileMapGeneratorEditor : EditorWindow
 {
     public HFTileMapGenerator m_tilemapReader;
