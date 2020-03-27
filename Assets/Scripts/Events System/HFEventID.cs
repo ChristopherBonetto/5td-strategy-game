@@ -67,4 +67,9 @@
 	OnWaveIndexUpdate,
 	OnNewWaveBegin,
 	OnWaveEnd,
+
+    /// <summary>
+    /// HFUnit	unit
+    /// </summary>
+    OnFinishedLoadEvents
 }

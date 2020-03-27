@@ -1,0 +1,303 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8255937633077920039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Turrets/Ballista/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Turrets/Ballista/New Event
+  guid: 7cfa069520118b4a9aab1d1cc3760c39
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 420
+--- !u!114 &-4552265867793607977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637209068551809092
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
+--- !u!114 &-4068567425517090132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/Death/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/Death/New Event
+  guid: 6887daefa1422f4aa3192bf1eb12743b
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 502
+--- !u!114 &-3167729885220682930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/SpearAttack/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/SpearAttack/New Event
+  guid: 31b2618f8adac54a846b8b0b65b6acd3
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &-1803343579460060497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/Hit/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/Hit/New Event
+  guid: b8dfcd32fe5dbd4fb028ea918f6843af
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 219
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32cf7c32a3ed8347bac48ef5ed56d82, type: 3}
+  m_Name: FMODStudioCache
+  m_EditorClassIdentifier: 
+  EditorBanks:
+  - {fileID: 5915443862301819332}
+  - {fileID: -4552265867793607977}
+  EditorEvents:
+  - {fileID: -3167729885220682930}
+  - {fileID: 361056133051988463}
+  - {fileID: 1188727983979992272}
+  - {fileID: 6343743446171672224}
+  - {fileID: 6823072936320120294}
+  - {fileID: -4068567425517090132}
+  - {fileID: 5987745706738327672}
+  - {fileID: -8255937633077920039}
+  - {fileID: 6710186271195615218}
+  - {fileID: -1803343579460060497}
+  EditorParameters: []
+  MasterBanks:
+  - {fileID: -4552265867793607977}
+  StringsBanks:
+  - {fileID: 5915443862301819332}
+  stringsBankWriteTime: 637209068551858956
+  cacheVersion: 3
+--- !u!114 &361056133051988463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/BowAttack/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/BowAttack/New Event
+  guid: 3d129f295ca9184daa4f829f364b8329
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 560
+--- !u!114 &1188727983979992272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/Hit 2/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/Hit 2/New Event
+  guid: 52b15d62565fbb47b284243783869242
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 60
+--- !u!114 &5915443862301819332
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: FmodBuilds/Desktop/Master.strings.bank
+  SubDir: 
+  lastModified: 637209068551858956
+  LoadResult: 0
+  FileSizes:
+  - Name: 
+    Value: 1256
+  Exists: 1
+--- !u!114 &5987745706738327672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/SwordSlash/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/SwordSlash/New Event
+  guid: 69b70467eeaf1040a4f5684717b62010
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 475
+--- !u!114 &6343743446171672224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/LiftTurret/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/LiftTurret/New Event
+  guid: 5f85e0934c51164dbdf231be80821fba
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 358
+--- !u!114 &6710186271195615218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Units/MoveComandSound/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Units/MoveComandSound/New Event
+  guid: 909ca7580c0715458d9825b8427f20bf
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 47
+--- !u!114 &6823072936320120294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Turrets/Cannon/New Event
+  m_EditorClassIdentifier: 
+  Path: event:/Turrets/Cannon/New Event
+  guid: 665cb5cd5a6de74cb28605f38a477800
+  Banks:
+  - {fileID: -4552265867793607977}
+  IsStream: 0
+  Is3D: 1
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 545
