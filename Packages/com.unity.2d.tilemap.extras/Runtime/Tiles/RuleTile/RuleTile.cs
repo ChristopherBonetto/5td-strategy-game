@@ -646,11 +646,11 @@ namespace UnityEngine
                     {
                         foreach (var compatible in rule.m_Compatibilities)
                         {
-                            if (compatible == other)
-                                return true;
+                            if (compatible != other)
+                                return false;
                         }
                     }
-                    return false;
+                    return true;
             }
             return true;
         }
