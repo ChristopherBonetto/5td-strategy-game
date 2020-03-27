@@ -1,5 +1,6 @@
 ﻿using UnityEngine.Tilemaps;
 using UnityEngine;
+using System.Collections.Generic;
 
 [CreateAssetMenu(menuName = "Human Factor/Tile Map/Rule Tile", fileName = "New_HF_RuleTile")]
 public class HFRuleTileCustom : RuleTile<HFRuleTileCustom.Neighbor>
@@ -18,6 +19,11 @@ public class HFRuleTileCustom : RuleTile<HFRuleTileCustom.Neighbor>
     //---------------------------------------------------------------------------------------------
 
     #region RuleMatch
+    public List<TileBase> siblings = new List<TileBase>();
+    public bool matchSiblingLayer;
+    public int siblingLayer;
+
+
     public class Neighbor : RuleTile.TilingRule.Neighbor
     {
         /// <summary>
@@ -30,16 +36,41 @@ public class HFRuleTileCustom : RuleTile<HFRuleTileCustom.Neighbor>
         /// If not, the rule will fail.
         /// </summary>
         public const int NotNull = 4;
+        /// <summary>
+        /// The Rule Tile will check if the contents of the cell in that direction is a compatible tile from the list.
+        /// If it is not, the rule will fail.
+        /// </summary>
+        public const int CompatibleTile = 5;
     }
 
-    public override bool RuleMatch(int neighbor, TileBase tile)
+    public override bool RuleMatch(int neighbor, TileBase other)
     {
         switch (neighbor)
         {
-            case Neighbor.Null: return tile == null;
-            case Neighbor.NotNull: return tile != null;
+            case Neighbor.Null: return other == null;
+            case Neighbor.NotNull: return other != null;
+            case Neighbor.CompatibleTile:
+                bool isMatchCondition = neighbor == RuleTile.TilingRule.Neighbor.This;
+                bool isMatch = other == this;
+
+                if (!isMatch)
+                {
+                    isMatch = siblings.Contains(other);
+                }
+
+                if (!isMatch && matchSiblingLayer)
+                {
+                    if (other is RuleOverrideTile)
+                        other = (other as RuleOverrideTile).m_InstanceTile;
+
+                    if (other is HFRuleTileCustom)
+                        isMatch = siblingLayer == (other as HFRuleTileCustom).siblingLayer;
+                }
+
+                return isMatch == isMatchCondition;
+
         }
-        return base.RuleMatch(neighbor, tile);
+        return base.RuleMatch(neighbor, other);
     }
     #endregion
 

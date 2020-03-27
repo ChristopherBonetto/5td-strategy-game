@@ -66,7 +66,6 @@ namespace UnityEngine
             public GameObject m_GameObject;
             public bool m_RandomPrefab = false;
             public RandomRuleTileContainer m_RuleTileContainer;
-            public HFRuleTileCustom[] m_Compatibilities = new HFRuleTileCustom[1];
             /// <summary>
             /// The output Animation Speed for this Rule.
             /// </summary>
@@ -103,11 +102,6 @@ namespace UnityEngine
                 /// If it is, the rule will fail.
                 /// </summary>
                 public const int NotThis = 2;
-                /// <summary>
-                /// The Rule Tile will check if the contents of the cell in that direction is a compatible tile from the list.
-                /// If it is not, the rule will fail.
-                /// </summary>
-                public const int CompatibleTile = 5;
             }
 
             /// <summary>
@@ -641,13 +635,6 @@ namespace UnityEngine
             {
                 case TilingRule.Neighbor.This: return other == this;
                 case TilingRule.Neighbor.NotThis: return other != this;
-                case TilingRule.Neighbor.CompatibleTile:
-                    foreach (var compatible in m_TilingRules[neighbor].m_Compatibilities)
-                    {
-                        if (compatible != other)
-                            return false;
-                    }
-                    return true;
             }
             return true;
         }
