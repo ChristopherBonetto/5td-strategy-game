@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9e7ff037dd9fac4999d974026351e9f, type: 3}
-  m_Name: Height_0
+  m_Name: Height_0 ramps
   m_EditorClassIdentifier: 
   m_DefaultSprite: {fileID: 21300000, guid: 08499df731eb23f408f9f6ea318002f5, type: 3}
   m_DefaultGameObject: {fileID: 2958892936083079309, guid: 5aa6f61dbb62394429ee50f4e9dd63f1,
@@ -135,7 +135,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0300000003000000040000000400000004000000
+    m_Neighbors: 0200000002000000040000000400000004000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
     m_RuleTransform: 0
   - m_Id: 4
     m_Sprites:
-    - {fileID: 21300000, guid: faa20c89e91a8a84c87b9608d9bf0bdd, type: 3}
+    - {fileID: 21300000, guid: f8f732e8c2feeda4eba40acb2f714abb, type: 3}
     m_GameObject: {fileID: 830078289055527557, guid: c05ac4b708e23f84ca3588f379c07e73,
       type: 3}
     m_RandomPrefab: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 04000000030000000300000003000000
+    m_Neighbors: 04000000020000000200000002000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -164,7 +164,7 @@ MonoBehaviour:
     m_RuleTransform: 0
   - m_Id: 5
     m_Sprites:
-    - {fileID: 21300000, guid: b4ec6d02b56ba984287089adab9ca1dd, type: 3}
+    - {fileID: 21300000, guid: 83bf02a2bc791874a9385f29da6d118c, type: 3}
     m_GameObject: {fileID: 3028599838729962301, guid: f5bf2369043f5794d8639154151f37a5,
       type: 3}
     m_RandomPrefab: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
     m_RuleTransform: 0
   - m_Id: 6
     m_Sprites:
-    - {fileID: 21300000, guid: 555010e341016d34eb9305d8b4fd31f6, type: 3}
+    - {fileID: 21300000, guid: 5fef8373683eb934ba3605b9c96ec43a, type: 3}
     m_GameObject: {fileID: 7918141725474048180, guid: 4795d0c9abb416f44a004ef1c430f87b,
       type: 3}
     m_RandomPrefab: 0
@@ -202,7 +202,7 @@ MonoBehaviour:
     m_RuleTransform: 0
   - m_Id: 7
     m_Sprites:
-    - {fileID: 21300000, guid: 6f5137e77c862074fb94369b87c65993, type: 3}
+    - {fileID: 21300000, guid: 2382ef5732ab82642853148f0dde5f3f, type: 3}
     m_GameObject: {fileID: 7506487531160815423, guid: eb735eab41a24714c933fce91cb8f7ba,
       type: 3}
     m_RandomPrefab: 0
@@ -250,12 +250,12 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 03000000030000000400000004000000
+    m_Neighbors: 04000000040000000300000003000000
     m_NeighborPositions:
-    - {x: 1, y: 0, z: 0}
-    - {x: -1, y: 0, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: 0, y: -1, z: 0}
+    - {x: -1, y: 0, z: 0}
+    - {x: 1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 10
     m_Sprites:
@@ -403,12 +403,12 @@ MonoBehaviour:
     m_NeighborPositions:
     - {x: 1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
-    - {x: -1, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
     - {x: -1, y: -1, z: 0}
-    - {x: 0, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}
+    - {x: -1, y: 1, z: 0}
     - {x: 1, y: -1, z: 0}
+    - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 17
     m_Sprites:
@@ -451,10 +451,10 @@ MonoBehaviour:
     - {x: 1, y: -1, z: 0}
     - {x: 0, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}
-    - {x: -1, y: 0, z: 0}
     - {x: -1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 1, z: 0}
+    - {x: -1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 21
     m_Sprites:
@@ -537,16 +537,16 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0300000003000000040000000400000004000000040000000400000004000000
+    m_Neighbors: 0300000004000000040000000400000004000000040000000400000003000000
     m_NeighborPositions:
     - {x: 1, y: -1, z: 0}
-    - {x: -1, y: -1, z: 0}
     - {x: -1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
     - {x: 0, y: -1, z: 0}
     - {x: -1, y: 0, z: 0}
+    - {x: -1, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 25
     m_Sprites:
@@ -590,9 +590,9 @@ MonoBehaviour:
     - {x: 1, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
     - {x: 0, y: 1, z: 0}
-    - {x: 0, y: -1, z: 0}
     - {x: -1, y: -1, z: 0}
     - {x: -1, y: 0, z: 0}
+    - {x: 0, y: -1, z: 0}
     m_RuleTransform: 0
   - m_Id: 27
     m_Sprites:
@@ -721,14 +721,14 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 030000000400000004000000040000000400000003000000
+    m_Neighbors: 030000000400000004000000040000000300000004000000
     m_NeighborPositions:
     - {x: -1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 1, z: 0}
-    - {x: 1, y: 0, z: 0}
     - {x: -1, y: 0, z: 0}
     - {x: 0, y: -1, z: 0}
+    - {x: 1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 33
     m_Sprites:
@@ -826,7 +826,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 020000000400000004000000040000000400000002000000
+    m_Neighbors: 030000000400000004000000040000000400000003000000
     m_NeighborPositions:
     - {x: -1, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
@@ -847,7 +847,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 020000000400000004000000040000000400000002000000
+    m_Neighbors: 030000000400000004000000040000000400000003000000
     m_NeighborPositions:
     - {x: -1, y: -1, z: 0}
     - {x: 1, y: -1, z: 0}
@@ -868,7 +868,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 020000000400000004000000040000000400000002000000
+    m_Neighbors: 030000000400000004000000040000000400000003000000
     m_NeighborPositions:
     - {x: 1, y: -1, z: 0}
     - {x: -1, y: -1, z: 0}
@@ -889,7 +889,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 020000000200000004000000040000000400000002000000
+    m_Neighbors: 030000000300000004000000040000000400000003000000
     m_NeighborPositions:
     - {x: 1, y: 1, z: 0}
     - {x: -1, y: 1, z: 0}
@@ -910,7 +910,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 020000000200000004000000040000000400000002000000
+    m_Neighbors: 030000000300000004000000040000000400000003000000
     m_NeighborPositions:
     - {x: 1, y: 1, z: 0}
     - {x: 1, y: -1, z: 0}
@@ -931,7 +931,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 040000000200000002000000040000000400000002000000
+    m_Neighbors: 040000000300000003000000040000000400000003000000
     m_NeighborPositions:
     - {x: -1, y: 0, z: 0}
     - {x: -1, y: 1, z: 0}
@@ -952,7 +952,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 020000000400000004000000040000000200000002000000
+    m_Neighbors: 030000000400000004000000040000000300000003000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -973,7 +973,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0200000002000000020000000400000004000000
+    m_Neighbors: 0300000003000000030000000400000004000000
     m_NeighborPositions:
     - {x: -1, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -993,7 +993,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0200000004000000040000000200000002000000
+    m_Neighbors: 0300000004000000040000000300000003000000
     m_NeighborPositions:
     - {x: 1, y: -1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -1013,7 +1013,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0200000002000000020000000400000004000000
+    m_Neighbors: 0300000003000000030000000400000004000000
     m_NeighborPositions:
     - {x: -1, y: 1, z: 0}
     - {x: 1, y: 0, z: 0}
@@ -1033,7 +1033,7 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 0200000004000000040000000200000002000000
+    m_Neighbors: 0300000004000000040000000300000003000000
     m_NeighborPositions:
     - {x: 1, y: 1, z: 0}
     - {x: 0, y: 1, z: 0}
