@@ -1,0 +1,66 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace HF
+{
+    public class HFUnitView : MonoBehaviour
+    {
+        [SerializeField]
+        private HFPoolID m_UnitPopUpID;
+        public HFPoolID UnitPopUpID => m_UnitPopUpID;
+
+        private HFUnit m_unitComponent;
+        private GameObject m_pooledGameObject;
+
+
+        private void Awake()
+        {
+            m_unitComponent = GetComponent<HFUnit>();
+        }
+
+        private void OnEnable()
+        {
+            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitSelected, OnUnitSelected);
+        }
+
+        private void OnDisable()
+        {
+            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitSelected, OnUnitSelected);
+        }
+
+
+        //-----------------------------------------------------------
+        // Interact with this component through events. If the ally
+        // unit is selected (OnUnitSelect), then sowh upgrade or 
+        // specialization. If the unit is already specialized, show
+        // updgrade, if not show the specialization. Cam be selected
+        // only one unit at time.
+        // When the unit is selected --> Pool the icons that allow
+        // upgrade or specialization --> chack if the unit is already
+        // specialized --> assign the unit to the UI element.
+        //-----------------------------------------------------------
+
+        public void OnUnitSelected(HFUnit unit)
+        {
+            // handle deselect unit.
+            if (unit == null)
+            {
+                if (m_pooledGameObject)
+                {
+                    m_pooledGameObject.SetActive(false);
+                }
+                return;
+            }
+
+            if (unit.Team == 0 && unit == m_unitComponent)
+            {
+                // Pool the popUp, get component of the popUp.
+                m_pooledGameObject = HFObjectPooler.Instance.GetPooledObject(m_UnitPopUpID.ID);
+                HFUnitUIPopUpUpgrade popUp = m_pooledGameObject.GetComponent<HFUnitUIPopUpUpgrade>();
+                // Set up the pop up.
+                popUp.SetUnitInfo(unit);
+            }
+        }
+    }
+}

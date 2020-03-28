@@ -25,6 +25,8 @@ public class HFObjectPooler : Singleton<HFObjectPooler>
 		[SerializeField]
 		public HFPoolID uniqueID = null;
 
+		public bool SpawnUnderCanvas = false;
+
 		[HideInInspector]
 		public int CurrentCount = 0;
 	}
@@ -34,13 +36,28 @@ public class HFObjectPooler : Singleton<HFObjectPooler>
 
 	private List<HFPoolableObject> m_objectPool = new List<HFPoolableObject>();
 
+	//---------------------------------
+	// TEMP
+	//---------------------------------
+	private void Start()
+	{
+		StartPooling();
+		Debug.Log(Instance);
+	}
+
+	private void Awake()
+	{
+		if (Instance != null && Instance != this)
+			Destroy(gameObject);
+	}
+
 	public void StartPooling()
 	{
 		foreach (ObjectPoolItem item in m_poolItems)
 		{
 			for (int i = 0; i < item.BasePoolSize; i++)
 			{
-				CreateNewObject(item);
+				CreateNewObject(item, item.SpawnUnderCanvas);
 			}
 		}
 	}
@@ -126,13 +143,13 @@ public class HFObjectPooler : Singleton<HFObjectPooler>
 		return 0;
 	}
 
-	private HFPoolableObject CreateNewObject(ObjectPoolItem item)
+	private HFPoolableObject CreateNewObject(ObjectPoolItem item, bool spawnInUI = false)
 	{
 		HFPoolableObject prefab = item.ObjectPrefab;
 		if (prefab)
 		{
 			HFPoolableObject obj = Instantiate(prefab);
-			obj.transform.parent = gameObject.transform;
+			obj.transform.parent = !spawnInUI ? gameObject.transform : HFUIManager.Instance.ScreenCanvas.transform;
 			obj.gameObject.SetActive(false);
 			item.CurrentCount++;
 			m_objectPool.Add(obj);

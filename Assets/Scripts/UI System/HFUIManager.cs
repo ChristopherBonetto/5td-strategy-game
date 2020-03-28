@@ -40,6 +40,8 @@ public class HFUIManager : Singleton<HFUIManager>
 
 	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
 
+    public Canvas ScreenCanvas;
+
     private Dictionary<UIControlID, HFUIControl> m_UIControls;
 	/// <summary>
 	/// Controls Collection.
