@@ -21,12 +21,12 @@ namespace HF
 
         private void OnEnable()
         {
-            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitSelected, OnUnitSelected);
+            HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
         }
 
         private void OnDisable()
         {
-            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitSelected, OnUnitSelected);
+            HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
         }
 
 
@@ -41,10 +41,12 @@ namespace HF
         // specialized --> assign the unit to the UI element.
         //-----------------------------------------------------------
 
-        public void OnUnitSelected(HFUnit unit)
+        public void OnUnitSelected(HFUnit unit, int team)
         {
             // handle deselect unit.
-            if (unit == null)
+            // if the unit is null and is
+            // triggered by player's unit.
+            if (unit == null && team == 0)
             {
                 if (m_pooledGameObject)
                 {
@@ -53,7 +55,9 @@ namespace HF
                 return;
             }
 
-            if (unit.Team == 0 && unit == m_unitComponent)
+            // if it's the player's unit and 
+            // it's the same unit as the one clicked.
+            if (team == 0 && unit == m_unitComponent)
             {
                 // Pool the popUp, get component of the popUp.
                 m_pooledGameObject = HFObjectPooler.Instance.GetPooledObject(m_UnitPopUpID.ID);

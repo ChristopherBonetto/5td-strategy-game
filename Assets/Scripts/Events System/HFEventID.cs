@@ -41,10 +41,12 @@
 
 	/// <summary>
 	/// 1) <see cref="HF.HFUnit"/> unit
+	/// 2) <see cref="HF.HFUnit.Team"/> team
 	/// </summary>
 	OnUnitSelected,
 	/// <summary>
 	/// 1) <see cref="HF.HFUnit"/> unit
+	/// 2) <see cref="HF.HFUnit.Team"/> team
 	/// </summary>
 	OnUnitSpecialized,
 

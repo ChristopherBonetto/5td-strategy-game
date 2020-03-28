@@ -1186,7 +1186,7 @@ namespace HF
 
 		public void Select()
 		{
-			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, this);
+			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, this, Team);
 			m_isSelected = true;
 			if (m_selectedMaterial)
 			{
@@ -1199,7 +1199,7 @@ namespace HF
 
 		public void Unselect()
 		{
-			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as HFUnit);
+			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as HFUnit, Team);
 			m_isSelected = false;
 			if (m_unselectedMaterial)
 			{
