@@ -13,6 +13,16 @@ public class HFSoundManager : Singleton<HFSoundManager>
     public Dictionary<string, Bus> BusesDictionary = new Dictionary<string, Bus>();
 
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            DebugDictionary();
+            
+        }
+    }
+
+
     #region Dictionary
 
     #region Add dictionary event
@@ -55,6 +65,14 @@ public class HFSoundManager : Singleton<HFSoundManager>
     }
 
     #endregion
+
+    public void DebugDictionary()
+    {
+        foreach(string path in EventsDictionary.Keys)
+        {
+            Debug.Log(path + " have " + EventsDictionary[path].Count);
+        }
+    }
 
     #region Release events
 
