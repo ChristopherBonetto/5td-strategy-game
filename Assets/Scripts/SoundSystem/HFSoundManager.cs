@@ -8,19 +8,40 @@ using System.Linq;
 
 public class HFSoundManager : Singleton<HFSoundManager>
 {
+    new public static HFSoundManager Instance
+    {
+        get
+        {
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = (HFSoundManager)FindObjectOfType(typeof(HFSoundManager));
+
+
+                    if (_instance == null)
+                    {
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/SoundManager"));
+                        _instance = outGO.GetComponent<HFSoundManager>();
+
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                        DontDestroyOnLoad(_instance);
+                }
+
+                return _instance;
+            }
+        }
+    }
+
+
     public Dictionary<string, List<HFCustomEvent> > EventsDictionary = new Dictionary<string, List<HFCustomEvent> >();
 
     public Dictionary<string, Bus> BusesDictionary = new Dictionary<string, Bus>();
-
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            DebugDictionary();
-            
-        }
-    }
 
 
     #region Dictionary
@@ -39,7 +60,6 @@ public class HFSoundManager : Singleton<HFSoundManager>
         {
             EventsDictionary[inPath].Add(inEventsList);
         }
-        Debug.Log("Added " + EventsDictionary[inPath].Count + " " + inPath);
     }
 
     #endregion

@@ -132,17 +132,7 @@ public class HFGameManager : Singleton<HFGameManager>
         switch (inState)
         {
             case GameStates.LoadStartingInfo:
-                PlayerData = HFSavingManager.LoadGame("NoName");
-
-                if (PlayerData != null)
-                {
-                    HFScenesManager.Instance.ActivateDeactivateLevels(PlayerData.LevelsCompletedCounter);
-                    CurrentGameState = GameStates.StartGame;
-                }
-                else
-                {
-                    Debug.Log("Impossible to take player data from load");
-                }
+                StartCoroutine(WaitAllLoadCompleted());
                 break;
 
             case GameStates.StartGame:
@@ -189,12 +179,29 @@ public class HFGameManager : Singleton<HFGameManager>
         return false;
     }
 
-    #endregion
-
-	
     public void ChangeGMState(GameStates newState)
     {
         CurrentGameState = newState;
+    }
+
+    #endregion
+
+
+
+
+
+    private IEnumerator WaitAllLoadCompleted()
+    {
+        Debug.Log("WAIT TO LOAD ALL GAME INFO");
+        yield return new WaitUntil(() => HFFmodDatabase.Instance.EventDatabaseCompleted == true);
+
+        while(PlayerData == null)
+        {
+            PlayerData = HFSavingManager.LoadGame("NoName");
+            yield return new WaitForEndOfFrame();
+        }
+
+        CurrentGameState = GameStates.StartGame;
     }
 
 }

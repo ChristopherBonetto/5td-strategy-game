@@ -8,6 +8,38 @@ using System.Linq;
 
 public class HFFmodDatabase : Singleton<HFFmodDatabase>
 {
+    new public static HFFmodDatabase Instance
+    {
+        get
+        {
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = (HFFmodDatabase)FindObjectOfType(typeof(HFFmodDatabase));
+
+
+                    if (_instance == null)
+                    {
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/FmodDatabase"));
+                        _instance = outGO.GetComponent<HFFmodDatabase>();
+
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                        DontDestroyOnLoad(_instance);
+                }
+
+                return _instance;
+            }
+        }
+    }
+
+
+
     //STUDIO VARIABLES
     private FMOD.Studio.System m_system = new FMOD.Studio.System();
 
@@ -24,6 +56,17 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
     //BUSS VARIABLES
     private const string m_busPrefix = "bus:/";
     [SerializeField] private string[] m_busesNames;
+
+    private bool m_eventDatabaseCompleted = false;
+    public bool EventDatabaseCompleted
+    {
+        get
+        {
+            return m_eventDatabaseCompleted;
+        }
+    }
+
+   
 
     #region Behaviour Cycle
 
@@ -115,16 +158,15 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
 
         while (_loadingState != LOADING_STATE.LOADED)
         {
-            Debug.Log("Try to load bank");
             FMOD.RESULT res = inBank.getLoadingState(out _loadingState);
             yield return null;
         }
-        Debug.Log("Bank loaded");
+        //Debug.Log("Bank loaded");
         m_loadedBanks.Add(inBank);
 
         if(CheckBanks(m_loadedBanks.Count, null, m_banksPath))
         {
-            Debug.Log("LOADED ALL BANKS");
+            //Debug.Log("LOADED ALL BANKS");
             FindEvents();
         }
         yield return null;
@@ -192,14 +234,10 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
         {
             yield return new WaitForSeconds(0.5f);
 
+            m_eventDatabaseCompleted = true;
             HFEventManager.TriggerEvent<bool>(HFEventID.OnFinishedLoadEvents, true);
         }
     }
-
-    //public void AddEventToDictionary(string inPath, CustomEvent inEvent)
-    //{
-    //    EventsDictionary.Add(inPath, inEvent);
-    //}
 
     #endregion
 
