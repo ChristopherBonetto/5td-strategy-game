@@ -1054,13 +1054,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_target: {fileID: 1858270165}
   m_cameraMovementSpeed: 40
-  m_distanceFromTarget: 80
+  m_initialDistanceFromTarget: 60
+  m_forwardSpeedSensitivity: 50
+  m_forwardSpeed: 5
+  m_minDistanceFromTarget: 10
+  m_maxDistanceFromTarget: 100
   m_Bounds: {fileID: 1540677094}
   m_sensitivityOnXAngle: 1
   m_sensitivityOnYAngle: 0.5
   m_angularFriction: 0.1
-  m_scrollSensitivity: 50
-  m_scrollSpeed: 4
 --- !u!1001 &1465273603
 PrefabInstance:
   m_ObjectHideFlags: 0

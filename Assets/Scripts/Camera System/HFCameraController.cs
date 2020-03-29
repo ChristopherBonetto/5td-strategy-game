@@ -15,8 +15,49 @@ public class HFCameraController : MonoBehaviour
     [SerializeField]
     private float m_cameraMovementSpeed;
 
+
+    [Header("Forward Movement Handler")]
+
+    //--------------------------------------------------------------------------------------
+    // The forward can be modified updating the distance (m_currentDistanceFromTarget) 
+    // from target, it's a float value. The distance will be lerped from the point 'A' to 'B' 
+    // at a given speed. The new distance (or m_actualDistance) is given by: 
+    // (the mouse scroll whell value) * (forward speed sensititvity). If you want more smooth 
+    // on distance value update, reduce the speed and increase the sensibility.
+    //--------------------------------------------------------------------------------------
+       
     [SerializeField]
-	private float m_distanceFromTarget = 10.0f;
+	private float m_initialDistanceFromTarget = 60.0f;
+    
+    /// <summary>
+    /// Last distance value (Initial lerp point).
+    /// </summary>
+    private float m_lastDistanceFromTarget;
+
+    /// <summary>
+    /// Current distance value (the percentage updated or 't').
+    /// </summary>
+    private float m_currentDistanceFromTarget;
+
+    /// <summary>
+    /// New distance value (end lerp point).
+    /// </summary>
+    private float m_actualDistanceFromTarget;
+
+    [SerializeField, Tooltip("It's the value multiplied by mouse scroll wheel value")]
+    private float m_forwardSensitivity;
+
+    [SerializeField, Tooltip("It's the updating speed on the distance")]
+    private float m_forwardSpeed;
+
+    [SerializeField]
+    private float MIN_DistanceFromTarget;
+
+    [SerializeField]
+    private float Max_DistanceDromTarget;
+
+
+    [Header("Reference to the map bounce")]
 
     [SerializeField]
     private Collider m_Bounds;
@@ -32,14 +73,6 @@ public class HFCameraController : MonoBehaviour
 
     [SerializeField, Range(0.05f, 1)]
     private float m_angularFriction = 0.1f;
-
-    [SerializeField]
-    private float m_scrollSensitivity;
-
-    [SerializeField]
-    private float m_scrollSpeed;
-    private float m_actualMouseScrollValue;
-
 
 
     //------------------------------------------------
@@ -59,8 +92,11 @@ public class HFCameraController : MonoBehaviour
     private float m_actualMouseXValue;
     private float m_actualMouseYValue;
 
-    public const float X_MIN_ANGLE = 20.0f;
-    public const float X_MAX_ANGLE = 50.0f;
+    [SerializeField, Tooltip("Min angle value on x")]
+    private float X_MIN_Angle = 20.0f;
+
+    [SerializeField, Tooltip("Max angle value on x")]
+    private float X_MAX_Angle = 50.0f;
 
 
 
@@ -68,24 +104,22 @@ public class HFCameraController : MonoBehaviour
     {
         m_transform = transform;
         m_cam = Camera.main;
-        m_actualMouseScrollValue = m_cam.fieldOfView;
+        m_actualDistanceFromTarget = m_initialDistanceFromTarget;
     }
 
     private void Update()
     {
         Rotate();
-        UpdateFielOfView();
         MoveTarget();
+        UpdateDistance();
     }
 
     private void LateUpdate()
     {
-        Vector3 direction = new Vector3(0, 0, -m_distanceFromTarget);
+        Vector3 direction = new Vector3(0, 0, -m_currentDistanceFromTarget);
         Quaternion rotation = Quaternion.Euler(m_currentAngleX, m_currentAngleY, 0);
         m_transform.position = m_target.position + rotation * direction;
         m_transform.LookAt(m_target);
-
-        m_cam.fieldOfView = Mathf.Lerp(m_cam.fieldOfView, m_actualMouseScrollValue, Time.deltaTime * m_scrollSpeed);
     }
 
     private void Rotate()
@@ -109,13 +143,16 @@ public class HFCameraController : MonoBehaviour
         m_currentAngleX += m_actualMouseYValue;
         m_currentAngleY += m_actualMouseXValue;
 
-        m_currentAngleX = Mathf.Clamp(m_currentAngleX, X_MIN_ANGLE, X_MAX_ANGLE);
+        m_currentAngleX = Mathf.Clamp(m_currentAngleX, X_MIN_Angle, X_MAX_Angle);
     }
 
-    private void UpdateFielOfView()
+    private void UpdateDistance()
     {
-        m_actualMouseScrollValue += -Input.GetAxis("Mouse ScrollWheel") * m_scrollSensitivity;
-        m_actualMouseScrollValue = Mathf.Clamp(m_actualMouseScrollValue, 30.0f, 60.0f);
+        m_actualDistanceFromTarget += -Input.GetAxis("Mouse ScrollWheel") * m_forwardSensitivity;
+        m_actualDistanceFromTarget = Mathf.Clamp(m_actualDistanceFromTarget, MIN_DistanceFromTarget, Max_DistanceDromTarget);
+
+        m_lastDistanceFromTarget = m_currentDistanceFromTarget;
+        m_currentDistanceFromTarget = Mathf.Lerp(m_lastDistanceFromTarget, m_actualDistanceFromTarget, Time.deltaTime * m_forwardSpeed);
     }
 
     private void MoveTarget()
