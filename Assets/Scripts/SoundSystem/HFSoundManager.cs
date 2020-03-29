@@ -44,7 +44,7 @@ public class HFSoundManager : Singleton<HFSoundManager>
     public Dictionary<string, Bus> BusesDictionary = new Dictionary<string, Bus>();
 
 
-    #region Dictionary
+    #region Events Dictionary
 
     #region Add dictionary event
 
@@ -143,36 +143,6 @@ public class HFSoundManager : Singleton<HFSoundManager>
     public void SetSoundsBusVolume(float inValue)
     {
         SetBusValue("Sound", inValue);
-    }
-
-    public void SetMusicBusVolume(float inValue)
-    {
-        SetBusValue("Music", inValue);
-    }
-
-    public void SetAllAmbienceBusVolume(float inValue)
-    {
-        SetBusValue("Sound/Background", inValue);
-    }
-
-    public void SetFoleyBusVolume(float inValue)
-    {
-        SetBusValue("Sound/Foley", inValue);
-    }
-
-    public void SetSfxBusVolume(float inValue)
-    {
-        SetBusValue("Sound/SFX", inValue);
-    }
-
-    public void SetAmbienceBusVolume(float inValue)
-    {
-        SetBusValue("Sound/Background/Ambience", inValue);
-    }
-
-    public void SetUnderwaterBusVolume(float inValue)
-    {
-        SetBusValue("Sound/Background/Underwater", inValue);
     }
 
     #endregion

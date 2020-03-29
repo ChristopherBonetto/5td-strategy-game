@@ -51,6 +51,9 @@ public class HFCustomEvent
     private EventInstance m_eventIstance = new EventInstance();
     public EventInstance EventIstance { get => m_eventIstance; }
 
+    #region Initialize Custom event
+
+    //Initializa a new Custom Event from description.
     public HFCustomEvent(EventDescription inDescription)
     {
         this.m_eventDescription = inDescription;
@@ -64,16 +67,6 @@ public class HFCustomEvent
     }
 
 
-    public bool isPlaying()
-    {
-        m_eventIstance.getPlaybackState(out PLAYBACK_STATE playingState);
-        return m_eventIstance.isValid() && (playingState != PLAYBACK_STATE.STOPPED);
-    }
-    
-    public bool CheckForErrors()
-    {
-        return !m_eventDescription.isValid() || !m_eventDescription.hasHandle();
-    }
 
     public bool TakeAllInfoFromDescription()
     {
@@ -107,8 +100,20 @@ public class HFCustomEvent
         return m_eventPath != null && m_ID != null;
     }
 
+    #endregion
 
+    #region Control custom event
+
+    public bool isPlaying()
+    {
+        m_eventIstance.getPlaybackState(out PLAYBACK_STATE playingState);
+        return m_eventIstance.isValid() && (playingState != PLAYBACK_STATE.STOPPED);
+    }
     
+    public bool CheckForErrors()
+    {
+        return !m_eventDescription.isValid() || !m_eventDescription.hasHandle();
+    }
 
     public void Play()
     {
@@ -121,6 +126,7 @@ public class HFCustomEvent
         m_eventIstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
+    #region Parameters
 
     public void ChangeParamFromName(string inName, float value)
     {
@@ -181,27 +187,8 @@ public class HFCustomEvent
         m_eventIstance.setVolume(inVolume);
     }
 
-    #region Deprecated Methods
-
-    //public void AddParameters(string inParams)
-    //{
-    //    m_params.Add(inParams);
-    //}
-
-    //public void SetID(System.Guid inID)
-    //{
-    //    m_ID = inID;
-    //}
-
-    //public void TakeParamsList(List<string> inList)
-    //{
-    //    m_params = inList;
-    //}
-
-    //public void SetPath(string inPath)
-    //{
-    //    m_eventPath = inPath;
-    //}
+    #endregion
 
     #endregion
+
 }
