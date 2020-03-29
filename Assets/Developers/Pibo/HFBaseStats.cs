@@ -28,10 +28,10 @@ public enum HFStatistics
 	SoldierRespawnDelay = 13,
 	//SoldiersPerUnit = 14,
 
-
 	Name = 20,
 	Description = 21
 }
+
 
 public enum HFRewardCondition
 {
@@ -75,7 +75,7 @@ public class HFBaseStats : ScriptableObject
 	[SerializeField]
 	public Sprite Icon = null;
 
-	[SerializeField]
+    [SerializeField]
 	public HFUnitType UnitType = HFUnitType.PlaceHolder;
 
 	[SerializeField]
@@ -97,9 +97,17 @@ public class HFBaseStats : ScriptableObject
 		UpdateAll();
 	}
 
-	#region Floats
+    [SerializeField, FMODUnity.EventRef]
+    public string DeathSound;
+    [SerializeField, FMODUnity.EventRef]
+    public string AttackSound;
+    [SerializeField, FMODUnity.EventRef]
+    public string HittedSound;
 
-	[SerializeField]
+
+    #region Floats
+
+    [SerializeField]
 	protected HFFloatKV[] m_floatStats = new HFFloatKV[0];
 
 	private Dictionary<HFStatistics, float> FloatDict = new Dictionary<HFStatistics, float>();

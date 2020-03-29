@@ -16,6 +16,7 @@ public class HFStatUpgrade : ScriptableObject, IHFStatModifier
 	[SerializeField]
 	HFStringKV[] m_stringModifiers = new HFStringKV[0];
 
+
 	public IEnumerable<float> GetFloatAddModifiers(HFStatistics stat)
 	{
 		for (int i = 0; i < m_floatAddModifiers.Length; i++)

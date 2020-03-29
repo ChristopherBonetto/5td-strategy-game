@@ -168,11 +168,13 @@ namespace HF
 		/// </summary>
 		public bool IsKilled { get; protected set; }
 
-		#endregion
+        private HFIEvent3D m_interfaceSound3D;
 
-		#region Core loop
+        #endregion
 
-		void Awake()
+        #region Core loop
+
+        void Awake()
 		{
 			m_transform = transform;
 			m_renderers = GetComponentsInChildren<Renderer>();
@@ -212,7 +214,12 @@ namespace HF
 			HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, HandleGameStateChange);
 		}
 
-		void Update()
+        void Start()
+        {
+            m_interfaceSound3D = new HFIAttachPlay3D();
+        }
+
+        void Update()
 		{
 			if (IsKilled || !m_controller)
 			{
@@ -1128,6 +1135,7 @@ namespace HF
 				m_stats[HFStatistics.UnitDamage],
 				m_stats[HFStatistics.BuildingDamage]
 			);
+            PlayUnitSound(m_baseStats.AttackSound);
 			target.TakeDamage(damageInfo);
 		}
 
@@ -1270,6 +1278,7 @@ namespace HF
 			if (receivedDamage > 0f)
 			{
 				CurrentHealth = Mathf.Max(previous - receivedDamage, 0f);
+                PlayUnitSound(m_baseStats.HittedSound);
 			}
 
 			float actualDamage = previous - CurrentHealth;
@@ -1322,6 +1331,7 @@ namespace HF
 			IsKilled = true;
 			OnDestinationReached();
 			ActionComplete(false);
+            PlayUnitSound(m_baseStats.DeathSound);
 
 // 			m_navAgent.enabled = false;
 // 			if (UnitType != HFUnitType.Unit)
@@ -1355,14 +1365,25 @@ namespace HF
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+
+        #region Sounds
+
+        void PlayUnitSound(string inEvent)
+        {
+            HFCustomEvent tempEvent;
+            tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(inEvent);
+            m_interfaceSound3D.AttachAndPlay(this.gameObject, tempEvent);
+        }
+
+        #endregion
+    }
 
 
 
-	#region Commands inl
+    #region Commands inl
 
-	public class HFMoveCommand : IHFCommand
+    public class HFMoveCommand : IHFCommand
 	{
 		private readonly Vector3 m_destination;
 		private readonly MovementType m_moveType;
@@ -1472,5 +1493,7 @@ namespace HF
 		}
 	}
 
-	#endregion
+    #endregion
+
+    
 }

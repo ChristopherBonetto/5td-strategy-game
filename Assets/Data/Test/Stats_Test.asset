@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Icon: {fileID: 0}
   UnitType: 0
+  SoldiersPerUnit: 1
   Visuals: {fileID: 0}
   m_levels:
   - List: []
   - List: []
   - List: []
   RewardCondition: 0
+  DeathSound: event:/GameSounds/Units/Death/unit_death
+  AttackSound: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  HittedSound: event:/GameSounds/Units/Hit/unit_hit
   m_floatStats:
   - Key: 1
     Value: 6

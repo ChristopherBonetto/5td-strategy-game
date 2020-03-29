@@ -304,12 +304,12 @@ public class HFScenesManager : Singleton<HFScenesManager>
         if (IndexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
         {
             // Load next scene
-            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
         else
         {
             // Load war room
-            SceneManager.LoadSceneAsync(1);
+            SceneManager.LoadScene(1);
         }
     }
 
@@ -318,7 +318,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         if (AllScenes.Contains(inName))
         {
-            SceneManager.LoadSceneAsync(inName);
+            SceneManager.LoadScene(inName);
         }
     }
 
@@ -330,7 +330,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     public void LoadLevelFromLevelInfo(HFLevelInfoSO inLevel)
     {
         CurrentLevelSelected = inLevel;
-        SceneManager.LoadSceneAsync(inLevel.LevelSceneIndex);
+        SceneManager.LoadScene(inLevel.LevelSceneIndex);
 
     }
 
@@ -338,7 +338,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     public void LoadLevelWithIndex(int inIndex)
     {
         CurrentLevelSelected = LevelContainer.Levels[inIndex];
-        SceneManager.LoadSceneAsync(LevelContainer.Levels[inIndex].LevelSceneIndex);
+        SceneManager.LoadScene(LevelContainer.Levels[inIndex].LevelSceneIndex);
     }
     #endregion
 

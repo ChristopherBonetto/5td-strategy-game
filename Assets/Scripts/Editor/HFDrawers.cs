@@ -64,7 +64,12 @@ public class HFBaseStatsEditor : Editor
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_intStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_stringStats"), true);
 		HFEditorHelper.ShowList(serializedObject.FindProperty("m_boolStats"), true);
-		serializedObject.ApplyModifiedProperties();
+
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("DeathSound"), true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("AttackSound"), true);
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("HittedSound"), true);
+        serializedObject.ApplyModifiedProperties();
 	}
 }
 
