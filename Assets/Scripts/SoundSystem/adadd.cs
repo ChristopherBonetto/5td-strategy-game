@@ -25,6 +25,7 @@ public class adadd : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
         {
             wow = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(ciao);
+            //wow.EventIstance.start();
             lol.AttachAndPlay(this.gameObject, wow);
         }
     }

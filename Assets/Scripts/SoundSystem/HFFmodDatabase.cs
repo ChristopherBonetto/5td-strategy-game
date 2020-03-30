@@ -48,6 +48,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
     private string[] m_banksPath = null;
     private List<Bank> m_loadedBanks = new List<Bank>();
 
+    
     private const string assetsPath = "/FmodBuilds/Desktop/";
     private const string bankExtension = ".bank";
 
@@ -117,6 +118,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
                 Debug.LogError(res);
                 return;
             }
+            
         }
     }
 
@@ -132,10 +134,10 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
 
         foreach (string bankPath in m_banksPath)
         {
-            if(bankPath != "")
+            if (bankPath != "")
             {
                 Bank tempBank;
-                string _finalPath = Application.dataPath + assetsPath + bankPath + bankExtension;
+                string _finalPath = Application.streamingAssetsPath + assetsPath + bankPath + bankExtension;
                 res = m_system.loadBankFile(_finalPath, LOAD_BANK_FLAGS.NONBLOCKING, out tempBank);
 
                 if (res != FMOD.RESULT.OK)
@@ -149,6 +151,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
                 StartCoroutine(LoadPendingBank(tempBank));
             }
         }
+        //Debug.Log(Application.streamingAssetsPath + assetsPath + m_banksPath + bankExtension);
     }
 
     //Check and elaborate all banks in pending

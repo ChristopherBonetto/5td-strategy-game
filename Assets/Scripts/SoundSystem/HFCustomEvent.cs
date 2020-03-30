@@ -121,6 +121,8 @@ public class HFCustomEvent
         m_eventIstance.start();
     }
 
+    
+
     public void Stop()
     {
         m_eventIstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
