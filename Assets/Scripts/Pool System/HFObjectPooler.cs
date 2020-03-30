@@ -149,7 +149,7 @@ public class HFObjectPooler : Singleton<HFObjectPooler>
 		if (prefab)
 		{
 			HFPoolableObject obj = Instantiate(prefab);
-			obj.transform.parent = !spawnInUI ? gameObject.transform : HFUIManager.Instance.ScreenCanvas.transform;
+			obj.transform.SetParent(!spawnInUI ? gameObject.transform : HFUIManager.Instance.ScreenCanvas.transform);
 			obj.gameObject.SetActive(false);
 			item.CurrentCount++;
 			m_objectPool.Add(obj);

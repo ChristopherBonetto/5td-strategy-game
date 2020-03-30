@@ -30,7 +30,7 @@ public class HFButtonLevelSelection : MonoBehaviour
         // Turn off the first window declared.
         // Turn on the second window declared (after loading).
         HFLoadingScreenWindow outLoadingScreen = HFUIManager.Instance.UIControls[UIControlID.LoadingScreen] as HFLoadingScreenWindow;
-        outLoadingScreen.OnShow(SceneManager.LoadSceneAsync(Level.LevelScene.name), UIControlID.LevelSelection, UIControlID.InGameWindow);
+        outLoadingScreen.OnShow(SceneManager.LoadSceneAsync(Level.LevelSceneIndex), UIControlID.LevelSelection, UIControlID.InGameWindow);
     }
 
     public void OnPointEnter()
