@@ -193,7 +193,7 @@ public class HFGameManager : Singleton<HFGameManager>
     private IEnumerator WaitAllLoadCompleted()
     {
         Debug.Log("WAIT TO LOAD ALL GAME INFO");
-        yield return new WaitUntil(() => HFFmodDatabase.Instance.EventDatabaseCompleted == true);
+        //yield return new WaitUntil(() => HFFmodDatabase.Instance.EventDatabaseCompleted == true);
 
         while(PlayerData == null)
         {
