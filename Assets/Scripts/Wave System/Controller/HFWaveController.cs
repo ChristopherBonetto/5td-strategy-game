@@ -140,7 +140,12 @@ namespace HF.WaveSystem
 
             HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
 
-            InitState();
+            // State Initialization
+
+            m_SingleState = new HFSingleState(this);
+            m_BulkState = new HFBulkState(this);
+            m_WaitState = new HFWaitState(this);
+            ChangeState();
         }
 
         private void Update()
@@ -174,12 +179,13 @@ namespace HF.WaveSystem
             }
         }
 
-        private void InitState()
+        /// <summary>
+        /// It will be called to initialize the state in the start,
+        /// also when the current state go in exit condition.
+        /// <see cref="HFWaveControllerState"/>
+        /// </summary>
+        public void ChangeState()
         {
-            m_SingleState = new HFSingleState(this);
-            m_BulkState = new HFBulkState(this);
-            m_WaitState = new HFWaitState(this);
-
             switch (GetCurrentMinorWave.MinorWaveType)
             {
                 case MinorWaveType.Bulk:
@@ -192,6 +198,8 @@ namespace HF.WaveSystem
                     CurrentState = WaitState;
                     break;
             }
+
+            CurrentState.HandleEnterPhase(this);
         }
 
 

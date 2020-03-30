@@ -14,13 +14,10 @@ public class HFWaitState : HFWaveControllerState
         TimeToElaps = waveController.GetCurrentMinorWave.TimeToWait;
     }
 
-    public override void HandleEnterCondition(HFWaveController waveController)
+    public override void HandleEnterPhase(HFWaveController waveController)
     {
-        if (waveController.GetCurrentMinorWave.MinorWaveType == MinorWaveType.Wait)
-        {
-            TimeElapsed = 0;
-            TimeToElaps = waveController.GetCurrentMinorWave.TimeToWait;
-        }
+        TimeElapsed = 0;
+        TimeToElaps = waveController.GetCurrentMinorWave.TimeToWait;
     }
 
     public override void HandleExitCondition(HFWaveController waveController)
@@ -28,7 +25,7 @@ public class HFWaitState : HFWaveControllerState
         if (TimeElapsed > TimeToElaps)
         {
             waveController.MinorWaveIndex++;
-            HandleEnterCondition(waveController);
+            waveController.ChangeState();
         }
     }
 

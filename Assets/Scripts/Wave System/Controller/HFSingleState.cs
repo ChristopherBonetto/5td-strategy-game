@@ -12,12 +12,9 @@ public class HFSingleState : HFWaveControllerState
         m_isEnemySpawned = false;
     }
 
-    public override void HandleEnterCondition(HFWaveController waveController)
+    public override void HandleEnterPhase(HFWaveController waveController)
     {
-        if (waveController.GetCurrentMinorWave.MinorWaveType == MinorWaveType.Single)
-        {
-            m_isEnemySpawned = false;
-        }
+        m_isEnemySpawned = false;
     }
 
     public override void HandleExitCondition(HFWaveController waveController)
@@ -25,7 +22,7 @@ public class HFSingleState : HFWaveControllerState
         if (m_isEnemySpawned)
         {
             waveController.MinorWaveIndex++;
-            HandleEnterCondition(waveController);
+            waveController.ChangeState();
         }
     }
 

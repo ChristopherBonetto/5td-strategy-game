@@ -18,14 +18,11 @@ public class HFBulkState : HFWaveControllerState
     }
 
 
-    public override void HandleEnterCondition(HFWaveController waveController)
+    public override void HandleEnterPhase(HFWaveController waveController)
     {
-        if (waveController.GetCurrentMinorWave.MinorWaveType == MinorWaveType.Bulk)
-        {
-            m_amountOfTroopSpawned = 0;
-            TimeElapsed = 0;
-            TimeToElaps = waveController.GetCurrentMinorWave.TimeToWait;
-        }
+        m_amountOfTroopSpawned = 0;
+        TimeElapsed = 0;
+        TimeToElaps = waveController.GetCurrentMinorWave.TimeToWait;
     }
 
     public override void HandleExitCondition(HFWaveController waveController)
@@ -33,7 +30,7 @@ public class HFBulkState : HFWaveControllerState
         if (m_amountOfTroopSpawned >= waveController.GetCurrentMinorWave.AmountToSpawn)
         {
             waveController.MinorWaveIndex++;
-            HandleEnterCondition(waveController);
+            waveController.ChangeState();
         }
     }
 
