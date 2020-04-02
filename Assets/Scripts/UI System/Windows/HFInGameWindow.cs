@@ -29,11 +29,6 @@ public class HFInGameWindow : HFUIControl
         
     }
 
-    protected override void Start()
-    {
-        base.Start();
-    }
-
     #region Events
 
     //--------------------------------------------------------

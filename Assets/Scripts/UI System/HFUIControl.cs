@@ -5,25 +5,11 @@
 /// </summary>
 public abstract class HFUIControl : MonoBehaviour
 {
-    public bool IsInEditorMode { get; set; } = false;
-
     /// <summary>
-    /// Name.
-    /// <see cref="UIControlID"/>
+    /// The control name or ID
     /// </summary>
     public abstract UIControlID Name { get; }
 
-
-    protected virtual void Start()
-    {
-        if (!IsInEditorMode)
-        {
-            if (HFUIManager.Instance != null)
-                HFUIManager.Instance.AddControl(this);
-
-            this.gameObject.SetActive(false);
-        }
-    }
 
     protected virtual void OnDestroy()
     {

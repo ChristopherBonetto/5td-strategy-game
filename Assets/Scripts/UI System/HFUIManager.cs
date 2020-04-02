@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-
-#if UNITY_EDITOR
 using UnityEngine.SceneManagement;
-#endif
 
 public class HFUIManager : Singleton<HFUIManager>
 {
+    //--------------------------------------------------------
     // Override how it get the instance
     // If the instance is = null, then load it from resources.
+    // The first time it will be called it initialize the 
+    // UI controls collection.
+    //--------------------------------------------------------
     new public static HFUIManager Instance
     {
         get
@@ -27,10 +28,10 @@ public class HFUIManager : Singleton<HFUIManager>
                         GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/UIManager"));
                         _instance = outGO.GetComponent<HFUIManager>();
 
-                        DontDestroyOnLoad(_instance);
                     }
-                    else
-                        DontDestroyOnLoad(_instance);
+
+                    DontDestroyOnLoad(_instance);
+                    _instance.Initialize();
                 }
 
                 return _instance;
@@ -38,15 +39,13 @@ public class HFUIManager : Singleton<HFUIManager>
         }
     }
 
-	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
 
-    public Canvas ScreenCanvas;
+
+    //-------------------------------------------------------
+    // UI Controls
+    //-------------------------------------------------------
 
     private Dictionary<UIControlID, HFUIControl> m_UIControls;
-	/// <summary>
-	/// Controls Collection.
-	/// Every key must provides only one value.
-	/// </summary>
 	public Dictionary<UIControlID, HFUIControl> UIControls
     {
         get
@@ -54,33 +53,22 @@ public class HFUIManager : Singleton<HFUIManager>
             if (m_UIControls == null)
             {
                 m_UIControls = new Dictionary<UIControlID, HFUIControl>();
-#if UNITY_EDITOR
-                // I have to force the subscribes of the UI Controls
-                // Event invoked from Game manager can cause a null reference 
-                // because windows aren't subscribed yet.
-                // This chink of code is run only one time. (it's not too bad)
-                Canvas outCanvas = FindObjectOfType<Canvas>();
-                foreach (var uiControl in outCanvas.GetComponentsInChildren<HFUIControl>())
-                {
-                    // Add control
-                    _instance.AddControl(uiControl);
-                    // Hide panel/window
-                    uiControl.OnHide();
-                    // Notify that is in the editor mode.
-                    uiControl.IsInEditorMode = true;
-                }
-
-                // I init the the variable here because the trigger can happen before start.
-                // I store the last window enabled to allow the UI system run also in editor mode,
-                // but can help also in build mode.
-                LastUIControlActivated = UIControls[UIControlID.MainMenu];
-#endif
             }
             return m_UIControls;
         }
     }
 
-    public HFUIControl LastUIControlActivated { get; set; }
+    private HFUIControl m_lastUIControlShown;
+
+
+    //--------------------------------------------------------
+    // Utils
+    //--------------------------------------------------------
+
+	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
+    public Canvas ScreenCanvas;
+
+    #region MonoBehaviour
 
     protected void Awake()
 	{
@@ -102,28 +90,24 @@ public class HFUIManager : Singleton<HFUIManager>
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
     }
 
-#if UNITY_EDITOR
     private void Start()
     {
-        // I need this part of code because if we start from a scene that isn't the first one
-        // game manager doesn't send notification. So i need scene refereces.
+        OnGameStateChange(HFGameManager.Instance.CurrentGameState);
+    }
 
-        if (SceneManager.GetActiveScene().buildIndex == 0)
+
+    private void Initialize()
+    {
+        foreach(HFUIControl control in ScreenCanvas.GetComponentsInChildren<HFUIControl>())
         {
-            Show(UIControlID.MainMenu);
-        }
-        else if (SceneManager.GetActiveScene().buildIndex == 1)
-        {
-            Show(UIControlID.LevelSelection);
-        }
-        else if (SceneManager.GetActiveScene().buildIndex > 1)
-        {
-            Show(UIControlID.InGameWindow);
+            control.gameObject.SetActive(false);
+            AddControl(control);
         }
     }
-#endif
 
-    #region UI Methods
+    #endregion
+
+    #region UI Controls Management
     /// <summary>
     /// Add new UIControl
     /// <see cref="UIControl"/>
@@ -132,8 +116,6 @@ public class HFUIManager : Singleton<HFUIManager>
     {
         if (uiControl != null && !UIControls.ContainsKey(uiControl.Name))
             UIControls.Add(uiControl.Name, uiControl);
-
-        //Debug.Log(uiControl.Name);
     }
 
     /// <summary>
@@ -155,7 +137,7 @@ public class HFUIManager : Singleton<HFUIManager>
         if (UIControls.TryGetValue(id, out HFUIControl control))
         {
             control.OnShow();
-            LastUIControlActivated = control;
+            m_lastUIControlShown = control;
         }
     }
 
@@ -173,7 +155,7 @@ public class HFUIManager : Singleton<HFUIManager>
     /// Show a UIControl by ID and
     /// Hide a UIControl by class type.
     /// <see cref="UIControlID"/>
-    /// <seealso cref="UIControl"/>
+    /// <seealso cref="HFUIControl"/>
     /// </summary>
     public void ShowAndHide(UIControlID id, HFUIControl controlToHide)
     {
@@ -185,17 +167,21 @@ public class HFUIManager : Singleton<HFUIManager>
 		
         // If they are the same control... return
         if (id == controlToHide.Name) return;
-
+            
 
         if (UIControls.TryGetValue(id, out HFUIControl control))
         {
-            // Show the control searched by name.
             if (!control.gameObject.activeSelf)
-                control.OnShow();
+            {
+                /// <see cref="HFUIManager.Show(UIControlID)"/>
+                Show(control.Name);
+            }
 
-            // Hide the control passed by class type.
             if (controlToHide.gameObject.activeSelf)
-                controlToHide.OnHide();
+            {
+                /// <see cref="HFUIManager.Hide(UIControlID)"/>
+                Hide(controlToHide.Name);
+            }
         }
         else
             throw new System.Exception("Control with " + id + " id, doesn't exist or it's not register.");
@@ -224,23 +210,31 @@ public class HFUIManager : Singleton<HFUIManager>
 
     private void OnGameStateChange(GameStates inState)
     {
+        Debug.Log($"Game state change in: {inState}");
+
+        if (m_lastUIControlShown != null)
+            m_lastUIControlShown.OnHide();
+
         // Handle all game state variables.
         switch (inState)
         {
+            case GameStates.LoadStartingInfo:
+                break;
             case GameStates.StartGame:
-                ShowAndHide(UIControlID.MainMenu, LastUIControlActivated);
+                Show(UIControlID.MainMenu);
                 break;
             case GameStates.WarRoom:
-                ShowAndHide(UIControlID.LevelSelection, LastUIControlActivated);
+                Show(UIControlID.LevelSelection);
                 break;
             case GameStates.InitializeLevel:
-                ShowAndHide(UIControlID.InGameWindow, LastUIControlActivated);
+                Show(UIControlID.InGameWindow);
                 break;
-
-            // Put other conditions...
-
-            default:
-                return;
+            case GameStates.PlayingLevel:
+                break;
+            case GameStates.Pause:
+                break;
+            case GameStates.EndLevel:
+                break;
         }
     }
 }

@@ -33,9 +33,8 @@ public class HFLevelSelctecionWindow : HFUIControl
     public string PrefixButtonText;
 
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         SpawnLevelButtons();
     }
 

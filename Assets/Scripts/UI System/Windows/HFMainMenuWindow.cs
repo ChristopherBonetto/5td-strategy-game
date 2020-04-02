@@ -8,11 +8,6 @@ public class HFMainMenuWindow : HFUIControl
     public override UIControlID Name => UIControlID.MainMenu;
 
 
-    protected override void Start()
-    {
-        HFUIManager.Instance.AddControl(this);
-    }
-
     public void OnClickStart()
     {
         HFUIManager.Instance.ShowAndHide(UIControlID.LevelSelection, this);
