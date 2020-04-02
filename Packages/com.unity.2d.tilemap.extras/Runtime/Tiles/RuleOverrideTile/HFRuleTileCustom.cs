@@ -40,7 +40,12 @@ public class HFRuleTileCustom : RuleTile<HFRuleTileCustom.Neighbor>
         /// The Rule Tile will check if the contents of the cell in that direction is a compatible tile from the list.
         /// If it is not, the rule will fail.
         /// </summary>
-        public const int CompatibleTile = 5;
+        public const int Compatible = 5;
+        /// <summary>
+        /// The Rule Tile will check if the contents of the cell in that direction is not a compatible tile from the list.
+        /// If it is not, the rule will fail.
+        /// </summary>
+        public const int NotCompatible = 6;
     }
 
     public override bool RuleMatch(int neighbor, TileBase other)
@@ -49,26 +54,8 @@ public class HFRuleTileCustom : RuleTile<HFRuleTileCustom.Neighbor>
         {
             case Neighbor.Null: return other == null;
             case Neighbor.NotNull: return other != null;
-            case Neighbor.CompatibleTile:
-                bool isMatchCondition = neighbor == RuleTile.TilingRule.Neighbor.This;
-                bool isMatch = other == this;
-
-                if (!isMatch)
-                {
-                    isMatch = siblings.Contains(other);
-                }
-
-                if (!isMatch && matchSiblingLayer)
-                {
-                    if (other is RuleOverrideTile)
-                        other = (other as RuleOverrideTile).m_InstanceTile;
-
-                    if (other is HFRuleTileCustom)
-                        isMatch = siblingLayer == (other as HFRuleTileCustom).siblingLayer;
-                }
-
-                return isMatch == isMatchCondition;
-
+            case Neighbor.Compatible: return siblings.Contains(other);
+            case Neighbor.NotCompatible: return !siblings.Contains(other);
         }
         return base.RuleMatch(neighbor, other);
     }
