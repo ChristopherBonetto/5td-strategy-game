@@ -71,9 +71,6 @@ namespace HF.WaveSystem
             set 
             {
                 m_WaveIndex = value;
-
-                // Update the view.
-                HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Min(WaveIndex + 1, GetWaves.Count), GetWaves.Count);
             }
         }
 
@@ -252,6 +249,8 @@ namespace HF.WaveSystem
             MinorWaveIndex = 0;
 
             WaitForInput = false;
+
+            HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, Mathf.Min(WaveIndex + 1, GetWaves.Count), GetWaves.Count);
         }
 
         //-------------------------------------------

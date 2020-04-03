@@ -47,6 +47,7 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     private void OnWaveIndexUpdate(int currentWave, int totalWave)
     {
+        Debug.Log("Updating UI wave inde...");
         m_waveInfo.text = $"Wave: {currentWave} / {totalWave}";
     }
 

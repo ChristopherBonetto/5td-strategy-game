@@ -29,6 +29,16 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
 
     #region MonoBehaviour
 
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
+    }
+
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
+    }
+
     private void Start()
     {
         m_cam = Camera.main;
@@ -175,6 +185,20 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         if (m_unit.CanUpgrade())
         {
             m_unit.Upgrade();
+        }
+    }
+
+    #endregion
+
+    #region Events
+
+    private void OnUnitupgrade(HFUnit unit, int team)
+    {
+        if (unit != null && team == 0)
+        {
+            Debug.Log("Reset unit info...");
+
+            SetUnitInfo(unit);
         }
     }
 
