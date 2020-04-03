@@ -908,7 +908,8 @@ namespace HF
 
 			Vector3 newPosition = m_transform.position;
 			newPosition.y += 2f * (bInIsCarried ? 1f : -1f);
-			m_transform.position = (bInIsCarried ? newPosition : m_transform.position.SnapLocation());
+			m_transform.position = (newPosition);
+			m_transform.position.SnapLocation();
 
 			m_transform.rotation = (bInIsCarried ? m_transform.rotation : Quaternion.identity);
 		}
