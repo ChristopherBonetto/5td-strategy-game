@@ -163,8 +163,7 @@ public class HFCameraController : MonoBehaviour
 
         if (x != 0 || z != 0)
         {
-            Vector3 forwardDir = (m_target.position - m_transform.position).normalized;
-            forwardDir.y = 0;
+            m_target.rotation = Quaternion.Euler(0, m_transform.rotation.eulerAngles.y, 0);
 
             float speedOnX = x * m_cameraMovementSpeed * Time.deltaTime;
             float speedOnZ = z * m_cameraMovementSpeed * Time.deltaTime;
@@ -175,7 +174,7 @@ public class HFCameraController : MonoBehaviour
             float minBoundOnZ = origin.z - m_Bounds.bounds.extents.z;
             float maxBoundOnZ = origin.z + m_Bounds.bounds.extents.z;
 
-            m_target.position += forwardDir * speedOnZ + m_transform.right * speedOnX;
+            m_target.position += m_target.forward.normalized * speedOnZ + m_transform.right.normalized * speedOnX;
 
             float clampOnX = Mathf.Clamp(m_target.position.x, minBoundOnX, maxBoundOnX);
             float clampOnZ = Mathf.Clamp(m_target.position.z, minBoundOnZ, maxBoundOnZ);
