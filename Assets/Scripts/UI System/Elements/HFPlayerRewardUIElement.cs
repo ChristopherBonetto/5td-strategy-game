@@ -9,6 +9,13 @@ public class HFPlayerRewardUIElement : MonoBehaviour
 
 	private int m_value;
 
+    private HFPulseScale m_scaleComponent;
+
+    private void Awake()
+    {
+        m_scaleComponent = GetComponent<HFPulseScale>();
+    }
+
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<int, HFUnit>(HFEventID.GainReward, OnGainReward);
@@ -34,5 +41,6 @@ public class HFPlayerRewardUIElement : MonoBehaviour
     {
 		m_value += value;
         RewardText.text = m_value.ToString();
+        StartCoroutine(m_scaleComponent.Pulse());
     }
 }

@@ -33,12 +33,13 @@ public class HFUIScaleComponent : MonoBehaviour
         if (m_animateOnEnable)
         {
             m_timeElapsed = 0;
-            m_imageComponent.transform.localScale = GetInitialScale();
         }
         else
         {
             m_timeElapsed = m_duration;
         }
+
+        m_imageComponent.transform.localScale = GetInitialScale();
     }
 
     private Vector3 GetInitialScale()
