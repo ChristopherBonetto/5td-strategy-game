@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
+using DG.Tweening;
 
 public class HFLoadingScreenWindow : HFUIControl
 {
     public override UIControlID Name => UIControlID.LoadingScreen;
 
-    /// <summary>
-    /// The reference to the current loading operation running in the background.
-    /// </summary>
-    public AsyncOperation CurrentLoadingOperation;
+    [Header("Fade")]
+
+    [SerializeField]
+    private Image m_imageToFade;
+    [SerializeField]
+    private Text m_Text;
 
     /// <summary>
     /// The minimum time to show this screen.
@@ -22,93 +26,100 @@ public class HFLoadingScreenWindow : HFUIControl
     /// </summary>
     private float m_timeElapsed;
 
-    /// <summary>
-    /// A fleg to tell whether a scen is being loaded or not.
-    /// </summary>
-    private bool m_isLoading;
 
-    /// <summary>
-    /// Store the window to turn off before loading screen.
-    /// </summary>
-    private UIControlID m_windowToHide;
-
-    /// <summary>
-    /// Store the window to turn on after loading screen.
-    /// </summary>
-    private UIControlID m_windowToShow;
-
-
-    private void Update()
+    private void OnEnable()
     {
-        if (m_isLoading)
-        {
-            // If the loading is complete, hide the loading screen:
-            if (CurrentLoadingOperation.isDone)
-            {
-                OnHide();
-            }
-            else
-            {
-                m_timeElapsed += Time.deltaTime;
+        // Listen to game manager state changes
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+    }
 
-                if (m_timeElapsed >= MinTimeToShow)
-                {
-                    // The loading screen has been showing for the minimum time required.
-                    // Allow the loading operation to formally finish:
-                    CurrentLoadingOperation.allowSceneActivation = true;
-                }
-            }
+    private void OnDisable()
+    {
+        //Stop to listen to game manager state changes
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+    }
+
+    /// <summary>
+    /// Call this to load level from war room
+    /// </summary>
+    public void LoadLevel(int levelIndex)
+    {
+        // Enable this gameObject when the method is called.
+        // Start the load methods in cascade wave.
+        // 1) Fade in.
+        // 2) Load progress...
+        // 3) Fade out.
+
+        OnShow();
+        StartCoroutine(FadeIn(levelIndex));
+    }
+
+    /// <summary>
+    /// Fade in the background...
+    /// once completed start a new coroutine that load the scene.
+    /// </summary>
+    IEnumerator FadeIn(int levelIndex)
+    {
+        HFUIManager.Instance.LastUIControlShown.OnHide();
+
+        while(m_imageToFade.color.a < 0.9f)
+        {
+            DOTweenModuleUI.DOFade(m_imageToFade, 1, 0.4f);
+            yield return null;
+        }
+
+        StartCoroutine(Load(levelIndex));
+        yield return null;
+    }
+
+    /// <summary>
+    /// Load the scene.
+    /// </summary>
+    IEnumerator Load(int levelIndex)
+    {
+        m_timeElapsed = 0;
+        m_Text.gameObject.SetActive(true);
+        HFScenesManager.Instance.LoadSceneFromIndex(levelIndex);
+
+        while(m_timeElapsed < MinTimeToShow)
+        {
+            // here wait the bank loadeing.
+            m_timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        yield return null;
+    }
+
+    /// <summary>
+    /// Handle the fade out at the right moment.
+    /// </summary>
+    private void OnGameStateChange(GameStates inState)
+    {
+        // Handle all game state variables.
+        switch (inState)
+        {
+            case GameStates.InitializeLevel:
+                StartCoroutine(FadeOut());
+                break;
         }
     }
 
-    public void OnShow(AsyncOperation asyncOperation, UIControlID windowToHide, UIControlID windowToShow)
+    /// <summary>
+    /// Fade out the background, 
+    /// Called when OnGameStateChange is triggered.
+    /// </summary>
+    IEnumerator FadeOut()
     {
-        // Store the windows
-        m_windowToHide = windowToHide;
-        m_windowToShow = windowToShow;
-        HideWindowBeforeLoading();
+        m_Text.gameObject.SetActive(false);
 
-        gameObject.SetActive(true);
+        while (m_imageToFade.color.a > 0.1f)
+        {
+            DOTweenModuleUI.DOFade(m_imageToFade, 0, 0.4f);
+            yield return null;
+        }
 
-        // reset timer
-        m_timeElapsed = 0;
-
-        // Store the reference
-        CurrentLoadingOperation = asyncOperation;
-
-
-        // Stop the loading operation from finishing, even if it technically did:
-        CurrentLoadingOperation.allowSceneActivation = false;
-
-        m_isLoading = true;
-    }
-
-    public override void OnHide()
-    {
-        gameObject.SetActive(false);
-
-        CurrentLoadingOperation = null;
-
-        m_isLoading = false;
-
-        ShowWindowAfterLoading();
-    }
-
-    private void ShowWindowAfterLoading()
-    {
-        if (m_windowToShow != UIControlID.None)
-            HFUIManager.Instance.Show(m_windowToShow);
-
-        // Reset the value.
-        m_windowToShow = UIControlID.None;
-    }
-
-    private void HideWindowBeforeLoading()
-    {
-        if (m_windowToHide != UIControlID.None)
-            HFUIManager.Instance.Hide(m_windowToHide);
-
-        // Reset the value.
-        m_windowToHide = UIControlID.None;
+        OnHide();
+        yield return null;
     }
 }

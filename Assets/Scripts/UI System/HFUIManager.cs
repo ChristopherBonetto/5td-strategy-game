@@ -58,7 +58,7 @@ public class HFUIManager : Singleton<HFUIManager>
         }
     }
 
-    private HFUIControl m_lastUIControlShown;
+    public HFUIControl LastUIControlShown { get; private set; }
 
 
     //--------------------------------------------------------
@@ -137,7 +137,7 @@ public class HFUIManager : Singleton<HFUIManager>
         if (UIControls.TryGetValue(id, out HFUIControl control))
         {
             control.OnShow();
-            m_lastUIControlShown = control;
+            LastUIControlShown = control;
         }
     }
 
@@ -212,8 +212,8 @@ public class HFUIManager : Singleton<HFUIManager>
     {
         Debug.Log($"Game state change in: {inState}");
 
-        if (m_lastUIControlShown != null)
-            m_lastUIControlShown.OnHide();
+        if (LastUIControlShown != null)
+            LastUIControlShown.OnHide();
 
         // Handle all game state variables.
         switch (inState)
@@ -227,9 +227,9 @@ public class HFUIManager : Singleton<HFUIManager>
                 Show(UIControlID.LevelSelection);
                 break;
             case GameStates.InitializeLevel:
-                Show(UIControlID.InGameWindow);
                 break;
             case GameStates.PlayingLevel:
+                Show(UIControlID.InGameWindow);
                 break;
             case GameStates.Pause:
                 break;

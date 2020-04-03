@@ -176,6 +176,7 @@ GameObject:
   - component: {fileID: 8051315532100851053}
   - component: {fileID: 8051315532100851050}
   - component: {fileID: 8051315532100851052}
+  - component: {fileID: 1434335122162023811}
   m_Layer: 5
   m_Name: Button_Unit_Icon_Upgrade
   m_TagString: Untagged
@@ -192,7 +193,7 @@ RectTransform:
   m_GameObject: {fileID: 8051315532100851054}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_Children:
   - {fileID: 1565943433891598372}
   m_Father: {fileID: 0}
@@ -256,3 +257,20 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &1434335122162023811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8051315532100851054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 300883935c86b52448125e0861a4f1f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animateOnEnable: 1
+  m_startFromScaleZero: 1
+  m_duration: 0.3
+  m_targetScale: {x: 1, y: 1, z: 1}
+  m_imageComponent: {fileID: 8051315532100851053}
