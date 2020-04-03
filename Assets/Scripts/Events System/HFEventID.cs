@@ -49,6 +49,11 @@
 	/// 2) <see cref="HF.HFUnit.Team"/> team
 	/// </summary>
 	OnUnitSpecialized,
+	/// <summary>
+	/// 1) <see cref="HF.HFUnit"/> unit
+	/// 2) <see cref="HF.HFUnit.Team"/> team
+	/// </summary>
+	OnUnitUpgraded,
 
 
 	//----------------------------------------------------------------------------------

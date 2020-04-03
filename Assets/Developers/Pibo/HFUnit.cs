@@ -289,7 +289,7 @@ namespace HF
 
 			ResetHealth(true, false);
 
-			HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this);
+			HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, Team);
 		}
 
 		public void Upgrade()
@@ -306,6 +306,8 @@ namespace HF
 				UpdateStats();
 
 				UpdateVisuals();
+
+				HFEventManager.TriggerEvent(HFEventID.OnUnitUpgraded, this, Team);
 			}
 		}
 
