@@ -217,8 +217,6 @@ namespace HF
         void Start()
         {
             m_interfaceSound3D = new HFIAttachPlay3D();
-
-			UpdateVisuals();
         }
 
         void Update()
@@ -494,7 +492,7 @@ namespace HF
 
 		public bool CanUpgrade()
 		{
-			return (CurrentLevel <= m_baseStats.Levels.Length);
+			return (CurrentLevel < m_baseStats.Levels.Length);
 		}
 
 		#endregion
