@@ -492,7 +492,7 @@ namespace HF
 
 		public bool CanUpgrade()
 		{
-			return (CurrentLevel <= m_baseStats.Levels.Length);
+			return (CurrentLevel < m_baseStats.Levels.Length);
 		}
 
 		#endregion
@@ -1091,7 +1091,7 @@ namespace HF
 				{
 					float attackDistance = m_stats[HFStatistics.AttackRange];
 
-					if (attackDistance <= 1f)
+					if (attackDistance <= 3f)
 					{
 						MeleeAttack(m_targetEnemy);
 						m_lastAttackTime = Time.time;
@@ -1379,8 +1379,13 @@ namespace HF
             m_interfaceSound3D.AttachAndPlay(this.gameObject, tempEvent);
         }
 
-        #endregion
-    }
+		#endregion
+
+		private void OnDrawGizmosSelected()
+		{
+			UnityEditor.Handles.DrawSolidDisc(transform.position, Vector3.up, m_stats[HFStatistics.AttackRange]);
+		}
+	}
 
 
 
@@ -1497,6 +1502,4 @@ namespace HF
 	}
 
     #endregion
-
-    
 }

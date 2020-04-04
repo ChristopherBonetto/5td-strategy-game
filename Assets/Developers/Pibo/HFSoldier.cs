@@ -30,14 +30,14 @@ namespace HF
 		{
 			int index = level - 1;
 			int levels = LoadedVisuals.LevelVisuals.Length;
+			Debug.Log("Unit UPgrade: " + index);
 			if (index < levels)
 			{
 				for(int i = 0; i < levels; i++)
 				{
-					bool bActivate = (index == i);
 					foreach (GameObject mesh in LoadedVisuals.LevelVisuals[i].List)
 					{
-						mesh.SetActive(bActivate);
+						mesh.SetActive(index == i);
 					}
 				}
 			}
