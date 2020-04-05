@@ -57,16 +57,17 @@ public class MouseSelectionManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        //if (!EventSystem.current.IsPointerOverGameObject())
+        //{
+            
+        //}
+        if (Input.GetMouseButtonDown(0))
         {
-            if (Input.GetMouseButtonDown(0))
-            {
-                SelectDeselectOneObject();
-            }
-            else if (Input.GetMouseButtonDown(1))
-            {
-                UnitAction();
-            }
+            SelectDeselectOneObject();
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            UnitAction();
         }
     }
 
@@ -76,6 +77,7 @@ public class MouseSelectionManager : MonoBehaviour
     {
         ClearSelection();
         CurrentSelectedObject = SelectObject();
+        Debug.Log(CurrentSelectedObject);
     }
 
 
@@ -86,19 +88,10 @@ public class MouseSelectionManager : MonoBehaviour
         
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
-            if(HitInfo.transform.gameObject.layer == CivilizationScriptBehaviour.Instance.GetGameObjectLayer(CivilizationScriptBehaviour.Instance.CivilizationSO.CivilizationLayer))
+            if(HitInfo.transform.gameObject.layer == PlayerInfoBehavior.Instance.GetGameObjectLayer(PlayerInfoBehavior.Instance.PlayerInfoSO.PlayerLayer))
             {
-                ISelectionable Selectionable = HitInfo.transform.GetComponent<ISelectionable>() as ISelectionable;
-
-                if(Selectionable != null)
-                {
-                    Debug.Log(HitInfo.transform.gameObject);
-                    return HitInfo.transform.gameObject;
-                }
-                else
-                {
-                    return null;
-                }
+                Debug.Log(HitInfo.transform.gameObject);
+                return HitInfo.transform.gameObject;
             }
             else
             {
@@ -137,30 +130,30 @@ public class MouseSelectionManager : MonoBehaviour
             if (tempLayer == LayerMask.NameToLayer("Terrain"))
             {
                 Debug.Log("Move");
-                GiveToEachUnitTipeAFocusObject(Actions.Move, null, HitInfo2.point);
+                GiveCommand(Actions.Move, null, HitInfo2.point);
             }
 
-            else if (tempLayer != CivilizationScriptBehaviour.Instance.m_ShiftedCivilizationLayer)
+            else if (tempLayer != PlayerInfoBehavior.Instance.m_playerLayer)
             {
                 IDamageable CanBeAttacked = HitInfo2.collider.GetComponent<IDamageable>();
 
-                if (HitInfo2.transform.gameObject.GetComponent<UnitsScriptBehaviour>() != null && CanBeAttacked != null)
+                if (HitInfo2.transform.gameObject.GetComponent<UnitsScriptBehavior>() != null && CanBeAttacked != null)
                 {
                     Debug.Log("ATTACK");
-                    GiveToEachUnitTipeAFocusObject(Actions.Attack, HitInfo2.transform.gameObject, HitInfo2.transform.position);
+                    GiveCommand(Actions.Attack, HitInfo2.transform.gameObject, HitInfo2.transform.position);
                 }
             }
 
-            else if(tempLayer == CivilizationScriptBehaviour.Instance.m_ShiftedCivilizationLayer)
+            else if(tempLayer == PlayerInfoBehavior.Instance.m_playerLayer)
             {
                 //ha lo stesso layer. quindi posso interagire;
             }
         }
     }
 
-    private void GiveToEachUnitTipeAFocusObject(Actions ActionType, GameObject FocussedGameobject, Vector3 ObjectPosition)
+    private void GiveCommand(Actions ActionType, GameObject FocussedGameobject, Vector3 ObjectPosition)
     {
-        UnitsScriptBehaviour tempRef = CurrentSelectedObject.GetComponent<UnitsScriptBehaviour>();
+        UnitsScriptBehavior tempRef = CurrentSelectedObject.GetComponent<UnitsScriptBehavior>();
 
         if(tempRef == null)
         {

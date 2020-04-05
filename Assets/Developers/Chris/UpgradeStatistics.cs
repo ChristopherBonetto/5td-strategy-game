@@ -13,7 +13,7 @@ public class UpgradeStatistics : ScriptableObject
     [Header("WorkerUpgrade"), Space] public WorkerUpgrade WorkerUpgrade;
 
     [Space]public float TimeToUpgrade;
-    [Header("UpgradeCost"),Space] public QuantityOfResources[] UpgradeCost;
+    [Header("UpgradeCost"),Space] public int UpgradeCost;
 }
 
 [System.Serializable]

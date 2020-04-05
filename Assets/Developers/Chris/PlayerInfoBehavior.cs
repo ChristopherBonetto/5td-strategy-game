@@ -2,65 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CivilizationScriptBehaviour : MonoBehaviour
+public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
 {
-    public static CivilizationScriptBehaviour Instance;
- 
-
-    public int m_ShiftedCivilizationLayer { get; private set; }
-
-    public QuantityOfResources[] m_CurrentCivilizationResources { get; private set; }
-
-    private Vector3 StartingCityHallPosition;
-
-    public int CurrentCivilizationMaxPopulation;
-
-    public bool DepositInstantiated = false;
-    private float m_Timer = 0f;
-    
-
-    private CivilizationStatistics m_CivilizationSO;
-    public CivilizationStatistics CivilizationSO
+    new public static PlayerInfoBehavior Instance
     {
         get
         {
-            if (m_CivilizationSO != null) return m_CivilizationSO;
-            m_CivilizationSO = Instantiate(m_CivilizationSO);
-            return m_CivilizationSO;
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = (PlayerInfoBehavior)FindObjectOfType(typeof(PlayerInfoBehavior));
+
+
+                    if (_instance == null)
+                    {
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/PlayerInfoBehavior"));
+                        _instance = outGO.GetComponent<PlayerInfoBehavior>();
+
+                        DontDestroyOnLoad(_instance);
+                    }
+                    else
+                        DontDestroyOnLoad(_instance);
+                }
+
+                return _instance;
+            }
+        }
+    }
+
+    public GameObject CastlePosition;
+
+    public int m_playerLayer;
+
+    public int m_CurrentPlayerResources { get; private set; }
+
+    private float m_Timer = 0f;
+
+    [SerializeField] private GameCollection m_desideredPlayerInfo;
+
+    private GameCollection m_PlayerInfoSO;
+    public GameCollection PlayerInfoSO
+    {
+        get
+        {
+            if (m_PlayerInfoSO != null) return m_PlayerInfoSO;
+            m_PlayerInfoSO = Instantiate(m_PlayerInfoSO);
+            return m_PlayerInfoSO;
         }
         set
         {
-            m_CivilizationSO = value;
+            m_PlayerInfoSO = value;
         }
     }
 
-    public List<GameObject> CreatedUnits = new List<GameObject>();
-    public List<GameObject> CreatedBuildings = new List<GameObject>();
-
-    
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        PlayerInfoSO = Instantiate(m_desideredPlayerInfo);
     }
-
     // Start is called before the first frame update
     void Start()
     {
         StartGame();
     }
-    private void Update()
-    {
-        
-    }
-
-
 
     public int GetGameObjectLayer(LayerMask mask)
     {
@@ -77,71 +84,28 @@ public class CivilizationScriptBehaviour : MonoBehaviour
 
     private void StartGame()
     {
-        m_ShiftedCivilizationLayer = GetGameObjectLayer(CivilizationSO.CivilizationLayer);
-
-        m_CurrentCivilizationResources = new QuantityOfResources[CivilizationSO.ResourcesValuesDictionary.Count];
-        CivilizationSO.ResourcesValuesDictionary.Values.CopyTo(m_CurrentCivilizationResources, 0);
-
-        CurrentCivilizationMaxPopulation = CivilizationSO.MaxPopulation;
-
-        StartingCityHallPosition = new Vector3(0, CivilizationSO.BuildingsDictionary[Buildings.CityHall].BuildingPrefab.transform.lossyScale.y / 2, 0);
+        m_playerLayer = GetGameObjectLayer(PlayerInfoSO.PlayerLayer);
+        m_CurrentPlayerResources = PlayerInfoSO.PlayerQuantityResources;
     }
 
 
-    public bool CheckResourcesAvailability(QuantityOfResources[] ResourcesToCheck)
+    public bool CheckResourcesAvailability(int ResourcesToCheck)
     {
-        int CivilizationHaveThatResource = 0;
-
-        for (int i = 0; i < ResourcesToCheck.Length; i++)
-        {
-            for (int j = 0; j < m_CurrentCivilizationResources.Length; j++)
-            {
-                if (ResourcesToCheck[i].ResourceType == m_CurrentCivilizationResources[j].ResourceType)
-                {
-                    if(m_CurrentCivilizationResources[j].ResourceQuantity >= ResourcesToCheck[i].ResourceQuantity)
-                    {
-                        CivilizationHaveThatResource++;
-                    }
-                }
-            }
-        }
-        if(CivilizationHaveThatResource >= ResourcesToCheck.Length)
+        if (ResourcesToCheck <= m_CurrentPlayerResources)
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
-    public void DecreaseResources(QuantityOfResources[] QuantityOfResources)
+    public void DecreaseResources(int QuantityOfResources)
     {
-        for (int i = 0; i < QuantityOfResources.Length; i++)
-        {
-            for (int j = 0; j < m_CurrentCivilizationResources.Length; j++)
-            {
-                if (QuantityOfResources[i].ResourceType == m_CurrentCivilizationResources[j].ResourceType)
-                {
-                    m_CurrentCivilizationResources[j].ResourceQuantity -= QuantityOfResources[i].ResourceQuantity;
-                }
-            }
-        }
+        m_CurrentPlayerResources -= QuantityOfResources;
     }
 
-    public void AddResources(QuantityOfResources[] QuantityOfResources)
+    public void AddResources(int QuantityOfResources)
     {
-        for (int i = 0; i < QuantityOfResources.Length; i++)
-        {
-            for(int j = 0; j < m_CurrentCivilizationResources.Length; j++)
-            {
-                if(QuantityOfResources[i].ResourceType == m_CurrentCivilizationResources[j].ResourceType)
-                {
-                    m_CurrentCivilizationResources[j].ResourceQuantity += QuantityOfResources[i].ResourceQuantity;
-                    QuantityOfResources[i].ResourceQuantity = 0;
-                }
-            }
-        }
+        m_CurrentPlayerResources += QuantityOfResources;
     }
 
     //public void InstantiateBuilding(Buildings BuildingType, Vector3 SpawnBuilding, Quaternion SpawnQuaternion)
@@ -203,6 +167,8 @@ public class CivilizationScriptBehaviour : MonoBehaviour
     //        }
     //    }
     //}
+
+    
 
 
     public bool Timer(float destinationTime)

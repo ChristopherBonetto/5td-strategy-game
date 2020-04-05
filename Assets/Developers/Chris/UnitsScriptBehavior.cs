@@ -6,12 +6,14 @@ using UnityEngine.AI;
 
 
 
-public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
+public class UnitsScriptBehavior : MonoBehaviour, IDamageable
 {
-    
+    [SerializeField] private Units m_startUnitsInfo;
+
+    [SerializeField] private int m_checkAreaRadius;
+
     public Actions m_CurrentUnitAction { get; protected set; }
     
-
     private UnitStatistics m_UnitStatisticsSO;
     public UnitStatistics UnitStatisticsSO
     {
@@ -43,16 +45,16 @@ public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
 
     protected IDamageable CanTakeDamage;
 
-    protected GameObject m_FocusObject = null;
+    protected GameObject m_focusObject = null;
     public GameObject FocusObject
     {
         get
         {
-            return m_FocusObject;
+            return m_focusObject;
         }
         set
         {
-            m_FocusObject = value;
+            m_focusObject = value;
         }
     }
 
@@ -73,10 +75,9 @@ public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
     // Start is called before the first frame update
     public virtual void Start()
     {
-        UnitAgent.speed = UnitAgent.speed + UnitStatisticsSO.MovementSpeed;
-        UpdateCurrentHp();
+        Initialize();
     }
-    
+
 
     public virtual void Update()
     {
@@ -87,7 +88,7 @@ public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
 
         if (!m_CanAttack)
         {
-            m_CanAttack = Timer(UnitStatisticsSO.TimeToAttack);
+            m_CanAttack = Timer(UnitStatisticsSO.AttackSpeed);
         }
         
         if(FocusObject != null)
@@ -95,8 +96,22 @@ public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
             gameObject.transform.LookAt(new Vector3(FocusObject.transform.position.x, gameObject.transform.position.y, FocusObject.transform.position.z));
         }
 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            if (gameObject.layer != PlayerInfoBehavior.Instance.m_playerLayer)
+            {
+                FocusObject = PlayerInfoBehavior.Instance.CastlePosition;
+            }
+        }
     }
-    
+
+    public virtual void Initialize()
+    {
+        UnitStatisticsSO = PlayerInfoBehavior.Instance.PlayerInfoSO.PlayerUnitsDictionary[m_startUnitsInfo].UnitStatsCopy;
+
+        UnitAgent.speed = UnitAgent.speed + UnitStatisticsSO.MovementSpeed;
+        UpdateCurrentHp();
+    }
 
     public virtual void ChangeUnitState(Actions NewAction)
     {
@@ -120,8 +135,7 @@ public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
     {
         if (FocusObject != null)
         {
-            
-            if (Vector3.Distance(transform.position, FocusObject.transform.position) <= m_UnitAgent.stoppingDistance + FocusObject.transform.localScale.x + UnitStatisticsSO.ViewRadius)
+            if (Vector3.Distance(transform.position, FocusObject.transform.position) <= m_UnitAgent.stoppingDistance + FocusObject.transform.localScale.x + UnitStatisticsSO.Range)
             {
                 m_UnitAgent.ResetPath();
 
@@ -212,4 +226,29 @@ public class UnitsScriptBehaviour : MonoBehaviour, IDamageable
         Destroy(this.gameObject);
     }
 
+
+    #region Check units near me
+    void CheckNearUnit()
+    {
+        
+
+        //Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_checkAreaRadius); // must be integrate layer 
+        //for (int i = 0; i < hitColliders.Length; i++)
+        //{
+        //    if (hitColliders[i].GetComponent<EnemySoldier>())
+        //    {
+        //        Debug.Log(hitColliders[i].name);
+        //        hitColliders[i].GetComponent<EnemySoldier>().PlayerDetected(true);
+        //        hitColliders[i].GetComponent<EnemySoldier>().MoveOnTargetDestination(MG_PlayerPosition);
+        //        hitColliders[i].GetComponent<EnemySoldier>().ChangeSoldierState(SoldierStates.Allert);
+
+        //    }
+        //}
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, m_checkAreaRadius);
+    }
+    #endregion
 }
