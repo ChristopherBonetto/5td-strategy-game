@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 62377667821311458}
   - component: {fileID: 62377667821311461}
-  - component: {fileID: 62377667821311459}
   - component: {fileID: -7398356098942697883}
+  - component: {fileID: 134842870497897369}
   m_Layer: 5
   m_Name: Button_Unit_Icon_Upgrade
   m_TagString: Untagged
@@ -48,7 +48,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 62377667821311457}
   m_CullTransparentMesh: 0
---- !u!114 &62377667821311459
+--- !u!114 &-7398356098942697883
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,7 +57,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 62377667821311457}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Script: {fileID: 11500000, guid: 300883935c86b52448125e0861a4f1f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_animateOnEnable: 1
+  m_startFromScaleZero: 0
+  m_duration: 0.3
+  m_targetScale: {x: 1, y: 1, z: 1}
+  m_imageComponent: {fileID: 62377667821311458}
+--- !u!114 &134842870497897369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62377667821311457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4efa992414cd7b8419de86bf4839ad4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
@@ -93,23 +110,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &-7398356098942697883
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 62377667821311457}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 300883935c86b52448125e0861a4f1f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_animateOnEnable: 1
-  m_startFromScaleZero: 0
-  m_duration: 0.3
-  m_targetScale: {x: 1, y: 1, z: 1}
-  m_imageComponent: {fileID: 62377667821311458}
+  m_BackGround: {fileID: 0}
+  m_Icon: {fileID: 0}
 --- !u!1 &5456510566807782868
 GameObject:
   m_ObjectHideFlags: 0

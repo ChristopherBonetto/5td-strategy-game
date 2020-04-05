@@ -46,6 +46,11 @@ namespace HF
 		private HFBaseStats m_initialStats = null;
 		public HFBaseStats InitialStats => m_initialStats; // #TEMP
 
+		[SerializeField]
+		private HFBaseStats[] m_Specializations = null;
+		public HFBaseStats[] Specializations => m_Specializations; // #TEMP
+		public bool CanBeSpecialize => m_Specializations != null && m_Specializations.Length > 0;
+
 		private HFBaseStats m_baseStats = null;
         public HFBaseStats BaseStats => m_baseStats; // #TEMP
 
@@ -349,8 +354,11 @@ namespace HF
 			}
 
 			// #TEMP Disable placeholder visuals
-			Transform placeHolder = m_transform.Find("PlaceHolder");
-			DestroyImmediate(placeHolder.gameObject);
+			Transform mesh = m_transform.Find("PlaceHolder");
+			if (mesh != null)
+			{
+				DestroyImmediate(mesh.gameObject);
+			}
 
 			SpawnUnits(visualsPrefab);
 		}
@@ -808,6 +816,9 @@ namespace HF
 				newSoldier.Init(this, phase);
 				m_soldiers.Add(newSoldier);
 				m_activeSoldiersCount++;
+
+				Debug.Log(newSoldier);
+				Debug.Log(newSoldier.transform.position);
 			}
 
 			int soldierTotal = m_baseStats.SoldiersPerUnit;
@@ -1031,65 +1042,69 @@ namespace HF
 
 		public bool FindNewTarget()
 		{
-			m_targetEnemy = null;
-
-			// Fail if carrying a tower
-			if (m_carriedTower)
+			if (m_soldiers.Count > 0)
 			{
-				return false;
-			}
 
-			float unitDamage = m_stats[HFStatistics.UnitDamage];
-			float buildingDamage = m_stats[HFStatistics.BuildingDamage];
+				m_targetEnemy = null;
 
-			// Fail if can't deal any damage
-			if (unitDamage == 0f && buildingDamage == 0f)
-			{
-				return false;
-			}
-
-			// #TEMP Acquisition range could be larger than attack range
-			Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 0f) * HFGameParameters.TileSize, m_unitLayer);
-
-			if (colliders.Length > 0)
-			{
-				float targetDistance = Mathf.Infinity;
-
-				for (int i = 0; i < colliders.Length; i++)
+				// Fail if carrying a tower
+				if (m_carriedTower)
 				{
-					Collider testCollider = colliders[i];
-
-					// Ignore if alreaady have a closer target
-					float testDistance = Vector3.Magnitude(testCollider.gameObject.transform.position - m_soldiers[0].BulletSpawn.position);
-					if (testDistance >= targetDistance)
-					{
-						continue;
-					}
-
-					// Ignore self
-					if (m_colliders.Contains(testCollider))
-					{
-						continue;
-					}
-
-					// Ignore useless attacks and disable friendly fire
-					HFUnit testEnemy = testCollider.gameObject.GetComponentInParent<HFUnit>();
-					if (!testEnemy
-						|| testEnemy.IsKilled
-						|| testEnemy.Team == Team
-						|| !testEnemy.CanSufferDamage
-						|| (testEnemy.UnitType == HFUnitType.Unit && unitDamage == 0f)
-						|| (testEnemy.UnitType == HFUnitType.Castle && buildingDamage == 0f))
-					{
-						continue;
-					}
-
-					m_targetEnemy = testEnemy;
-					targetDistance = testDistance;
+					return false;
 				}
-			}
 
-			UpdateAnimState();
+				float unitDamage = m_stats[HFStatistics.UnitDamage];
+				float buildingDamage = m_stats[HFStatistics.BuildingDamage];
+
+				// Fail if can't deal any damage
+				if (unitDamage == 0f && buildingDamage == 0f)
+				{
+					return false;
+				}
+
+				// #TEMP Acquisition range could be larger than attack range
+				Collider[] colliders = Physics.OverlapSphere(m_transform.position, (m_stats[HFStatistics.AttackRange] + 0f) * HFGameParameters.TileSize, m_unitLayer);
+
+				if (colliders.Length > 0)
+				{
+					float targetDistance = Mathf.Infinity;
+
+					for (int i = 0; i < colliders.Length; i++)
+					{
+						Collider testCollider = colliders[i];
+
+						// Ignore if alreaady have a closer target
+						float testDistance = Vector3.Magnitude(testCollider.gameObject.transform.position - m_soldiers[0].BulletSpawn.position);
+						if (testDistance >= targetDistance)
+						{
+							continue;
+						}
+
+						// Ignore self
+						if (m_colliders.Contains(testCollider))
+						{
+							continue;
+						}
+
+						// Ignore useless attacks and disable friendly fire
+						HFUnit testEnemy = testCollider.gameObject.GetComponentInParent<HFUnit>();
+						if (!testEnemy
+							|| testEnemy.IsKilled
+							|| testEnemy.Team == Team
+							|| !testEnemy.CanSufferDamage
+							|| (testEnemy.UnitType == HFUnitType.Unit && unitDamage == 0f)
+							|| (testEnemy.UnitType == HFUnitType.Castle && buildingDamage == 0f))
+						{
+							continue;
+						}
+
+						m_targetEnemy = testEnemy;
+						targetDistance = testDistance;
+					}
+				}
+
+				UpdateAnimState();
+			}
 
 			return (m_targetEnemy != null);
 		}
