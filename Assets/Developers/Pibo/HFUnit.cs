@@ -43,6 +43,9 @@ namespace HF
 		[Header("Statistics")]
 
 		[SerializeField]
+		private HFBaseStats m_initialStats = null;
+		public HFBaseStats InitialStats => m_initialStats; // #TEMP
+
 		private HFBaseStats m_baseStats = null;
         public HFBaseStats BaseStats => m_baseStats; // #TEMP
 
@@ -168,6 +171,11 @@ namespace HF
 		/// </summary>
 		public bool IsKilled { get; protected set; }
 
+		/// <summary>
+		/// id it unit specialized?
+		/// </summary>
+		public bool IsSpecialized { get; protected set; }
+
         private HFIEvent3D m_interfaceSound3D;
 
         #endregion
@@ -181,17 +189,22 @@ namespace HF
 			m_navAgent = GetComponent<NavMeshAgent>();
 			m_navObstacle = GetComponent<NavMeshObstacle>();
 			m_anim = GetComponent<Animator>();
-			
-			HFHelpers.NullCheck(gameObject, m_baseStats, "base stats");
+
+
+			HFHelpers.NullCheck(gameObject, m_initialStats, "initial stats");
 			HFHelpers.NullCheck(gameObject, m_renderers, "renderers");
 			HFHelpers.NullCheck(gameObject, m_navAgent, "navigation agent");
 			HFHelpers.NullCheck(gameObject, m_navObstacle, "navigation obstacle");
 			// #TEMP
 			//HFHelpers.NullCheck(gameObject, m_anim, "animator");
 
+
 			m_stats = new Dictionary<HFStatistics, float>();
 			m_stringStats = new Dictionary<HFStatistics, string>();
 			m_mods = new List<IHFStatModifier>();
+
+			Initialization();
+
 			UpdateStats();
 
 			ResetHealth(true, true);
@@ -262,13 +275,25 @@ namespace HF
 		{
 			if (newState == GameStates.InitializeLevel)
 			{
-				Specialize(m_baseStats);
+				ResetStats();
 			}
 		}
 
 		#endregion
 
 		#region Statistics
+
+		public void Initialization()
+		{
+			m_baseStats = m_initialStats;
+			IsSpecialized = false;
+		}
+
+		public void ResetStats()
+		{
+			Specialize(m_initialStats);
+			IsSpecialized = false;
+		}
 
 		public void Specialize(HFBaseStats newStats)
 		{
@@ -290,6 +315,8 @@ namespace HF
 			ResetHealth(true, false);
 
 			HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, Team);
+
+			IsSpecialized = true;
 		}
 
 		public void Upgrade()
