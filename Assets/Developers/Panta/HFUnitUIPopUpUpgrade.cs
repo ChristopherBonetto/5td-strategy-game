@@ -32,11 +32,13 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
+        HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
     }
 
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
+        HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
     }
 
     private void Start()
@@ -49,7 +51,6 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         {
             float angle = 360 / m_specializedButtons.Length * i;
             m_specializedButtons[i].transform.position = DrawIconsInCircle(transform.position, m_radius, angle);
-            //m_specializedButtons[i].onClick.AddListener(/*Add funtion*/);
         }
 
         // Set the upgrades buttons positions.
@@ -108,6 +109,7 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
                 EnableButtons(false, m_upgradeButtons);
                 // If it's not specialized,
                 // then show the specialization buttons.
+                ShowSpecializations(unit);
                 break;
 
             case PopUpMode.Upgrade:
@@ -125,6 +127,18 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
     private void SetUnit(HFUnit unit)
     {
         m_unit = unit;
+
+        // Check if it's already specialized,
+        // if not, set the m_mode to PopUpMode.Specialization.
+        // else PopUpMode.Upgrade.
+
+        m_mode = PopUpMode.Upgrade;
+    }
+
+    private void ShowSpecializations(HFUnit unit)
+    {
+        // if the unit is not specialized yet
+        // show specialization,
     }
 
     private void ShowUpgrade(HFUnit unit)
@@ -134,7 +148,7 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         // show some feedback.
         // ------------------------------------------
 
-        if (unit.CanUpgrade())
+        if (m_unit != null && unit.CanUpgrade())
         {
             foreach (var button in m_upgradeButtons)
             {
@@ -147,7 +161,7 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         // show some feedback.
         // ------------------------------------------
 
-        else
+        else if (m_unit != null && !unit.CanUpgrade())
         {
             foreach (var button in m_upgradeButtons)
             {
@@ -188,17 +202,33 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         }
     }
 
+    private void OnClickSpecialize(int i)
+    {
+    }
+
     #endregion
 
     #region Events
 
+    /// <summary>
+    /// Update the pop up with new info.
+    /// </summary>
     private void OnUnitupgrade(HFUnit unit, int team)
     {
         if (unit != null && team == 0)
         {
-            Debug.Log("Reset unit info...");
-
             SetUnitInfo(unit);
+        }
+    }
+
+    /// <summary>
+    /// Turn off the pop up when unit death
+    /// </summary>
+    private void OnUnitDeath(HFUnit unit)
+    {
+        if (unit != null && unit.Team == 0 && unit == m_unit)
+        {
+            gameObject.SetActive(false);
         }
     }
 
