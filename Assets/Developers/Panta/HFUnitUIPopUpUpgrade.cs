@@ -31,53 +31,24 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
 
     private void OnEnable()
     {
+        HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialization);
         HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
         HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
     }
 
     private void OnDisable()
     {
+        HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialization);
         HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
         HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
+
+        EnableButtons(false, m_specializedButtons);
+        EnableButtons(false, m_upgradeButtons);
     }
 
     private void Start()
     {
         m_cam = Camera.main;
-
-        // Set the specialize buttons positions.
-        // Set the function to perform
-        for (int i = 0; i < m_specializedButtons.Length; i++)
-        {
-            float angle = 360 / m_specializedButtons.Length * i;
-            m_specializedButtons[i].transform.position = DrawIconsInCircle(transform.position, m_radius, angle);
-        }
-
-        // Set the upgrades buttons positions.
-        // Set the function to perform
-        for (int i = 0; i < m_upgradeButtons.Length; i++)
-        {
-            float angle = 360 / m_upgradeButtons.Length * i;
-            m_upgradeButtons[i].transform.position = DrawIconsInCircle(transform.position, m_radius, angle);
-            m_upgradeButtons[i].onClick.AddListener(OnClickupgrade);
-        }
-
-        // Turn off all buttons.
-        EnableButtons(false, m_specializedButtons);
-        EnableButtons(false, m_upgradeButtons);
-    }
-
-    private void OnDestroy()
-    {
-        foreach (var button in m_specializedButtons)
-        {
-            button.onClick.RemoveAllListeners();
-        }
-
-        foreach (var button in m_upgradeButtons)
-        {
-            button.onClick.RemoveAllListeners();
-        }
     }
 
     private void Update()
@@ -90,87 +61,61 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
 
     #endregion
 
-    #region Set Up Methods (when it's called from the event trigger)
 
-    /// <summary>
-    /// It's called from <see cref="HFUnitView"/> 
-    /// when the event <see cref="HFEventID.OnUnitSelected"/>
-    /// it's triggered.
-    /// </summary>
-    public void SetUnitInfo(HFUnit unit)
-    {
-        // Get the unit reference.
-        SetUnit(unit);
-
-        switch (m_mode)
-        {
-            case PopUpMode.Specialize:
-                EnableButtons(true, m_specializedButtons);
-                EnableButtons(false, m_upgradeButtons);
-                // If it's not specialized,
-                // then show the specialization buttons.
-                ShowSpecializations(unit);
-                break;
-
-            case PopUpMode.Upgrade:
-                EnableButtons(true, m_upgradeButtons);
-                EnableButtons(false, m_specializedButtons);
-                // If it's specialized and can be upgraded,
-                // then show the upgrade button.
-                ShowUpgrade(unit);
-                break;
-        }
-
-        gameObject.SetActive(true);
-    }
-
-    private void SetUnit(HFUnit unit)
+    public void ShowSpecializations(HFUnit unit)
     {
         m_unit = unit;
 
-        // Check if it's already specialized,
-        // if not, set the m_mode to PopUpMode.Specialization.
-        // else PopUpMode.Upgrade.
-
-        m_mode = PopUpMode.Upgrade;
-    }
-
-    private void ShowSpecializations(HFUnit unit)
-    {
-        // if the unit is not specialized yet
-        // show specialization,
-    }
-
-    private void ShowUpgrade(HFUnit unit)
-    {
-        // ------------------------------------------
-        // If the unit selected can be upgraded then
-        // show some feedback.
-        // ------------------------------------------
-
-        if (m_unit != null && unit.CanUpgrade())
+        for (int i = 0; i < unit.Specializations.Length; i++)
         {
-            foreach (var button in m_upgradeButtons)
-            {
-                button.image.color = Color.white;
-            }
-        }
+            float angle = 360 / m_unit.Specializations.Length * i;
+            m_specializedButtons[i].transform.position = DrawIconsInCircle(transform.position, m_radius, angle);
 
-        // ------------------------------------------
-        // If the unit selected can't be upgraded then
-        // show some feedback.
-        // ------------------------------------------
+            var index = i;
 
-        else if (m_unit != null && !unit.CanUpgrade())
-        {
-            foreach (var button in m_upgradeButtons)
-            {
-                button.image.color = Color.grey;
-            }
+            // m_specializationButtons[i].Icon = unit.Specializations[i].Icon;
+            m_specializedButtons[index].onClick.RemoveAllListeners();
+            m_specializedButtons[index].onClick.AddListener(() => unit.Specialize(unit.Specializations[index]));
+
+            EnableButtons(true, m_specializedButtons[i]);
         }
     }
 
-    #endregion
+    public void ShowUpgrade(HFUnit unit)
+    {
+        m_unit = unit;
+
+        CheckCanUpgrade(unit);
+
+        for (int i = 0; i < m_upgradeButtons.Length; i++)
+        {
+            float angle = 360 / m_upgradeButtons.Length * i;
+            m_upgradeButtons[i].transform.position = DrawIconsInCircle(transform.position, m_radius, angle);
+
+            var index = i;
+
+            // m_specializationButtons[i].Icon = unit.Specializations[i].Icon;
+            m_upgradeButtons[index].onClick.RemoveAllListeners();
+            m_upgradeButtons[index].onClick.AddListener(unit.Upgrade);
+
+            EnableButtons(true, m_upgradeButtons[i]);
+        }
+    }
+
+    private void CheckCanUpgrade(HFUnit unit)
+    {
+        for (int i = 0; i < m_upgradeButtons.Length; i++)
+        {
+            if (!unit.CanUpgrade())
+            {
+                m_upgradeButtons[i].image.color = Color.grey;
+            }
+            else
+            {
+                m_upgradeButtons[i].image.color = Color.white;
+            }
+        }
+    }
 
     #region Utils
 
@@ -186,24 +131,12 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         return pos;
     }
 
-    private void EnableButtons(bool enable, params Button[] buttons)
+    private void EnableButtons(bool enabled, params Button[] buttons)
     {
         foreach (var button in buttons)
         {
-            button.gameObject.SetActive(enable);
+            button.gameObject.SetActive(enabled);
         }
-    }
-
-    private void OnClickupgrade()
-    {
-        if (m_unit.CanUpgrade())
-        {
-            m_unit.Upgrade();
-        }
-    }
-
-    private void OnClickSpecialize(int i)
-    {
     }
 
     #endregion
@@ -217,7 +150,8 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
     {
         if (unit != null && team == 0)
         {
-            SetUnitInfo(unit);
+            EnableButtons(false, m_upgradeButtons);
+            ShowUpgrade(unit);
         }
     }
 
@@ -229,6 +163,15 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         if (unit != null && unit.Team == 0 && unit == m_unit)
         {
             gameObject.SetActive(false);
+        }
+    }
+
+    private void OnUnitSpecialization(HFUnit unit, int team)
+    {
+        if (unit != null && team == 0)
+        {
+            EnableButtons(false, m_specializedButtons);
+            ShowUpgrade(unit);
         }
     }
 

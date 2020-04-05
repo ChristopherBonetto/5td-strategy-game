@@ -62,8 +62,18 @@ namespace HF
                 // Pool the popUp, get component of the popUp.
                 m_pooledGameObject = HFObjectPooler.Instance.GetPooledObject(m_UnitPopUpID.ID);
                 HFUnitUIPopUpUpgrade popUp = m_pooledGameObject.GetComponent<HFUnitUIPopUpUpgrade>();
-                // Set up the pop up.
-                popUp.SetUnitInfo(unit);
+
+                // Filter the option: specialization or upgrade.
+                if (!unit.IsSpecialized && unit.CanBeSpecialize)
+                {
+                    popUp.ShowSpecializations(unit);
+                }
+                else
+                {
+                    popUp.ShowUpgrade(unit);
+                }
+
+                popUp.gameObject.SetActive(true);
             }
         }
     }
