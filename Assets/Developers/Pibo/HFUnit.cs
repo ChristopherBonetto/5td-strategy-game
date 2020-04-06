@@ -1423,17 +1423,19 @@ namespace HF
 
 		#endregion
 
+#if UNITY_EDITOR
 		private void OnDrawGizmosSelected()
 		{
 			UnityEditor.Handles.DrawSolidDisc(transform.position, Vector3.up, m_stats[HFStatistics.AttackRange]);
 		}
+#endif
 	}
 
 
 
-    #region Commands inl
+	#region Commands inl
 
-    public class HFMoveCommand : IHFCommand
+	public class HFMoveCommand : IHFCommand
 	{
 		private readonly Vector3 m_destination;
 		private readonly MovementType m_moveType;
