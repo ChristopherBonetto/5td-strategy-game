@@ -88,7 +88,7 @@ public class MouseSelectionManager : MonoBehaviour
         
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
-            if(HitInfo.transform.gameObject.layer == PlayerInfoBehavior.Instance.GetGameObjectLayer(PlayerInfoBehavior.Instance.PlayerInfoSO.PlayerLayer))
+            if(HitInfo.transform.gameObject.layer == GameController.Instance.GetGameObjectLayer(GameController.Instance.GameCollectionCopy.PlayerLayer))
             {
                 Debug.Log(HitInfo.transform.gameObject);
                 return HitInfo.transform.gameObject;
@@ -133,7 +133,7 @@ public class MouseSelectionManager : MonoBehaviour
                 GiveCommand(Actions.Move, null, HitInfo2.point);
             }
 
-            else if (tempLayer != PlayerInfoBehavior.Instance.m_playerLayer)
+            else if (tempLayer != GameController.Instance.m_playerLayer)
             {
                 IDamageable CanBeAttacked = HitInfo2.collider.GetComponent<IDamageable>();
 
@@ -144,7 +144,7 @@ public class MouseSelectionManager : MonoBehaviour
                 }
             }
 
-            else if(tempLayer == PlayerInfoBehavior.Instance.m_playerLayer)
+            else if(tempLayer == GameController.Instance.m_playerLayer)
             {
                 //ha lo stesso layer. quindi posso interagire;
             }

@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
+public enum PlayerType
 {
-    new public static PlayerInfoBehavior Instance
+    Player,
+    AI
+}
+
+
+public class GameController : Singleton<GameController>
+{
+    new public static GameController Instance
     {
         get
         {
@@ -15,13 +22,13 @@ public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
             {
                 if (_instance == null)
                 {
-                    _instance = (PlayerInfoBehavior)FindObjectOfType(typeof(PlayerInfoBehavior));
+                    _instance = (GameController)FindObjectOfType(typeof(GameController));
 
 
                     if (_instance == null)
                     {
-                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/PlayerInfoBehavior"));
-                        _instance = outGO.GetComponent<PlayerInfoBehavior>();
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/GameController"));
+                        _instance = outGO.GetComponent<GameController>();
 
                         DontDestroyOnLoad(_instance);
                     }
@@ -34,39 +41,52 @@ public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
         }
     }
 
-    public GameObject CastlePosition;
 
-    public int m_playerLayer;
+    public GameObject PlayerCastle;
+
+    public int m_playerLayer { get; private set; }
+    public int m_aiLayer { get; private set; }
 
     public int m_CurrentPlayerResources { get; private set; }
 
     private float m_Timer = 0f;
 
-    [SerializeField] private GameCollection m_desideredPlayerInfo;
+    [SerializeField] private GameCollection m_gameCollection;
 
-    private GameCollection m_PlayerInfoSO;
-    public GameCollection PlayerInfoSO
+    private GameCollection m_gameCollectionCopy;
+    public GameCollection GameCollectionCopy
     {
         get
         {
-            if (m_PlayerInfoSO != null) return m_PlayerInfoSO;
-            m_PlayerInfoSO = Instantiate(m_PlayerInfoSO);
-            return m_PlayerInfoSO;
+            return m_gameCollectionCopy;
         }
         set
         {
-            m_PlayerInfoSO = value;
+            m_gameCollectionCopy = value;
         }
     }
 
     private void Awake()
     {
-        PlayerInfoSO = Instantiate(m_desideredPlayerInfo);
+        GameCollectionCopy = Instantiate(m_gameCollection);
     }
     // Start is called before the first frame update
     void Start()
     {
         StartGame();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CreateNewEntity(EntityType.Defender, PlayerType.Player, Vector3.zero);
+        }
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            CreateNewEntity(EntityType.Farmer, PlayerType.AI, Vector3.zero);
+        }
     }
 
     public int GetGameObjectLayer(LayerMask mask)
@@ -84,12 +104,37 @@ public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
 
     private void StartGame()
     {
-        m_playerLayer = GetGameObjectLayer(PlayerInfoSO.PlayerLayer);
-        m_CurrentPlayerResources = PlayerInfoSO.PlayerQuantityResources;
+        m_playerLayer = GetGameObjectLayer(GameCollectionCopy.PlayerLayer);
+        m_aiLayer = GetGameObjectLayer(GameCollectionCopy.AILayer);
+
+        m_CurrentPlayerResources = GameCollectionCopy.PlayerQuantityResources;
+    }
+
+    public void CreateNewEntity(EntityType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    {
+        if (!GameCollectionCopy.GameEntitiesDictionary.ContainsKey(inEntityType))
+        {
+            Debug.Log("GameCollection don't contain " + inEntityType);
+            return;
+        }
+
+        GameObject tempEntity = Instantiate(GameCollectionCopy.GameEntitiesDictionary[inEntityType].EntityPrefab, inPosition, Quaternion.identity);
+
+        if(inPlayerType == PlayerType.Player)
+        {
+            tempEntity.layer = m_playerLayer;
+        }
+        else
+        {
+            tempEntity.layer = m_aiLayer;
+        }
+
     }
 
 
-    public bool CheckResourcesAvailability(int ResourcesToCheck)
+        #region Resources
+
+        public bool CheckResourcesAvailability(int ResourcesToCheck)
     {
         if (ResourcesToCheck <= m_CurrentPlayerResources)
         {
@@ -107,6 +152,8 @@ public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
     {
         m_CurrentPlayerResources += QuantityOfResources;
     }
+
+    #endregion
 
     //public void InstantiateBuilding(Buildings BuildingType, Vector3 SpawnBuilding, Quaternion SpawnQuaternion)
     //{
@@ -168,7 +215,7 @@ public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
     //    }
     //}
 
-    
+
 
 
     public bool Timer(float destinationTime)
@@ -185,4 +232,5 @@ public class PlayerInfoBehavior : Singleton<PlayerInfoBehavior>
             return false;
         }
     }
+    
 }

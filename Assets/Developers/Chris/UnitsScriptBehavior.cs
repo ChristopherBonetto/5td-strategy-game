@@ -6,26 +6,11 @@ using UnityEngine.AI;
 
 
 
-public class UnitsScriptBehavior : MonoBehaviour, IDamageable
+public class UnitsScriptBehavior : Entity, IDamageable
 {
-    [SerializeField] private Units m_startUnitsInfo;
-
-    [SerializeField] private int m_checkAreaRadius;
+    [SerializeField] private EntityType m_startUnitsInfo = EntityType.Farmer;
 
     public Actions m_CurrentUnitAction { get; protected set; }
-    
-    private UnitStatistics m_UnitStatisticsSO;
-    public UnitStatistics UnitStatisticsSO
-    {
-        get
-        {
-            return m_UnitStatisticsSO;
-        }
-        set
-        {
-            m_UnitStatisticsSO = value;
-        }
-    }
     
     protected NavMeshAgent m_UnitAgent;
     public NavMeshAgent UnitAgent
@@ -39,9 +24,6 @@ public class UnitsScriptBehavior : MonoBehaviour, IDamageable
             m_UnitAgent = value;
         }
     }
-
-    private float m_Timer = 0f;
-    protected bool m_CanAttack = true;
 
     protected IDamageable CanTakeDamage;
 
@@ -98,16 +80,16 @@ public class UnitsScriptBehavior : MonoBehaviour, IDamageable
 
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (gameObject.layer != PlayerInfoBehavior.Instance.m_playerLayer)
+            if (gameObject.layer != GameController.Instance.m_playerLayer)
             {
-                FocusObject = PlayerInfoBehavior.Instance.CastlePosition;
+                FocusObject = GameController.Instance.PlayerCastle;
             }
         }
     }
 
     public virtual void Initialize()
     {
-        UnitStatisticsSO = PlayerInfoBehavior.Instance.PlayerInfoSO.PlayerUnitsDictionary[m_startUnitsInfo].UnitStatsCopy;
+        UnitStatisticsSO = GameController.Instance.GameCollectionCopy.GameEntitiesDictionary[m_startUnitsInfo];
 
         UnitAgent.speed = UnitAgent.speed + UnitStatisticsSO.MovementSpeed;
         UpdateCurrentHp();
@@ -183,20 +165,7 @@ public class UnitsScriptBehavior : MonoBehaviour, IDamageable
         m_UnitAgent.velocity = Vector3.zero;
     }
 
-    public virtual bool Timer(float destinationTime)
-    {
-        m_Timer += Time.deltaTime;
-
-        if (m_Timer >= destinationTime)
-        {
-            m_Timer = 0f;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    
 
     public virtual void UpdateCurrentHp()
     {
@@ -227,28 +196,5 @@ public class UnitsScriptBehavior : MonoBehaviour, IDamageable
     }
 
 
-    #region Check units near me
-    void CheckNearUnit()
-    {
-        
-
-        //Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_checkAreaRadius); // must be integrate layer 
-        //for (int i = 0; i < hitColliders.Length; i++)
-        //{
-        //    if (hitColliders[i].GetComponent<EnemySoldier>())
-        //    {
-        //        Debug.Log(hitColliders[i].name);
-        //        hitColliders[i].GetComponent<EnemySoldier>().PlayerDetected(true);
-        //        hitColliders[i].GetComponent<EnemySoldier>().MoveOnTargetDestination(MG_PlayerPosition);
-        //        hitColliders[i].GetComponent<EnemySoldier>().ChangeSoldierState(SoldierStates.Allert);
-
-        //    }
-        //}
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, m_checkAreaRadius);
-    }
-    #endregion
+    
 }

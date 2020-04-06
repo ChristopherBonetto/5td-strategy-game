@@ -8,7 +8,6 @@ public class UpgradeStatistics : ScriptableObject
 {
     [Header("UnitsToUpgrade")] public UnitUpgrade[] UnitsToUpgrade;
 
-    [Header("BuildingToUpgrade"),Space] public BuildingUpgrade[] BuildingsToUpgrade;
 
     [Header("WorkerUpgrade"), Space] public WorkerUpgrade WorkerUpgrade;
 
@@ -19,7 +18,7 @@ public class UpgradeStatistics : ScriptableObject
 [System.Serializable]
 public struct UnitUpgrade
 {
-    public Units TypeOfUnitToUpgrade;
+    public EntityType TypeOfUnitToUpgrade;
     public float DecreaseTimeToInstantiate;
     public int IncreaseHealthMax;
     public int IncreaseAttack;
@@ -31,17 +30,6 @@ public struct UnitUpgrade
     [Space] public float IncreaseBulletSpeed;
 }
 
-[System.Serializable]
-public struct BuildingUpgrade
-{
-    public Buildings TypeOfBuildingToUpgrade;
-    public float DecreaseTimeToBuild;
-    public int IncreaseHealthMax;
-    public int IncreaseAttack;
-    public int IncreaseDefence;
-    public float DecreaseTimeToAttack;
-    public int IncreaseViewRadius;
-}
 
 [System.Serializable]
 public struct WorkerUpgrade
