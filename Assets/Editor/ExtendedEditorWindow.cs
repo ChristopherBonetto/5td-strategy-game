@@ -11,7 +11,7 @@ public class ExtendedEditorWindow : EditorWindow
     private string m_selectedPropertyPath;
     protected SerializedProperty m_selectedProperty;
 
-    protected void DrawProperties(SerializedProperty prop, bool drawChildren)
+    protected virtual void DrawProperties(SerializedProperty prop, bool drawChildren)
     {
         string lastPropPath = string.Empty;
 
@@ -43,8 +43,13 @@ public class ExtendedEditorWindow : EditorWindow
         }
     }
 
-    protected void DrawSidebar(SerializedProperty prop)
+    protected virtual void DrawSidebar(SerializedProperty prop)
     {
+        if (prop == null)
+        {
+            return;
+        }
+
         foreach (SerializedProperty p in prop)
         {
             if (GUILayout.Button(p.displayName))
