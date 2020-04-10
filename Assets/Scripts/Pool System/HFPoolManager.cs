@@ -14,15 +14,16 @@ public class HFPoolManager : MonoBehaviour
 				HFPoolManager[] managers = FindObjectsOfType<HFPoolManager>();
 
 				// Destroy if there are multiple instance of them.
-				if (managers.Length > 1)
+				if (managers.Length > 0)
 				{
+					m_Instance = managers[0];
+
 					for (int i = 1; i < managers.Length; i++)
 					{
 						Destroy(managers[i].gameObject);
 					}
 				}
 
-				m_Instance = managers[0];
 
 				if (m_Instance == null)
 				{
