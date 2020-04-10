@@ -18,16 +18,16 @@ namespace HF.Refactoring
 
         private void OnEnable()
         {
-            HFEventManager.SubscribeTo(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
-            HFEventManager.SubscribeTo(HFEventID.OnWaveEnd, OnWaveEnd);
+            HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
+            HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
 
             ButtonCallNextWave.gameObject.SetActive(true);
         }
 
         private void OnDisable()
         {
-            HFEventManager.UnsubscribeFrom(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
-            HFEventManager.UnsubscribeFrom(HFEventID.OnWaveEnd, OnWaveEnd);
+            HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnNewWaveBegin);
+            HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
 
         }
 
@@ -42,7 +42,7 @@ namespace HF.Refactoring
             ButtonCallNextWave.gameObject.SetActive(false);
         }
 
-        private void OnWaveEnd()
+        private void OnWaveCleared()
         {
             ButtonCallNextWave.gameObject.SetActive(true);
         }
@@ -51,7 +51,7 @@ namespace HF.Refactoring
 
         public void PressNewWave()
         {
-            HFEventManager.TriggerEvent(HFEventID.OnNewWaveBegin);
+            HFEventManager.TriggerEvent(HFEventID.OnWaveBeginned);
         }
 
         public void ReturnToLevelSelection()

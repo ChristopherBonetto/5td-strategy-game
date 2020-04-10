@@ -19,15 +19,15 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     private void OnEnable()
     {
-        HFEventManager.SubscribeTo(HFEventID.OnWaveEnd, OnWaveEnd);
-        HFEventManager.SubscribeTo(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
+        HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveEnd);
+        HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
         HFEventManager.SubscribeTo<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
     }
 
     private void OnDisable()
     {
-        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveEnd, OnWaveEnd);
-        HFEventManager.UnsubscribeFrom(HFEventID.OnNewWaveBegin, OnNewWaveBegin);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveEnd);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnNewWaveBegin);
         HFEventManager.UnsubscribeFrom<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
     }
 
