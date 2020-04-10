@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class HFObjectPoolerEditorWindow : ExtendedEditorWindow
 {
-    public static void Open(HFObjectPooler manager)
+    public static void Open(HFPoolManager manager)
     {
         HFObjectPoolerEditorWindow window = GetWindow<HFObjectPoolerEditorWindow>("Object Pooler");
         window.m_serializedObject = new SerializedObject(manager);

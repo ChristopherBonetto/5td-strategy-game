@@ -102,7 +102,7 @@ namespace HF
 		/// </summary>
 		private void TrySelect()
 		{
-			if (Input.GetMouseButtonDown(0) && !HFUIManager.Instance.IsMouseOverUI())
+			if (Input.GetMouseButtonDown(0))
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{
@@ -137,7 +137,7 @@ namespace HF
 		/// </summary>
 		private void TryInteract()
 		{
-			if (m_currentSelection && Input.GetMouseButtonDown(1) && !HFUIManager.Instance.IsMouseOverUI())
+			if (m_currentSelection && Input.GetMouseButtonDown(1))
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{
