@@ -33,12 +33,11 @@ namespace HF.Refactoring
             }
             else
             {
-                for (int i = 0; i < m_amountToSpawn; i++)
-                {
-                    // Instatiate unit with the given position and data.
+                // Instatiate unit with the given position and data.
+                controller.Controller.SpawnUnit(m_unitStatsData, controller.SpawnPoints[m_spawnPointID]);
 
-                    m_spawnedUnitCount++;
-                }
+                // Increment index
+                m_spawnedUnitCount++;
 
                 // Reset the timer
                 m_timeElapsed = 0;

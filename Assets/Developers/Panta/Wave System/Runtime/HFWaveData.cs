@@ -12,7 +12,7 @@ namespace HF.Refactoring
         BULK
     }
 
-    [CreateAssetMenu(fileName = "SO_wave_lvl_00", menuName = "Refactoring/Good North/Wave/New Wave Data")]
+    [CreateAssetMenu(fileName = "SO_Wave_00_Lvl_00", menuName = "Refactoring/Good North/Wave/New Wave Data")]
     /// <summary>
     /// Scriptable Object that collect behaviours of a single wave.
     /// </summary>

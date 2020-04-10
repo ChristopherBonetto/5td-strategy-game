@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HF.Refactoring
 {
-    [CreateAssetMenu(fileName = "SO_wave_collection_lvl_00", menuName = "Refactoring/Good North/Wave/New Wave Collection")]
+    [CreateAssetMenu(fileName = "SO_WaveCollection_Lvl_00", menuName = "Refactoring/Good North/Wave/New Wave Collection")]
     public class HFWaveCollection : ScriptableObject
     {
         [SerializeField]

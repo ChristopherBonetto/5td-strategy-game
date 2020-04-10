@@ -26,7 +26,7 @@ namespace HF.Refactoring
             for (int i = 0; i < m_amountToSpawn; i++)
             {
                 // Instantitate prefab at the given position with the given data.
-
+                controller.Controller.SpawnUnit(m_unitStatsData, controller.SpawnPoints[m_spawnPointID]);
                 m_spawnedUnitCount++;
             }
         }
