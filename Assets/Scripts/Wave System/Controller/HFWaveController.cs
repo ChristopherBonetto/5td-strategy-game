@@ -128,10 +128,6 @@ namespace HF.WaveSystem
 
         private void Start()
         {
-#if UNITY_EDITOR
-            if (HFUIManager.Instance != null) Debug.Log("");
-#endif
-
             Initialize();
             ResetAllCounts();
 

@@ -1,240 +1,263 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-public class HFUIManager : Singleton<HFUIManager>
+namespace HF.Refactoring
 {
-    //--------------------------------------------------------
-    // Override how it get the instance
-    // If the instance is = null, then load it from resources.
-    // The first time it will be called it initialize the 
-    // UI controls collection.
-    //--------------------------------------------------------
-    new public static HFUIManager Instance
+    public class HFUIManager : MonoBehaviour
     {
-        get
+        #region Singleton
+        private static HFUIManager m_Instance;
+        public static HFUIManager Instance
         {
-            if (applicationIsQuitting)
-                return null;
-
-            lock (_lock)
+            get
             {
-                if (_instance == null)
+                if (m_Instance == null)
                 {
-                    _instance = (HFUIManager)FindObjectOfType(typeof(HFUIManager));
+                    HFUIManager[] managers = FindObjectsOfType<HFUIManager>();
 
-                    if (_instance == null)
+                    // Destroy if there are multiple instance of them.
+                    if (managers.Length > 1)
                     {
-                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/UIManager"));
-                        _instance = outGO.GetComponent<HFUIManager>();
-
+                        for (int i = 1; i < managers.Length; i++)
+                        {
+                            Destroy(managers[i].gameObject);
+                        }
                     }
 
-                    DontDestroyOnLoad(_instance);
-                    _instance.Initialize();
+                    m_Instance = managers[0];
+                    
+                    if (m_Instance == null)
+                    {
+                        m_Instance = Resources.Load("Managers/UIManager", typeof(HFUIManager)) as HFUIManager;
+                    }
+
+                    if (m_Instance)
+                    {
+                        m_Instance.Initialization();
+                        DontDestroyOnLoad(m_Instance);
+                    }
                 }
 
-                return _instance;
+                return m_Instance;
             }
         }
-    }
+        #endregion
 
+        public Canvas ScreenCanvas;
+        public Canvas WorldCanvas;
+        private Dictionary<HFUIWindowID, HFUIWindow> m_WindowCollection;
+        public Dictionary<HFUIWindowID, HFUIWindow> WindowCollection => m_WindowCollection;
+        private bool m_isInitialized;
 
+        #region Multiple active windows management
+        //---------------------------------------------------------------------
+        // To manage multiple active windows I decide to create a stack that
+        // store the latest window enabled, so now undo action is supported.
+        // In order to deny user to interact with background windows I also 
+        // create a delegate that trigger every time a new window is shown.
+        // All buttons will be subscribed to this delegate and that button 
+        // works only if the windowID match the assigne one.
+        /// <see cref="HFButton"/> 
+        // Note: Loading screen will never be assigned to this stack. It operate
+        // async from the other windows.
+        //---------------------------------------------------------------------
+        public delegate void GetIsListeningInput(HFUIWindowID myWindowId);
+        public GetIsListeningInput IsListeningInput;
+        private Stack<HFUIWindow> m_windowsHistory;   
+        #endregion
 
-    //-------------------------------------------------------
-    // UI Controls
-    //-------------------------------------------------------
+        #region Helpers
+        private const string m_debugColor = "#7FFFD4";
+        #endregion
 
-    private Dictionary<UIControlID, HFUIControl> m_UIControls;
-	public Dictionary<UIControlID, HFUIControl> UIControls
-    {
-        get
+        private void Awake()
         {
-            if (m_UIControls == null)
+            Initialization();
+            ShowAndAddToHistory(HFUIWindowID.MAIN_MENU);
+        }
+
+        private void OnEnable()
+        {
+            HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+        }
+
+        private void OnDisable()
+        {
+            HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+        }
+
+        private void Start()
+        {
+            OnGameStateChange(HFGameManager.Instance.CurrentGameState);
+        }
+
+        private void Initialization()
+        {
+            if (!m_isInitialized)
             {
-                m_UIControls = new Dictionary<UIControlID, HFUIControl>();
+                m_WindowCollection = new Dictionary<HFUIWindowID, HFUIWindow>();
+                m_windowsHistory = new Stack<HFUIWindow>();
+
+                GetWindows();
+                HideAllWindowsAtInitialization();
+
+                m_isInitialized = true;
             }
-            return m_UIControls;
         }
-    }
 
-    public HFUIControl LastUIControlShown { get; private set; }
-
-
-    //--------------------------------------------------------
-    // Utils
-    //--------------------------------------------------------
-
-	private UnityEngine.UI.GraphicRaycaster m_graphicRaycaster = null;
-    public Canvas ScreenCanvas;
-
-    #region MonoBehaviour
-
-    protected void Awake()
-	{
-    	m_graphicRaycaster = GetComponentInChildren<UnityEngine.UI.GraphicRaycaster>();
-
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-    }
-
-    private void OnEnable()
-    {
-        // Listen to game manager state changes
-        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
-    }
-
-    private void OnDisable()
-    {
-        //Stop to listen to game manager state changes
-        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
-    }
-
-    private void Start()
-    {
-        OnGameStateChange(HFGameManager.Instance.CurrentGameState);
-    }
-
-
-    private void Initialize()
-    {
-        foreach(HFUIControl control in ScreenCanvas.GetComponentsInChildren<HFUIControl>())
+        #region Events
+        private void OnGameStateChange(GameStates state)
         {
-            control.gameObject.SetActive(false);
-            AddControl(control);
-        }
-    }
+            Debug.Log($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : {state}");
 
-    #endregion
-
-    #region UI Controls Management
-    /// <summary>
-    /// Add new UIControl
-    /// <see cref="UIControl"/>
-    /// </summary>
-    public void AddControl(HFUIControl uiControl)
-    {
-        if (uiControl != null && !UIControls.ContainsKey(uiControl.Name))
-            UIControls.Add(uiControl.Name, uiControl);
-    }
-
-    /// <summary>
-    /// Remove an existing UIControl
-    /// <see cref="UIControl"/>
-    /// </summary>
-    public void RemoveControl(HFUIControl uiControl)
-    {
-        if (uiControl != null && UIControls.ContainsKey(uiControl.Name))
-            UIControls.Remove(uiControl.Name);
-    }
-
-    /// <summary>
-    /// Show a UIControl by ID.
-    /// <see cref="UIControlID"/>
-    /// </summary>
-    public void Show(UIControlID id)
-    {
-        if (UIControls.TryGetValue(id, out HFUIControl control))
-        {
-            control.OnShow();
-            LastUIControlShown = control;
-        }
-    }
-
-    /// <summary>
-    /// Hide a UIControl by ID.
-    /// <see cref="UIControlID"/>
-    /// </summary>
-    public void Hide(UIControlID id)
-    {
-        if (UIControls.TryGetValue(id, out HFUIControl control))
-            control.OnHide();
-    }
-
-    /// <summary>
-    /// Show a UIControl by ID and
-    /// Hide a UIControl by class type.
-    /// <see cref="UIControlID"/>
-    /// <seealso cref="HFUIControl"/>
-    /// </summary>
-    public void ShowAndHide(UIControlID id, HFUIControl controlToHide)
-    {
-		if (!controlToHide)
-		{
-			Debug.LogWarning("Received request to hide a null UIControl when showing " + id.ToString());
-			return;
-		}
-		
-        // If they are the same control... return
-        if (id == controlToHide.Name) return;
-            
-
-        if (UIControls.TryGetValue(id, out HFUIControl control))
-        {
-            if (!control.gameObject.activeSelf)
+            switch (state)
             {
-                /// <see cref="HFUIManager.Show(UIControlID)"/>
-                Show(control.Name);
-            }
-
-            if (controlToHide.gameObject.activeSelf)
-            {
-                /// <see cref="HFUIManager.Hide(UIControlID)"/>
-                Hide(controlToHide.Name);
+                case GameStates.None:
+                    break;
+                case GameStates.LoadStartingInfo:
+                    break;
+                case GameStates.StartGame:
+                    ShowAndClearHistory(HFUIWindowID.MAIN_MENU);
+                    break;
+                case GameStates.WarRoom:
+                    ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
+                    break;
+                case GameStates.InitializeLevel:
+                    break;
+                case GameStates.PlayingLevel:
+                    ShowAndClearHistory(HFUIWindowID.HUD);
+                    break;
+                case GameStates.EndLevel:
+                    ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
+                    break;
             }
         }
-        else
-            throw new System.Exception("Control with " + id + " id, doesn't exist or it's not register.");
-    }
+        #endregion
 
-	/// <summary>
-	/// Check if mouse is over a raycast target
-	/// </summary>
-	/// <returns>True if over a raycast target</returns>
-	public bool IsMouseOverUI()
-	{
-		if (m_graphicRaycaster)
-		{
-			UnityEngine.EventSystems.PointerEventData ped = new UnityEngine.EventSystems.PointerEventData(null);
-			ped.position = Input.mousePosition;
-			List<UnityEngine.EventSystems.RaycastResult> results = new List<UnityEngine.EventSystems.RaycastResult>();
-			m_graphicRaycaster.Raycast(ped, results);
-
-			return results.Count > 0;
-		}
-
-		return false;
-	}
-
-	#endregion
-
-    private void OnGameStateChange(GameStates inState)
-    {
-        Debug.Log($"Game state change in: {inState}");
-
-        if (LastUIControlShown != null)
-            LastUIControlShown.OnHide();
-
-        // Handle all game state variables.
-        switch (inState)
+        #region Utils
+        /// <summary>
+        /// Get loading screen
+        /// </summary>
+        public HFLoadingScreenWindow GetLoadingScreen()
         {
-            case GameStates.LoadStartingInfo:
-                break;
-            case GameStates.StartGame:
-                Show(UIControlID.MainMenu);
-                break;
-            case GameStates.WarRoom:
-                Show(UIControlID.LevelSelection);
-                break;
-            case GameStates.InitializeLevel:
-                break;
-            case GameStates.PlayingLevel:
-                Show(UIControlID.InGameWindow);
-                break;
-            case GameStates.Pause:
-                break;
-            case GameStates.EndLevel:
-                break;
+            return m_WindowCollection[HFUIWindowID.LOADING_SCREEN] as HFLoadingScreenWindow;
         }
+
+        /// <summary>
+        /// Get all windows under the screen canvas.
+        /// Called to initialize the UI.
+        /// </summary>
+        private void GetWindows()
+        {
+            if (ScreenCanvas == null)
+            {
+                Debug.LogError($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : Screen canvas is null, make sure to drag it in inspector");
+                return;
+            }
+
+            foreach (HFUIWindow window in ScreenCanvas.GetComponentsInChildren<HFUIWindow>())
+            {
+                if (!m_WindowCollection.ContainsKey(window.ID))
+                {
+                    m_WindowCollection.Add(window.ID, window);
+                    Debug.Log($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : Window [ID: {window.ID} | object name: {window.gameObject.name}] is added");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Hide all windows in the collection.
+        /// </summary>
+        private void HideAllWindowsAtInitialization()
+        {
+            foreach (HFUIWindow window in m_WindowCollection.Values)
+            {
+                if (window.gameObject.activeSelf)
+                {
+                    window.gameObject.SetActive(false);
+                }
+            }
+        }
+        #endregion
+
+        #region Window management
+        /// <summary>
+        /// After clear the history show the window passed in as ID.
+        /// Mostly used when load a new scene or event like "ens level".
+        /// </summary>
+        /// <param name="id"></param>
+        public void ShowAndClearHistory(HFUIWindowID id)
+        {
+            if (!IsHistoryEmpty(0))
+            {
+                while (m_windowsHistory.Count > 0)
+                {
+                    m_windowsHistory.Pop().OnHide();
+                }
+            }
+
+            m_windowsHistory.Clear();
+
+            TryGetWindow(id);
+        }
+
+        /// <summary>
+        /// Hide the current window,
+        /// Show the window passed in as ID and
+        /// add it to the history.
+        /// </summary>
+        /// <param name="id"></param>
+        public void ShowAndAddToHistory(HFUIWindowID id, bool addittive = false)
+        {
+            if (!IsHistoryEmpty(0))
+            {
+                if (!addittive)
+                {
+                    m_windowsHistory.Peek().OnHide();
+                }
+            }
+
+            TryGetWindow(id);
+        }
+
+        /// <summary>
+        /// Hide the top window, pop it and
+        /// show the previous window.
+        /// </summary>
+        public void Undo()
+        {
+            if (!IsHistoryEmpty(1))
+            {
+                m_windowsHistory.Pop().OnHide();
+                HFUIWindow window = m_windowsHistory.Peek();
+                window.OnShow();
+                IsListeningInput?.Invoke(window.ID);
+            }
+            else
+            {
+                Debug.LogWarning($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : You can't undo. History is empty");
+            }
+        }
+
+        private void TryGetWindow(HFUIWindowID id)
+        {
+            if (m_WindowCollection.TryGetValue(id, out HFUIWindow window))
+            {
+                window.OnShow();
+                m_windowsHistory.Push(window);
+
+                // This make sure that only the window
+                // on the top of the satck is listening
+                // to input
+                IsListeningInput?.Invoke(id);
+            }
+        }
+
+        private bool IsHistoryEmpty(int count)
+        {
+            return m_windowsHistory.Count <= count;
+        }
+        #endregion
     }
 }
