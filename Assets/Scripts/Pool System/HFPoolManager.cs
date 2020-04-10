@@ -22,12 +22,14 @@ public class HFPoolManager : MonoBehaviour
 					{
 						Destroy(managers[i].gameObject);
 					}
+
+					m_Instance = managers[0];
 				}
 
 
 				if (m_Instance == null)
 				{
-					m_Instance = Resources.Load("Managers/PoolManager", typeof(HFPoolManager)) as HFPoolManager;
+					m_Instance = Instantiate(Resources.Load("Managers/PoolManager", typeof(HFPoolManager))) as HFPoolManager;
 				}
 
 				if (m_Instance)
@@ -70,12 +72,12 @@ public class HFPoolManager : MonoBehaviour
 		[HideInInspector]
 		public int CurrentCount = 0;
 	}
-    #endregion
+	#endregion
 
 	//-------------------------------------------------------------------------
 	// Object declarated to pool
 	//-------------------------------------------------------------------------
-    [SerializeField]
+	[SerializeField]
 	private List<ObjectPoolItem> m_poolItems = new List<ObjectPoolItem>();
 
 
