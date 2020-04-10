@@ -17,19 +17,20 @@ namespace HF.Refactoring
                     HFUIManager[] managers = FindObjectsOfType<HFUIManager>();
 
                     // Destroy if there are multiple instance of them.
-                    if (managers.Length > 1)
+                    if (managers.Length > 0)
                     {
                         for (int i = 1; i < managers.Length; i++)
                         {
                             Destroy(managers[i].gameObject);
                         }
+
+                        m_Instance = managers[0];
                     }
 
-                    m_Instance = managers[0];
                     
                     if (m_Instance == null)
                     {
-                        m_Instance = Resources.Load("Managers/UIManager", typeof(HFUIManager)) as HFUIManager;
+                        m_Instance = Instantiate(Resources.Load("Managers/UIManager", typeof(HFUIManager))) as HFUIManager;
                     }
 
                     if (m_Instance)
