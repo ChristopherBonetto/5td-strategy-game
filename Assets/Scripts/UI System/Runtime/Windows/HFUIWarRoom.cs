@@ -40,6 +40,7 @@ namespace HF.Refactoring
 
             for (int i = 0; i < levels.Count; i++)
             {
+                Debug.Log(HFPoolManager.Instance);
                 HFLoadLevelB button = HFPoolManager.Instance.GetPooledObject(LoadLevelButtonID.ID).GetComponent<HFLoadLevelB>();
                 button.Level = levels[i];
                 button.ButtonText.text = $"{PrefixButtonText}: {i + 1}";

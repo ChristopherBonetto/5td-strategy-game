@@ -12,6 +12,7 @@ public class HFPoolManager : MonoBehaviour
 			if (m_Instance == null)
 			{
 				HFPoolManager[] managers = FindObjectsOfType<HFPoolManager>();
+				Debug.Log(managers.Length);
 
 				// Destroy if there are multiple instance of them.
 				if (managers.Length > 1)
@@ -20,6 +21,7 @@ public class HFPoolManager : MonoBehaviour
 					{
 						Destroy(managers[i].gameObject);
 					}
+					
 				}
 
 				m_Instance = managers[0];
