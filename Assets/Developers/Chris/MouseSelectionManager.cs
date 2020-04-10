@@ -36,7 +36,6 @@ public class MouseSelectionManager : MonoBehaviour
     private Vector3 mousePositon { get => Input.mousePosition; }
     
 
-
     private void Awake()
     {
         if (Instance == null)
@@ -48,24 +47,15 @@ public class MouseSelectionManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
     {
-        //if (!EventSystem.current.IsPointerOverGameObject())
-        //{
-            
-        //}
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetButtonDown("Select"))
         {
             SelectDeselectOneObject();
         }
-        else if (Input.GetMouseButtonDown(1))
+        else if (Input.GetButtonDown("Command"))
         {
             UnitAction();
         }
@@ -77,7 +67,6 @@ public class MouseSelectionManager : MonoBehaviour
     {
         ClearSelection();
         CurrentSelectedObject = SelectObject();
-        Debug.Log(CurrentSelectedObject);
     }
 
 
@@ -90,7 +79,6 @@ public class MouseSelectionManager : MonoBehaviour
         {
             if(HitInfo.transform.gameObject.layer == GameController.Instance.GetGameObjectLayer(GameController.Instance.GameCollectionCopy.PlayerLayer))
             {
-                Debug.Log(HitInfo.transform.gameObject);
                 return HitInfo.transform.gameObject;
             }
             else
@@ -133,7 +121,7 @@ public class MouseSelectionManager : MonoBehaviour
                 GiveCommand(Actions.Move, null, HitInfo2.point);
             }
 
-            else if (tempLayer != GameController.Instance.m_playerLayer)
+            else if (tempLayer == GameController.Instance.m_aiLayer)
             {
                 IDamageable CanBeAttacked = HitInfo2.collider.GetComponent<IDamageable>();
 
@@ -163,8 +151,8 @@ public class MouseSelectionManager : MonoBehaviour
         switch (ActionType)
         {
             case Actions.Attack:
-                tempRef.FocusObject = FocussedGameobject;
-                tempRef.ChangeUnitState(Actions.Attack);
+                tempRef.AssignFocusObj(FocussedGameobject);
+                tempRef.ChangeAction(Actions.Attack);
                 break;
 
             case Actions.Collect:
@@ -172,9 +160,9 @@ public class MouseSelectionManager : MonoBehaviour
                 break;
 
             case Actions.Move:
-                tempRef.FocusObject = null;
+                tempRef.AssignFocusObj(null);
                 tempRef.SetDestination(ObjectPosition);
-                tempRef.ChangeUnitState(Actions.Move);
+                tempRef.ChangeAction(Actions.Move);
                 break;
 
             default:

@@ -98,7 +98,6 @@ public class GameController : Singleton<GameController>
                 return i;
             }
         }
-
         return -1;
     }
 
@@ -119,16 +118,14 @@ public class GameController : Singleton<GameController>
         }
 
         GameObject tempEntity = Instantiate(GameCollectionCopy.GameEntitiesDictionary[inEntityType].EntityPrefab, inPosition, Quaternion.identity);
+        Entity tempRef = tempEntity.GetComponent<Entity>();
 
-        if(inPlayerType == PlayerType.Player)
+        if(tempRef != null)
         {
-            tempEntity.layer = m_playerLayer;
-        }
-        else
-        {
-            tempEntity.layer = m_aiLayer;
+            tempRef.AssignStats(GameCollectionCopy.GameEntitiesDictionary[inEntityType]);
         }
 
+        tempRef.AssignPlayer(inPlayerType);
     }
 
 

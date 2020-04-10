@@ -8,20 +8,16 @@ using UnityEngine.AI;
 
 public class UnitsScriptBehavior : Entity, IDamageable
 {
-    [SerializeField] private EntityType m_startUnitsInfo = EntityType.Farmer;
-
-    public Actions m_CurrentUnitAction { get; protected set; }
-    
-    protected NavMeshAgent m_UnitAgent;
+    protected NavMeshAgent m_unitAgent;
     public NavMeshAgent UnitAgent
     {
         get
         {
-            return m_UnitAgent;
+            return m_unitAgent;
         }
         set
         {
-            m_UnitAgent = value;
+            m_unitAgent = value;
         }
     }
 
@@ -30,14 +26,8 @@ public class UnitsScriptBehavior : Entity, IDamageable
     protected GameObject m_focusObject = null;
     public GameObject FocusObject
     {
-        get
-        {
-            return m_focusObject;
-        }
-        set
-        {
-            m_focusObject = value;
-        }
+        get { return m_focusObject; }
+        protected set { m_focusObject = value; }
     }
 
     protected int m_UnitCurrentHp = 10;
@@ -57,58 +47,55 @@ public class UnitsScriptBehavior : Entity, IDamageable
     // Start is called before the first frame update
     public virtual void Start()
     {
-        Initialize();
+        InitializeStats();
     }
 
 
     public virtual void Update()
     {
+        CheckAndAttackFocusObj();
+        ReloadWeapon();
+    }
+
+    public virtual void ChangeBehaviorOnPlayerType()
+    {
+
+    }
+
+    public virtual void InitializeStats()
+    {
+        UnitAgent.speed = UnitAgent.speed + EntityStatisticsSO.MovementSpeed;
+        ResetHp();
+    }
+
+    public void CheckAndAttackFocusObj()
+    {
         if (CheckFocussedObjectDistance() && m_CanAttack)
-        {            
+        {
             Attack();
         }
-
-        if (!m_CanAttack)
-        {
-            m_CanAttack = Timer(UnitStatisticsSO.AttackSpeed);
-        }
-        
-        if(FocusObject != null)
+        if (FocusObject != null)
         {
             gameObject.transform.LookAt(new Vector3(FocusObject.transform.position.x, gameObject.transform.position.y, FocusObject.transform.position.z));
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+    public void ReloadWeapon()
+    {
+        if (!m_CanAttack)
         {
-            if (gameObject.layer != GameController.Instance.m_playerLayer)
-            {
-                FocusObject = GameController.Instance.PlayerCastle;
-            }
+            m_CanAttack = Timer(EntityStatisticsSO.AttackSpeed);
         }
     }
-
-    public virtual void Initialize()
-    {
-        UnitStatisticsSO = GameController.Instance.GameCollectionCopy.GameEntitiesDictionary[m_startUnitsInfo];
-
-        UnitAgent.speed = UnitAgent.speed + UnitStatisticsSO.MovementSpeed;
-        UpdateCurrentHp();
-    }
-
-    public virtual void ChangeUnitState(Actions NewAction)
-    {
-        m_CurrentUnitAction = NewAction;
-    }
-
     
     public virtual void Attack()
     {
-        ChangeUnitState(Actions.Attack);
+        ChangeAction(Actions.Attack);
         
         CanTakeDamage = FocusObject.GetComponent<IDamageable>() as IDamageable;
         if (CanTakeDamage != null)
         {
-            CanTakeDamage.TakeDamage(UnitStatisticsSO.Attack);
+            CanTakeDamage.TakeDamage(EntityStatisticsSO.Attack);
             m_CanAttack = false;
         }
     }
@@ -117,11 +104,11 @@ public class UnitsScriptBehavior : Entity, IDamageable
     {
         if (FocusObject != null)
         {
-            if (Vector3.Distance(transform.position, FocusObject.transform.position) <= m_UnitAgent.stoppingDistance + FocusObject.transform.localScale.x + UnitStatisticsSO.Range)
+            if (Vector3.Distance(transform.position, FocusObject.transform.position) <= m_unitAgent.stoppingDistance + FocusObject.transform.localScale.x + EntityStatisticsSO.Range)
             {
-                m_UnitAgent.ResetPath();
+                m_unitAgent.ResetPath();
 
-                if (m_UnitAgent.velocity.sqrMagnitude == 0)
+                if (m_unitAgent.velocity.sqrMagnitude == 0)
                 {
                     return true;
                 }
@@ -132,19 +119,19 @@ public class UnitsScriptBehavior : Entity, IDamageable
             }
             else
             {
-                if(m_UnitAgent.pathStatus == NavMeshPathStatus.PathComplete)
+                if(m_unitAgent.pathStatus == NavMeshPathStatus.PathComplete)
                 {
-                    ChangeUnitState(Actions.Move);
-                    m_UnitAgent.SetDestination(FocusObject.transform.position);
+                    ChangeAction(Actions.Move);
+                    m_unitAgent.SetDestination(FocusObject.transform.position);
                 }
             }
         }
         else if(FocusObject == null)
         {
             
-            if (m_UnitAgent.velocity.sqrMagnitude == 0 && !m_UnitAgent.pathPending && !m_UnitAgent.hasPath && m_CurrentUnitAction != Actions.Idle)
+            if (m_unitAgent.velocity.sqrMagnitude == 0 && !m_unitAgent.pathPending && !m_unitAgent.hasPath && m_CurrentUnitAction != Actions.Idle)
             {
-                ChangeUnitState(Actions.Idle);
+                ChangeAction(Actions.Idle);
             }
             else
             {
@@ -155,6 +142,11 @@ public class UnitsScriptBehavior : Entity, IDamageable
         return false;
     }
 
+    public virtual void AssignFocusObj(GameObject inObj)
+    {
+        FocusObject = inObj;
+    }
+
     public virtual void SetDestination(Vector3 destination)
     {
         UnitAgent.SetDestination(destination);
@@ -162,20 +154,20 @@ public class UnitsScriptBehavior : Entity, IDamageable
 
     public virtual void StopAgent()
     {
-        m_UnitAgent.velocity = Vector3.zero;
+        m_unitAgent.velocity = Vector3.zero;
     }
 
     
 
-    public virtual void UpdateCurrentHp()
+    public virtual void ResetHp()
     {
-        m_UnitCurrentHp = UnitStatisticsSO.HealthMax;
+        m_UnitCurrentHp = EntityStatisticsSO.HealthMax;
     }
     
 
     public virtual bool TakeDamage(int Damage)
     {
-        Damage = Mathf.Clamp(Damage, 0, UnitStatisticsSO.HealthMax + UnitStatisticsSO.Defence);
+        Damage = Mathf.Clamp(Damage, 0, m_UnitCurrentHp);
         
         if (m_UnitCurrentHp <= Damage)
         {

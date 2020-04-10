@@ -4,24 +4,52 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
-
-    private EntityStatistics m_UnitStatisticsSO;
-    public EntityStatistics UnitStatisticsSO
+    private EntityStatistics m_entityStatisticsSO;
+    public EntityStatistics EntityStatisticsSO
     {
         get
         {
-            return m_UnitStatisticsSO;
+            return m_entityStatisticsSO;
         }
         set
         {
-            m_UnitStatisticsSO = value;
+            m_entityStatisticsSO = value;
         }
     }
 
-    [SerializeField] private int m_checkAreaRadius;
+    public PlayerType m_EntityPlayerType { get; protected set; }
+
+    public Actions m_CurrentUnitAction { get; protected set; }
 
     private float m_Timer = 0f;
     protected bool m_CanAttack = true;
+
+
+    public virtual void AssignPlayer(PlayerType inPlayerType)
+    {
+        m_EntityPlayerType = inPlayerType;
+
+        if(m_EntityPlayerType == PlayerType.Player)
+        {
+            gameObject.layer = GameController.Instance.m_playerLayer;
+        }
+        else if(m_EntityPlayerType == PlayerType.AI)
+        {
+            gameObject.layer = GameController.Instance.m_aiLayer;
+        }
+
+    }
+
+    public virtual void AssignStats(EntityStatistics inStats)
+    {
+        EntityStatisticsSO = inStats;
+    }
+
+
+    public virtual void ChangeAction(Actions NewAction)
+    {
+        m_CurrentUnitAction = NewAction;
+    }
 
 
     public virtual bool Timer(float destinationTime)
@@ -39,28 +67,4 @@ public class Entity : MonoBehaviour
         }
     }
 
-    #region Check units near me
-    void CheckNearUnit()
-    {
-
-
-        //Collider[] hitColliders = Physics.OverlapSphere(transform.position, m_checkAreaRadius); // must be integrate layer 
-        //for (int i = 0; i < hitColliders.Length; i++)
-        //{
-        //    if (hitColliders[i].GetComponent<EnemySoldier>())
-        //    {
-        //        Debug.Log(hitColliders[i].name);
-        //        hitColliders[i].GetComponent<EnemySoldier>().PlayerDetected(true);
-        //        hitColliders[i].GetComponent<EnemySoldier>().MoveOnTargetDestination(MG_PlayerPosition);
-        //        hitColliders[i].GetComponent<EnemySoldier>().ChangeSoldierState(SoldierStates.Allert);
-
-        //    }
-        //}
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, m_checkAreaRadius);
-    }
-    #endregion
 }

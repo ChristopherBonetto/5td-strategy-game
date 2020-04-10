@@ -14,7 +14,7 @@ public class EntityStatistics : ScriptableObject
 
     public int HealthMax = 1;
     public int Attack = 1;
-    public int Defence = 1;
+    //public int Defence = 1;
     public float AttackSpeed = 1;
     public float MovementSpeed = 1;
     public int Range = 1;
