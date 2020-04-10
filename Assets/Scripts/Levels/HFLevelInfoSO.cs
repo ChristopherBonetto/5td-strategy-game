@@ -1,8 +1,8 @@
-﻿using HF.WaveSystem;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using HF.Refactoring;
 
 [CreateAssetMenu(menuName = "Human Factor/New Level Info", fileName = "L_00_Info")]
 public class HFLevelInfoSO : ScriptableObject
@@ -10,8 +10,8 @@ public class HFLevelInfoSO : ScriptableObject
     [SerializeField] private string m_levelName;
     public string LevelName { get => m_levelName;}
 
-    [SerializeField] private HFWavesCollection m_levelWavesInfo;
-    public HFWavesCollection LevelWavesInfo { get => m_levelWavesInfo; }
+    [SerializeField] private HFWaveCollection m_levelWavesInfo;
+    public HFWaveCollection LevelWavesInfo { get => m_levelWavesInfo; }
     
 
     [TextArea] public string m_levelDescription;

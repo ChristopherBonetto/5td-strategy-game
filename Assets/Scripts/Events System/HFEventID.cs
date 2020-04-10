@@ -72,8 +72,8 @@
 	/// 1) int <see cref="HF.WaveSystem.HFWaveReader.GetNumberOfWaves(HF.WaveSystem.HFWaveModel)"/> total waves
 	/// </summary>
 	OnWaveIndexUpdate,
-	OnNewWaveBegin,
-	OnWaveEnd,
+	OnWaveBeginned,
+	OnWaveCleared,
 
     /// <summary>
     /// HFUnit	unit

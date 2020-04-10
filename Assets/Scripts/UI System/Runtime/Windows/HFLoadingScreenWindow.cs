@@ -79,13 +79,17 @@ namespace HF.Refactoring
         /// </summary>
         private void OnGameStateChange(GameStates inState)
         {
+                Debug.Log(inState);
             // Handle all game state variables.
             switch (inState)
             {
+
                 case GameStates.WarRoom:
                     StartCoroutine(FadeOut());
                     break;
                 case GameStates.InitializeLevel:
+                    break;
+                case GameStates.PlayingLevel:
                     StartCoroutine(FadeOut());
                     break;
             }

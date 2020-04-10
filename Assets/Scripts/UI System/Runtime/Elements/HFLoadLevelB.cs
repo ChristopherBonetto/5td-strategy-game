@@ -27,7 +27,6 @@ namespace HF.Refactoring
             {
                 HFScenesManager.Instance.CurrentLevelSelected = Level;
 
-                Debug.Log(Level.LevelSceneIndex);
                 // loading selected scene async.
                 // Turn off the first window declared.
                 // Turn on the second window declared (after loading).
