@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(HFObjectPooler))]
+[CustomEditor(typeof(HFPoolManager))]
 public class HFObjectPoolerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         if (GUILayout.Button("Open"))
         {
-            HFObjectPoolerEditorWindow.Open((HFObjectPooler)target);
+            HFObjectPoolerEditorWindow.Open((HFPoolManager)target);
         }
     }
 }

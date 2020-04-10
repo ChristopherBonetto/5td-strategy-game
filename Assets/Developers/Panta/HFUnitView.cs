@@ -60,7 +60,7 @@ namespace HF
             if (team == 0 && unit == m_unitComponent)
             {
                 // Pool the popUp, get component of the popUp.
-                m_pooledGameObject = HFObjectPooler.Instance.GetPooledObject(m_UnitPopUpID.ID);
+                m_pooledGameObject = HFPoolManager.Instance.GetPooledObject(m_UnitPopUpID.ID);
                 HFUnitUIPopUpUpgrade popUp = m_pooledGameObject.GetComponent<HFUnitUIPopUpUpgrade>();
 
                 // Filter the option: specialization or upgrade.

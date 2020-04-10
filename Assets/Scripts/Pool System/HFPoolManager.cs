@@ -1,9 +1,47 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class HFObjectPooler : Singleton<HFObjectPooler>
+public class HFPoolManager : MonoBehaviour
 {
-	/* Inner class */
+	#region Singleton
+	private static HFPoolManager m_Instance;
+	public static HFPoolManager Instance
+	{
+		get
+		{
+			if (m_Instance == null)
+			{
+				HFPoolManager[] managers = FindObjectsOfType<HFPoolManager>();
+
+				// Destroy if there are multiple instance of them.
+				if (managers.Length > 1)
+				{
+					for (int i = 1; i < managers.Length; i++)
+					{
+						Destroy(managers[i].gameObject);
+					}
+				}
+
+				m_Instance = managers[0];
+
+				if (m_Instance == null)
+				{
+					m_Instance = Resources.Load("Managers/PoolManager", typeof(HFPoolManager)) as HFPoolManager;
+				}
+
+				if (m_Instance)
+				{
+					m_Instance.StartPooling();
+					DontDestroyOnLoad(m_Instance);
+				}
+			}
+
+			return m_Instance;
+		}
+	}
+	#endregion
+
+	#region Object Pool item inner class
 	[System.Serializable]
 	private class ObjectPoolItem
 	{
@@ -26,30 +64,28 @@ public class HFObjectPooler : Singleton<HFObjectPooler>
 		public HFPoolID uniqueID = null;
 
 		public bool SpawnUnderCanvas = false;
+		public HF.Refactoring.HFUIWindowID WindowID;
 
 		[HideInInspector]
 		public int CurrentCount = 0;
 	}
+    #endregion
 
-	[SerializeField]
+	//-------------------------------------------------------------------------
+	// Object declarated to pool
+	//-------------------------------------------------------------------------
+    [SerializeField]
 	private List<ObjectPoolItem> m_poolItems = new List<ObjectPoolItem>();
 
+
+	//-------------------------------------------------------------------------
+	// Object created and put in the pool
+	//-------------------------------------------------------------------------
 	private List<HFPoolableObject> m_objectPool = new List<HFPoolableObject>();
 
-	//---------------------------------
-	// TEMP
-	//---------------------------------
-	private void Start()
-	{
-		StartPooling();
-		Debug.Log(Instance);
-	}
-
-	private void Awake()
-	{
-		if (Instance != null && Instance != this)
-			Destroy(gameObject);
-	}
+	#region Helpers
+	private const string m_debugColor = "#FF4500";
+	#endregion
 
 	public void StartPooling()
 	{
@@ -149,10 +185,24 @@ public class HFObjectPooler : Singleton<HFObjectPooler>
 		if (prefab)
 		{
 			HFPoolableObject obj = Instantiate(prefab);
-			obj.transform.SetParent(!spawnInUI ? gameObject.transform : HFUIManager.Instance.ScreenCanvas.transform);
+
+			if (spawnInUI)
+			{
+				// Spawn under the window declareted in the object
+				obj.transform.SetParent(HF.Refactoring.HFUIManager.Instance.WindowCollection[item.WindowID].transform);
+			}
+			else
+			{
+				// spawn under the Pool Manager.
+				obj.transform.SetParent(gameObject.transform);
+			}
+
 			obj.gameObject.SetActive(false);
 			item.CurrentCount++;
 			m_objectPool.Add(obj);
+
+			Debug.Log($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : gameobject [Name = {item.ObjectPrefab.name} | ID = {item.uniqueID}]");
+
 			return obj;
 		}
 		else
