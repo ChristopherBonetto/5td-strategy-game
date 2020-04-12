@@ -7,4 +7,14 @@ using Types;
 public class UnitsSO : EntitySO
 {
     public UnitType UnitType;
+
+    public AttackType AttackType;
+
+    public float UnitSpeed;
+
+    public int CarryCapacity;
+
+    public float RespawnTime;
+
+
 }

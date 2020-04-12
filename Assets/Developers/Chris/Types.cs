@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Types
 {
-    public enum DamageType
+    public enum AttackType
     {
         RANGED,
         MELEE

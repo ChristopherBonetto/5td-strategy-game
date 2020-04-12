@@ -7,4 +7,6 @@ using Types;
 public class BuildingsSO : EntitySO
 {
     public BuildingType BuildingType;
+
+    public int Weight;
 }
