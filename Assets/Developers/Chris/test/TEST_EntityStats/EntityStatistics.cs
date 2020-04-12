@@ -20,6 +20,8 @@ public class EntityStatistics : ScriptableObject
     public int Range = 1;
     public int CarryCapacity = 1;
 
+    
+
     [Space,Space,Space]
     public GameObject EntityPrefab;
 }
