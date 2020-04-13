@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Types;
 
 [CreateAssetMenu(menuName = "NewEntity", fileName = "Entity")]
 public class EntityStatistics : ScriptableObject
 {
     public new string EntityName = "";
-    public EntityType EntityType;
+    public UnitType EntityType;
 
     [Header("Unit Stats")]
     [Space]

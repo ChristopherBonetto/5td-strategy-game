@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Types;
 
 public enum PlayerType
 {
@@ -80,12 +81,12 @@ public class GameController : Singleton<GameController>
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            CreateNewEntity(EntityType.Defender, PlayerType.Player, Vector3.zero);
+            CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, Vector3.zero);
         }
 
         if (Input.GetKeyDown(KeyCode.W))
         {
-            CreateNewEntity(EntityType.Farmer, PlayerType.AI, Vector3.zero);
+            CreateNewEntity(UnitType.PEASANT, PlayerType.AI, Vector3.zero);
         }
     }
 
@@ -109,7 +110,7 @@ public class GameController : Singleton<GameController>
         m_CurrentPlayerResources = GameCollectionCopy.PlayerQuantityResources;
     }
 
-    public void CreateNewEntity(EntityType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!GameCollectionCopy.GameEntitiesDictionary.ContainsKey(inEntityType))
         {

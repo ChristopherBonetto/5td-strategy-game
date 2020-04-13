@@ -6,8 +6,8 @@ namespace Types
 {
     public enum AttackType
     {
-        RANGED,
-        MELEE
+        MELEE,
+        RANGED
     }
 
     public enum UnitType

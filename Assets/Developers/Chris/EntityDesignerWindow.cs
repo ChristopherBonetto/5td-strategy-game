@@ -155,7 +155,7 @@ public class GeneralSettings : EditorWindow
     {
         dataSetting = setting;
         window = (GeneralSettings)GetWindow(typeof(GeneralSettings));
-        window.minSize = new Vector2(250, 200);
+        window.minSize = new Vector2(300, 350);
         window.Show();
     }
 
@@ -174,46 +174,6 @@ public class GeneralSettings : EditorWindow
 
     void DrawSettings(EntitySO entity)
     {
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Name");
-        entity.Name = EditorGUILayout.TextField(entity.Name);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Health");
-        entity.MaxHp = EditorGUILayout.IntSlider(entity.MaxHp, 0, 999);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Armor");
-        entity.Armor = EditorGUILayout.IntSlider(entity.Armor, 0, 999);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Damage");
-        entity.Damage = EditorGUILayout.IntSlider(entity.Damage, 0, 999);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Attack Speed");
-        entity.AttackSpeed = EditorGUILayout.Slider(entity.AttackSpeed, 0, 999);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Cost");
-        entity.Cost = EditorGUILayout.IntField(entity.Cost);
-        EditorGUILayout.EndHorizontal();
-
-        //public Mesh Mesh;
-
-        //public EntitySO[] Upgrades;
-
         if (entity is UnitsSO)
         {
             if (DrawUnitSettings((UnitsSO)entity))
@@ -240,77 +200,235 @@ public class GeneralSettings : EditorWindow
 
     bool DrawUnitSettings(UnitsSO unit)
     {
+        bool tempValue = true;
+
+        GUILayout.Label("GENERAL STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Attack Type");
-        unit.AttackType = (AttackType)EditorGUILayout.EnumPopup(unit.AttackType);
+        GUILayout.Label("Unit Type");
+        unit.UnitType = (UnitType)EditorGUILayout.EnumPopup(unit.UnitType);
         EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Name");
+        unit.Name = EditorGUILayout.TextField(unit.Name);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("DEFENSIVE STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Can Take Damage");
+        unit.CanTakeDamage = EditorGUILayout.Toggle(unit.CanTakeDamage);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (unit.CanTakeDamage)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Health");
+            unit.MaxHp = EditorGUILayout.IntSlider(unit.MaxHp, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Armor");
+            unit.Armor = EditorGUILayout.IntSlider(unit.Armor, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+        }
+
+        
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("OFFENSIVE STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Can Attack");
+        unit.CanAttack = EditorGUILayout.Toggle(unit.CanAttack);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (unit.CanAttack)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Attack Type");
+            unit.AttackType = (AttackType)EditorGUILayout.EnumPopup(unit.AttackType);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Damage");
+            unit.Damage = EditorGUILayout.IntSlider(unit.Damage, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Attack Range");
+            unit.AttackRange = EditorGUILayout.IntField(unit.AttackRange);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
+            if (unit.AttackType == AttackType.MELEE)
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Engage Range");
+                unit.EngageRange = EditorGUILayout.IntField(unit.EngageRange);
+                EditorGUILayout.EndHorizontal();
+            }
+            else if (unit.AttackType == AttackType.RANGED)
+            {
+                unit.EngageRange = unit.AttackRange;
+
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Projectile");
+                unit.Projectile = (GameObject)EditorGUILayout.ObjectField(unit.Projectile, typeof(GameObject), false);
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.Space();
+
+                if (unit.Projectile == null)
+                {
+                    EditorGUILayout.HelpBox("This entity need a projectile", MessageType.Warning);
+                    tempValue = false;
+                }
+            }
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Attack Speed");
+            unit.AttackSpeed = EditorGUILayout.Slider(unit.AttackSpeed, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+        }
+        EditorGUILayout.Space();
+
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("OTHER STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Mov Speed");
         unit.UnitSpeed = EditorGUILayout.Slider(unit.UnitSpeed, 0, 100);
         EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Carry Capacity");
         unit.CarryCapacity = EditorGUILayout.IntSlider(unit.CarryCapacity, 0, 100);
         EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Respawn Time");
         unit.RespawnTime = EditorGUILayout.FloatField(unit.RespawnTime);
         EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
-        if (unit.AttackType == AttackType.MELEE)
-        {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Attack Range");
-            unit.AttackRange = EditorGUILayout.IntField(unit.AttackRange);
-            EditorGUILayout.EndHorizontal();
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Cost");
+        unit.Cost = EditorGUILayout.IntField(unit.Cost);
+        EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Engage Range");
-            unit.EngageRange = EditorGUILayout.IntField(unit.EngageRange);
-            EditorGUILayout.EndHorizontal();
-        }
-        else if(unit.AttackType == AttackType.RANGED)
-        {
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Attack Range");
-            unit.AttackRange = EditorGUILayout.IntField(unit.AttackRange);
-            EditorGUILayout.EndHorizontal();
-
-            unit.EngageRange = unit.AttackRange;
-
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Label("Projectile");
-            unit.Projectile = (GameObject)EditorGUILayout.ObjectField(unit.Projectile, typeof(GameObject), false);
-            EditorGUILayout.EndHorizontal();
-
-            if(unit.Projectile == null)
-            {
-                EditorGUILayout.HelpBox("This entity need a projectile", MessageType.Warning);
-                return false;
-            }
-        }
-
-        
-
-        return true;
+        return tempValue;
     }
 
     bool DrawBuildingSettings(BuildingsSO building)
     {
+        bool tempValue = true;
+
+        GUILayout.Label("GENERAL STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Building Type");
+        GUILayout.Label("Unit Type");
         building.BuildingType = (BuildingType)EditorGUILayout.EnumPopup(building.BuildingType);
         EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
-        if(building.BuildingType == BuildingType.CASTLE)
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Name");
+        building.Name = EditorGUILayout.TextField(building.Name);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("DEFENSIVE STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Can Take Damage");
+        building.CanTakeDamage = EditorGUILayout.Toggle(building.CanTakeDamage);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (building.CanTakeDamage)
         {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Health");
+            building.MaxHp = EditorGUILayout.IntSlider(building.MaxHp, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
 
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Armor");
+            building.Armor = EditorGUILayout.IntSlider(building.Armor, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
         }
-        else if(building.BuildingType == BuildingType.TOWER)
+
+        
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("OFFENSIVE STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Can Attack");
+        building.CanAttack = EditorGUILayout.Toggle(building.CanAttack);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (building.CanAttack)
         {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Damage");
+            building.Damage = EditorGUILayout.IntSlider(building.Damage, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Attack Range");
+            building.AttackRange = EditorGUILayout.IntField(building.AttackRange);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Attack Speed");
+            building.AttackSpeed = EditorGUILayout.Slider(building.AttackSpeed, 0, 999);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Projectile");
             building.Projectile = (GameObject)EditorGUILayout.ObjectField(building.Projectile, typeof(GameObject), false);
@@ -319,16 +437,32 @@ public class GeneralSettings : EditorWindow
             if (building.Projectile == null)
             {
                 EditorGUILayout.HelpBox("This entity need a projectile", MessageType.Warning);
-                return false;
+                tempValue = false;
             }
         }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("OTHER STATS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Cost");
+        building.Cost = EditorGUILayout.IntField(building.Cost);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Building Type");
+        building.BuildingType = (BuildingType)EditorGUILayout.EnumPopup(building.BuildingType);
+        EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Weight");
         building.Weight = EditorGUILayout.IntField(building.Weight);
         EditorGUILayout.EndHorizontal();
 
-        return true;
+        return tempValue;
     }
 
     void SaveData()

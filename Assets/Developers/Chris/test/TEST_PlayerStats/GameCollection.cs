@@ -1,15 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Types;
 
-
-public enum EntityType
-{
-    Farmer,
-    Defender,
-    Lifter,
-    Runner,
-}
 
 public enum Materials
 {
@@ -46,13 +39,13 @@ public class GameCollection : ScriptableObject
     [Space, Header("Player")]
     [SerializeField] private EntityStatistics[] m_gameEntities;
 
-    public Dictionary<EntityType, EntityStatistics> GameEntitiesDictionary { get; private set; }
+    public Dictionary<UnitType, EntityStatistics> GameEntitiesDictionary { get; private set; }
 
 
     private void Awake()
     {
 
-        GameEntitiesDictionary = new Dictionary<EntityType, EntityStatistics>();
+        GameEntitiesDictionary = new Dictionary<UnitType, EntityStatistics>();
 
         for (int i = 0; i < m_gameEntities.Length; i++)
         {
