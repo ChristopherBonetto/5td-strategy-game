@@ -8,7 +8,7 @@ using DG.Tweening;
 namespace HF.Refactoring
 {
 
-    public class HFLoadingScreenWindow : HFUIWindow
+    public class HFUILoadingScreen : HFUIWindow
     {
         public override HFUIWindowID ID => HFUIWindowID.LOADING_SCREEN;
 

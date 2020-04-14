@@ -140,9 +140,9 @@ namespace HF.Refactoring
         /// <summary>
         /// Get loading screen
         /// </summary>
-        public HFLoadingScreenWindow GetLoadingScreen()
+        public HFUILoadingScreen GetLoadingScreen()
         {
-            return m_WindowCollection[HFUIWindowID.LOADING_SCREEN] as HFLoadingScreenWindow;
+            return m_WindowCollection[HFUIWindowID.LOADING_SCREEN] as HFUILoadingScreen;
         }
 
         /// <summary>
