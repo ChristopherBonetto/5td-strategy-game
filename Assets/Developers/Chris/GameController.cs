@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 
-public enum PlayerType
-{
-    Player,
-    AI
-}
+
 
 
 public class GameController : Singleton<GameController>
@@ -42,52 +38,53 @@ public class GameController : Singleton<GameController>
         }
     }
 
-
-    public GameObject PlayerCastle;
-
     public int m_playerLayer { get; private set; }
     public int m_aiLayer { get; private set; }
 
-    public int m_CurrentPlayerResources { get; private set; }
-
-    private float m_Timer = 0f;
 
     [SerializeField] private GameCollection m_gameCollection;
 
-    private GameCollection m_gameCollectionCopy;
-    public GameCollection GameCollectionCopy
+    private GameCollection m_collection;
+    public GameCollection Collection
     {
         get
         {
-            return m_gameCollectionCopy;
+            return m_collection;
         }
         set
         {
-            m_gameCollectionCopy = value;
+            m_collection = value;
         }
     }
+    public QuantityOfResources[] m_currentPlayerResources { get; private set; }
+
+    public GameObject PlayerCastle;
+
+    private float m_timer = 0f;
+
+
 
     private void Awake()
     {
-        GameCollectionCopy = Instantiate(m_gameCollection);
+        Collection = Instantiate(m_gameCollection);
     }
     // Start is called before the first frame update
     void Start()
     {
-        StartGame();
+        Initialize();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, Vector3.zero);
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, Vector3.zero);
+        //}
 
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            CreateNewEntity(UnitType.PEASANT, PlayerType.AI, Vector3.zero);
-        }
+        //if (Input.GetKeyDown(KeyCode.W))
+        //{
+        //    CreateNewEntity(UnitType.PEASANT, PlayerType.AI, Vector3.zero);
+        //}
     }
 
     public int GetGameObjectLayer(LayerMask mask)
@@ -102,126 +99,102 @@ public class GameController : Singleton<GameController>
         return -1;
     }
 
-    private void StartGame()
+    private void Initialize()
     {
-        m_playerLayer = GetGameObjectLayer(GameCollectionCopy.PlayerLayer);
-        m_aiLayer = GetGameObjectLayer(GameCollectionCopy.AILayer);
+        m_playerLayer = GetGameObjectLayer(Collection.PlayerLayer);
+        m_aiLayer = GetGameObjectLayer(Collection.AILayer);
 
-        m_CurrentPlayerResources = GameCollectionCopy.PlayerQuantityResources;
+        m_currentPlayerResources = new QuantityOfResources[m_collection.ResourcesValuesDictionary.Count];
+        m_collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    //public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    //{
+    //    if (!Collection.GameEntitiesDictionary.ContainsKey(inEntityType))
+    //    {
+    //        Debug.Log("GameCollection don't contain " + inEntityType);
+    //        return;
+    //    }
+
+    //    GameObject tempEntity = Instantiate(Collection.GameEntitiesDictionary[inEntityType].EntityPrefab, inPosition, Quaternion.identity);
+    //    Entity tempRef = tempEntity.GetComponent<Entity>();
+
+    //    if(tempRef != null)
+    //    {
+    //        tempRef.AssignStats(Collection.GameEntitiesDictionary[inEntityType]);
+    //    }
+
+    //    tempRef.AssignPlayer(inPlayerType);
+    //}
+
+    #region Resources
+
+    public bool CheckResourcesAvailability(QuantityOfResources[] ResourcesToCheck)
     {
-        if (!GameCollectionCopy.GameEntitiesDictionary.ContainsKey(inEntityType))
+        int CivilizationHaveThatResource = 0;
+
+        for (int i = 0; i < ResourcesToCheck.Length; i++)
         {
-            Debug.Log("GameCollection don't contain " + inEntityType);
-            return;
+            for (int j = 0; j < m_currentPlayerResources.Length; j++)
+            {
+                if (ResourcesToCheck[i].ResourceType == m_currentPlayerResources[j].ResourceType)
+                {
+                    if (m_currentPlayerResources[j].ResourceQuantity >= ResourcesToCheck[i].ResourceQuantity)
+                    {
+                        CivilizationHaveThatResource++;
+                    }
+                }
+            }
         }
-
-        GameObject tempEntity = Instantiate(GameCollectionCopy.GameEntitiesDictionary[inEntityType].EntityPrefab, inPosition, Quaternion.identity);
-        Entity tempRef = tempEntity.GetComponent<Entity>();
-
-        if(tempRef != null)
-        {
-            tempRef.AssignStats(GameCollectionCopy.GameEntitiesDictionary[inEntityType]);
-        }
-
-        tempRef.AssignPlayer(inPlayerType);
-    }
-
-
-        #region Resources
-
-        public bool CheckResourcesAvailability(int ResourcesToCheck)
-    {
-        if (ResourcesToCheck <= m_CurrentPlayerResources)
+        if (CivilizationHaveThatResource >= ResourcesToCheck.Length)
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
 
-    public void DecreaseResources(int QuantityOfResources)
+    public void DecreaseResources(QuantityOfResources[] QuantityOfResources)
     {
-        m_CurrentPlayerResources -= QuantityOfResources;
+        for (int i = 0; i < QuantityOfResources.Length; i++)
+        {
+            for (int j = 0; j < m_currentPlayerResources.Length; j++)
+            {
+                if (QuantityOfResources[i].ResourceType == m_currentPlayerResources[j].ResourceType)
+                {
+                    m_currentPlayerResources[j].ResourceQuantity -= QuantityOfResources[i].ResourceQuantity;
+                }
+            }
+        }
     }
 
-    public void AddResources(int QuantityOfResources)
+    public void AddResources(QuantityOfResources[] QuantityOfResources)
     {
-        m_CurrentPlayerResources += QuantityOfResources;
+        for (int i = 0; i < QuantityOfResources.Length; i++)
+        {
+            for (int j = 0; j < m_currentPlayerResources.Length; j++)
+            {
+                if (QuantityOfResources[i].ResourceType == m_currentPlayerResources[j].ResourceType)
+                {
+                    m_currentPlayerResources[j].ResourceQuantity += QuantityOfResources[i].ResourceQuantity;
+                    QuantityOfResources[i].ResourceQuantity = 0;
+                }
+            }
+        }
     }
 
     #endregion
-
-    //public void InstantiateBuilding(Buildings BuildingType, Vector3 SpawnBuilding, Quaternion SpawnQuaternion)
-    //{
-    //    if (CivilizationSO.BuildingsDictionary != null)
-    //    {
-    //        GameObject Building = Instantiate(CivilizationSO.BuildingsDictionary[BuildingType].BuildingPrefab, SpawnBuilding, SpawnQuaternion) as GameObject;
-    //        Building.transform.name = CivilizationSO.BuildingsDictionary[BuildingType].BuildingName;
-    //        Building.layer = GetGameObjectLayer(CivilizationSO.CivilizationLayer);
-
-    //        switch (BuildingType)
-    //        {
-    //            case Buildings.CityHall:
-    //                Building.GetComponent<CityAllActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                CivilizationSO.DepositsList.Add(Building);
-    //                DepositInstantiated = true;
-    //                break;
-
-    //            case Buildings.House:
-    //                Building.GetComponent<HouseActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                break;
-
-    //            case Buildings.MineralDeposit:
-    //                Building.GetComponent<MineralDepositActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                CivilizationSO.DepositsList.Add(Building);
-    //                DepositInstantiated = true;
-    //                break;
-
-    //            case Buildings.Carpentry:
-    //                Building.GetComponent<CarpentryActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                CivilizationSO.DepositsList.Add(Building);
-    //                DepositInstantiated = true;
-    //                break;
-
-    //            case Buildings.Plantation:
-    //                Building.GetComponent<PlantationActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                CivilizationSO.DepositsList.Add(Building);
-    //                DepositInstantiated = true;
-    //                break;
-
-    //            case Buildings.Port:
-    //                Building.GetComponent<PortActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                break;
-
-    //            case Buildings.Barrack:
-    //                Building.GetComponent<BarrackActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                break;
-
-    //            case Buildings.Archery:
-    //                Building.GetComponent<ArcheryActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                break;
-
-    //            case Buildings.Stable:
-    //                Building.GetComponent<StableActions>().BuildingStatisticsSO = CivilizationSO.BuildingsDictionary[BuildingType].BuildingStatsCopy;
-    //                break;
-
-    //            default:
-    //                break;
-    //        }
-    //    }
-    //}
-
 
 
 
     public bool Timer(float destinationTime)
     {
-        m_Timer += Time.deltaTime;
-        if (m_Timer >= destinationTime)
+        m_timer += Time.deltaTime;
+        if (m_timer >= destinationTime)
         {
-            m_Timer = 0f;
+            m_timer = 0f;
 
             return true;
         }

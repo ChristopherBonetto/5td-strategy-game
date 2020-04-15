@@ -77,7 +77,7 @@ public class MouseSelectionManager : MonoBehaviour
         
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
-            if(HitInfo.transform.gameObject.layer == GameController.Instance.GetGameObjectLayer(GameController.Instance.GameCollectionCopy.PlayerLayer))
+            if(HitInfo.transform.gameObject.layer == GameController.Instance.GetGameObjectLayer(GameController.Instance.Collection.PlayerLayer))
             {
                 return HitInfo.transform.gameObject;
             }

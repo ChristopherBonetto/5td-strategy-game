@@ -27,7 +27,16 @@ public class Editor_BuildingSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Prefab");
+        building.Prefab = (GameObject)EditorGUILayout.ObjectField(building.Prefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
+        if(building.Prefab == null)
+        {
+            EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
+        }
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
@@ -108,18 +117,15 @@ public class Editor_BuildingSO : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Cost");
-        building.Cost = EditorGUILayout.IntField(building.Cost);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Building Type");
-        building.BuildingType = (BuildingType)EditorGUILayout.EnumPopup(building.BuildingType);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Weight");
         building.Weight = EditorGUILayout.IntField(building.Weight);
         EditorGUILayout.EndHorizontal();
+
+        GUILayout.Label("Cost");
+        EditorGUILayout.BeginHorizontal();
+        building.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(building.Cost.ResourceType);
+        building.Cost.ResourceQuantity = EditorGUILayout.IntField(building.Cost.ResourceQuantity);
+        EditorGUILayout.EndHorizontal();
+
     }
 }

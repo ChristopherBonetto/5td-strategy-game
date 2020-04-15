@@ -27,6 +27,17 @@ public class Editor_UnitSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Prefab");
+        unit.Prefab = (GameObject)EditorGUILayout.ObjectField(unit.Prefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if(unit.Prefab == null)
+        {
+            EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
+        }
+
 
 
         EditorGUILayout.Space();
@@ -146,9 +157,10 @@ public class Editor_UnitSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Cost");
-        unit.Cost = EditorGUILayout.IntField(unit.Cost);
+        EditorGUILayout.BeginHorizontal();
+        unit.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(unit.Cost.ResourceType);
+        unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
 
 

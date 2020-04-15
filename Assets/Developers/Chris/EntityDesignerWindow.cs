@@ -219,6 +219,19 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.Space();
 
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Prefab");
+        unit.Prefab = (GameObject)EditorGUILayout.ObjectField(unit.Prefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (unit.Prefab == null)
+        {
+            tempValue = false;
+            EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
+        }
+
+
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
@@ -338,10 +351,15 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Cost");
-        unit.Cost = EditorGUILayout.IntField(unit.Cost);
+        EditorGUILayout.BeginHorizontal();
+        unit.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(unit.Cost.ResourceType);
+        unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
 
         return tempValue;
     }
@@ -365,6 +383,20 @@ public class GeneralSettings : EditorWindow
         building.Name = EditorGUILayout.TextField(building.Name);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
+
+        
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Prefab");
+        building.Prefab = (GameObject)EditorGUILayout.ObjectField(building.Prefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (building.Prefab == null)
+        {
+            tempValue = false;
+            EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
+        }
 
 
 
@@ -448,19 +480,19 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Cost");
-        building.Cost = EditorGUILayout.IntField(building.Cost);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Building Type");
-        building.BuildingType = (BuildingType)EditorGUILayout.EnumPopup(building.BuildingType);
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Weight");
         building.Weight = EditorGUILayout.IntField(building.Weight);
         EditorGUILayout.EndHorizontal();
+
+        GUILayout.Label("Cost");
+        EditorGUILayout.BeginHorizontal();
+        building.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(building.Cost.ResourceType);
+        building.Cost.ResourceQuantity = EditorGUILayout.IntField(building.Cost.ResourceQuantity);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
 
         return tempValue;
     }

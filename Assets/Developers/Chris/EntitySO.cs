@@ -7,6 +7,7 @@ public class EntitySO : ScriptableObject
 {
     [Header("Name")]
     public string Name;
+    public GameObject Prefab;
     
     [Header("Defensive Stats")]
     public int MaxHp;
@@ -31,6 +32,6 @@ public class EntitySO : ScriptableObject
     public EntitySO[] Roles;
 
     [Header("Utility")]
-    public int Cost;
+    public QuantityOfResources Cost;
 
 }
