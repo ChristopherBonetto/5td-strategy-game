@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using HF.Refactoring;
 
 namespace HF
 {
@@ -102,7 +103,7 @@ namespace HF
 		/// </summary>
 		private void TrySelect()
 		{
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetMouseButtonDown(0) && !HFUIManager.IsPointerOverUIElement())
 			{
 				if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit testHit))
 				{

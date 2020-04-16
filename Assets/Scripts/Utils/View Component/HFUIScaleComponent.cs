@@ -21,7 +21,7 @@ public class HFUIScaleComponent : MonoBehaviour
     [SerializeField]
     Vector3 m_targetScale;
     [SerializeField]
-    Transform m_imageComponent;
+    Transform m_transformComponent;
 
     Vector3 m_initialScale;
     float m_timeElapsed;
@@ -39,14 +39,14 @@ public class HFUIScaleComponent : MonoBehaviour
             m_timeElapsed = m_duration;
         }
 
-        m_imageComponent.transform.localScale = GetInitialScale();
+        m_transformComponent.transform.localScale = GetInitialScale();
     }
 
     private Vector3 GetInitialScale()
     {
         if (m_initialScale == null)
         {
-            m_initialScale = m_startFromScaleZero ? Vector3.zero : m_imageComponent.transform.localScale;
+            m_initialScale = m_startFromScaleZero ? Vector3.zero : m_transformComponent.transform.localScale;
         }
         return m_initialScale;
     }
@@ -81,12 +81,12 @@ public class HFUIScaleComponent : MonoBehaviour
     public void ScaleIn()
     {
         m_timeElapsed += Time.deltaTime;
-        m_imageComponent.transform.DOScale(m_targetScale, m_duration);
+        m_transformComponent.transform.DOScale(m_targetScale, m_duration);
     }
 
     public void ScaleOut()
     {
         m_timeElapsed += Time.deltaTime;
-        m_imageComponent.transform.DOScale(GetInitialScale(), m_duration);
+        m_transformComponent.transform.DOScale(GetInitialScale(), m_duration);
     }
 }
