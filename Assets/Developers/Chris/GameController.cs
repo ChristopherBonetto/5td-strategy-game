@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 
-
-
-
 public class GameController : Singleton<GameController>
 {
     new public static GameController Instance
@@ -58,10 +55,10 @@ public class GameController : Singleton<GameController>
     }
     public QuantityOfResources[] m_currentPlayerResources { get; private set; }
 
-    public GameObject PlayerCastle;
-
     private float m_timer = 0f;
 
+
+    [SerializeField] private GameObject m_troopsContainer;
 
 
     private void Awake()
@@ -76,16 +73,12 @@ public class GameController : Singleton<GameController>
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, Vector3.zero);
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.W))
-        //{
-        //    CreateNewEntity(UnitType.PEASANT, PlayerType.AI, Vector3.zero);
-        //}
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0,0.5f,0));
+        }
     }
+
 
     public int GetGameObjectLayer(LayerMask mask)
     {
@@ -104,28 +97,33 @@ public class GameController : Singleton<GameController>
         m_playerLayer = GetGameObjectLayer(Collection.PlayerLayer);
         m_aiLayer = GetGameObjectLayer(Collection.AILayer);
 
-        m_currentPlayerResources = new QuantityOfResources[m_collection.ResourcesValuesDictionary.Count];
-        m_collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
+        m_currentPlayerResources = new QuantityOfResources[Collection.ResourcesValuesDictionary.Count];
+        Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    //public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
-    //{
-    //    if (!Collection.GameEntitiesDictionary.ContainsKey(inEntityType))
-    //    {
-    //        Debug.Log("GameCollection don't contain " + inEntityType);
-    //        return;
-    //    }
+    public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    {
+        //Search in pool one unit and set his player type and position.
 
-    //    GameObject tempEntity = Instantiate(Collection.GameEntitiesDictionary[inEntityType].EntityPrefab, inPosition, Quaternion.identity);
-    //    Entity tempRef = tempEntity.GetComponent<Entity>();
+        if (!Collection.UnitsDictionary.ContainsKey(inEntityType))
+        {
+            Debug.Log("GameCollection don't contain " + inEntityType);
+            return;
+        }
 
-    //    if(tempRef != null)
-    //    {
-    //        tempRef.AssignStats(Collection.GameEntitiesDictionary[inEntityType]);
-    //    }
+        GameObject tempContainer = Instantiate(m_troopsContainer, inPosition, Quaternion.identity);
+        TroopBehavior tempRef = tempContainer.GetComponent<TroopBehavior>();
 
-    //    tempRef.AssignPlayer(inPlayerType);
-    //}
+        if (tempRef != null)
+        {
+            tempRef.AssignPlayer(inPlayerType);
+            tempRef.AssignStats(Collection.UnitsDictionary[inEntityType].UnitStatsCopy);
+        }
+        else
+        {
+            Debug.LogError("Prefab need TroopsBehavior script");
+        }
+    }
 
     #region Resources
 
@@ -186,7 +184,6 @@ public class GameController : Singleton<GameController>
     }
 
     #endregion
-
 
 
     public bool Timer(float destinationTime)

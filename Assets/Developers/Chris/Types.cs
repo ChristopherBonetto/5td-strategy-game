@@ -52,4 +52,5 @@ namespace Types
         Player,
         AI
     }
+
 }

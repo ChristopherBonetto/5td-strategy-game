@@ -1,0 +1,125 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Types;
+using UnityEngine.AI;
+
+public class EntityBehavior : MonoBehaviour
+{
+    protected List<Command> m_commands;
+    protected int m_currentCommandIndex;
+
+    public PlayerType m_entityPlayerType { get; protected set; }
+
+    protected float m_timer = 0f;
+    protected bool m_canAttack = true;
+
+    private NavMeshAgent m_agent;
+    public NavMeshAgent Agent
+    {
+        get
+        {
+            return m_agent;
+        }
+        set
+        {
+            m_agent = value;
+        }
+    }
+
+    public Vector3 m_currentDestination;
+
+
+    public virtual void Start()
+    {
+        m_commands = new List<Command>();
+    }
+
+
+    public bool CheckAgent()
+    {
+        return Agent;
+    }
+
+    public void AddRemoveAgent(bool inValue)
+    {
+        if(CheckAgent() && inValue)
+        {
+            return;
+        }
+        else if(CheckAgent() && inValue == false)
+        {
+            Destroy(Agent);
+        }
+        else if(!CheckAgent() && inValue == false)
+        {
+            return;
+        }
+        else if(!CheckAgent() && inValue)
+        {
+            Agent = gameObject.AddComponent<NavMeshAgent>();
+        }
+
+    }
+
+    public virtual void AssignPlayer(PlayerType inPlayerType)
+    {
+        m_entityPlayerType = inPlayerType;
+
+        if (m_entityPlayerType == PlayerType.Player)
+        {
+            gameObject.layer = GameController.Instance.m_playerLayer;
+        }
+        else if (m_entityPlayerType == PlayerType.AI)
+        {
+            gameObject.layer = GameController.Instance.m_aiLayer;
+        }
+    }
+
+    public virtual void AssignStats(EntityStatsSO inStats)
+    {
+        gameObject.name = inStats.Name + "Troops";
+    }
+
+
+
+    public virtual bool Timer(float destinationTime)
+    {
+        m_timer += Time.deltaTime;
+
+        if (m_timer >= destinationTime)
+        {
+            m_timer = 0f;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
+    public virtual void ExecuteCommand(Command inCommand)
+    {
+        m_commands.Add(inCommand);
+        inCommand.Execute();
+        m_currentCommandIndex = m_commands.Count - 1;
+    }
+
+    public virtual void Undo()
+    {
+        if (m_currentCommandIndex < 0)
+        {
+            return;
+        }
+        m_commands[m_currentCommandIndex].Undo();
+        m_commands.RemoveAt(m_currentCommandIndex);
+        m_currentCommandIndex--;
+    }
+
+    public virtual void Redo()
+    {
+        m_commands[m_currentCommandIndex].Execute();
+        m_currentCommandIndex++;
+    }
+}
