@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace HF.Refactoring
 {
@@ -179,6 +180,18 @@ namespace HF.Refactoring
                     window.gameObject.SetActive(false);
                 }
             }
+        }
+
+        /// <summary>
+        /// Detect if the mouse is over UI.
+        /// </summary>
+        public static bool IsPointerOverUIElement()
+        {
+            var eventData = new PointerEventData(EventSystem.current);
+            eventData.position = Input.mousePosition;
+            var results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(eventData, results);
+            return results.Count > 0;
         }
         #endregion
 
