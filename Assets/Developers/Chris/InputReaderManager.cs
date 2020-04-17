@@ -39,18 +39,19 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
     }
 
-    //private EntityBehavior m_currentEntity;
-    public EntityBehavior CurrentEntity;
-    //{
-    //    get
-    //    {
-    //        return m_currentEntity;
-    //    }
-    //    set
-    //    {
-    //        m_currentEntity = value;
-    //    }
-    //}
+    private EntityBehavior m_currentEntity;
+    public EntityBehavior CurrentEntity
+    {
+        get
+        {
+            return m_currentEntity;
+        }
+        set
+        {
+            m_currentEntity = value;
+        }
+    }
+    
 
     [SerializeField] private LayerMask m_GroundMask;
 

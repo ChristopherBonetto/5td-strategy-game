@@ -14,18 +14,7 @@ public class EntityBehavior : MonoBehaviour
     protected float m_timer = 0f;
     protected bool m_canAttack = true;
 
-    private NavMeshAgent m_agent;
-    public NavMeshAgent Agent
-    {
-        get
-        {
-            return m_agent;
-        }
-        set
-        {
-            m_agent = value;
-        }
-    }
+    
 
     public Vector3 m_currentDestination;
 
@@ -35,32 +24,7 @@ public class EntityBehavior : MonoBehaviour
         m_commands = new List<Command>();
     }
 
-
-    public bool CheckAgent()
-    {
-        return Agent;
-    }
-
-    public void AddRemoveAgent(bool inValue)
-    {
-        if(CheckAgent() && inValue)
-        {
-            return;
-        }
-        else if(CheckAgent() && inValue == false)
-        {
-            Destroy(Agent);
-        }
-        else if(!CheckAgent() && inValue == false)
-        {
-            return;
-        }
-        else if(!CheckAgent() && inValue)
-        {
-            Agent = gameObject.AddComponent<NavMeshAgent>();
-        }
-
-    }
+    
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {

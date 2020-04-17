@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Types;
+using UnityEngine.AI;
 
 public class GameController : Singleton<GameController>
 {
@@ -57,8 +58,11 @@ public class GameController : Singleton<GameController>
 
     private float m_timer = 0f;
 
-
+    //must be take from assets folder.
     [SerializeField] private GameObject m_troopsContainer;
+
+    [SerializeField] Transform[] m_enemySpawnPoints;
+    [SerializeField] Transform m_castle;
 
 
     private void Awake()
@@ -76,6 +80,10 @@ public class GameController : Singleton<GameController>
         if (Input.GetKeyDown(KeyCode.A))
         {
             CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0,0.5f,0));
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            CreateNewEntity(UnitType.PEASANT, PlayerType.AI, new Vector3(0, 0.5f, 0));
         }
     }
 
@@ -101,18 +109,16 @@ public class GameController : Singleton<GameController>
         Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3? inPosition = null)
     {
-        //Search in pool one unit and set his player type and position.
-
         if (!Collection.UnitsDictionary.ContainsKey(inEntityType))
         {
             Debug.Log("GameCollection don't contain " + inEntityType);
             return;
         }
 
-        GameObject tempContainer = Instantiate(m_troopsContainer, inPosition, Quaternion.identity);
-        TroopBehavior tempRef = tempContainer.GetComponent<TroopBehavior>();
+        GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Troop");
+        TroopBehavior tempRef = troop.GetComponent<TroopBehavior>();
 
         if (tempRef != null)
         {
@@ -122,8 +128,14 @@ public class GameController : Singleton<GameController>
         else
         {
             Debug.LogError("Prefab need TroopsBehavior script");
+            return;
         }
+
+        troop.SetActive(true);
     }
+
+    
+
 
     #region Resources
 

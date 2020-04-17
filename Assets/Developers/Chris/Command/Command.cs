@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.AI;
 
+
 public abstract class Command
 {
     protected EntityBehavior m_entity;
@@ -39,21 +40,27 @@ public class MoveToAgent : Command
     private Vector3 m_destination;
     private Vector3 m_originalPosition;
 
+    ICanMove canMove;
+
     public MoveToAgent(EntityBehavior inEntity, Vector3 inDestination) : base(inEntity)
     {
         m_destination = inDestination;
+        canMove = inEntity.GetComponent<ICanMove>() as ICanMove;
     }
 
     public override void Execute()
     {
-        m_originalPosition = m_entity.transform.position;
+        if(canMove != null)
+        {
+            m_originalPosition = m_entity.transform.position;
 
-        m_entity.AddRemoveAgent(true);
-        m_entity.Agent.destination = m_destination;
+            canMove.MoveFromTo(m_destination);
+        }
     }
 
     public override void Undo()
     {
-        m_entity.Agent.destination = m_originalPosition;
+        if(canMove != null)
+        canMove.MoveFromTo(m_originalPosition);
     }
 }

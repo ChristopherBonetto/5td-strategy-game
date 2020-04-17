@@ -4,26 +4,51 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 
-public class TroopBehavior : EntityBehavior
+public class TroopBehavior : EntityBehavior, ICanMove
 {
     public TroopBehavior(UnitsStatsSO inStat)
     {
         m_unitStats = inStat;
     }
 
-    private UnitsStatsSO m_unitStats;
+    public UnitsStatsSO m_unitStats;
     private UnitBehavior[] m_troopUnits;
 
 
+    private NavMeshAgent m_troopAgent;
+    public NavMeshAgent TroopAgent
+    {
+        get
+        {
+            return m_troopAgent;
+        }
+        set
+        {
+            m_troopAgent = value;
+        }
+    }
+
+
+    private void Awake()
+    {
+        AssignAgentComponent();
+    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.W))
         {
-            Undo();
+            ResetStats();
+            gameObject.SetActive(false);
         }
-        else if (Input.GetKeyDown(KeyCode.Q))
+    }
+
+    public void AssignAgentComponent()
+    {
+        TroopAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        if (TroopAgent == null)
         {
-            AddRemoveAgent(false);
+            TroopAgent = gameObject.AddComponent<NavMeshAgent>();
         }
     }
 
@@ -57,6 +82,7 @@ public class TroopBehavior : EntityBehavior
                 tempRef = tempUnit.AddComponent<UnitBehavior>();
             }
             m_troopUnits[i] = tempRef;
+            m_troopUnits[i].AssignTroop(this);
         }
     }
 
@@ -75,4 +101,13 @@ public class TroopBehavior : EntityBehavior
     }
 
 
+    public void MoveFromTo(Vector3 endPosition)
+    {
+        //TroopAgent.destination = endPosition;
+
+        foreach (UnitBehavior unit in m_troopUnits)
+        {
+            unit.UnitAgent.destination = endPosition;
+        }
+    }
 }
