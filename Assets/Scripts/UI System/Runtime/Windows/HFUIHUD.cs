@@ -57,14 +57,14 @@ namespace HF.Refactoring
         public void ReturnToLevelSelection()
         {
             HFGameManager.Instance.ChangeGMState(GameStates.Pause);
-            HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
+            HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
             HFScenesManager.Instance.LoadSceneFromIndex(1);
         }
 
         public void WinLevel()
         {
             HFScenesManager.Instance.EndCurrentLevel(true);
-            HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
+            HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
             HFScenesManager.Instance.LoadSceneFromIndex(1);
         }
     }

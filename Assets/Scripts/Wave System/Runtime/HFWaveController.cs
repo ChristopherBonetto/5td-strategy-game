@@ -185,7 +185,7 @@ namespace HF.Refactoring
             {
                 // Win level.
                 HFScenesManager.Instance.EndCurrentLevel(true);
-                HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
+                HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
                 HFScenesManager.Instance.LoadSceneFromIndex(1);
 
                 return;

@@ -30,7 +30,7 @@ namespace HF.Refactoring
                 // loading selected scene async.
                 // Turn off the first window declared.
                 // Turn on the second window declared (after loading).
-                HFUIManager.Instance.GetLoadingScreen().LoadLevel(Level.LevelSceneIndex);
+                HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(Level.LevelSceneIndex);
             }
         }
     }

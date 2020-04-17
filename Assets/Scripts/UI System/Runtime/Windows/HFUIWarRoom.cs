@@ -7,20 +7,10 @@ namespace HF.Refactoring
 {
     public class HFUIWarRoom : HFUIWindow
     {
-        public override HFUIWindowID ID => HFUIWindowID.WAR_ROOM;
+        public override HFUIWindowID ID => HFUIWindowID.WR_LEVEL_SELCTION;
 
-
-        /// <summary>
-        /// it'sused as parent of buttons.
-        /// </summary>
-        public VerticalLayoutGroup ButtonsGrid;
-
-        [Header("Buttons Field")]
-
-        /// <summary>
-        /// Selection level button prefab.
-        /// </summary>
-        public HFPoolID LoadLevelButtonID;
+        [SerializeField]
+        private HFLoadLevelB[] m_loadLevelButtons;
 
         /// <summary>
         /// Constant word present in every button. 
@@ -28,23 +18,15 @@ namespace HF.Refactoring
         /// </summary>
         public string PrefixButtonText;
 
-
-        private void Awake()
+        private void Start()
         {
-            SpawnLevelButtons();
-        }
+            HFScenesManager sceneM = HFScenesManager.Instance;
+            HFLevelContainerSO levelContainer = sceneM.LevelContainer;
 
-        private void SpawnLevelButtons()
-        {
-            List<HFLevelInfoSO> levels = HFScenesManager.Instance.LevelContainer.Levels;
-
-            for (int i = 0; i < levels.Count; i++)
+            for (int i = 0; i < levelContainer.Levels.Count; i++)
             {
-                HFLoadLevelB button = HFPoolManager.Instance.GetPooledObject(LoadLevelButtonID.ID).GetComponent<HFLoadLevelB>();
-                button.Level = levels[i];
-                button.ButtonText.text = $"{PrefixButtonText}: {i + 1}";
-                button.gameObject.SetActive(true);
-                button.transform.SetParent(ButtonsGrid.transform);
+                m_loadLevelButtons[i].ButtonText.text = PrefixButtonText + " " + (i + 1).ToString();
+                m_loadLevelButtons[i].Level = levelContainer.Levels[i];
             }
         }
     }

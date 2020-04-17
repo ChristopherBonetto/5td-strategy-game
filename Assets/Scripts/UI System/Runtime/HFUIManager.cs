@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using System;
 
 namespace HF.Refactoring
 {
@@ -123,7 +124,8 @@ namespace HF.Refactoring
                     ShowAndClearHistory(HFUIWindowID.MAIN_MENU);
                     break;
                 case GameStates.WarRoom:
-                    ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
+                    WorldCanvas.worldCamera = Camera.main;
+                    ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
                     break;
                 case GameStates.InitializeLevel:
                     break;
@@ -141,9 +143,9 @@ namespace HF.Refactoring
         /// <summary>
         /// Get loading screen
         /// </summary>
-        public HFUILoadingScreen GetLoadingScreen()
+        public T Getwindow<T>(HFUIWindowID id) where T : HFUIWindow
         {
-            return m_WindowCollection[HFUIWindowID.LOADING_SCREEN] as HFUILoadingScreen;
+            return (T)Convert.ChangeType(m_WindowCollection[id], typeof(T));
         }
 
         /// <summary>
@@ -152,13 +154,24 @@ namespace HF.Refactoring
         /// </summary>
         private void GetWindows()
         {
-            if (ScreenCanvas == null)
+            if (ScreenCanvas == null || WorldCanvas == null)
             {
-                Debug.LogError($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : Screen canvas is null, make sure to drag it in inspector");
+                Debug.LogError($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : Screen or World canvas is null, make sure to drag it in inspector");
                 return;
             }
 
+            // Get windows from screen canvas
             foreach (HFUIWindow window in ScreenCanvas.GetComponentsInChildren<HFUIWindow>())
+            {
+                if (!m_WindowCollection.ContainsKey(window.ID))
+                {
+                    m_WindowCollection.Add(window.ID, window);
+                    Debug.Log($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : Window [ID: {window.ID} | object name: {window.gameObject.name}] is added");
+                }
+            }
+
+            // Get windows from world canvas
+            foreach (HFUIWindow window in WorldCanvas.GetComponentsInChildren<HFUIWindow>())
             {
                 if (!m_WindowCollection.ContainsKey(window.ID))
                 {

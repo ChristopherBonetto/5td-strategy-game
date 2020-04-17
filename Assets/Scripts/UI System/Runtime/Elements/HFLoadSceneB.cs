@@ -20,7 +20,8 @@ namespace HF.Refactoring
         {
             if (m_isListeningInput)
             {
-                HFUIManager.Instance.GetLoadingScreen().LoadLevel(Sceneindex, false);
+                Debug.Log("Pressing...");
+                HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(Sceneindex, false);
             }
         }
     }

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3943272351597553054}
   - component: {fileID: 8402165642228873873}
   - component: {fileID: 7873473947281195381}
-  - component: {fileID: 5235719086939207411}
   m_Layer: 5
   m_Name: PF_B_LoadLevel
   m_TagString: Untagged
@@ -39,7 +38,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4575173168458155405
 CanvasRenderer:
@@ -69,8 +68,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -147,21 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9a33821c3c79046a39a83dfa8e1826, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MyWindowID: 2
+  MyWindowID: 1
   ButtonText: {fileID: 714894944480214640}
---- !u!114 &5235719086939207411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 679482797882494860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36788e272508db54ca616b88033ca719, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uniqueID: {fileID: 11400000, guid: 45ada5ea56b845740a5c3a0a02b9423d, type: 2}
 --- !u!1 &5521455683923435768
 GameObject:
   m_ObjectHideFlags: 0

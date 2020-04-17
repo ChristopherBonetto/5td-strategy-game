@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace HF.Refactoring
 {
-    public class HFUICredits : HFUIWindow
+    public class HFUISettingsWarRoom : HFUIWindow
     {
-        public override HFUIWindowID ID => HFUIWindowID.CREDITS;
+        public override HFUIWindowID ID => HFUIWindowID.WR_SETTINGS;
     }
 }
