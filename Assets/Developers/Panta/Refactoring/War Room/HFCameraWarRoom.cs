@@ -6,6 +6,8 @@ namespace HF.Refactoring
 {
     public class HFCameraWarRoom : MonoBehaviour
     {
+        [SerializeField]
+        private int CountOfPositions;
         private Animator m_animatorController;
         private int m_position = 0;
 
@@ -16,24 +18,23 @@ namespace HF.Refactoring
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             {
-                m_position = 0;
+                m_position++;
+                m_position = (int)Mathf.Repeat(m_position++, CountOfPositions);
                 m_animatorController.SetInteger("Position", m_position);
-                HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
+            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             {
-                m_position = 1;
+                m_position--;
+                m_position = (int)Mathf.Repeat(m_position--, CountOfPositions);
                 m_animatorController.SetInteger("Position", m_position);
-                HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WR_SETTINGS);
             }
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                m_position = 2;
-                m_animatorController.SetInteger("Position", m_position);
-                HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WR_CREDITS);
-            }
+        }
+
+        public void ShowWindow(int id)
+        {
+            HFUIManager.Instance.ShowAndClearHistory((HFUIWindowID)id);
         }
     }
 }
