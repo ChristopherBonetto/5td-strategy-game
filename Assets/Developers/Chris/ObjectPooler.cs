@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Types;
 
 public class ObjectPooler : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class ObjectPooler : MonoBehaviour
     [System.Serializable]
     public struct ObjectPoolItem
     {
+        public ObjectPoolItem(GameObject inObj, int inAmount, bool inCanExpland)
+        {
+            ObjectToPool = inObj;
+            AmountToPool = inAmount;
+            ShouldExpand = inCanExpland;
+        }
+
         /// <summary>
         /// Object of which copies will be pooled.
         /// </summary>
@@ -29,13 +37,10 @@ public class ObjectPooler : MonoBehaviour
         /// </summary>
         [Tooltip("If ticked, when there aren't enough available pooled objects of this type, the ObjectPooler will instantiate new ones, expanding the pool.")]
         public bool ShouldExpand;
-
-        public GameObject FatherGameObject;
-
-        public bool ResetScale;
     }
 
     #endregion
+
 
 
     #region Static variables
@@ -54,7 +59,7 @@ public class ObjectPooler : MonoBehaviour
     /// List of items that should be pooled at startup.
     /// </summary>
     [Tooltip("List of items that should be pooled at startup.")]
-    [SerializeField] private List<ObjectPoolItem> m_ItemsToPool;
+    [SerializeField] private List<ObjectPoolItem> m_itemsToPool;
 
     #endregion
 
@@ -63,7 +68,9 @@ public class ObjectPooler : MonoBehaviour
     /// <summary>
     /// Currently pooled objects, ordered as (tag, List of objects) pairs.
     /// </summary>
-    private Dictionary<string, List<GameObject>> m_PooledObjects;
+    private Dictionary<string, List<GameObject>> m_pooledObjects;
+    private Dictionary<UnitType, List<GameObject>> m_unitPooled;
+    private Dictionary<BuildingType, List<GameObject>> m_buildingPooled;
 
     #endregion
 
@@ -75,7 +82,9 @@ public class ObjectPooler : MonoBehaviour
         SharedInstance = this;
 
         // Init Dictionary
-        m_PooledObjects = new Dictionary<string, List<GameObject>>();
+        m_pooledObjects = new Dictionary<string, List<GameObject>>();
+        m_unitPooled = new Dictionary<UnitType, List<GameObject>>();
+        m_buildingPooled = new Dictionary<BuildingType, List<GameObject>>();
     }
 
     private void Start()
@@ -95,10 +104,10 @@ public class ObjectPooler : MonoBehaviour
     public GameObject GetPooledObject(string tag)
     {
         // First check if the Dictionary actually contains the tag key
-        if (m_PooledObjects.ContainsKey(tag))
+        if (m_pooledObjects.ContainsKey(tag))
         {
             // Get the list corresponding to the tag
-            List<GameObject> objectsList = m_PooledObjects[tag];
+            List<GameObject> objectsList = m_pooledObjects[tag];
 
             // Cycle the list to search for an available pooled object
             int count = objectsList.Count;
@@ -113,7 +122,7 @@ public class ObjectPooler : MonoBehaviour
 
 
             // If an available object couldn't be found, get the ObjectPoolItem corresponding to the tag (by design, the OPI should always be found)
-            foreach (ObjectPoolItem item in m_ItemsToPool)
+            foreach (ObjectPoolItem item in m_itemsToPool)
             {
                 if (item.ObjectToPool.CompareTag(tag))
                 {
@@ -137,6 +146,44 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
+    public GameObject GetUnityObject(UnitType inType)
+    {
+        // First check if the Dictionary actually contains the tag key
+        if (m_unitPooled.ContainsKey(inType))
+        {
+            // Get the list corresponding to the tag
+            List<GameObject> objectsList = m_unitPooled[inType];
+
+            // Cycle the list to search for an available pooled object
+            int count = objectsList.Count;
+
+            if(count == 0)
+            {
+                Debug.LogError("No one object to take with : " + inType + " key");
+                return null;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject obj = objectsList[i];
+
+                // If an available object is found, return it
+                if (!obj.activeInHierarchy) return obj;
+            }
+
+            UnitInfo unit = (UnitInfo)GameController.Instance.SearchUnit(inType);
+            ObjectPoolItem tempItem = new ObjectPoolItem(unit.UnitStatsCopy.Prefab, unit.UnitPoolQuantity, true);
+            return AddObjectToPool(objectsList, tempItem);
+
+        }
+        else
+        {
+            // If the Dicitionary doesn't contain the tag key, send an error and return null
+            Debug.LogError("ObjectPooler '" + name + "' doesn't contain the specified tag '" + tag + "'.");
+            return null;
+        }
+    }
+
     #endregion
 
     /// <summary>
@@ -144,7 +191,7 @@ public class ObjectPooler : MonoBehaviour
     /// </summary>
     private void InitPool()
     {
-        foreach (ObjectPoolItem item in m_ItemsToPool)
+        foreach (ObjectPoolItem item in m_itemsToPool)
         {
             // Create the list corresponding to the item
             List<GameObject> objectsList = new List<GameObject>();
@@ -154,7 +201,33 @@ public class ObjectPooler : MonoBehaviour
                 AddObjectToPool(objectsList, item);
 
             // Add the list to the Dictionary, using the item's object's tag as a key
-            m_PooledObjects.Add(item.ObjectToPool.tag, objectsList);
+            m_pooledObjects.Add(item.ObjectToPool.tag, objectsList);
+        }
+
+        GameCollection collection = GameController.Instance.Collection;
+
+        foreach(UnitType unit in collection.UnitsDictionary.Keys)
+        {
+            List<GameObject> unitList = new List<GameObject>();
+
+            for(int i = 0; i < collection.UnitsDictionary[unit].UnitPoolQuantity; i++)
+            {
+                ObjectPoolItem tempItem = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.Prefab, collection.UnitsDictionary[unit].UnitPoolQuantity, true);
+                AddObjectToPool(unitList, tempItem);
+            }
+            m_unitPooled.Add(unit, unitList);
+        }
+
+        foreach(BuildingType building in collection.BuildingsDictionary.Keys)
+        {
+            List<GameObject> buildingList = new List<GameObject>();
+
+            for(int i = 0; i < collection.BuildingsDictionary[building].BuildingPoolQuantity; i++)
+            {
+                ObjectPoolItem tempItem = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.Prefab, collection.BuildingsDictionary[building].BuildingPoolQuantity, true);
+                AddObjectToPool(buildingList, tempItem);
+            }
+            m_buildingPooled.Add(building, buildingList);
         }
     }
 
@@ -170,20 +243,15 @@ public class ObjectPooler : MonoBehaviour
         obj.SetActive(false);
         pooledList.Add(obj);
 
-        if (item.FatherGameObject != null)
-        {
-            obj.transform.SetParent(item.FatherGameObject.transform);
-            if (item.ResetScale) obj.transform.localScale = new Vector3(1, 1, 1);
-        }
-
         return obj;
     }
 
+
     public List<GameObject> ReturnListFromDictionary(string tag)
     {
-        if (m_PooledObjects.ContainsKey(tag))
+        if (m_pooledObjects.ContainsKey(tag))
         {
-            return m_PooledObjects[tag];
+            return m_pooledObjects[tag];
         }
         else
         {

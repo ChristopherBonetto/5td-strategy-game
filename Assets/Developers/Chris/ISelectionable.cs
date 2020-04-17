@@ -6,6 +6,6 @@ using UnityEngine.UI;
 
 public interface ISelectionable
 {
-    void ShowInfoPanels();
+    void Clicked();
 }
 

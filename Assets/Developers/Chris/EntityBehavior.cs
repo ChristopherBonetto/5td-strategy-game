@@ -4,7 +4,7 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 
-public class EntityBehavior : MonoBehaviour
+public class EntityBehavior : MonoBehaviour, ISelectionable
 {
     protected List<Command> m_commands;
     protected int m_currentCommandIndex;
@@ -14,17 +14,12 @@ public class EntityBehavior : MonoBehaviour
     protected float m_timer = 0f;
     protected bool m_canAttack = true;
 
-    
-
-    public Vector3 m_currentDestination;
-
 
     public virtual void Start()
     {
         m_commands = new List<Command>();
     }
 
-    
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {
@@ -62,7 +57,7 @@ public class EntityBehavior : MonoBehaviour
         }
     }
 
-
+    //MAYBE INTERFACE.
     public virtual void ExecuteCommand(Command inCommand)
     {
         m_commands.Add(inCommand);
@@ -85,5 +80,10 @@ public class EntityBehavior : MonoBehaviour
     {
         m_commands[m_currentCommandIndex].Execute();
         m_currentCommandIndex++;
+    }
+
+    public virtual void Clicked()
+    {
+        Debug.Log("selected " + gameObject.name);
     }
 }

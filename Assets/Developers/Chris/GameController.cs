@@ -79,11 +79,11 @@ public class GameController : Singleton<GameController>
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0,0.5f,0));
+            CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(0,0.5f,0));
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            CreateNewEntity(UnitType.PEASANT, PlayerType.AI, new Vector3(0, 0.5f, 0));
+            CreateNewTroop(UnitType.PEASANT, PlayerType.AI, new Vector3(0, 0.5f, 0));
         }
     }
 
@@ -109,7 +109,7 @@ public class GameController : Singleton<GameController>
         Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    public void CreateNewEntity(UnitType inEntityType, PlayerType inPlayerType, Vector3? inPosition = null)
+    public void CreateNewTroop(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!Collection.UnitsDictionary.ContainsKey(inEntityType))
         {
@@ -117,80 +117,110 @@ public class GameController : Singleton<GameController>
             return;
         }
 
+        if (!CheckResourcesAvailability(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost))
+        {
+            return;
+        }
+
+        DecreaseResources(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost);
+
+        CheckFreeSpace(inPosition, 10);
+
         GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Troop");
+        troop.SetActive(true);
+
+        if (troop == null)
+        {
+            Debug.Log("can't take troop container because in pool it can't expand");
+            return;
+        }
         TroopBehavior tempRef = troop.GetComponent<TroopBehavior>();
 
-        if (tempRef != null)
-        {
-            tempRef.AssignPlayer(inPlayerType);
-            tempRef.AssignStats(Collection.UnitsDictionary[inEntityType].UnitStatsCopy);
-        }
-        else
+        if (tempRef == null)
         {
             Debug.LogError("Prefab need TroopsBehavior script");
             return;
         }
 
-        troop.SetActive(true);
+        tempRef.AssignPlayer(inPlayerType);
+        tempRef.AssignStats(Collection.UnitsDictionary[inEntityType].UnitStatsCopy);
     }
 
-    
+    public UnitInfo? SearchUnit(UnitType inType)
+    {
+        if (Collection.UnitsDictionary.ContainsKey(inType))
+        {
+            return Collection.UnitsDictionary[inType];
+        }
+        return null;
+    }
+
+    public void CheckFreeSpace(Vector3 inPos, float inRadius)
+    {
+        int layerToCheck = 9 << 10;
+
+        Collider[] collider = Physics.OverlapSphere(inPos, inRadius, layerToCheck);
+
+        EntityBehavior entity = null;
+
+        if(collider.Length == 0)
+        {
+
+        }
+
+        for(int i = 0; i < collider.Length; i++)
+        {
+            EntityBehavior tempEntity = collider[i].GetComponentInParent<EntityBehavior>();
+            
+            if(tempEntity != entity)
+            {
+                entity = tempEntity;
+                var command = new TeleportCommand(entity, new Vector3(10,0,10));
+                entity.ExecuteCommand(command);
+            }
+        }
+    }
+
 
 
     #region Resources
 
-    public bool CheckResourcesAvailability(QuantityOfResources[] ResourcesToCheck)
+    public bool CheckResourcesAvailability(QuantityOfResources ResourcesToCheck)
     {
-        int CivilizationHaveThatResource = 0;
-
-        for (int i = 0; i < ResourcesToCheck.Length; i++)
+        for (int j = 0; j < m_currentPlayerResources.Length; j++)
         {
-            for (int j = 0; j < m_currentPlayerResources.Length; j++)
+            if (m_currentPlayerResources[j].ResourceType == ResourcesToCheck.ResourceType)
             {
-                if (ResourcesToCheck[i].ResourceType == m_currentPlayerResources[j].ResourceType)
+                if (m_currentPlayerResources[j].ResourceQuantity >= ResourcesToCheck.ResourceQuantity)
                 {
-                    if (m_currentPlayerResources[j].ResourceQuantity >= ResourcesToCheck[i].ResourceQuantity)
-                    {
-                        CivilizationHaveThatResource++;
-                    }
+                    return true;
                 }
             }
         }
-        if (CivilizationHaveThatResource >= ResourcesToCheck.Length)
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return false;
     }
 
-    public void DecreaseResources(QuantityOfResources[] QuantityOfResources)
+    public void DecreaseResources(QuantityOfResources inResource)
     {
-        for (int i = 0; i < QuantityOfResources.Length; i++)
+        for (int j = 0; j < m_currentPlayerResources.Length; j++)
         {
-            for (int j = 0; j < m_currentPlayerResources.Length; j++)
+            if (m_currentPlayerResources[j].ResourceType == inResource.ResourceType)
             {
-                if (QuantityOfResources[i].ResourceType == m_currentPlayerResources[j].ResourceType)
+                if (m_currentPlayerResources[j].ResourceQuantity >= inResource.ResourceQuantity)
                 {
-                    m_currentPlayerResources[j].ResourceQuantity -= QuantityOfResources[i].ResourceQuantity;
+                    m_currentPlayerResources[j].ResourceQuantity -= inResource.ResourceQuantity;
                 }
             }
         }
     }
 
-    public void AddResources(QuantityOfResources[] QuantityOfResources)
+    public void AddResources(QuantityOfResources inResource)
     {
-        for (int i = 0; i < QuantityOfResources.Length; i++)
+        for (int j = 0; j < m_currentPlayerResources.Length; j++)
         {
-            for (int j = 0; j < m_currentPlayerResources.Length; j++)
+            if (m_currentPlayerResources[j].ResourceType == inResource.ResourceType)
             {
-                if (QuantityOfResources[i].ResourceType == m_currentPlayerResources[j].ResourceType)
-                {
-                    m_currentPlayerResources[j].ResourceQuantity += QuantityOfResources[i].ResourceQuantity;
-                    QuantityOfResources[i].ResourceQuantity = 0;
-                }
+                m_currentPlayerResources[j].ResourceQuantity += inResource.ResourceQuantity;
             }
         }
     }

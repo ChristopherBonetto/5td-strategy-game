@@ -88,13 +88,19 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
-            if (HitInfo.transform.gameObject.layer == GameController.Instance.m_playerLayer)
-            {
-                EntityBehavior entity = HitInfo.transform.GetComponent<EntityBehavior>();
+            ISelectionable canBeSelected = HitInfo.transform.GetComponentInParent<ISelectionable>();
 
-                if(entity != null)
+            if(canBeSelected != null)
+            {
+                canBeSelected.Clicked();
+
+                if (HitInfo.transform.gameObject.layer == GameController.Instance.m_playerLayer)
                 {
-                    return entity;
+                    EntityBehavior entity = HitInfo.transform.GetComponentInParent<EntityBehavior>();
+                    if (entity != null)
+                    {
+                        return entity;
+                    }
                 }
             }
         }

@@ -23,12 +23,7 @@ public class UnitBehavior : MonoBehaviour
 
     private void Awake()
     {
-        UnitAgent = gameObject.GetComponent<NavMeshAgent>();
-
-        if (UnitAgent == null)
-        {
-            UnitAgent = gameObject.AddComponent<NavMeshAgent>();
-        }
+        AssignAgentComponent();
     }
 
     public void AssignTroop(TroopBehavior inTroop)
@@ -39,5 +34,15 @@ public class UnitBehavior : MonoBehaviour
     public void DeassignTroop()
     {
         m_troopRef = null;
+    }
+
+    public void AssignAgentComponent()
+    {
+        UnitAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        if (UnitAgent == null)
+        {
+            UnitAgent = gameObject.AddComponent<NavMeshAgent>();
+        }
     }
 }
