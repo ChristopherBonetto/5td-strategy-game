@@ -24,6 +24,10 @@ namespace HF.Refactoring
             base.OnEnable();
             SetCost(0, Color.white);
             SetBackgroundColor(Color.white);
+        }
+
+        protected override void OnDisable()
+        {
             RemoveAllListener();
         }
 

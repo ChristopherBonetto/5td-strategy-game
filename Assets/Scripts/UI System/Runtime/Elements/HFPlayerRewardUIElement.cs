@@ -9,6 +9,7 @@ public class HFPlayerRewardUIElement : MonoBehaviour
 
 	private int m_value;
 
+    [SerializeField]
     private HFPulseScale m_scaleComponent;
 
     private void Awake()
