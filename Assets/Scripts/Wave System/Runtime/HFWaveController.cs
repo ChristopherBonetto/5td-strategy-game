@@ -170,6 +170,14 @@ namespace HF.Refactoring
             // Set the current wave to perform 
             // when the wave begin
             SetCurrentBehaviourToPerform();
+
+            // @Temp
+            List<HFBaseStats> stats = new List<HFBaseStats>();
+            foreach (HFWaveData.HFWaveBehaviourData data in m_currentWave.GetBehaviours())
+            {
+                stats.Add(data.UnitData);
+            }
+            HFEventManager.TriggerEvent<int, List<HFBaseStats>>(HFEventID.OnUnitsPossessed, Controller.Team, stats);
         }
 
         /// <summary>

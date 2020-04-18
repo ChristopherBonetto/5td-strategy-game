@@ -12,24 +12,15 @@ public class HFPlayerRewardUIElement : MonoBehaviour
     [SerializeField]
     private HFPulseScale m_scaleComponent;
 
-    private void Awake()
-    {
-        m_scaleComponent = GetComponent<HFPulseScale>();
-    }
-
     private void OnEnable()
     {
+        ResetValue();
         HFEventManager.SubscribeTo<int, HFUnit>(HFEventID.GainReward, OnGainReward);
     }
 
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<int, HFUnit>(HFEventID.GainReward, OnGainReward);
-    }
-
-    private void Start()
-    {
-        ResetValue();
     }
 
     public void ResetValue()

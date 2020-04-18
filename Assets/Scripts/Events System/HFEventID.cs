@@ -38,7 +38,6 @@
     /// HFUnit	unit
     /// </summary>
     OnUnitDeath,
-
 	/// <summary>
 	/// 1) <see cref="HF.HFUnit"/> unit
 	/// 2) <see cref="HF.HFUnit.Team"/> team
@@ -54,6 +53,11 @@
 	/// 2) <see cref="HF.HFUnit.Team"/> team
 	/// </summary>
 	OnUnitUpgraded,
+	/// <summary>
+	/// 1) <see cref="HF.HFController.Team"/> int
+	/// 2) <see cref="HFBaseStats"/> List<HFBaseStats>
+	/// </summary>
+	OnUnitsPossessed,
 
 
 	//----------------------------------------------------------------------------------
@@ -63,13 +67,13 @@
 	/// <summary>
 	/// This one differ from <see cref="HFEventID.OnUnitDeath"/>.
 	/// it's used to update the view.
-	/// 1) int <see cref="HF.WaveSystem.HFWaveController.CountOfEnemyKilled"/> current enemies killed
+	/// 1) int <see cref="HF.Refactoring.HFWaveController.CountOfEnemyKilled"/> current enemies killed
 	/// 2) int <see cref="HF.WaveSystem.HFWaveReader.GetNumberOfEnemiesInTheWave(HF.WaveSystem.HFWaveModel)"/> total enemies to kill
 	/// </summary>
 	OnEnemyCountUpdate,
 	/// <summary>
-	/// 1) int <see cref="HF.WaveSystem.HFWaveController.WaveIndex"/> current wave
-	/// 1) int <see cref="HF.WaveSystem.HFWaveReader.GetNumberOfWaves(HF.WaveSystem.HFWaveModel)"/> total waves
+	/// 1) int <see cref="HF.Refactoring.HFWaveController.WaveIndex"/> current wave
+	/// 1) int <see cref="HF.Refactoring.HFR.GetNumberOfWaves(HF.WaveSystem.HFWaveModel)"/> total waves
 	/// </summary>
 	OnWaveIndexUpdate,
 	OnWaveBeginned,

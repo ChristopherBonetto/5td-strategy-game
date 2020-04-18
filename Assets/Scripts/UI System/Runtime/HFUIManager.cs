@@ -128,9 +128,9 @@ namespace HF.Refactoring
                     ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
                     break;
                 case GameStates.InitializeLevel:
+                    ShowAndClearHistory(HFUIWindowID.HUD);
                     break;
                 case GameStates.PlayingLevel:
-                    ShowAndClearHistory(HFUIWindowID.HUD);
                     break;
                 case GameStates.EndLevel:
                     ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);

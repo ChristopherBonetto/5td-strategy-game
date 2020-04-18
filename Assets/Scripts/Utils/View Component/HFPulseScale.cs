@@ -6,8 +6,6 @@ using DG.Tweening;
 public class HFPulseScale : MonoBehaviour
 {
     [SerializeField]
-    bool m_startOnEnable;
-    [SerializeField]
     Transform m_targetTransform;
     [SerializeField]
     float m_amplitude;
@@ -16,10 +14,6 @@ public class HFPulseScale : MonoBehaviour
 
     float m_timeElapsed;
 
-    private void OnEnable()
-    {
-        m_timeElapsed = m_startOnEnable ? 0 : m_duration;
-    }
 
     public IEnumerator Pulse()
     {
