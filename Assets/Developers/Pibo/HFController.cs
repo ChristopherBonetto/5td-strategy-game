@@ -16,7 +16,8 @@ namespace HF
 		[SerializeField]
 		private HFUnit[] m_possessedUnitsOnStart = new HFUnit[0];
 
-		private List<HFUnit> m_possessedUnits = new List<HFUnit>();
+		private List<HFUnit> m_PossessedUnits = new List<HFUnit>();
+		public List<HFUnit> PossessedUnits => m_PossessedUnits;
 
 		public int Team = 0;
 
@@ -40,7 +41,7 @@ namespace HF
 
             if (Team == HFGameParameters.PlayerTeam)
 			{
-                HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
+				HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
 			}
 		}
 
@@ -71,8 +72,19 @@ namespace HF
 				if (m_possessedUnitsOnStart[i])
 				{
 					m_possessedUnitsOnStart[i].Possess(this);
-					m_possessedUnits.Add(m_possessedUnitsOnStart[i]);
+					m_PossessedUnits.Add(m_possessedUnitsOnStart[i]);
 				}
+			}
+
+			if (Team == HFGameParameters.PlayerTeam)
+			{
+				List<HFBaseStats> baseStats = new List<HFBaseStats>();
+
+				foreach (var unit in m_PossessedUnits)
+				{
+					baseStats.Add(unit.BaseStats);
+				}
+				HFEventManager.TriggerEvent<int, List<HFBaseStats>>(HFEventID.OnUnitsPossessed, Team, baseStats);
 			}
 		}
 
@@ -84,11 +96,11 @@ namespace HF
 		{
 			if (newState == GameStates.EndLevel)
 			{
-				for (int i = 0; i < m_possessedUnits.Count; i++)
+				for (int i = 0; i < m_PossessedUnits.Count; i++)
 				{
-					if (m_possessedUnits[i])
+					if (m_PossessedUnits[i])
 					{
-						m_possessedUnits[i].UnPossess();
+						m_PossessedUnits[i].UnPossess();
 					}
 				}
 			}
@@ -172,7 +184,7 @@ namespace HF
 			HFUnit newUnit = Instantiate(m_unitPrefab, spawnPoint.SpawnPosition, spawnPoint.SpawnRotation);
 			newUnit.Specialize(stats);
 			newUnit.Possess(this);
-			m_possessedUnits.Add(newUnit);
+			m_PossessedUnits.Add(newUnit);
 
 			return newUnit;
 		}
