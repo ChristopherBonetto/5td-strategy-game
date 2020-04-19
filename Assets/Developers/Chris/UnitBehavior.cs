@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class UnitBehavior : MonoBehaviour
+public class UnitBehavior : MonoBehaviour, ICanMove
 {
     private NavMeshAgent m_unitAgent;
     public NavMeshAgent UnitAgent
@@ -23,7 +23,11 @@ public class UnitBehavior : MonoBehaviour
 
     private void Awake()
     {
-        AssignAgentComponent();
+        TakeAgentComponent();
+    }
+    private void Update()
+    {
+        Debug.Log(IsMoving());
     }
 
     public void AssignTroop(TroopBehavior inTroop)
@@ -36,7 +40,8 @@ public class UnitBehavior : MonoBehaviour
         m_troopRef = null;
     }
 
-    public void AssignAgentComponent()
+
+    public void TakeAgentComponent()
     {
         UnitAgent = gameObject.GetComponent<NavMeshAgent>();
 
@@ -44,5 +49,34 @@ public class UnitBehavior : MonoBehaviour
         {
             UnitAgent = gameObject.AddComponent<NavMeshAgent>();
         }
+    }
+
+    public void MoveFromTo(Vector3 endPosition)
+    {
+        Stop(false);
+        UnitAgent.SetDestination(endPosition);
+    }
+
+    public void Stop(bool inBool)
+    {
+        if(UnitAgent.isStopped != inBool)
+        UnitAgent.isStopped = inBool;
+    }
+
+    public bool IsMoving()
+    {
+        if (!UnitAgent.hasPath && UnitAgent.velocity.sqrMagnitude < 0.1f || UnitAgent.isStopped)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void Clicked()
+    {
+
     }
 }

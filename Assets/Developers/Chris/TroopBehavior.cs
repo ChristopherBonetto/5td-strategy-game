@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine.AI;
 using Types;
 
-public class TroopBehavior : EntityBehavior, ICanMove
+public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 {
     public TroopBehavior(UnitsStatsSO inStat)
     {
@@ -13,19 +13,48 @@ public class TroopBehavior : EntityBehavior, ICanMove
     }
 
     public UnitsStatsSO m_unitStats;
-    private UnitBehavior[] m_troopUnits;
+    public UnitBehavior[] m_troopUnits;
 
+    private Vector3[] m_formationPosition = new Vector3[4];
 
-    private void Update()
+    public NavMeshAgent Agent;
+
+    private int Xsize;
+    private int Zsize;
+
+    private bool m_agentInMovement;
+    public bool AgentInMovement
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        get
         {
-            ResetStats();
+            return m_agentInMovement;
+        }
+        set
+        {
+            if(m_agentInMovement == true)
+            {
+                if(value == false)
+                {
+                    Stop(true);
+                }
+            }
+            m_agentInMovement = value;
         }
     }
 
-    
 
+    private void Awake()
+    {
+        TakeAgentComponent();
+    }
+
+    private void Update()
+    {
+        AgentInMovement = IsMoving();
+    }
+
+
+    
     public override void AssignStats(EntityStatsSO inStats)
     {
         if(inStats is UnitsStatsSO)
@@ -58,6 +87,7 @@ public class TroopBehavior : EntityBehavior, ICanMove
             }
             m_troopUnits[i] = AssignUnit(tempRef);
         }
+        CreateSquareFormation(1f);
     }
 
     public void ResetStats()
@@ -79,7 +109,6 @@ public class TroopBehavior : EntityBehavior, ICanMove
         inUnit.gameObject.SetActive(true);
         inUnit.AssignTroop(this);
         inUnit.gameObject.transform.parent = this.transform;
-        inUnit.gameObject.transform.position = gameObject.transform.position;
         inUnit.gameObject.layer = gameObject.layer;
         return inUnit;
     }
@@ -90,12 +119,110 @@ public class TroopBehavior : EntityBehavior, ICanMove
         inUnit.gameObject.SetActive(false);
     }
 
+    public void CreateSquareFormation(float inOffset = 1)
+    {
+        if(m_unitStats == null || m_troopUnits.Length == 0)
+        {
+            return;
+        }
+
+        Xsize = Mathf.RoundToInt(m_troopUnits[0].transform.localScale.x);
+        Zsize = Mathf.RoundToInt(m_troopUnits[0].transform.localScale.z);
+        m_formationPosition = new Vector3[4];
+
+        switch (m_troopUnits.Length)
+        {
+            case 1:
+                m_formationPosition[0] = new Vector3(transform.position.x, transform.position.y, inOffset + Zsize / 2);
+                break;
+
+            case 2:
+                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, transform.position.z);
+                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, transform.position.z);
+                break;
+
+            case 3:
+                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, inOffset + Zsize / 2);
+                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, inOffset + Zsize / 2);
+                m_formationPosition[2] = new Vector3(transform.position.x, transform.position.y, -inOffset - Zsize / 2);
+                break;
+
+            case 4:
+                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, inOffset + Zsize / 2);
+                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, inOffset + Zsize / 2);
+                m_formationPosition[2] = new Vector3(-inOffset - Xsize / 2, transform.position.y, -inOffset - Zsize / 2);
+                m_formationPosition[3] = new Vector3(inOffset + Xsize / 2, transform.position.y, -inOffset - Zsize / 2);
+                break;
+
+        }
+        AssignFormation(m_formationPosition);
+    }
+
+    public void CreateTriangleFormation(float inOffSet)
+    {
+
+    }
+
+    public void AssignFormation(Vector3[] inPos)
+    {
+        for(int i = 0; i < m_troopUnits.Length; i++)
+        {
+            m_troopUnits[i].transform.localPosition = inPos[i];
+        }
+    }
+
+
+
 
     public void MoveFromTo(Vector3 endPosition)
     {
-        foreach (UnitBehavior unit in m_troopUnits)
+        if (Agent.pathStatus == NavMeshPathStatus.PathInvalid)
         {
-            unit.UnitAgent.destination = endPosition;
+            Debug.Log("Invalid destination");
+            return;
+        }
+
+        Stop(false);
+        Agent.SetDestination(endPosition);
+        
+        for(int i = 0; i < m_troopUnits.Length; i++)
+        {
+            m_troopUnits[i].MoveFromTo(endPosition + m_formationPosition[i]);
+        }
+    }
+
+    public bool IsMoving()
+    {
+        if(!Agent.hasPath && Agent.velocity.sqrMagnitude < 0.1f || Agent.isStopped)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void Stop(bool inBool)
+    {
+        if(Agent.isStopped != inBool)
+        {
+            Agent.isStopped = inBool;
+
+            for (int i = 0; i < m_troopUnits.Length; i++)
+            {
+                m_troopUnits[i].UnitAgent.isStopped = inBool;
+            }
+        }
+    }
+
+    public void TakeAgentComponent()
+    {
+        Agent = gameObject.GetComponent<NavMeshAgent>();
+
+        if (Agent == null)
+        {
+            Agent = gameObject.AddComponent<NavMeshAgent>();
         }
     }
 
@@ -103,4 +230,6 @@ public class TroopBehavior : EntityBehavior, ICanMove
     {
         base.Clicked();
     }
+
+    
 }

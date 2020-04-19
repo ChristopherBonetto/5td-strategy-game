@@ -119,12 +119,13 @@ public class GameController : Singleton<GameController>
 
         if (!CheckResourcesAvailability(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost))
         {
+            Debug.Log("u need more resources");
             return;
         }
 
         DecreaseResources(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost);
 
-        CheckFreeSpace(inPosition, 10);
+        //CheckFreeSpace(inPosition, 1);
 
         GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Troop");
         troop.SetActive(true);
@@ -155,31 +156,26 @@ public class GameController : Singleton<GameController>
         return null;
     }
 
-    public void CheckFreeSpace(Vector3 inPos, float inRadius)
-    {
-        int layerToCheck = 9 << 10;
+    //public void CheckFreeSpace(Vector3 inPos, float inRadius)
+    //{
+    //    int layerToCheck = 9 << 10;
 
-        Collider[] collider = Physics.OverlapSphere(inPos, inRadius, layerToCheck);
+    //    Collider[] collider = Physics.OverlapSphere(inPos, inRadius, layerToCheck);
 
-        EntityBehavior entity = null;
+    //    EntityBehavior entity = null;
 
-        if(collider.Length == 0)
-        {
-
-        }
-
-        for(int i = 0; i < collider.Length; i++)
-        {
-            EntityBehavior tempEntity = collider[i].GetComponentInParent<EntityBehavior>();
+    //    for(int i = 0; i < collider.Length; i++)
+    //    {
+    //        EntityBehavior tempEntity = collider[i].GetComponentInParent<EntityBehavior>();
             
-            if(tempEntity != entity)
-            {
-                entity = tempEntity;
-                var command = new TeleportCommand(entity, new Vector3(10,0,10));
-                entity.ExecuteCommand(command);
-            }
-        }
-    }
+    //        if(tempEntity != entity)
+    //        {
+    //            entity = tempEntity;
+    //            var command = new TeleportCommand(entity new Vector3(10,0,10));
+    //            entity.ExecuteCommand(command);
+    //        }
+    //    }
+    //}
 
 
 
