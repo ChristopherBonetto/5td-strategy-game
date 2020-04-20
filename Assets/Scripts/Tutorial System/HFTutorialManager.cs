@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using HF.Refactoring;
+using HF;
 
 //-----------------------------------------------------------------------------
 // This class manage the tutorial pop-ups throw events. This class will be not 
@@ -24,24 +25,26 @@ public enum TutorialID
 
 public class HFTutorialManager : MonoBehaviour
 {
-    private List<HFTutorialPopUp> m_popups;
+    private List<HFTutorialPopUp> m_popups = new List<HFTutorialPopUp>();
 
     private const string m_debugColor = "#DA70D6";
 
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<TutorialID>(HFEventID.OnTutorialQuestCompleted, OnTutorialQuestCompleted);
+        HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
+        HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitUpgraded);
     }
 
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<TutorialID>(HFEventID.OnTutorialQuestCompleted, OnTutorialQuestCompleted);
+        HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
+        HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitUpgraded);
     }
 
     private void Start()
     {
-        m_popups = new List<HFTutorialPopUp>();
-
         LoadTutorialPopups();
 
         if (m_popups.Count > 0)
@@ -79,10 +82,27 @@ public class HFTutorialManager : MonoBehaviour
             {
                 // Triggered the win or wait the wave ends.
                 Debug.Log($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : End tutorial!");
+                gameObject.SetActive(false);
                 return;
             }
 
             m_popups[0].gameObject.SetActive(true);
+        }
+    }
+
+    private void OnUnitSelected(HFUnit unit, int team)
+    {
+        if (team == HFGameParameters.PlayerTeam)
+        {
+            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
+        }
+    }
+
+    private void OnUnitUpgraded(HFUnit unit, int team)
+    {
+        if (team == HFGameParameters.PlayerTeam)
+        {
+            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
         }
     }
 }

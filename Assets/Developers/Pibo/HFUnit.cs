@@ -761,6 +761,9 @@ namespace HF
 				m_navAgent.ResetPath();
 				m_navAgent.updatePosition = true;
 				m_navAgent.SetDestination(destination);
+
+				if (Team == HFGameParameters.PlayerTeam)
+					HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Unit);
 			}
 			else // Direct or Teleport
 			{
@@ -1017,6 +1020,7 @@ namespace HF
 				m_carriedTower = tower;
 				m_carriedTower.SetCarried(true);
 				m_carriedTower.transform.parent = m_transform;
+				HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Carry_Turret);
 			}
 
 			return bCanCarry;
@@ -1031,6 +1035,7 @@ namespace HF
 				m_carriedTower.transform.parent = null;
 				m_carriedTower.SetCarried(false);
 				m_carriedTower = null;
+				HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Reposition_Turret);
 			}
 
 			return bCanDrop;
