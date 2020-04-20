@@ -137,6 +137,8 @@ public class HFCameraController : MonoBehaviour
             {
                 m_actualMouseXValue -= (m_actualMouseXValue * m_angularFriction);
                 m_actualMouseYValue -= (m_actualMouseYValue * m_angularFriction);
+
+                HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Rotate_Camera);
             }
         }
 
@@ -179,6 +181,8 @@ public class HFCameraController : MonoBehaviour
             float clampOnX = Mathf.Clamp(m_target.position.x, minBoundOnX, maxBoundOnX);
             float clampOnZ = Mathf.Clamp(m_target.position.z, minBoundOnZ, maxBoundOnZ);
             m_target.position = new Vector3(clampOnX, m_target.position.y, clampOnZ);
+
+            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Camera);
         }
     }
 }
