@@ -9,72 +9,50 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 {
     public TroopBehavior(UnitsStatsSO inStat)
     {
-        m_unitStats = inStat;
+        m_troopStats = inStat;
     }
 
-    public UnitsStatsSO m_unitStats;
-    public UnitBehavior[] m_troopUnits;
+    public UnitsStatsSO m_troopStats;
+    public override EntityStatsSO EntityStats
+    {
+        get
+        {
+            return m_troopStats;
+        }
+        set
+        {
+            m_troopStats = (UnitsStatsSO)value;
+        }
+    }
+
+
+
+    public UnitBehavior[] m_units;
 
     private Vector3[] m_formationPosition = new Vector3[4];
-
-    public NavMeshAgent Agent;
 
     private int Xsize;
     private int Zsize;
 
-    private bool m_agentInMovement;
-    public bool AgentInMovement
-    {
-        get
-        {
-            return m_agentInMovement;
-        }
-        set
-        {
-            if(m_agentInMovement == true)
-            {
-                if(value == false)
-                {
-                    Stop(true);
-                }
-            }
-            m_agentInMovement = value;
-        }
-    }
-
-
-    private void Awake()
-    {
-        TakeAgentComponent();
-    }
-
-    private void Update()
-    {
-        AgentInMovement = IsMoving();
-    }
-
+    [SerializeField] private Transform m_destinationPoint;
 
     
+
+    #region Create new troop with unit
+
     public override void AssignStats(EntityStatsSO inStats)
     {
-        if(inStats is UnitsStatsSO)
-        {
-            base.AssignStats(inStats);
-            m_unitStats = (UnitsStatsSO)inStats;
-            CreateUnit(m_unitStats.UnitType, m_unitStats.TroopsQuantity);
-        }
-        else
-        {
-            Debug.LogWarning("This unit can take stats from: " + inStats.Name);
-        }
+        base.AssignStats(inStats);
+        CreateUnit(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
     }
+
 
 
     public void CreateUnit(UnitType inType, int inValue)
     {
-        m_troopUnits = new UnitBehavior[inValue];
+        m_units = new UnitBehavior[inValue];
 
-        for (int i = 0; i < m_troopUnits.Length; i++)
+        for (int i = 0; i < m_units.Length; i++)
         {
             GameObject tempUnit = ObjectPooler.SharedInstance.GetUnityObject(inType);
 
@@ -85,20 +63,20 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                 Debug.Log(inType + "didn't have UnitBehavior script, pls add next time");
                 return;
             }
-            m_troopUnits[i] = AssignUnit(tempRef);
+            m_units[i] = AssignUnit(tempRef);
         }
         CreateSquareFormation(1f);
     }
 
     public void ResetStats()
     {
-        foreach(UnitBehavior unit in m_troopUnits)
+        foreach(UnitBehavior unit in m_units)
         {
             DeassignUnit(unit);
         }
-        m_troopUnits = null;
+        m_units = null;
 
-        m_unitStats = null;
+        m_troopStats = null;
 
         gameObject.SetActive(false);
         //Return to the pool
@@ -107,30 +85,35 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     public UnitBehavior AssignUnit(UnitBehavior inUnit)
     {
         inUnit.gameObject.SetActive(true);
-        inUnit.AssignTroop(this);
         inUnit.gameObject.transform.parent = this.transform;
         inUnit.gameObject.layer = gameObject.layer;
+        inUnit.JoinTroop(this);
         return inUnit;
     }
 
     public void DeassignUnit(UnitBehavior inUnit)
     {
         inUnit.transform.parent = null;
+        inUnit.LeaveTroop();
         inUnit.gameObject.SetActive(false);
     }
 
+    #endregion
+
+    #region Troop Formation
+
     public void CreateSquareFormation(float inOffset = 1)
     {
-        if(m_unitStats == null || m_troopUnits.Length == 0)
+        if(m_troopStats == null || m_units.Length == 0)
         {
             return;
         }
 
-        Xsize = Mathf.RoundToInt(m_troopUnits[0].transform.localScale.x);
-        Zsize = Mathf.RoundToInt(m_troopUnits[0].transform.localScale.z);
+        Xsize = Mathf.RoundToInt(m_units[0].transform.localScale.x);
+        Zsize = Mathf.RoundToInt(m_units[0].transform.localScale.z);
         m_formationPosition = new Vector3[4];
 
-        switch (m_troopUnits.Length)
+        switch (m_units.Length)
         {
             case 1:
                 m_formationPosition[0] = new Vector3(transform.position.x, transform.position.y, inOffset + Zsize / 2);
@@ -165,71 +148,61 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public void AssignFormation(Vector3[] inPos)
     {
-        for(int i = 0; i < m_troopUnits.Length; i++)
+        for(int i = 0; i < m_units.Length; i++)
         {
-            m_troopUnits[i].transform.localPosition = inPos[i];
+            m_units[i].transform.localPosition = inPos[i];
         }
     }
 
+    #endregion
 
-
+    #region Move inteface
 
     public void MoveFromTo(Vector3 endPosition)
     {
-        if (Agent.pathStatus == NavMeshPathStatus.PathInvalid)
-        {
-            Debug.Log("Invalid destination");
-            return;
-        }
+        m_destinationPoint.position = endPosition;
 
-        Stop(false);
-        Agent.SetDestination(endPosition);
-        
-        for(int i = 0; i < m_troopUnits.Length; i++)
+        for(int i = 0; i < m_units.Length; i++)
         {
-            m_troopUnits[i].MoveFromTo(endPosition + m_formationPosition[i]);
+            m_units[i].MoveFromTo(m_destinationPoint.position + m_formationPosition[i]);
         }
     }
 
-    public bool IsMoving()
+    #endregion
+
+    #region Click interface
+
+    public override void Select()
     {
-        if(!Agent.hasPath && Agent.velocity.sqrMagnitude < 0.1f || Agent.isStopped)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        base.Select();
     }
 
-    public void Stop(bool inBool)
+    public override void Interact(EntityBehavior inEntity)
     {
-        if(Agent.isStopped != inBool)
-        {
-            Agent.isStopped = inBool;
+        base.Interact(inEntity);
 
-            for (int i = 0; i < m_troopUnits.Length; i++)
+        if(inEntity.m_entityPlayerType != this.m_entityPlayerType)
+        {
+            if(inEntity is TroopBehavior)
             {
-                m_troopUnits[i].UnitAgent.isStopped = inBool;
+                TroopBehavior tempTroop = (TroopBehavior)inEntity;
+
+                if (m_troopStats.CanAttack && tempTroop.m_troopStats.CanTakeDamage)
+                {
+                    for (int i = 0; i < m_units.Length; i++)
+                    {
+                        m_units[i].UnitFocusObj = tempTroop.m_units[i].gameObject;
+                        m_units[i].UnitAgent.SetDestination(m_units[i].UnitFocusObj.transform.position);
+                        Debug.Log(m_units[i] + " go to attack " + tempTroop.m_units[i]);
+                    }
+                }
+                else
+                {
+                    Debug.Log("unit can't attack or other troop can't take damage : PLS CHECK ON SCRIPTABLE");
+                }
             }
         }
     }
 
-    public void TakeAgentComponent()
-    {
-        Agent = gameObject.GetComponent<NavMeshAgent>();
-
-        if (Agent == null)
-        {
-            Agent = gameObject.AddComponent<NavMeshAgent>();
-        }
-    }
-
-    public override void Clicked()
-    {
-        base.Clicked();
-    }
-
-    
+    #endregion
 }

@@ -17,32 +17,34 @@ public abstract class Command
 
 public class TeleportCommand : Command
 {
-    private Vector3 m_direction;
+    private Vector3 m_destination;
+    private Vector3 m_originalPosition;
 
-    public TeleportCommand(EntityBehavior inEntity, Vector3 inDirection) : base(inEntity)
+    public TeleportCommand(EntityBehavior inEntity, Vector3 inPos) : base(inEntity)
     {
-        m_direction = inDirection;
+        m_destination = inPos;
     }
 
     public override void Execute()
     {
-        m_entity.transform.position += m_direction * 0.1f;
+        m_originalPosition = m_entity.transform.position;
+        m_entity.transform.position = m_destination;
     }
 
     public override void Undo()
     {
-        m_entity.transform.position += m_direction * 0.1f;
+        m_entity.transform.position = m_originalPosition;
     }
 }
 
-public class MoveToAgent : Command
+public class MoveWithAgent : Command
 {
     private Vector3 m_destination;
     private Vector3 m_originalPosition;
 
     ICanMove canMove;
 
-    public MoveToAgent(EntityBehavior inEntity, Vector3 inDestination) : base(inEntity)
+    public MoveWithAgent(EntityBehavior inEntity, Vector3 inDestination) : base(inEntity)
     {
         m_destination = inDestination;
         canMove = inEntity.GetComponent<ICanMove>() as ICanMove;
@@ -62,5 +64,31 @@ public class MoveToAgent : Command
     {
         if(canMove != null)
         canMove.MoveFromTo(m_originalPosition);
+    }
+}
+
+public class GoToInteract : Command
+{
+    private EntityBehavior FocusObj;
+    private EntityBehavior PreviousFocusObj;
+
+    public GoToInteract(EntityBehavior inEntity, EntityBehavior inFocus) : base(inEntity)
+    {
+        FocusObj = inFocus;
+    }
+
+    public override void Execute()
+    {
+        if(m_entity.FocusEntity != null)
+        {
+            PreviousFocusObj = m_entity.FocusEntity;
+        }
+
+        m_entity.Interact(FocusObj);
+    }
+
+    public override void Undo()
+    {
+        m_entity.Interact(PreviousFocusObj);
     }
 }

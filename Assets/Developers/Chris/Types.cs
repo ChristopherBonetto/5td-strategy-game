@@ -53,4 +53,12 @@ namespace Types
         AI
     }
 
+    public enum ActionTypes
+    {
+        Idle,
+        Move,
+        Attack,
+        Lift,
+        Collect
+    }
 }

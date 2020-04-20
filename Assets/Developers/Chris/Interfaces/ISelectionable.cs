@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public interface ISelectionable
 {
-    void Clicked();
+    void Select();
+    void Interact(EntityBehavior inEntity);
 }
 

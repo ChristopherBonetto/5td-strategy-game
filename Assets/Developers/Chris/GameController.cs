@@ -73,6 +73,8 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         Initialize();
+
+        
     }
 
     private void Update()
@@ -83,7 +85,15 @@ public class GameController : Singleton<GameController>
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            CreateNewTroop(UnitType.PEASANT, PlayerType.AI, new Vector3(0, 0.5f, 0));
+            CreateEnemies();
+        }
+    }
+
+    public void CreateEnemies()
+    {
+        for(int i = 0; i < m_enemySpawnPoints.Length; i++)
+        {
+            CreateNewTroop(UnitType.DEFENDER, PlayerType.AI, m_enemySpawnPoints[i].position);
         }
     }
 
@@ -117,17 +127,20 @@ public class GameController : Singleton<GameController>
             return;
         }
 
-        if (!CheckResourcesAvailability(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost))
+        if(inPlayerType == PlayerType.Player)
         {
-            Debug.Log("u need more resources");
-            return;
+            if (!CheckResourcesAvailability(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost))
+            {
+                Debug.Log("u need more resources");
+                return;
+            }
+            DecreaseResources(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost);
         }
 
-        DecreaseResources(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost);
-
         //CheckFreeSpace(inPosition, 1);
-
+        
         GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Troop");
+        troop.transform.position = inPosition;
         troop.SetActive(true);
 
         if (troop == null)
@@ -145,6 +158,7 @@ public class GameController : Singleton<GameController>
 
         tempRef.AssignPlayer(inPlayerType);
         tempRef.AssignStats(Collection.UnitsDictionary[inEntityType].UnitStatsCopy);
+
     }
 
     public UnitInfo? SearchUnit(UnitType inType)
@@ -154,6 +168,7 @@ public class GameController : Singleton<GameController>
             return Collection.UnitsDictionary[inType];
         }
         return null;
+
     }
 
     //public void CheckFreeSpace(Vector3 inPos, float inRadius)
@@ -164,17 +179,31 @@ public class GameController : Singleton<GameController>
 
     //    EntityBehavior entity = null;
 
-    //    for(int i = 0; i < collider.Length; i++)
+    //    for (int i = 0; i < collider.Length; i++)
     //    {
     //        EntityBehavior tempEntity = collider[i].GetComponentInParent<EntityBehavior>();
-            
-    //        if(tempEntity != entity)
+
+    //        if (tempEntity != entity)
     //        {
     //            entity = tempEntity;
-    //            var command = new TeleportCommand(entity new Vector3(10,0,10));
+    //            var command = new TeleportCommand(entity, new Vector3(10,0,10));
     //            entity.ExecuteCommand(command);
     //        }
     //    }
+    //}
+
+    //protected virtual Vector3 RandomNavmeshLocation(float radius)
+    //{
+    //    Vector3 randomDirection = Random.insideUnitSphere * radius;
+    //    randomDirection += transform.position;
+    //    NavMeshHit hit;
+    //    Vector3 finalPosition = Vector3.zero;
+    //    if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1))
+    //    {
+    //        finalPosition = hit.position;
+    //    }
+
+    //    return finalPosition;
     //}
 
 

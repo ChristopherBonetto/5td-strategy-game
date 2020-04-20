@@ -77,11 +77,11 @@ public class InputReaderManager : Singleton<InputReaderManager>
     private void SelectDeselectOneObject()
     {
         ClearSelection();
-        CurrentEntity = SelectEntity();
+        ClickEntity();
     }
 
 
-    private EntityBehavior SelectEntity()
+    private void ClickEntity()
     {
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
@@ -92,19 +92,9 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(canBeSelected != null)
             {
-                canBeSelected.Clicked();
-
-                if (HitInfo.transform.gameObject.layer == GameController.Instance.m_playerLayer)
-                {
-                    EntityBehavior entity = HitInfo.transform.GetComponentInParent<EntityBehavior>();
-                    if (entity != null)
-                    {
-                        return entity;
-                    }
-                }
+                canBeSelected.Select();
             }
         }
-        return null;
     }
 
 
@@ -128,29 +118,22 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
+            EntityBehavior entity = HitInfo.transform.GetComponentInParent<EntityBehavior>();
             LayerMask tempLayer = HitInfo.transform.gameObject.layer;
 
-            if (tempLayer == LayerMask.NameToLayer("Terrain"))
+            if(entity != null)
             {
-                Debug.Log("Move");
-                var command = new MoveToAgent(CurrentEntity, HitInfo.point);
+                var command = new GoToInteract(CurrentEntity, entity);
                 CurrentEntity.ExecuteCommand(command);
             }
-
-            else if (tempLayer == GameController.Instance.m_aiLayer)
+            else
             {
-                IDamageable CanBeAttacked = HitInfo.collider.GetComponent<IDamageable>();
-
-                if (HitInfo.transform.gameObject.GetComponent<EntityBehavior>() != null && CanBeAttacked != null)
+                if (tempLayer == LayerMask.NameToLayer("Terrain"))
                 {
-                    Debug.Log("ATTACK");
-                    //GiveCommand(Actions.Attack, HitInfo2.transform.gameObject, HitInfo2.transform.position);
+                    Debug.Log("Move");
+                    var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
+                    CurrentEntity.ExecuteCommand(command);
                 }
-            }
-
-            else if (tempLayer == GameController.Instance.m_playerLayer)
-            {
-                //ha lo stesso layer. quindi posso interagire;
             }
         }
     }
