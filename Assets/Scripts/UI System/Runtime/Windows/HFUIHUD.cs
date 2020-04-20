@@ -9,6 +9,10 @@ namespace HF.Refactoring
     {
         public override HFUIWindowID ID => HFUIWindowID.HUD;
 
+        [Header("Tutorial Field")]
+
+        public HFTutorialPopUp[] Popups;
+
         [Header("Generic buttons")]
 
         /// <summary>

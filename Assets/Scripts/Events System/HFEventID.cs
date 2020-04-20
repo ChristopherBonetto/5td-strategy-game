@@ -82,5 +82,9 @@
     /// <summary>
     /// HFUnit	unit
     /// </summary>
-    OnFinishedLoadEvents
+    OnFinishedLoadEvents,
+
+	// UI
+
+	OnTutorialQuestCompleted,
 }
