@@ -7,7 +7,7 @@ namespace HF.Refactoring
 {
     public class HFUIWarRoom : HFUIWindow
     {
-        public override HFUIWindowID ID => HFUIWindowID.WR_LEVEL_SELCTION;
+        public override HFUIWindowID ID => HFUIWindowID.WAR_ROOM;
 
         [SerializeField]
         private HFLoadLevelB[] m_loadLevelButtons;

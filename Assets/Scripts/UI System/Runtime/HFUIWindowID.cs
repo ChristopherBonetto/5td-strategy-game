@@ -7,9 +7,7 @@
     public enum HFUIWindowID
     {
         MAIN_MENU,
-        WR_LEVEL_SELCTION,      // War room level selection.
-        WR_CREDITS,             // War room credits.
-        WR_SETTINGS,            // War room setting.
+        WAR_ROOM,
         HUD,
         PAUSE_MENU,
         SETTINGS,               // Setting in game.

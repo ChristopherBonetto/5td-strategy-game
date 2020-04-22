@@ -98,7 +98,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -170,18 +170,7 @@ MonoBehaviour:
     m_InheritPosition: 0
     m_OnCameraLive:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 5305570960370622315}
-          m_MethodName: ShowWindow
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 1
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
       m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
   m_LegacyBlendHint: 0
@@ -245,10 +234,6 @@ MonoBehaviour:
   - {fileID: 343491475}
   - {fileID: 877096067}
   m_Instructions:
-  - m_FullHash: 1997218476
-    m_VirtualCamera: {fileID: 0}
-    m_ActivateAfter: 0
-    m_MinDuration: 0
   - m_FullHash: 1514803859
     m_VirtualCamera: {fileID: 343491475}
     m_ActivateAfter: 0
@@ -337,18 +322,7 @@ MonoBehaviour:
     m_InheritPosition: 0
     m_OnCameraLive:
       m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 5305570960370622315}
-          m_MethodName: ShowWindow
-          m_Mode: 3
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 2
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
+        m_Calls: []
       m_TypeName: Cinemachine.CinemachineBrain+VcamActivatedEvent, Cinemachine, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
   m_LegacyBlendHint: 0
@@ -1053,18 +1027,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e5b70b6fe6c5b01458df199b2d414bdf, type: 3}
---- !u!114 &5305570960370622315 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2644101585538316627, guid: e5b70b6fe6c5b01458df199b2d414bdf,
-    type: 3}
-  m_PrefabInstance: {fileID: 5305570960370622314}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7622d4a53949cb24e8dd4cc1bf2eb975, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &7858940571372103224 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 2644101585538316626, guid: e5b70b6fe6c5b01458df199b2d414bdf,

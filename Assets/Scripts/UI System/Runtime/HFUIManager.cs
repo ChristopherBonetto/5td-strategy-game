@@ -125,7 +125,7 @@ namespace HF.Refactoring
                     break;
                 case GameStates.WarRoom:
                     WorldCanvas.worldCamera = Camera.main;
-                    ShowAndClearHistory(HFUIWindowID.WR_LEVEL_SELCTION);
+                    ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
                     break;
                 case GameStates.InitializeLevel:
                     ShowAndClearHistory(HFUIWindowID.HUD);

@@ -7,9 +7,9 @@ using HF;
 //-----------------------------------------------------------------------------
 // This class manage the tutorial pop-ups throw events. This class will be not 
 // a singleton because it doesn't need to be.
-// We track the right tutorial to perform storing an enum value that works as
-// an ID. If the event triggered is equal to this ID than the tutorial is 
-// completed and go to the next one.
+// We track the right tutorial to perform storing a Queue of "TutorialPopUp",
+// If the ID from the first of the queue correspond to the one triggered by an 
+// event, then go to next one if there are any.
 //-----------------------------------------------------------------------------
 
 public enum TutorialID
@@ -25,9 +25,12 @@ public enum TutorialID
 
 public class HFTutorialManager : MonoBehaviour
 {
-    private List<HFTutorialPopUp> m_popups = new List<HFTutorialPopUp>();
+    // Queue of tutorials to show 
+    private Queue<HFTutorialPopUp> m_popups = new Queue<HFTutorialPopUp>();
 
+    // Debug helper
     private const string m_debugColor = "#DA70D6";
+
 
     private void OnEnable()
     {
@@ -49,46 +52,66 @@ public class HFTutorialManager : MonoBehaviour
 
         if (m_popups.Count > 0)
         {
-            m_popups[0].gameObject.SetActive(true);
+            m_popups.Peek().gameObject.SetActive(true);
         }
     }
 
+    /// <summary>
+    /// Laod every popup from the HUD window
+    /// <see cref="HFUIHUD"/>
+    /// </summary>
     private void LoadTutorialPopups()
     {
         HFUIHUD hud = HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD);
 
         foreach (HFTutorialPopUp popUp in hud.Popups)
         {
-            m_popups.Add(popUp);
+            m_popups.Enqueue(popUp);
         }
     }
 
+
+    // Event that respond to the triggers,
+    // If the parameter ID correspond to the pop-up
+    // then go to the next one.
     private void OnTutorialQuestCompleted(TutorialID id)
     {
+        // No pop-up available.
         if (m_popups.Count == 0)
         {
             // Triggered the win or wait the wave ends.
             return;
         }
 
-        TutorialID tempID = m_popups[0].ID;
 
+        // Peek the ID from the queue 
+        TutorialID tempID = m_popups.Peek().ID;
+
+
+        // If the IDs match
         if (id == tempID)
         {
-            m_popups[0].gameObject.SetActive(false);    // maybe start an animation
-            m_popups.RemoveAt(0);
+            // Remove from the queue
+            m_popups.Dequeue().gameObject.SetActive(false); 
 
+
+            // Check if the collection is empty
             if (m_popups.Count == 0)
             {
-                // Triggered the win or wait the wave ends.
                 Debug.Log($"<color={m_debugColor}><b>[{this.GetType().Name}]</b></color> : End tutorial!");
+
+                // TTurn off this gameObejct, so it doesn't listen to event anymore.
                 gameObject.SetActive(false);
                 return;
             }
 
-            m_popups[0].gameObject.SetActive(true);
+
+            // Turn on the next one
+            m_popups.Peek().gameObject.SetActive(true);
         }
     }
+
+    #region Events
 
     private void OnUnitSelected(HFUnit unit, int team)
     {
@@ -105,4 +128,6 @@ public class HFTutorialManager : MonoBehaviour
             HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
         }
     }
+
+    #endregion
 }

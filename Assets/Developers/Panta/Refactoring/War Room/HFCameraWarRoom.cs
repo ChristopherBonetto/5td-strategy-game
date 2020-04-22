@@ -31,10 +31,5 @@ namespace HF.Refactoring
                 m_animatorController.SetInteger("Position", m_position);
             }
         }
-
-        public void ShowWindow(int id)
-        {
-            HFUIManager.Instance.ShowAndClearHistory((HFUIWindowID)id);
-        }
     }
 }
