@@ -25,9 +25,19 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         }
     }
 
+    public override int CurrentHp
+    {
+        get
+        {
+            return TakeTroopHealth();
+        }
+        set
+        {
+            base.CurrentHp = value;
+        }
+    }
 
-
-    public UnitBehavior[] m_units;
+    public List<UnitBehavior> m_units = new List<UnitBehavior>();
 
     private Vector3[] m_formationPosition = new Vector3[4];
 
@@ -36,7 +46,18 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     [SerializeField] private Transform m_destinationPoint;
 
-    
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            m_units[0].TakeDamage(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            m_units[1].TakeDamage(0);
+        }
+    }
 
     #region Create new troop with unit
 
@@ -46,13 +67,11 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         CreateUnit(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
     }
 
-
-
     public void CreateUnit(UnitType inType, int inValue)
     {
-        m_units = new UnitBehavior[inValue];
+        m_units = new List<UnitBehavior>(inValue);
 
-        for (int i = 0; i < m_units.Length; i++)
+        for (int i = 0; i < inValue; i++)
         {
             GameObject tempUnit = ObjectPooler.SharedInstance.GetUnityObject(inType);
 
@@ -63,10 +82,11 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                 Debug.Log(inType + "didn't have UnitBehavior script, pls add next time");
                 return;
             }
-            m_units[i] = AssignUnit(tempRef);
+            m_units.Add(AssignUnit(tempRef));
         }
         CreateSquareFormation(1f);
     }
+
 
     public void ResetStats()
     {
@@ -84,18 +104,17 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public UnitBehavior AssignUnit(UnitBehavior inUnit)
     {
-        inUnit.gameObject.SetActive(true);
-        inUnit.gameObject.transform.parent = this.transform;
-        inUnit.gameObject.layer = gameObject.layer;
         inUnit.JoinTroop(this);
         return inUnit;
     }
 
     public void DeassignUnit(UnitBehavior inUnit)
     {
-        inUnit.transform.parent = null;
+        if (!m_units.Contains(inUnit))
+        {
+            return;
+        }
         inUnit.LeaveTroop();
-        inUnit.gameObject.SetActive(false);
     }
 
     #endregion
@@ -104,7 +123,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public void CreateSquareFormation(float inOffset = 1)
     {
-        if(m_troopStats == null || m_units.Length == 0)
+        if(m_troopStats == null || m_units.Count == 0)
         {
             return;
         }
@@ -113,7 +132,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         Zsize = Mathf.RoundToInt(m_units[0].transform.localScale.z);
         m_formationPosition = new Vector3[4];
 
-        switch (m_units.Length)
+        switch (m_units.Count)
         {
             case 1:
                 m_formationPosition[0] = new Vector3(transform.position.x, transform.position.y, inOffset + Zsize / 2);
@@ -148,7 +167,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public void AssignFormation(Vector3[] inPos)
     {
-        for(int i = 0; i < m_units.Length; i++)
+        for(int i = 0; i < m_units.Count; i++)
         {
             m_units[i].transform.localPosition = inPos[i];
         }
@@ -162,7 +181,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         m_destinationPoint.position = endPosition;
 
-        for(int i = 0; i < m_units.Length; i++)
+        for(int i = 0; i < m_units.Count; i++)
         {
             m_units[i].MoveFromTo(m_destinationPoint.position + m_formationPosition[i]);
         }
@@ -189,7 +208,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
                 if (m_troopStats.CanAttack && tempTroop.m_troopStats.CanTakeDamage)
                 {
-                    for (int i = 0; i < m_units.Length; i++)
+                    for (int i = 0; i < m_units.Count; i++)
                     {
                         m_units[i].UnitFocusObj = tempTroop.m_units[i].gameObject;
                         m_units[i].UnitAgent.SetDestination(m_units[i].UnitFocusObj.transform.position);
@@ -202,6 +221,53 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                 }
             }
         }
+    }
+
+    #endregion
+
+    #region Troop health
+
+    public int TakeTroopHealth()
+    {
+        int health = 0;
+
+        if(m_units.Count == 0)
+        {
+            Debug.Log("This troop don't have units");
+            return health;
+        }
+
+        for(int i = 0; i < m_units.Count; i++)
+        {
+            health += m_units[i].CurrentUnitHp;
+        }
+
+        return health;
+    }
+
+    public override bool TakeDamage(int Damage = 0)
+    {
+        int troopCounter = 0;
+
+        foreach(UnitBehavior unit in m_units)
+        {
+            if (!unit.gameObject.active)
+            {
+                troopCounter++;
+            }
+        }
+
+        if(troopCounter == m_units.Count)
+        {
+            Death();
+            return true;
+        }
+        return false;
+    }
+
+    public override void Death()
+    {
+        base.Death();
     }
 
     #endregion

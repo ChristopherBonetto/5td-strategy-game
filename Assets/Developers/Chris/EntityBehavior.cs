@@ -4,7 +4,7 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 
-public class EntityBehavior : MonoBehaviour, ITakeCommand
+public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
 {
     private EntityStatsSO m_entityStats;
     public virtual EntityStatsSO EntityStats
@@ -40,7 +40,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand
     }
 
     protected int m_currentHp;
-    public int CurrentHp
+    public virtual int CurrentHp
     {
         get
         {
@@ -52,12 +52,17 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand
         }
     }
 
+
     public virtual void Start()
     {
         m_commands = new List<Command>();
     }
 
-    
+    //Maybe a new command.
+    public virtual void RefreshHp()
+    {
+        CurrentHp = EntityStats.MaxHp;
+    }
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {
@@ -94,6 +99,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand
         }
     }
 
+    #region Command
+
     //MAYBE INTERFACE.
     public virtual void ExecuteCommand(Command inCommand)
     {
@@ -119,6 +126,10 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand
         m_currentCommandIndex++;
     }
 
+    #endregion
+
+    #region Click Interface
+
     public virtual void Select()
     {
         Debug.Log("selected " + m_entityPlayerType + " " + gameObject.name);
@@ -138,4 +149,39 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand
         FocusEntity = inEntity;
         Debug.Log(gameObject.name + " want to interact with " + FocusEntity.name);
     }
+
+    #endregion
+
+    #region Take Damage Inteface
+
+    public virtual bool TakeDamage(int Damage)
+    {
+        if(EntityStats.CanTakeDamage)
+        {
+            Damage = Mathf.Clamp(Damage, 1, EntityStats.MaxHp + EntityStats.Armor);
+
+            if (CurrentHp <= Damage)
+            {
+                Death();
+                return true;
+            }
+            else
+            {
+                CurrentHp -= Damage;
+                if (InputReaderManager.Instance.CurrentEntity == this)
+                {
+                    InputReaderManager.Instance.CurrentEntity = null;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public virtual void Death()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    #endregion
 }

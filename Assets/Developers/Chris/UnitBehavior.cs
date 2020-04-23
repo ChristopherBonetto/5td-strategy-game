@@ -23,6 +23,7 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
     public TroopBehavior TroopRef { get => m_troopRef; }
 
     private UnitsStatsSO m_unitStats;
+    public UnitsStatsSO UnitStats { get => m_unitStats; }
 
     public int m_currentUnitHp;
     public int CurrentUnitHp { get => m_currentUnitHp; }
@@ -100,38 +101,6 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
         m_currentUnitHp = m_unitStats.MaxHp;
     }
 
-    //public virtual bool TakeDamage(int Damage)
-    //{
-    //    Damage = Mathf.Clamp(Damage, 0, UnitStatisticsSO.HealthMax + UnitStatisticsSO.Defence);
-
-    //    if (m_UnitCurrentHp <= Damage)
-    //    {
-    //        m_UnitCurrentHp -= Damage;
-    //        UIManager.Instance.DeactivateAllPanels();
-    //        Death();
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        m_UnitCurrentHp -= Damage;
-    //        if (gameObject == MouseSelectionManager.Instance.CurrentSelectedObject)
-    //        {
-    //            ShowInfoPanels();
-    //        }
-    //        return false;
-    //    }
-    //}
-
-    //public virtual void Death()
-    //{
-    //    if (gameObject == MouseSelectionManager.Instance.CurrentSelectedObject)
-    //    {
-    //        MouseSelectionManager.Instance.ClearSelection();
-    //    }
-    //    CivilizationScriptBehaviour.Instance.AddRemoveCivilizationValue(-UnitStatisticsSO.PopolationsValue);
-    //    UIManager.Instance.RefreshPopulation();
-    //    Destroy(this.gameObject);
-    //}
 
     public virtual bool Timer(float destinationTime)
     {
@@ -148,19 +117,16 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
         }
     }
 
-    public bool TakeDamage(int Damage)
-    {
-        return true;
-    }
-
-    public void Death()
-    {
-    }
+    
 
     #region Join Leave troop
 
     public void JoinTroop(TroopBehavior inTroop)
     {
+        gameObject.SetActive(true);
+        gameObject.transform.parent = inTroop.transform;
+        gameObject.layer = inTroop.gameObject.layer;
+
         m_troopRef = inTroop;
         m_unitStats = inTroop.m_troopStats;
 
@@ -170,8 +136,13 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
 
     public void LeaveTroop()
     {
+        TroopRef.m_units.Remove(this);
+
+        transform.parent = null;
+
         m_unitStats = null;
         m_troopRef = null;
+        gameObject.SetActive(false);
     }
 
     #endregion
@@ -226,4 +197,33 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
     }
 
     #endregion
+
+    public bool TakeDamage(int Damage)
+    {
+        if (m_unitStats.CanTakeDamage)
+        {
+            Damage = Mathf.Clamp(Damage, 1, m_unitStats.MaxHp + m_unitStats.Armor);
+
+            if (CurrentUnitHp <= Damage)
+            {
+                Death();
+                return true;
+            }
+            else
+            {
+                m_currentUnitHp -= Damage;
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public void Death()
+    {
+        if(TroopRef.m_entityPlayerType == PlayerType.Player)
+        {
+            gameObject.SetActive(false);
+            TroopRef.TakeDamage();
+        }
+    }
 }
