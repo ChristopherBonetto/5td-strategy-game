@@ -18,7 +18,7 @@ namespace HF.Refactoring
         /// <summary>
         /// "Call next wave" button.
         /// </summary>
-        public Button ButtonCallNextWave;
+        public HFButton ButtonCallNextWave;
 
         private void OnEnable()
         {
@@ -32,7 +32,6 @@ namespace HF.Refactoring
         {
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnNewWaveBegin);
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
-
         }
 
         #region Events
@@ -52,11 +51,6 @@ namespace HF.Refactoring
         }
 
         #endregion
-
-        public void PressNewWave()
-        {
-            HFEventManager.TriggerEvent(HFEventID.OnWaveBeginned);
-        }
 
         public void ReturnToLevelSelection()
         {

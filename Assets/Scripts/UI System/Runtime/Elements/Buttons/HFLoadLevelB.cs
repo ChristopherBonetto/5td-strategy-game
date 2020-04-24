@@ -23,7 +23,7 @@ namespace HF.Refactoring
         /// </summary>
         public void LoadLevel()
         {
-            if (m_isListeningInput)
+            if (m_isMatchingWindowID)
             {
                 HFScenesManager.Instance.CurrentLevelSelected = Level;
 

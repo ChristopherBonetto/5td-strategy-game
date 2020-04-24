@@ -7,7 +7,7 @@ public class HFQuitB : HFButton
 {
     public void QuitApplication()
     {
-        if (m_isListeningInput)
+        if (m_isMatchingWindowID)
         {
             Application.Quit();
         }

@@ -8,7 +8,7 @@ namespace HF.Refactoring
     {
         public void Undo()
         {
-            if (m_isListeningInput)
+            if (m_isMatchingWindowID)
             {
                 HFUIManager.Instance.Undo();
             }

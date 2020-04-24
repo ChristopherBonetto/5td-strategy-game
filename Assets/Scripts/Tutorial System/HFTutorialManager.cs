@@ -21,6 +21,8 @@ public enum TutorialID
     Carry_Turret,
     Reposition_Turret,
     Upgrade_Unit,
+    Call_wave,
+    None,
 }
 
 public class HFTutorialManager : MonoBehaviour
@@ -58,7 +60,7 @@ public class HFTutorialManager : MonoBehaviour
 
         if (m_popups.Count > 0)
         {
-            m_popups.Peek().gameObject.SetActive(true);
+            PeekAndEnableOn();
         }
     }
 
@@ -113,8 +115,20 @@ public class HFTutorialManager : MonoBehaviour
 
 
             // Turn on the next one
-            m_popups.Peek().gameObject.SetActive(true);
+            PeekAndEnableOn();
         }
+    }
+
+
+    // Peek the first element on the queue,
+    // turn on it, and trigger the event. 
+    private void PeekAndEnableOn()
+    {
+        HFTutorialPopUp popUp = m_popups.Peek();
+        popUp.gameObject.SetActive(true);
+
+        // This event allow other component to respond when a new pop up is shown.
+        HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestOn, popUp.ID);
     }
 
     #region Events

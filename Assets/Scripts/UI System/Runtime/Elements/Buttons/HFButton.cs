@@ -8,25 +8,28 @@ namespace HF.Refactoring
     {
         [Tooltip("Choose the current window ID where the button is")]
         public HFUIWindowID MyWindowID;
+        protected bool m_isMatchingWindowID;
+
         protected bool m_isListeningInput;
 
         protected virtual void OnEnable()
         {
-            HFUIManager.Instance.IsListeningInput += IsListeningInput;
+            HFUIManager.Instance.IsMatchingWindowID += IsMatchingWiindowID;
         }
 
         protected virtual void OnDisable()
         {
-            HFUIManager.Instance.IsListeningInput -= IsListeningInput;
+            HFUIManager.Instance.IsMatchingWindowID -= IsMatchingWiindowID;
         }
 
         /// <summary>
         /// Filter what element listen input.
         /// </summary>
         /// <param name="id"></param>
-        protected void IsListeningInput(HFUIWindowID id)
+        protected virtual void IsMatchingWiindowID(HFUIWindowID id)
         {
-            m_isListeningInput = MyWindowID == id;
+            m_isMatchingWindowID = MyWindowID == id;
+            m_isListeningInput = m_isMatchingWindowID;
         }
     }
 }

@@ -66,7 +66,7 @@ namespace HF.Refactoring
         // async from the other windows.
         //---------------------------------------------------------------------
         public delegate void GetIsListeningInput(HFUIWindowID myWindowId);
-        public GetIsListeningInput IsListeningInput;
+        public GetIsListeningInput IsMatchingWindowID;
         private Stack<HFUIWindow> m_windowsHistory;   
         #endregion
 
@@ -259,7 +259,7 @@ namespace HF.Refactoring
                 m_windowsHistory.Pop().OnHide();
                 HFUIWindow window = m_windowsHistory.Peek();
                 window.OnShow();
-                IsListeningInput?.Invoke(window.ID);
+                IsMatchingWindowID?.Invoke(window.ID);
             }
             else
             {
@@ -277,7 +277,7 @@ namespace HF.Refactoring
                 // This make sure that only the window
                 // on the top of the satck is listening
                 // to input
-                IsListeningInput?.Invoke(id);
+                IsMatchingWindowID?.Invoke(id);
             }
         }
 

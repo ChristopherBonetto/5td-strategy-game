@@ -77,7 +77,16 @@
     /// </summary>
     OnFinishedLoadEvents,
 
-	// UI
+	//----------------------------------------------------------------------------------
+	// Tutorial
+	//----------------------------------------------------------------------------------
 
+	/// <summary>
+	/// 1) <see cref="TutorialID"/> id
+	/// </summary>
 	OnTutorialQuestCompleted,
+	/// <summary>
+	/// 2) <see cref="TutorialID"/> id
+	/// </summary>
+	OnTutorialQuestOn,
 }

@@ -37,7 +37,7 @@ namespace HF.Refactoring
         /// </summary>
         public void InvokDelegates()
         {
-            if (m_isListeningInput)
+            if (m_isMatchingWindowID)
             {
                 m_callBack?.Invoke();
             }

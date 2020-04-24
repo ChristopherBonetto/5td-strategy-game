@@ -14,7 +14,7 @@ namespace HF.Refactoring
 
         public void ShowPanel()
         {
-            if (m_isListeningInput)
+            if (m_isMatchingWindowID)
             {
                 HFUIManager.Instance.ShowAndAddToHistory(WindowIDToShow, ShowAddittive);    
             }
