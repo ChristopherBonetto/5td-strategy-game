@@ -44,6 +44,12 @@ public class HFTutorialManager : MonoBehaviour
         HFEventManager.UnsubscribeFrom<TutorialID>(HFEventID.OnTutorialQuestCompleted, OnTutorialQuestCompleted);
         HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
         HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitUpgraded);
+
+        HFUIHUD hud = HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD);
+        foreach (HFTutorialPopUp popUp in hud.Popups)
+        {
+            popUp.gameObject.SetActive(false);
+        }
     }
 
     private void Start()

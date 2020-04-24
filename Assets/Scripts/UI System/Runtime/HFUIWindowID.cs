@@ -10,7 +10,7 @@
         WAR_ROOM,
         HUD,
         PAUSE_MENU,
-        SETTINGS,               // Setting in game.
+        SETTINGS_MENU,               // Setting in game.
         LEVEL_ENDING,
         LOADING_SCREEN, 
     }

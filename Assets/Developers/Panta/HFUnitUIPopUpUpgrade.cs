@@ -34,6 +34,8 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
         HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialization);
         HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitupgrade);
         HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnUnitDeath);
+
+        m_cam = Camera.main;
     }
 
     private void OnDisable()
@@ -44,11 +46,7 @@ public class HFUnitUIPopUpUpgrade : HFPoolableObject
 
         EnableButtons(false, m_specializedButtons);
         EnableButtons(false, m_upgradeButtons);
-    }
-
-    private void Start()
-    {
-        m_cam = Camera.main;
+        this.gameObject.SetActive(false);
     }
 
     private void Update()
