@@ -73,8 +73,6 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         Initialize();
-
-        
     }
 
     private void Update()

@@ -49,8 +49,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         {
             m_units[0].TakeDamage(0);
         }
-
-        Debug.Log(CurrentHp);
     }
 
     #region Troop management
@@ -171,12 +169,14 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #region Move inteface
 
+    //Muovi la truppa e le unita.
     public void MoveFromTo(Vector3 endPosition)
     {
         m_destinationPoint.position = endPosition;
 
         for(int i = 0; i < m_units.Count; i++)
         {
+            Vector3 destination = m_destinationPoint.position + m_formationPosition[i];
             m_units[i].MoveFromTo(m_destinationPoint.position + m_formationPosition[i]);
         }
     }
@@ -190,6 +190,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         base.Select();
     }
 
+    //Come la truppa interagisce con le altre entity.
     public override void Interact(EntityBehavior inEntity)
     {
         base.Interact(inEntity);
@@ -204,8 +205,8 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                 {
                     for (int i = 0; i < m_units.Count; i++)
                     {
-                        m_units[i].UnitFocusObj = tempTroop.m_units[i].gameObject;
-                        m_units[i].UnitAgent.SetDestination(m_units[i].UnitFocusObj.transform.position);
+                        m_units[i].FocusEntity = tempTroop.m_units[i];
+                        m_units[i].UnitAgent.SetDestination(m_units[i].FocusEntity.transform.position);
                         Debug.Log(m_units[i] + " go to attack " + tempTroop.m_units[i]);
                     }
                 }
@@ -221,6 +222,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #region Troop health
 
+    //Prende la vita totale
     public int TakeTroopHealth()
     {
         int health = 0;
@@ -233,17 +235,19 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
         for(int i = 0; i < m_units.Count; i++)
         {
-            health += m_units[i].CurrentUnitHp;
+            health += m_units[i].CurrentHp;
         }
         
         return health;
     }
 
+    //Non usato
     public override bool TakeDamage(int Damage = 0)
     {
         return true;
     }
 
+    //Come prende danno la truppa
     public void TroopTakeDamage(UnitBehavior inUnit)
     {
         inUnit.LeaveTroop();
@@ -267,6 +271,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         base.Death();
     }
 
+    //Respawna le unita dopo un timer
     IEnumerator Respawn()
     {
         transform.position = new Vector3(0, 0.5f, 0);

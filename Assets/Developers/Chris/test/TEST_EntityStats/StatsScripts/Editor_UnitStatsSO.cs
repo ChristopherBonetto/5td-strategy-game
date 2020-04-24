@@ -7,6 +7,7 @@ using Types;
 [CustomEditor(typeof(UnitsStatsSO))]
 public class Editor_UnitStatsSO : Editor
 {
+
     public override void OnInspectorGUI()
     {
         UnitsStatsSO unit = target as UnitsStatsSO;
@@ -169,6 +170,6 @@ public class Editor_UnitStatsSO : Editor
         unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
 
-
+        
     }
 }

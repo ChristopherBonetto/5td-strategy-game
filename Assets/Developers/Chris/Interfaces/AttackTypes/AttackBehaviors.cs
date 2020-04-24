@@ -6,6 +6,7 @@ public class AttackBehaviors : IAttackTypes
 {
     private float m_lastAttack;
 
+
     public bool CanAttack(float inAttackRate)
     {
         if (Time.time > inAttackRate + m_lastAttack)
@@ -37,23 +38,30 @@ public class AttackBehaviors : IAttackTypes
                         dmg.TakeDamage(damage);
                     }
                 }
-
             }
         }
-
         m_lastAttack = Time.time;
     }
 
     
 
-    public void SingleAttack(EntityBehavior inEntity, int inDamage)
+    public bool SingleAttack(EntityBehavior inEntity, int inDamage)
     {
+        if (!inEntity.gameObject.active)
+        {
+            return false;
+        }
+
         ITakeDamage damageInterface = inEntity.GetComponent<ITakeDamage>();
 
         if(damageInterface != null)
         {
-            damageInterface.TakeDamage(inDamage);
+            if (damageInterface.TakeDamage(inDamage))
+            {
+                return true;
+            }
         }
         m_lastAttack = Time.time;
+        return false;
     }
 }

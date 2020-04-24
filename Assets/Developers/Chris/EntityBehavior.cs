@@ -37,7 +37,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected float m_timer = 0f;
 
-    private EntityBehavior m_focusEntity = null;
+    public EntityBehavior m_focusEntity = null;
     public EntityBehavior FocusEntity
     {
         get
@@ -63,10 +63,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+    protected IAttackTypes m_attackType;
+
 
     public virtual void Start()
     {
         m_commands = new List<Command>();
+
+        m_attackType = new AttackBehaviors();
     }
 
     //Maybe a new command.
@@ -159,7 +163,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             Debug.Log("ciao miao");
         }
         FocusEntity = inEntity;
-        Debug.Log(gameObject.name + " want to interact with " + FocusEntity.name);
+        Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
     }
 
     #endregion
@@ -174,12 +178,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
             if (CurrentHp <= Damage)
             {
+                Debug.Log("Death");
                 Death();
                 return true;
             }
             else
             {
                 CurrentHp -= Damage;
+                Debug.Log(CurrentHp);
                 if (InputReaderManager.Instance.CurrentEntity == this)
                 {
                     InputReaderManager.Instance.CurrentEntity = null;
@@ -193,11 +199,13 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public virtual void Death()
     {
         this.gameObject.SetActive(false);
+
+        //TO DO: se è il castello finisce il match.
     }
 
     #endregion
 
-    public void Attack()
+    public virtual void Attack()
     {
         throw new System.NotImplementedException();
     }
