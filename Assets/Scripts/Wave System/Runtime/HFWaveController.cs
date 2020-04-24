@@ -171,13 +171,16 @@ namespace HF.Refactoring
             // when the wave begin
             SetCurrentBehaviourToPerform();
 
-            // @Temp
+            // TO DO: find a better implementation @Panta
             List<HFBaseStats> stats = new List<HFBaseStats>();
             foreach (HFWaveData.HFWaveBehaviourData data in m_currentWave.GetBehaviours())
             {
                 stats.Add(data.UnitData);
             }
             HFEventManager.TriggerEvent<int, List<HFBaseStats>>(HFEventID.OnUnitsPossessed, Controller.Team, stats);
+
+            // Update wave index in UI.
+            HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, WaveIndex + 1, TotalWaves.Count);
         }
 
         /// <summary>

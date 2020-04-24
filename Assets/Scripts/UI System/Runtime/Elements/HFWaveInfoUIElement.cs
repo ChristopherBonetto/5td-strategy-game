@@ -19,15 +19,15 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     private void OnEnable()
     {
-        HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveEnd);
-        HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
+        HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
+        HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnWaveBeginned);
         HFEventManager.SubscribeTo<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
     }
 
     private void OnDisable()
     {
-        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveEnd);
-        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnNewWaveBegin);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnWaveBeginned);
         HFEventManager.UnsubscribeFrom<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
     }
 
@@ -47,7 +47,6 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     private void OnWaveIndexUpdate(int currentWave, int totalWave)
     {
-        Debug.Log("Updating UI wave inde...");
         m_waveInfo.text = $"Wave: {currentWave} / {totalWave}";
     }
 
@@ -59,12 +58,12 @@ public class HFWaveInfoUIElement : MonoBehaviour
 
     #region Events
 
-    private void OnNewWaveBegin()
+    private void OnWaveBeginned()
     {
         m_enableTimer = true;
     }
 
-    private void OnWaveEnd()
+    private void OnWaveCleared()
     {
         m_enableTimer = false;
     }
