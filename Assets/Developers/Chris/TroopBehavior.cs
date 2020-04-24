@@ -31,10 +31,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         {
             return TakeTroopHealth();
         }
-        set
-        {
-            base.CurrentHp = value;
-        }
     }
 
     public List<UnitBehavior> m_units = new List<UnitBehavior>();
@@ -43,6 +39,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     private int Xsize;
     private int Zsize;
+
 
     [SerializeField] private Transform m_destinationPoint;
 
@@ -53,21 +50,18 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             m_units[0].TakeDamage(0);
         }
 
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            m_units[1].TakeDamage(0);
-        }
+        Debug.Log(CurrentHp);
     }
 
-    #region Create new troop with unit
+    #region Troop management
 
     public override void AssignStats(EntityStatsSO inStats)
     {
         base.AssignStats(inStats);
-        CreateUnit(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
+        CreateUnits(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
     }
 
-    public void CreateUnit(UnitType inType, int inValue)
+    public void CreateUnits(UnitType inType, int inValue)
     {
         m_units = new List<UnitBehavior>(inValue);
 
@@ -200,7 +194,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         base.Interact(inEntity);
 
-        if(inEntity.m_entityPlayerType != this.m_entityPlayerType)
+        if(inEntity.EntityPlayerType != this.EntityPlayerType)
         {
             if(inEntity is TroopBehavior)
             {
@@ -241,33 +235,43 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         {
             health += m_units[i].CurrentUnitHp;
         }
-
+        
         return health;
     }
 
     public override bool TakeDamage(int Damage = 0)
     {
-        int troopCounter = 0;
+        return true;
+    }
 
-        foreach(UnitBehavior unit in m_units)
+    public void TroopTakeDamage(UnitBehavior inUnit)
+    {
+        inUnit.LeaveTroop();
+
+        if(CurrentHp == 0)
         {
-            if (!unit.gameObject.active)
+            if(EntityPlayerType == PlayerType.AI)
             {
-                troopCounter++;
+                gameObject.SetActive(false);
+                return;
+            }
+            else
+            {
+                StartCoroutine("Respawn");
             }
         }
-
-        if(troopCounter == m_units.Count)
-        {
-            Death();
-            return true;
-        }
-        return false;
     }
 
     public override void Death()
     {
         base.Death();
+    }
+
+    IEnumerator Respawn()
+    {
+        transform.position = new Vector3(0, 0.5f, 0);
+        yield return new WaitForSeconds(m_troopStats.RespawnTime);
+        CreateUnits(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
     }
 
     #endregion

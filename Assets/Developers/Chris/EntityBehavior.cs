@@ -4,7 +4,7 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 
-public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
+public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
     private EntityStatsSO m_entityStats;
     public virtual EntityStatsSO EntityStats
@@ -22,7 +22,18 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
     protected List<Command> m_commands;
     protected int m_currentCommandIndex;
 
-    public PlayerType m_entityPlayerType { get; protected set; }
+    private PlayerType m_entityPlayerType;
+    public PlayerType EntityPlayerType
+    {
+        get
+        {
+            return m_entityPlayerType;
+        }
+        protected set
+        {
+            m_entityPlayerType = value;
+        }
+    }
 
     protected float m_timer = 0f;
 
@@ -66,13 +77,13 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {
-        m_entityPlayerType = inPlayerType;
+        EntityPlayerType = inPlayerType;
 
-        if (m_entityPlayerType == PlayerType.Player)
+        if (EntityPlayerType == PlayerType.Player)
         {
             gameObject.layer = GameController.Instance.m_playerLayer;
         }
-        else if (m_entityPlayerType == PlayerType.AI)
+        else if (EntityPlayerType == PlayerType.AI)
         {
             gameObject.layer = GameController.Instance.m_aiLayer;
         }
@@ -98,6 +109,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
             return false;
         }
     }
+
 
     #region Command
 
@@ -132,9 +144,9 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
 
     public virtual void Select()
     {
-        Debug.Log("selected " + m_entityPlayerType + " " + gameObject.name);
+        Debug.Log("selected " + EntityPlayerType + " " + gameObject.name);
 
-        if(m_entityPlayerType == PlayerType.Player)
+        if(EntityPlayerType == PlayerType.Player)
         {
             InputReaderManager.Instance.CurrentEntity = this;
         }
@@ -184,4 +196,9 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage
     }
 
     #endregion
+
+    public void Attack()
+    {
+        throw new System.NotImplementedException();
+    }
 }

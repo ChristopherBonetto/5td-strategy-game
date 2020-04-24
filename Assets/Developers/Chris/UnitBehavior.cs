@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Types;
 
-public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
+public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage, IAttack
 {
     private NavMeshAgent m_unitAgent;
     public NavMeshAgent UnitAgent
@@ -43,15 +43,19 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
     private float m_Timer = 0f;
     protected bool m_canAttack = true;
 
+    private IAttackTypes m_attackType; 
+
     private void Awake()
     {
         TakeAgentComponent();
+
+        m_attackType = new AttackBehaviors();
     }
     private void Update()
     {
         if (UnitFocusObj != null)
         {
-            if (CheckFocussedObjectDistance() && m_canAttack)
+            if (CheckFocussedObjectDistance())
             {
 
             }
@@ -88,6 +92,8 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
     {
         if (Vector3.Distance(transform.position, UnitFocusObj.transform.position) <= m_unitAgent.stoppingDistance + UnitFocusObj.transform.localScale.x + m_unitStats.AttackRange)
         {
+            m_unitAgent.velocity = Vector3.zero;
+
             if (UnitAgent.velocity.sqrMagnitude == 0)
             {
                 return true;
@@ -220,10 +226,11 @@ public class UnitBehavior : MonoBehaviour, ICanMove, ITakeDamage
 
     public void Death()
     {
-        if(TroopRef.m_entityPlayerType == PlayerType.Player)
-        {
-            gameObject.SetActive(false);
-            TroopRef.TakeDamage();
-        }
+        TroopRef.TroopTakeDamage(this);
+    }
+
+    public void Attack()
+    {
+        throw new System.NotImplementedException();
     }
 }

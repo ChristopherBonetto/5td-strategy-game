@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 304543894073728472}
   - component: {fileID: -9003747597338188634}
   - component: {fileID: -4123713844011539507}
+  - component: {fileID: 7011455563845171123}
   m_Layer: 0
   m_Name: Defender
   m_TagString: Untagged
@@ -106,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 659d4b7cbd5399d47934a1a7ba918f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_currentUnitHp: 0
 --- !u!54 &-4123713844011539507
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -122,3 +124,25 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!195 &7011455563845171123
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 304543894073728471}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
