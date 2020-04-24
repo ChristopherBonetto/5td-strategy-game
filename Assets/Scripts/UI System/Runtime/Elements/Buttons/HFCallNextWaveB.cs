@@ -42,6 +42,7 @@ public class HFCallNextWaveB : HFButton
         if (m_isListeningInput)
         {
             HFEventManager.TriggerEvent(HFEventID.OnWaveBeginned);
+            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Call_wave);
         }
     }
 
