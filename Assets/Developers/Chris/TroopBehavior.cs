@@ -43,11 +43,22 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     [SerializeField] private Transform m_destinationPoint;
 
-    private void Update()
+
+    private IDetect m_detectInterface;
+
+
+    public override void Start()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        base.Start();
+
+        m_detectInterface = new DetectBehaviors();
+    }
+
+    public void Update()
+    {
+        if (m_isBusy == false)
         {
-            m_units[0].TakeDamage(0);
+            EntityBehavior tempEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
         }
     }
 
@@ -77,6 +88,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             m_units.Add(AssignUnit(tempRef));
         }
         CreateSquareFormation(1f);
+
     }
 
 
@@ -205,6 +217,8 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                 {
                     for (int i = 0; i < m_units.Count; i++)
                     {
+                        //var command = new GoToInteract(m_units[i], tempTroop.m_units[i]);
+                        //m_units[i].ExecuteCommand(command);
                         m_units[i].FocusEntity = tempTroop.m_units[i];
                         m_units[i].UnitAgent.SetDestination(m_units[i].FocusEntity.transform.position);
                         Debug.Log(m_units[i] + " go to attack " + tempTroop.m_units[i]);

@@ -65,12 +65,20 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected IAttackTypes m_attackType;
 
+    protected bool m_isBusy = false;
+    public bool IsBusy { get => m_isBusy; }
 
     public virtual void Start()
     {
         m_commands = new List<Command>();
 
         m_attackType = new AttackBehaviors();
+    }
+
+
+    public virtual void ChangeIsBusy(bool inValue)
+    {
+        m_isBusy = inValue;
     }
 
     //Maybe a new command.
@@ -207,6 +215,5 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Attack()
     {
-        throw new System.NotImplementedException();
     }
 }

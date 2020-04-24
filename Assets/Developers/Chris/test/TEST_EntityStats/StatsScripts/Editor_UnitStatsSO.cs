@@ -7,10 +7,22 @@ using Types;
 [CustomEditor(typeof(UnitsStatsSO))]
 public class Editor_UnitStatsSO : Editor
 {
+    UnitsStatsSO unit;
 
+    private void OnEnable()
+    {
+        unit = (UnitsStatsSO)target;
+    }
+    private void OnDisable()
+    {
+        EditorUtility.SetDirty(unit);
+        AssetDatabase.SaveAssets();
+    }
     public override void OnInspectorGUI()
     {
-        UnitsStatsSO unit = target as UnitsStatsSO;
+        serializedObject.Update();
+
+        //UnitsStatsSO unit = target as UnitsStatsSO;
 
         GUILayout.Label("GENERAL STATS");
         EditorGUILayout.Space();
@@ -170,6 +182,6 @@ public class Editor_UnitStatsSO : Editor
         unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
 
-        
+        serializedObject.ApplyModifiedProperties();
     }
 }
