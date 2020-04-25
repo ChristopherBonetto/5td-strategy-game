@@ -13,23 +13,24 @@ MonoBehaviour:
   m_Name: Defender
   m_EditorClassIdentifier: 
   Name: Defender
-  Prefab: {fileID: 304543894073728471, guid: 1390d88fc1f040144ada4f0afa6c891d, type: 3}
+  Prefab: {fileID: 8924808220165357022, guid: 46444357b68de0c46b0eb409b3e75629, type: 3}
   MaxHp: 50
   Armor: 10
   CanTakeDamage: 1
-  EngageRange: 0
-  AttackRange: 0
-  AttackSpeed: 0
-  Damage: 0
-  CanAttack: 0
+  EngageRange: 10
+  AttackRange: 5
+  AttackSpeed: 2
+  Damage: 1
+  CanAttack: 1
   Projectile: {fileID: 0}
   Mesh: {fileID: 0}
   Specializations: []
   Cost:
-    ResourceType: 0
+    ResourceType: 1
     ResourceQuantity: 0
   UnitType: 2
   AttackType: 0
-  UnitSpeed: 10
+  TroopsQuantity: 3
+  UnitSpeed: 5
   CarryCapacity: 0
   RespawnTime: 2

@@ -40,13 +40,18 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     private int Xsize;
     private int Zsize;
 
+    private NavMeshAgent m_troopAgent;
 
-    [SerializeField] private Transform m_destinationPoint;
-
+    private bool m_moveCoroutineIsActive = false;
+    private bool m_isGoingToInteract = false;
 
     private IDetect m_detectInterface;
 
 
+    private void Awake()
+    {
+        TakeAgentComponent();
+    }
     public override void Start()
     {
         base.Start();
@@ -59,6 +64,22 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         if (m_isBusy == false)
         {
             EntityBehavior tempEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
+        }
+
+        if(FocusEntity != null)
+        {
+            if (!m_isGoingToInteract)
+            {
+                StartCoroutine(GoToInteract());
+            }
+        }
+
+        if (IsMoving())
+        {
+            if (!m_moveCoroutineIsActive)
+            {
+                StartCoroutine(MoveUnits(0.5f));
+            }
         }
     }
 
@@ -139,18 +160,18 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         switch (m_units.Count)
         {
             case 1:
-                m_formationPosition[0] = new Vector3(transform.position.x, transform.position.y, inOffset + Zsize / 2);
+                m_formationPosition[0] = new Vector3(0, transform.position.y, 0);
                 break;
 
             case 2:
-                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, transform.position.z);
-                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, transform.position.z);
+                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, 0);
+                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, 0);
                 break;
 
             case 3:
                 m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, inOffset + Zsize / 2);
                 m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, inOffset + Zsize / 2);
-                m_formationPosition[2] = new Vector3(transform.position.x, transform.position.y, -inOffset - Zsize / 2);
+                m_formationPosition[2] = new Vector3(0, transform.position.y, -inOffset - Zsize / 2);
                 break;
 
             case 4:
@@ -177,25 +198,95 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         }
     }
 
-    #endregion
-
-    #region Move inteface
-
-    //Muovi la truppa e le unita.
-    public void MoveFromTo(Vector3 endPosition)
+    public void ResetFormation()
     {
-        m_destinationPoint.position = endPosition;
-
-        for(int i = 0; i < m_units.Count; i++)
+        for (int i = 0; i < m_units.Count; i++)
         {
-            Vector3 destination = m_destinationPoint.position + m_formationPosition[i];
-            m_units[i].MoveFromTo(m_destinationPoint.position + m_formationPosition[i]);
+            Vector3 destination = transform.position + m_formationPosition[i];
+            m_units[i].MoveFromTo(destination);
         }
     }
 
     #endregion
 
-    #region Click interface
+    #region Troop movement
+
+    //Muovi la truppa e le unita.
+    public void MoveFromTo(Vector3 endPosition)
+    {
+        Stop(false);
+        m_troopAgent.SetDestination(endPosition);
+    }
+
+    private IEnumerator MoveUnits(float inDestinationTime)
+    {
+        m_moveCoroutineIsActive = true;
+        int unitCounter = 0;
+
+        while (IsMoving())
+        {
+            if (Timer(inDestinationTime))
+            {
+                m_units[unitCounter].MoveFromTo(m_troopAgent.destination + m_formationPosition[unitCounter]);
+                unitCounter++;
+
+                if(unitCounter > m_units.Count -1 )
+                {
+                    unitCounter = 0;
+                }
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForEndOfFrame();
+        ResetFormation();
+
+        Debug.Log("wow");
+        m_moveCoroutineIsActive = false;
+    }
+
+
+    public void TakeAgentComponent()
+    {
+        m_troopAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        if (m_troopAgent == null)
+        {
+            m_troopAgent = gameObject.AddComponent<NavMeshAgent>();
+        }
+    }
+
+    public void Stop(bool inBool)
+    {
+        if (m_troopAgent.isStopped != inBool)
+            m_troopAgent.isStopped = inBool;
+    }
+
+    public bool IsMoving()
+    {
+        if (!m_troopAgent.hasPath && m_troopAgent.velocity.sqrMagnitude < 0.1f || m_troopAgent.isStopped)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    protected virtual bool CheckFocussedObjectDistance()
+    {
+        Debug.Log(m_troopAgent.remainingDistance + " " + Vector3.Distance(transform.position, FocusEntity.transform.position));
+        if ( Vector3.Distance(transform.position, FocusEntity.transform.position) <= m_troopAgent.stoppingDistance + FocusEntity.transform.localScale.x + EntityStats.EngageRange)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    #endregion
+
+    #region Troop Interactions
 
     public override void Select()
     {
@@ -209,27 +300,40 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
         if(inEntity.EntityPlayerType != this.EntityPlayerType)
         {
-            if(inEntity is TroopBehavior)
+            if(EntityStats.CanAttack && inEntity.EntityStats.CanTakeDamage)
             {
-                TroopBehavior tempTroop = (TroopBehavior)inEntity;
-
-                if (m_troopStats.CanAttack && tempTroop.m_troopStats.CanTakeDamage)
+                if(FocusEntity != inEntity)
                 {
-                    for (int i = 0; i < m_units.Count; i++)
-                    {
-                        //var command = new GoToInteract(m_units[i], tempTroop.m_units[i]);
-                        //m_units[i].ExecuteCommand(command);
-                        m_units[i].FocusEntity = tempTroop.m_units[i];
-                        m_units[i].UnitAgent.SetDestination(m_units[i].FocusEntity.transform.position);
-                        Debug.Log(m_units[i] + " go to attack " + tempTroop.m_units[i]);
-                    }
-                }
-                else
-                {
-                    Debug.Log("unit can't attack or other troop can't take damage : PLS CHECK ON SCRIPTABLE");
+                    FocusEntity = inEntity;
                 }
             }
+            else
+            {
+                Debug.Log("unit can't attack or other troop can't take damage : PLS CHECK ON SCRIPTABLE");
+            }
         }
+    }
+
+
+    private IEnumerator GoToInteract()
+    {
+        m_isGoingToInteract = true;
+
+        while(FocusEntity != null)
+        {
+            if (!CheckFocussedObjectDistance())
+            {
+                m_troopAgent.SetDestination(FocusEntity.transform.position);
+            }
+            else
+            {
+                Stop(true);
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForEndOfFrame();
+        m_isGoingToInteract = false;
     }
 
     #endregion
@@ -294,4 +398,9 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     }
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, EntityStats.EngageRange);
+    }
 }
