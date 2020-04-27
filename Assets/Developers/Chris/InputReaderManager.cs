@@ -94,6 +94,8 @@ public class InputReaderManager : Singleton<InputReaderManager>
             {
                 canBeSelected.Select();
             }
+
+            // else Trigger the event "OnUnitSelected(null)"
         }
     }
 

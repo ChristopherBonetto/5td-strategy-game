@@ -161,6 +161,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if(EntityPlayerType == PlayerType.Player)
         {
             InputReaderManager.Instance.CurrentEntity = this;
+            // Trigger the event "OnUnitSelected(this)"
         }
     }
 
