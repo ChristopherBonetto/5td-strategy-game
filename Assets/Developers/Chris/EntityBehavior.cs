@@ -210,6 +210,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         this.gameObject.SetActive(false);
 
         //TO DO: se è il castello finisce il match.
+        // TO DO: trigger an event that set null all attackers with this enitity as focus. @Panta
     }
 
     #endregion

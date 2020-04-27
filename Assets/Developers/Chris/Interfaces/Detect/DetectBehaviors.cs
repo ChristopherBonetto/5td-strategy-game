@@ -5,7 +5,7 @@ using Types;
 
 public class DetectBehaviors : IDetect
 {
-    private Collider[] inDetectedColliders;
+    private Collider[] inDetectedColliders = new Collider[15];
     private int inNumberOfCollidersDetected;
 
     public EntityBehavior DetectArea(Transform inStartDetectPoint, float inViewRadius, LayerMask inWantedLayer)
@@ -22,22 +22,19 @@ public class DetectBehaviors : IDetect
                 {
                     RaycastHit hit;
 
-                    if (Physics.Raycast(inStartDetectPoint.transform.position, inDetectedColliders[i].transform.position - inStartDetectPoint.transform.position, out hit, inViewRadius))
+                    if (Physics.Raycast(inStartDetectPoint.transform.position, inDetectedColliders[i].transform.position - inStartDetectPoint.transform.position, out hit, inViewRadius, inWantedLayer))
                     {
-                        if (hit.transform.name != inDetectedColliders[i].transform.name)
+                        if (hit.collider.name != inDetectedColliders[i].name)
                         {
                             return null;
                         }
-                        else
+
+                        EntityBehavior tempEntity = hit.transform.GetComponent<EntityBehavior>();
+
+                        if (!tempEntity.IsBusy)
                         {
-                            EntityBehavior tempEntity = hit.transform.GetComponent<EntityBehavior>();
-
-                            if (!tempEntity.IsBusy)
-                            {
-                                return tempEntity;
-                            }
+                            return tempEntity;
                         }
-
                     }
                 }
             }

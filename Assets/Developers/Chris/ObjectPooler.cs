@@ -184,6 +184,44 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
+    public GameObject GetBuildingObject(BuildingType inType)
+    {
+        // First check if the Dictionary actually contains the tag key
+        if (m_buildingPooled.ContainsKey(inType))
+        {
+            // Get the list corresponding to the tag
+            List<GameObject> objectsList = m_buildingPooled[inType];
+
+            // Cycle the list to search for an available pooled object
+            int count = objectsList.Count;
+
+            if (count == 0)
+            {
+                Debug.LogError("No one object to take with : " + inType + " key");
+                return null;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject obj = objectsList[i];
+
+                // If an available object is found, return it
+                if (!obj.activeInHierarchy) return obj;
+            }
+
+            BuildingInfo building = (BuildingInfo)GameController.Instance.SearchBuilding(inType);
+            ObjectPoolItem tempItem = new ObjectPoolItem(building.BuildingStatsCopy.Prefab, building.BuildingPoolQuantity, true);
+            return AddObjectToPool(objectsList, tempItem);
+
+        }
+        else
+        {
+            // If the Dicitionary doesn't contain the tag key, send an error and return null
+            Debug.LogError("ObjectPooler '" + name + "' doesn't contain the specified tag '" + tag + "'.");
+            return null;
+        }
+    }
+
     #endregion
 
     /// <summary>

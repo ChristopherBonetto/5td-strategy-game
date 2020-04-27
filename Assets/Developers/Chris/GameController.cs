@@ -81,6 +81,10 @@ public class GameController : Singleton<GameController>
         {
             CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(0,0.5f,0));
         }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(0, 0.5f, 0));
+        }
         if (Input.GetKeyDown(KeyCode.S))
         {
             CreateEnemies();
@@ -159,6 +163,7 @@ public class GameController : Singleton<GameController>
 
     }
 
+
     public UnitInfo? SearchUnit(UnitType inType)
     {
         if (Collection.UnitsDictionary.ContainsKey(inType))
@@ -168,6 +173,68 @@ public class GameController : Singleton<GameController>
         return null;
 
     }
+
+
+    //-------------------------------------------------------------------------
+    // here is how a new building is created and instantiated for the level.
+    //-------------------------------------------------------------------------
+    #region Building
+
+    public void CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
+    {
+        if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
+        {
+            Debug.Log("GameCollection don't contain " + inBuildingType);
+            return;
+        }
+
+        if (inPlayerType == PlayerType.Player)
+        {
+            if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
+            {
+                Debug.Log("u need more resources");
+                return;
+            }
+            DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
+        }
+
+        //CheckFreeSpace(inPosition, 1);
+
+        GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Building");
+        troop.transform.position = inPosition;
+        troop.SetActive(true);
+
+        if (troop == null)
+        {
+            Debug.Log("can't take troop container because in pool it can't expand");
+            return;
+        }
+        BuildingBehaviour tempRef = troop.GetComponent<BuildingBehaviour>();
+
+        if (tempRef == null)
+        {
+            Debug.LogError("Prefab need TroopsBehavior script");
+            return;
+        }
+
+        tempRef.AssignPlayer(inPlayerType);
+        tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+
+        Debug.Log("building pooled!!!");
+
+    }
+
+    public BuildingInfo? SearchBuilding(BuildingType inType)
+    {
+        if (Collection.BuildingsDictionary.ContainsKey(inType))
+        {
+            return Collection.BuildingsDictionary[inType];
+        }
+        return null;
+
+    }
+
+    #endregion
 
     //public void CheckFreeSpace(Vector3 inPos, float inRadius)
     //{
