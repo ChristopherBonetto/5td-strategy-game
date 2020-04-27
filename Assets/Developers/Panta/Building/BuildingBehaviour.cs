@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using Types;
 using UnityEngine;
+using UnityEngine.AI;
 
+/// <summary>
+/// This class' purpose is to controll the building's view and model.
+/// </summary>
+[RequireComponent(typeof(NavMeshObstacle))]
 public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
 {
     private BuildingsStatsSO m_unitStats;
@@ -18,7 +23,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
         }
     }
 
-    #region Detection
+    #region Detection variables
     [Header("Detection Field")]
 
     [SerializeField]
@@ -28,29 +33,33 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     private float m_delayBetweenCheckOstileInRangeElapsed = 0f;
     #endregion
 
-
     //-------------------------------------------------------------------------
     // Handle carry infos. The carry action is performed by the troops.
     // The building have to respond to this action changing its scale and postion,
     // also need some check to drop the turret in a new location.
     //-------------------------------------------------------------------------
-    #region Carry
+    #region Carry variables
     [Header("Carry Field")]
 
     [SerializeField]
-    private Vector3 m_carryUpScale = Vector3.one * 0.5f;
+    private Vector3 m_carryScale = Vector3.one * 0.5f;
     private Vector3 m_initialScale = Vector3.one;
 
-    [SerializeField]
-    private float m_offSetOnY = 1.5f;
+    private NavMeshObstacle m_navMeshObstacle;
     #endregion
 
 
-
     #region MonoBehaviour
+    private void Awake()
+    {
+        m_navMeshObstacle = GetComponent<NavMeshObstacle>();
+    }
+
     public override void Start()
     {
         base.Start();
+
+        m_initialScale = this.transform.localScale;
         m_detectionComponent = new DetectBehaviors();
     }
 
@@ -61,9 +70,6 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     }
     #endregion
 
-
-
-    #region Stats management
     public override void AssignStats(EntityStatsSO inStats)
     {
         base.AssignStats(inStats);
@@ -76,9 +82,6 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
         tempUnit.SetActive(true);
         tempUnit.transform.SetParent(transform);
     }
-    #endregion
-
-
 
     //Esegue il select della truppa
     public override void Select()
@@ -88,10 +91,44 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
         // Change material or highligth the one it has.
     }
 
+    #region Carry actions
+    /// <summary>
+    /// This method is performed by the troop when perform successfully carry a tower.
+    /// </summary>
+    public void Carry(TroopBehavior troop, Vector3 inCarryPosition)
+    {
+        // Can attack = false
+        // change its scale,
+        // move it on top of the units.
+        // Set this transform as parent of the unit.
+        // Deactivate navmesh obstacle.
 
-    //-------------------------------------------------------------------------
-    // Handle all function used to deal damage or search targets.
-    //-------------------------------------------------------------------------
+        m_unitStats.CanAttack = false;
+        m_navMeshObstacle.enabled = false;
+        this.transform.localScale = m_carryScale;
+        this.transform.position = inCarryPosition;
+        this.transform.SetParent(troop.transform);
+    }
+
+    /// <summary>
+    /// This method is performed by the troop when perform successfully drop the tower.
+    /// </summary>
+    public void Drop(TroopBehavior troop, Vector3 inDropPosition)
+    {
+        // Can attack = true
+        // restore its original scale,
+        // drop onto terrain.
+        // Set this transform parent = null
+        // Activate navmesh obstalce.
+
+        m_unitStats.CanAttack = true;
+        m_navMeshObstacle.enabled = true;
+        this.transform.localScale = m_initialScale;
+        this.transform.position = inDropPosition;
+        this.transform.SetParent(null);
+    }
+    #endregion
+
     #region Offensive actions
     public void CheckOstileInRange()
     {
@@ -132,10 +169,6 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     }
     #endregion
 
-
-    //-------------------------------------------------------------------------
-    // Editor visual to help to show infos.
-    //-------------------------------------------------------------------------
     #region Editor
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
