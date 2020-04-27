@@ -35,25 +35,22 @@ public class UnitBehavior : EntityBehavior, ICanMove
         }
     }
 
+    protected bool m_isGoingToInteract = false;
 
     private void Awake()
     {
         TakeAgentComponent();
     }
-    private void Update()
+
+    public void Update()
     {
         if (FocusEntity != null)
         {
-            if (CheckFocussedObjectDistance())
+            if (!m_isGoingToInteract)
             {
-                Interact(FocusEntity);
+                StartCoroutine(GoToInteract());
             }
         }
-
-        //if (UnitFocusObj != null)
-        //{
-        //    gameObject.transform.LookAt(new Vector3(UnitFocusObj.transform.position.x, gameObject.transform.position.y, UnitFocusObj.transform.position.z));
-        //}
     }
 
     //Controlla la distanza dall'oggetto focus.
@@ -61,12 +58,7 @@ public class UnitBehavior : EntityBehavior, ICanMove
     {
         if (Vector3.Distance(transform.position, FocusEntity.transform.position) <= m_unitAgent.stoppingDistance + FocusEntity.transform.localScale.x + m_unitStats.AttackRange)
         {
-            m_unitAgent.velocity = Vector3.zero;
-
-            if (UnitAgent.velocity.sqrMagnitude == 0)
-            {
-                return true;
-            }
+            return true;
         }
         return false;
     }
@@ -157,6 +149,28 @@ public class UnitBehavior : EntityBehavior, ICanMove
         {
             Attack();
         }
+    }
+
+    private IEnumerator GoToInteract()
+    {
+        m_isGoingToInteract = true;
+
+        while (FocusEntity != null)
+        {
+            if (!CheckFocussedObjectDistance())
+            {
+                UnitAgent.SetDestination(FocusEntity.transform.position);
+            }
+            else
+            {
+                Stop(true);
+                Interact(FocusEntity);
+            }
+            yield return new WaitForSeconds(1);
+        }
+        
+        yield return new WaitForEndOfFrame();
+        m_isGoingToInteract = false;
     }
 
     #endregion
