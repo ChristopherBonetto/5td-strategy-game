@@ -95,7 +95,7 @@ public class GameController : Singleton<GameController>
     {
         for(int i = 0; i < m_enemySpawnPoints.Length; i++)
         {
-            CreateNewTroop(UnitType.DEFENDER, PlayerType.AI, m_enemySpawnPoints[i].position);
+            CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
         }
     }
 

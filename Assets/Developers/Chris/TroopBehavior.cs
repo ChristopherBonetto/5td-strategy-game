@@ -5,13 +5,6 @@ using UnityEditor;
 using UnityEngine.AI;
 using Types;
 
-public enum Actions
-{
-    Move,
-    Fight,
-    Carry,
-    Death
-}
 
 public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 {
@@ -35,9 +28,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             return TakeTroopHealth();
         }
     }
-
-    public Actions CurrentAction;
-
 
     public List<UnitBehavior> m_units = new List<UnitBehavior>();
 
@@ -68,38 +58,32 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public void Update()
     {
+        CheckToInterctWithNearbyEntity();
+        CommandUnitsToFollowMe();
+    }
+
+    #region Troop Behavior
+
+    public void CheckToInterctWithNearbyEntity()
+    {
         if (!inCombat)
         {
             if (FocusEntity != null)
             {
-                if (Timer(0.3f))
+                if (!CheckFocussedObjectDistance())
                 {
-                    if (!CheckFocussedObjectDistance())
-                    {
-                        m_agent.SetDestination(FocusEntity.transform.position);
-                    }
-                    else
-                    {
-                        Interact();
-                    }
+                    m_agent.SetDestination(FocusEntity.transform.position);
+                }
+                else
+                {
+                    Interact();
                 }
             }
             else
             {
-                //EntityBehavior tempEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
+                //FocusEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
             }
         }
-
-
-
-        if (IsMoving())
-        {
-            if (!m_moveCoroutineIsActive)
-            {
-                StartCoroutine(MoveUnits(0.3f));
-            }
-        }
-
     }
 
 
@@ -113,30 +97,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         }
     }
 
-    public override void UnlockEntity()
-    {
-        base.UnlockEntity();
-
-        if (FocusEntity != null)
-        {
-            Debug.Log("AOAOAOA");
-            FocusEntity.UnlockEntity();
-        }
-        
-        Stop(false);
-
-        foreach (UnitBehavior unit in m_units)
-        {
-            unit.FocusEntity = null;
-            unit.Stop(false);
-        }
-
-        FocusEntity = null;
-        Debug.Log("escape");
-
-        ResetFormation();
-    }
-
     public void Fight(EntityBehavior inEntity)
     {
         ChangeInCombat(true);
@@ -145,6 +105,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         TroopBehavior troop = (TroopBehavior)inEntity;
         int difference = (m_units.Count - troop.m_units.Count);
 
+        //TO DO :Schieramenti e controlli se ranged o melee
         if (difference == 0)
         {
             for (int i = 0; i < m_units.Count; i++)
@@ -154,7 +115,31 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         }
     }
 
-    #region Troop management
+    public override void UnlockEntity()
+    {
+        base.UnlockEntity();
+
+        if (FocusEntity != null)
+        {
+            FocusEntity.UnlockEntity();
+        }
+        
+
+        foreach (UnitBehavior unit in m_units)
+        {
+            unit.UnlockEntity();
+        }
+
+        FocusEntity = null;
+
+        Stop(false);
+        ResetFormation();
+        Debug.Log("escape");
+    }
+
+    #endregion
+
+    #region Troop commands units
 
     public override void AssignStats(EntityStatsSO inStats)
     {
@@ -182,6 +167,16 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         CreateSquareFormation(1f);
     }
 
+    public void CommandUnitsToFollowMe()
+    {
+        if (IsMoving())
+        {
+            if (!m_moveCoroutineIsActive)
+            {
+                StartCoroutine(MoveUnits(0.3f));
+            }
+        }
+    }
 
     public void ResetStats()
     {
@@ -272,6 +267,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         for (int i = 0; i < m_units.Count; i++)
         {
+            Debug.Log("ciao");
             Vector3 destination = transform.position + m_formationPosition[i];
             m_units[i].MoveFromTo(destination);
         }
@@ -281,7 +277,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #region Troop movement
 
-    //Muovi la truppa e le unita.
+    //Muovi la truppa e le unita. Da usare per uscire dal fight siccome resetta tutto.
     public void MoveFromTo(Vector3 endPosition)
     {
         UnlockEntity();
@@ -355,7 +351,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #endregion
 
-    #region Troop Interactions
+    #region Troop Click
 
     public override void Select()
     {
@@ -363,7 +359,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     }
 
     //Come la truppa interagisce con le altre entity.
-    public override void AssignInteraction(EntityBehavior inEntity)
+    public override void AssignFocusEntity(EntityBehavior inEntity)
     {
         if(inEntity.EntityPlayerType != this.EntityPlayerType)
         {
@@ -411,6 +407,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
         if(CurrentHp == 0)
         {
+            UnlockEntity();
             if(EntityPlayerType == PlayerType.AI)
             {
                 Death();
@@ -418,6 +415,10 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             }
             else
             {
+                if(InputReaderManager.Instance.CurrentEntity == this)
+                {
+                    InputReaderManager.Instance.CurrentEntity = null;
+                }
                 StartCoroutine("Respawn");
             }
         }
@@ -440,7 +441,11 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     private void OnDrawGizmos()
     {
-        if(!inCombat)
-        Gizmos.DrawWireSphere(transform.position, EntityStats.EngageRange);
+        if(EntityStats != null)
+        {
+            if (!inCombat)
+                Gizmos.DrawWireSphere(transform.position, EntityStats.EngageRange);
+        }
+        
     }
 }

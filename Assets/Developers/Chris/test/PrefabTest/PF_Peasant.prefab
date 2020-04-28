@@ -134,7 +134,6 @@ GameObject:
   - component: {fileID: 6315723822256517091}
   - component: {fileID: 5520845122888363183}
   - component: {fileID: 284714804252280231}
-  - component: {fileID: 2623948075921476274}
   - component: {fileID: 1870346674405810597}
   - component: {fileID: 7333124669602100354}
   m_Layer: 0
@@ -195,22 +194,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!54 &2623948075921476274
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1086234464380520536}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!195 &1870346674405810597
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -220,7 +203,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1086234464380520536}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.35
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50

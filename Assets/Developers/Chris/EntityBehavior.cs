@@ -169,7 +169,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
-    public virtual void AssignInteraction(EntityBehavior inEntity)
+    public virtual void AssignFocusEntity(EntityBehavior inEntity)
     {
         //if(inEntity == null)
         //{

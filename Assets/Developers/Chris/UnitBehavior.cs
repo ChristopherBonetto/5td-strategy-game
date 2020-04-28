@@ -35,8 +35,6 @@ public class UnitBehavior : EntityBehavior, ICanMove
         }
     }
 
-    protected bool m_isGoingToInteract = false;
-
     private void Awake()
     {
         TakeAgentComponent();
@@ -56,7 +54,7 @@ public class UnitBehavior : EntityBehavior, ICanMove
                 {
                     //interact
                     Stop(true);
-                    AssignInteraction(FocusEntity);
+                    Interact();
                 }
             }
         }
@@ -71,7 +69,6 @@ public class UnitBehavior : EntityBehavior, ICanMove
         }
         return false;
     }
-
 
     #region Join Leave troop
 
@@ -151,18 +148,29 @@ public class UnitBehavior : EntityBehavior, ICanMove
         m_troopRef.Select();
     }
 
-    //Come interagisce l'unita con un'altra.
-    public override void AssignInteraction(EntityBehavior inEntity)
+    public void Interact()
     {
-        if (inEntity is UnitBehavior)
+        if (FocusEntity is UnitBehavior)
         {
-            
             Attack();
         }
     }
 
+    //Come interagisce l'unita con un'altra.
+    public override void AssignFocusEntity(EntityBehavior inEntity)
+    {
+        
+    }
+
 
     #endregion
+
+    public override void UnlockEntity()
+    {
+        base.UnlockEntity();
+        FocusEntity = null;
+        Stop(false);
+    }
 
     //Se muore chiede alla truppa cosa deve fare.
     public override void Death()

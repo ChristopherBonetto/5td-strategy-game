@@ -7,6 +7,6 @@ using UnityEngine.UI;
 public interface ISelectionable
 {
     void Select();
-    void AssignInteraction(EntityBehavior inEntity);
+    void AssignFocusEntity(EntityBehavior inEntity);
 }
 
