@@ -144,7 +144,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
                     if (CurrentEntity.inCombat)
                     {
-                        CurrentEntity.ResetCombat();
+                        CurrentEntity.UnlockEntity();
                     }
                 }
             }

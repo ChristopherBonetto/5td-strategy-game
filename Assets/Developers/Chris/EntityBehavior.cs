@@ -75,7 +75,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_attackType = new AttackBehaviors();
     }
 
-    public virtual void ResetCombat()
+    public virtual void UnlockEntity()
     {
         ChangeInCombat(false);
     }

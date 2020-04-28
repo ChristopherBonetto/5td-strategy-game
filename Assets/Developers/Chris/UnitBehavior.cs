@@ -55,6 +55,7 @@ public class UnitBehavior : EntityBehavior, ICanMove
                 else
                 {
                     //interact
+                    Stop(true);
                     AssignInteraction(FocusEntity);
                 }
             }

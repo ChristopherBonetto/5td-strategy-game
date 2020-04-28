@@ -5,6 +5,14 @@ using UnityEditor;
 using UnityEngine.AI;
 using Types;
 
+public enum Actions
+{
+    Move,
+    Fight,
+    Carry,
+    Death
+}
+
 public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 {
     public UnitsStatsSO m_troopStats;
@@ -27,6 +35,9 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             return TakeTroopHealth();
         }
     }
+
+    public Actions CurrentAction;
+
 
     public List<UnitBehavior> m_units = new List<UnitBehavior>();
 
@@ -54,6 +65,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         m_detectInterface = new DetectBehaviors();
     }
 
+
     public void Update()
     {
         if (!inCombat)
@@ -77,8 +89,8 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                 //EntityBehavior tempEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
             }
         }
-       
-        
+
+
 
         if (IsMoving())
         {
@@ -90,6 +102,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     }
 
+
     public void Interact()
     {
         if(FocusEntity is TroopBehavior)
@@ -100,13 +113,14 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         }
     }
 
-    public void UnlockEntity()
+    public override void UnlockEntity()
     {
-        base.ResetCombat();
+        base.UnlockEntity();
 
         if (FocusEntity != null)
         {
-            FocusEntity.ResetCombat();
+            Debug.Log("AOAOAOA");
+            FocusEntity.UnlockEntity();
         }
         
         Stop(false);
@@ -119,6 +133,8 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
         FocusEntity = null;
         Debug.Log("escape");
+
+        ResetFormation();
     }
 
     public void Fight(EntityBehavior inEntity)
@@ -409,7 +425,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public override void Death()
     {
-        ResetTroopFocusObj();
         base.Death();
     }
 
