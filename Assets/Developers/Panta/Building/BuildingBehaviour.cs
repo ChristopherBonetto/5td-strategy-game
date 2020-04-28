@@ -23,6 +23,9 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
         }
     }
 
+    private Collider m_Collider;
+    public Collider Collider => m_Collider;
+
     #region Detection variables
     [Header("Detection Field")]
 
@@ -53,6 +56,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     private void Awake()
     {
         m_navMeshObstacle = GetComponent<NavMeshObstacle>();
+        m_Collider = GetComponent<Collider>();
     }
 
     public override void Start()
@@ -105,9 +109,8 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
 
         m_unitStats.CanAttack = false;
         m_navMeshObstacle.enabled = false;
-        this.transform.localScale = m_carryScale;
-        this.transform.position = inCarryPosition;
         this.transform.SetParent(troop.transform);
+        StartCoroutine(UpdatePosition(inCarryPosition));
     }
 
     /// <summary>
@@ -123,9 +126,22 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
 
         m_unitStats.CanAttack = true;
         m_navMeshObstacle.enabled = true;
-        this.transform.localScale = m_initialScale;
-        this.transform.position = inDropPosition;
         this.transform.SetParent(null);
+        StartCoroutine(UpdatePosition(inDropPosition));
+    }
+
+    IEnumerator UpdatePosition(Vector3 inTargetPosition)
+    {
+        float totalTimeToElaps = 0.5f;
+        float elapsedTime = 0f;
+        Vector3 startingPos = transform.position;
+
+        while (elapsedTime < totalTimeToElaps)
+        {
+            transform.position = Vector3.Slerp(startingPos, inTargetPosition, (elapsedTime / totalTimeToElaps));
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
     }
     #endregion
 

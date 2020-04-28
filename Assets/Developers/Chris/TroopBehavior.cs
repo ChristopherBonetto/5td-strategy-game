@@ -8,6 +8,7 @@ using Types;
 
 public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 {
+
     public UnitsStatsSO m_troopStats;
     public override EntityStatsSO EntityStats
     {
@@ -42,6 +43,10 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     protected bool m_stopBecauseInCombat = false;
 
     protected IDetect m_detectInterface;
+
+
+    [Header("carry Field"), Tooltip("Declare where the building will be after carry it")]
+    public Transform CarryPoint;
 
 
     private void Awake()
