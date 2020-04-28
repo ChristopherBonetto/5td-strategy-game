@@ -46,9 +46,17 @@ public class UnitBehavior : EntityBehavior, ICanMove
     {
         if (FocusEntity != null)
         {
-            if (!m_isGoingToInteract)
+            if (Timer(0.3f))
             {
-                StartCoroutine(GoToInteract());
+                if (!CheckFocussedObjectDistance())
+                {
+                    m_unitAgent.SetDestination(FocusEntity.transform.position);
+                }
+                else
+                {
+                    //interact
+                    AssignInteraction(FocusEntity);
+                }
             }
         }
     }
@@ -143,35 +151,15 @@ public class UnitBehavior : EntityBehavior, ICanMove
     }
 
     //Come interagisce l'unita con un'altra.
-    public override void Interact(EntityBehavior inEntity)
+    public override void AssignInteraction(EntityBehavior inEntity)
     {
         if (inEntity is UnitBehavior)
         {
+            
             Attack();
         }
     }
 
-    private IEnumerator GoToInteract()
-    {
-        m_isGoingToInteract = true;
-
-        while (FocusEntity != null)
-        {
-            if (!CheckFocussedObjectDistance())
-            {
-                UnitAgent.SetDestination(FocusEntity.transform.position);
-            }
-            else
-            {
-                Stop(true);
-                Interact(FocusEntity);
-            }
-            yield return new WaitForSeconds(1);
-        }
-        
-        yield return new WaitForEndOfFrame();
-        m_isGoingToInteract = false;
-    }
 
     #endregion
 

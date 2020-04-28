@@ -65,8 +65,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected IAttackTypes m_attackType;
 
-    protected bool m_isBusy = false;
-    public bool IsBusy { get => m_isBusy; }
+    protected bool m_inCombat = false;
+    public bool inCombat { get => m_inCombat; }
 
     public virtual void Start()
     {
@@ -75,10 +75,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_attackType = new AttackBehaviors();
     }
 
-
-    public virtual void ChangeIsBusy(bool inValue)
+    public virtual void ResetCombat()
     {
-        m_isBusy = inValue;
+        ChangeInCombat(false);
+    }
+
+    public virtual void ChangeInCombat(bool inValue)
+    {
+        m_inCombat = inValue;
     }
 
     //Maybe a new command.
@@ -165,14 +169,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
-    public virtual void Interact(EntityBehavior inEntity)
+    public virtual void AssignInteraction(EntityBehavior inEntity)
     {
-        if(inEntity == null)
-        {
-            Debug.Log("ciao miao");
-        }
-        FocusEntity = inEntity;
-        Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
+        //if(inEntity == null)
+        //{
+        //    Debug.Log("ciao miao");
+        //}
+        //FocusEntity = inEntity;
+        //Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
     }
 
     #endregion
@@ -207,6 +211,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Death()
     {
+        FocusEntity = null;
         this.gameObject.SetActive(false);
 
         //TO DO: se è il castello finisce il match.

@@ -84,11 +84,11 @@ public class GoToInteract : Command
             PreviousFocusObj = m_entity.FocusEntity;
         }
 
-        m_entity.Interact(FocusObj);
+        m_entity.AssignInteraction(FocusObj);
     }
 
     public override void Undo()
     {
-        m_entity.Interact(PreviousFocusObj);
+        m_entity.AssignInteraction(PreviousFocusObj);
     }
 }

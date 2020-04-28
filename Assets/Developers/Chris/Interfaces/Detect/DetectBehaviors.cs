@@ -31,7 +31,7 @@ public class DetectBehaviors : IDetect
 
                         EntityBehavior tempEntity = hit.transform.GetComponent<EntityBehavior>();
 
-                        if (!tempEntity.IsBusy)
+                        if (!tempEntity.inCombat)
                         {
                             return tempEntity;
                         }
