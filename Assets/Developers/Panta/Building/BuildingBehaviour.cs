@@ -100,7 +100,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     /// <summary>
     /// This method is performed by the troop when perform successfully carry a tower.
     /// </summary>
-    public void Carry(TroopBehavior troop, Vector3 inCarryPosition)
+    public void Carry(NewTroopBehavior troop, Vector3 inCarryPosition)
     {
         // Can attack = false
         // change its scale,
@@ -117,7 +117,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     /// <summary>
     /// This method is performed by the troop when perform successfully drop the tower.
     /// </summary>
-    public void Drop(TroopBehavior troop, Vector3 inDropPosition)
+    public void Drop(NewTroopBehavior troop, Vector3 inDropPosition)
     {
         // Can attack = true
         // restore its original scale,
@@ -176,11 +176,11 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
             {
                 // Calculate also the distance to perform, then apply the damage.
 
-                if (m_attackType.SingleAttack(FocusEntity, m_unitStats.Damage))
-                {
-                    //TO DO: Chiedi alla truppa un altro bersaglio del suo oggetto focus.
-                    FocusEntity = null;
-                }
+                //if (m_attackType.SingleAttack(FocusEntity, m_unitStats.Damage))
+                //{
+                //    //TO DO: Chiedi alla truppa un altro bersaglio del suo oggetto focus.
+                //    FocusEntity = null;
+                //}
             }
         }
     }

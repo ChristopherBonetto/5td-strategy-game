@@ -86,7 +86,7 @@ public class GameController : Singleton<GameController>
 
     public void CreateAllEntities()
     {
-        CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(-5, 0.5f, -5));
+        CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(5, 0, 5));
         CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(0, 0.5f, 0));
         Castle = CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(15, 0.5f, 5));
         CreateEnemies();
@@ -96,7 +96,7 @@ public class GameController : Singleton<GameController>
     {
         for(int i = 0; i < m_enemySpawnPoints.Length; i++)
         {
-            TroopBehavior tempTroop = CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
+            NewTroopBehavior tempTroop = CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
             tempTroop.AssignFocusEntity(Castle);
         }
     }
@@ -123,7 +123,7 @@ public class GameController : Singleton<GameController>
         Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    public TroopBehavior CreateNewTroop(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    public NewTroopBehavior CreateNewTroop(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!Collection.UnitsDictionary.ContainsKey(inEntityType))
         {
@@ -152,7 +152,7 @@ public class GameController : Singleton<GameController>
             Debug.Log("can't take troop container because in pool it can't expand");
             return null;
         }
-        TroopBehavior tempRef = troop.GetComponent<TroopBehavior>();
+        NewTroopBehavior tempRef = troop.GetComponent<NewTroopBehavior>();
 
         if (tempRef == null)
         {

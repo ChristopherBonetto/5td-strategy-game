@@ -9,7 +9,7 @@ namespace HF.Unit
     /// </summary>
     public class CarryBehaviour : MonoBehaviour
     {
-        private TroopBehavior m_troopBehaviourComponent;
+        private NewTroopBehavior m_troopBehaviourComponent;
         private bool m_isCarring = false;
 
         // Here all variable used to detect building.
@@ -26,7 +26,7 @@ namespace HF.Unit
 
         private void Awake()
         {
-            m_troopBehaviourComponent = GetComponent<TroopBehavior>();
+            m_troopBehaviourComponent = GetComponent<NewTroopBehavior>();
         }
 
         private void Start()
@@ -69,10 +69,11 @@ namespace HF.Unit
                     //}
 
                     // unit can't attack while carrying, so set that.
-                    foreach (UnitBehavior unit in m_troopBehaviourComponent.m_units)
-                    {
-                        unit.EntityStats.CanAttack = false;
-                    }
+                    // Ale questa è solo una info dello scriptable se l'entità è in grado di attaccare. Non è proprio una bool.
+                    //foreach (NewUnitBehavior unit in m_troopBehaviourComponent.m_units)
+                    //{
+                    //    unit.EntityStats.CanAttack = false;
+                    //}
 
                     m_isCarring = true;
                 }
@@ -99,10 +100,10 @@ namespace HF.Unit
                         // Play the animation foreach unit.
 
                         // units now can attack,
-                        foreach (UnitBehavior unit in m_troopBehaviourComponent.m_units)
-                        {
-                            unit.EntityStats.CanAttack = true;
-                        }
+                        //foreach (NewUnitBehavior unit in m_troopBehaviourComponent.m_units)
+                        //{
+                        //    unit.EntityStats.CanAttack = true;
+                        //}
 
                         m_building.Drop(m_troopBehaviourComponent, hit.point + Vector3.up * m_building.Collider.bounds.extents.y);
                         m_building.transform.up = hit.normal;

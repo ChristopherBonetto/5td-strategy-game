@@ -125,11 +125,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(entity != null)
             {
-                if(entity is UnitBehavior)
-                {
-                    UnitBehavior unit = (UnitBehavior)entity;
-                    entity = unit.TroopRef;
-                }
                 var command = new GoToInteract(CurrentEntity, entity);
                 Debug.Log(CurrentEntity + " " + entity);
                 CurrentEntity.ExecuteCommand(command);

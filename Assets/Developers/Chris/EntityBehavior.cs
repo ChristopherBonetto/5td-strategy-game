@@ -64,9 +64,12 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     }
 
     protected IAttackTypes m_attackType;
+    public IAttackTypes AttackType { get => m_attackType; }
 
     protected bool m_inCombat = false;
     public bool inCombat { get => m_inCombat; }
+
+
 
     public virtual void Start()
     {
@@ -171,10 +174,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void AssignFocusEntity(EntityBehavior inEntity)
     {
-        //if(inEntity == null)
-        //{
-        //    Debug.Log("ciao miao");
-        //}
         FocusEntity = inEntity;
         Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
     }
