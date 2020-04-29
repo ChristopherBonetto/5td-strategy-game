@@ -65,6 +65,12 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         CheckToInterctWithNearbyEntity();
         CommandUnitsToFollowMe();
+
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            EntityStats.Armor = 100;
+            m_troopStats.Armor = 100;
+        }
     }
 
     #region Troop Behavior
@@ -100,6 +106,12 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             TroopBehavior troop = (TroopBehavior)FocusEntity;
             troop.Fight(this);
         }
+        if(FocusEntity is BuildingBehaviour)
+        {
+            Fight(FocusEntity);
+            BuildingBehaviour caa = (BuildingBehaviour)FocusEntity;
+            
+        }
     }
 
     public void Fight(EntityBehavior inEntity)
@@ -107,17 +119,28 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         ChangeInCombat(true);
         Stop(true);
 
-        TroopBehavior troop = (TroopBehavior)inEntity;
-        int difference = (m_units.Count - troop.m_units.Count);
+        if(inEntity is TroopBehavior)
+        {
+            TroopBehavior troop = (TroopBehavior)inEntity;
+            int difference = (m_units.Count - troop.m_units.Count);
 
-        //TO DO :Schieramenti e controlli se ranged o melee
-        if (difference == 0)
+            //TO DO :Schieramenti e controlli se ranged o melee
+            if (difference == 0)
+            {
+                for (int i = 0; i < m_units.Count; i++)
+                {
+                    m_units[i].FocusEntity = troop.m_units[i];
+                }
+            }
+        }
+        else if(inEntity is BuildingBehaviour)
         {
             for (int i = 0; i < m_units.Count; i++)
             {
-                m_units[i].FocusEntity = troop.m_units[i];
+                m_units[i].FocusEntity = inEntity;
             }
         }
+        
     }
 
     public override void UnlockEntity()
@@ -149,6 +172,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     public override void AssignStats(EntityStatsSO inStats)
     {
         base.AssignStats(inStats);
+        m_agent.speed = m_troopStats.UnitSpeed + 2;
         CreateUnits(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
     }
 
@@ -363,20 +387,32 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         base.Select();
     }
 
+    #endregion
+
     //Come la truppa interagisce con le altre entity.
     public override void AssignFocusEntity(EntityBehavior inEntity)
     {
-        if(inEntity.EntityPlayerType != this.EntityPlayerType)
+        if (inEntity.EntityPlayerType != this.EntityPlayerType)
         {
-            if (inEntity is TroopBehavior)
+            if (inEntity.EntityStats.CanTakeDamage)
             {
                 FocusEntity = inEntity;
             }
-        }
-        
-    }
+            //if (inEntity is TroopBehavior)
+            //{
+            //    FocusEntity = inEntity;
+            //}
+            //if(inEntity is BuildingBehaviour)
+            //{
+            //    BuildingBehaviour building = (BuildingBehaviour)inEntity;
+            //    if (building.EntityStats.CanTakeDamage)
+            //    {
 
-    #endregion
+            //    }
+            //}
+        }
+
+    }
 
     #region Troop health
 

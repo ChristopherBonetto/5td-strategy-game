@@ -197,4 +197,10 @@ public class UnitBehavior : EntityBehavior, ICanMove
             }
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        if (m_unitStats != null)
+            Gizmos.DrawWireSphere(transform.position, m_unitStats.AttackRange);
+    }
 }

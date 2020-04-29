@@ -30,7 +30,7 @@ public class DetectBehaviors : IDetect
                         }
 
                         EntityBehavior tempEntity = hit.transform.GetComponent<EntityBehavior>();
-
+                        
                         if (!tempEntity.inCombat)
                         {
                             return tempEntity;
