@@ -64,7 +64,13 @@ public class NewTroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     private void Update()
     {
-        
+        if(FocusEntity != null)
+        {
+            if (CheckFocussedObjectDistance())
+            {
+                Debug.Log("ciao");
+            }
+        }
     }
 
     // Update is called once per frame
@@ -210,9 +216,35 @@ public class NewTroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     protected virtual bool CheckFocussedObjectDistance()
     {
-        if (Vector3.Distance(transform.position, FocusEntity.transform.position) <= (m_troopAgent.stoppingDistance + FocusEntity.transform.localScale.x + EntityStats.EngageRange))
+        if (FocusEntity != null)
         {
-            return true;
+            if (Vector3.Distance(transform.position, FocusEntity.transform.position) <= m_troopAgent.stoppingDistance + FocusEntity.transform.localScale.x + m_troopStats.EngageRange)
+            {
+                m_troopAgent.ResetPath();
+
+                if (m_troopAgent.velocity.sqrMagnitude == 0)
+                {
+                    Debug.Log("DESTINATION REACHED");
+                    return true;
+                }
+            }
+            else
+            {
+                if (m_troopAgent.pathStatus == NavMeshPathStatus.PathComplete)
+                {
+                    Debug.Log("MOVE");
+                    m_troopAgent.SetDestination(FocusEntity.transform.position);
+                    return false;
+                }
+            }
+        }
+        else if (FocusEntity == null)
+        {
+            if (m_troopAgent.velocity.sqrMagnitude == 0 && !m_troopAgent.pathPending && !m_troopAgent.hasPath)
+            {
+                Debug.Log("IDLE");
+            }
+            return false;
         }
         return false;
     }

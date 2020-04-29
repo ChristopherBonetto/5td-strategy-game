@@ -97,7 +97,7 @@ public class GameController : Singleton<GameController>
         for(int i = 0; i < m_enemySpawnPoints.Length; i++)
         {
             NewTroopBehavior tempTroop = CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
-            tempTroop.AssignFocusEntity(Castle);
+            //tempTroop.AssignFocusEntity(Castle);
         }
     }
 
