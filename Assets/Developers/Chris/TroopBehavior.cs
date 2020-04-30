@@ -77,6 +77,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             {
                 if (!CheckFocussedObjectDistance())
                 {
+                    Debug.Log("ciao");
                     m_agent.SetDestination(FocusEntity.transform.position);
                 }
                 else
@@ -149,6 +150,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     public override void AssignStats(EntityStatsSO inStats)
     {
         base.AssignStats(inStats);
+        m_agent.speed = m_troopStats.UnitSpeed;
         CreateUnits(m_troopStats.UnitType, m_troopStats.TroopsQuantity);
     }
 
@@ -169,7 +171,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             }
             m_units.Add(AssignUnit(tempRef));
         }
-        CreateSquareFormation(1f);
+        CreateSquareFormation(1.5f);
     }
 
     public void CommandUnitsToFollowMe()
@@ -272,7 +274,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         for (int i = 0; i < m_units.Count; i++)
         {
-            Debug.Log("ciao");
             Vector3 destination = transform.position + m_formationPosition[i];
             m_units[i].MoveFromTo(destination);
         }
@@ -298,7 +299,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         {
             if (Timer(inDestinationTime))
             {
-                m_units[unitCounter].MoveFromTo(m_agent.destination + m_formationPosition[unitCounter]);
+                m_units[unitCounter].MoveFromTo(m_agent.transform.position + m_formationPosition[unitCounter]);
                 unitCounter++;
 
                 if(unitCounter > m_units.Count -1 )
@@ -315,7 +316,6 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         Debug.Log("destination reached");
         m_moveCoroutineIsActive = false;
     }
-
 
     public void TakeAgentComponent()
     {
@@ -347,9 +347,28 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     protected virtual bool CheckFocussedObjectDistance()
     {
-        if(Vector3.Distance(transform.position, FocusEntity.transform.position) <= (m_agent.stoppingDistance + FocusEntity.transform.localScale.x + EntityStats.EngageRange))
+        if (Vector3.Distance(transform.position, FocusEntity.transform.position) <= m_agent.stoppingDistance + FocusEntity.transform.localScale.x + m_troopStats.EngageRange)
         {
-            return true;
+            m_agent.velocity = Vector3.zero;
+
+            if (m_agent.velocity.sqrMagnitude == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            m_agent.ResetPath();
+
+            if (m_agent.pathStatus == NavMeshPathStatus.PathComplete)
+            {
+                m_agent.SetDestination(FocusEntity.transform.position);
+                return false;
+            }
         }
         return false;
     }
@@ -368,10 +387,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         if(inEntity.EntityPlayerType != this.EntityPlayerType)
         {
-            if (inEntity is TroopBehavior)
-            {
-                FocusEntity = inEntity;
-            }
+            FocusEntity = inEntity;
         }
         
     }
@@ -451,6 +467,5 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             if (!inCombat)
                 Gizmos.DrawWireSphere(transform.position, EntityStats.EngageRange);
         }
-        
     }
 }

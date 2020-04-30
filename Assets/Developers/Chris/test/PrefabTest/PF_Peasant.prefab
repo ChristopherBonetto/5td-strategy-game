@@ -133,7 +133,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6315723822256517091}
   - component: {fileID: 5520845122888363183}
-  - component: {fileID: 1645005224564083428}
+  - component: {fileID: 6247039143661291564}
+  - component: {fileID: 8552519778160079418}
   m_Layer: 0
   m_Name: PF_Peasant
   m_TagString: Peasant
@@ -178,7 +179,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1645005224564083428
+--- !u!114 &6247039143661291564
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -187,10 +188,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1086234464380520536}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a11be3c8c1df95f478cd1bc06fbe4543, type: 3}
+  m_Script: {fileID: 11500000, guid: 659d4b7cbd5399d47934a1a7ba918f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentHp: 0
+  m_focusEntity: {fileID: 0}
+--- !u!65 &8552519778160079418
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1086234464380520536}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8, y: 2, z: 0.8}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1408268391079448233
 GameObject:
   m_ObjectHideFlags: 0

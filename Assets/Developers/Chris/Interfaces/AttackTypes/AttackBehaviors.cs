@@ -45,14 +45,14 @@ public class AttackBehaviors : IAttackTypes
 
     
 
-    public bool SingleAttack(GameObject inFocusObj, int inDamage)
+    public bool SingleAttack(EntityBehavior inEntity, int inDamage)
     {
-        if (!inFocusObj.gameObject.active)
+        if (!inEntity.gameObject.active)
         {
             return false;
         }
 
-        ITakeDamage damageInterface = inFocusObj.GetComponent<ITakeDamage>();
+        ITakeDamage damageInterface = inEntity.GetComponent<ITakeDamage>();
 
         if(damageInterface != null)
         {

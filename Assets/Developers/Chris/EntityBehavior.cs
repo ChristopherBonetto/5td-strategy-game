@@ -175,8 +175,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         //{
         //    Debug.Log("ciao miao");
         //}
-        //FocusEntity = inEntity;
-        //Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
+        FocusEntity = inEntity;
+        Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
     }
 
     #endregion

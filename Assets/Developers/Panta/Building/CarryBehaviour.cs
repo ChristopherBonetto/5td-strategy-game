@@ -9,7 +9,7 @@ namespace HF.Unit
     /// </summary>
     public class CarryBehaviour : MonoBehaviour
     {
-        private NewTroopBehavior m_troopBehaviourComponent;
+        private TroopBehavior m_troopBehaviourComponent;
         private bool m_isCarring = false;
 
         // Here all variable used to detect building.
@@ -26,7 +26,7 @@ namespace HF.Unit
 
         private void Awake()
         {
-            m_troopBehaviourComponent = GetComponent<NewTroopBehavior>();
+            m_troopBehaviourComponent = GetComponent<TroopBehavior>();
         }
 
         private void Start()

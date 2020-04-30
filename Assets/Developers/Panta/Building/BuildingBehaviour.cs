@@ -99,7 +99,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     /// <summary>
     /// This method is performed by the troop when perform successfully carry a tower.
     /// </summary>
-    public void Carry(NewTroopBehavior troop, Vector3 inCarryPosition)
+    public void Carry(TroopBehavior troop, Vector3 inCarryPosition)
     {
         // Can attack = false
         // change its scale,
@@ -116,7 +116,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
     /// <summary>
     /// This method is performed by the troop when perform successfully drop the tower.
     /// </summary>
-    public void Drop(NewTroopBehavior troop, Vector3 inDropPosition)
+    public void Drop(TroopBehavior troop, Vector3 inDropPosition)
     {
         // Can attack = true
         // restore its original scale,
