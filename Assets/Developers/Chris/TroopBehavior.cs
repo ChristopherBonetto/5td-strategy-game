@@ -287,6 +287,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     public void MoveFromTo(Vector3 endPosition)
     {
         UnlockEntity();
+
         m_agent.SetDestination(endPosition);
     }
 

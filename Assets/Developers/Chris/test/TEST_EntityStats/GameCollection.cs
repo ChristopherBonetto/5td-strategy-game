@@ -94,7 +94,6 @@ public class GameCollection : ScriptableObject
     public Dictionary<BuildingType, BuildingInfo> BuildingsDictionary { get; private set; }
     public Dictionary<ResourceType, QuantityOfResources> ResourcesValuesDictionary { get; private set; }
 
-    [SerializeField] private EntityStatsSO ciao;
 
     private void Awake()
     {

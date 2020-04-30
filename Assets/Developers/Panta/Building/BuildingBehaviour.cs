@@ -10,7 +10,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshObstacle))]
 public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
 {
-    private BuildingsStatsSO m_unitStats;
+    public BuildingsStatsSO m_unitStats;
     public override EntityStatsSO EntityStats
     {
         get
@@ -85,6 +85,7 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
         GameObject tempUnit = ObjectPooler.SharedInstance.GetBuildingObject(inType);
         tempUnit.SetActive(true);
         tempUnit.transform.SetParent(transform);
+        tempUnit.transform.localPosition = new Vector3(0, transform.position.y, 0);
     }
 
     //Esegue il select della truppa

@@ -10,24 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d87391f075a628640a55baf728962249, type: 3}
-  m_Name: Building
+  m_Name: Castle
   m_EditorClassIdentifier: 
-  Name: Pippo
-  Prefab: {fileID: 5606003400729683687, guid: 257b555a31e137140ab1aa73b529c2a1, type: 3}
-  MaxHp: 0
-  Armor: 0
-  CanTakeDamage: 0
+  Name: Castle
+  Prefab: {fileID: 8141033731097591622, guid: b5f425c399e5fe64591efcf5eaf8b370, type: 3}
+  MaxHp: 100
+  Armor: 10
+  CanTakeDamage: 1
   EngageRange: 0
-  AttackRange: 10
-  AttackSpeed: 2
-  Damage: 5
-  CanAttack: 1
-  Projectile: {fileID: 1455427389740590923, guid: c263eaad79c532043b980e596a0590b6,
-    type: 3}
+  AttackRange: 0
+  AttackSpeed: 0
+  Damage: 0
+  CanAttack: 0
+  Projectile: {fileID: 0}
   Mesh: {fileID: 0}
   Specializations: []
   Cost:
     ResourceType: 1
-    ResourceQuantity: 10
-  BuildingType: 1
+    ResourceQuantity: 0
+  BuildingType: 0
   Weight: 10
