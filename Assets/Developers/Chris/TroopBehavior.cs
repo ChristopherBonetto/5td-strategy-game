@@ -10,43 +10,32 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 {
 
     public UnitsStatsSO m_troopStats;
-    public override EntityStatsSO EntityStats
-    {
-        get
-        {
-            return m_troopStats;
-        }
-        set
-        {
-            m_troopStats = (UnitsStatsSO)value;
-        }
+    public override EntityStatsSO EntityStats 
+    { 
+        get { return m_troopStats; } 
+        set { m_troopStats = (UnitsStatsSO)value; } 
     }
 
     public override int CurrentHp
     {
-        get
-        {
-            return TakeTroopHealth();
-        }
+        get { return TakeTroopHealth(); }
     }
 
+    [Header("Formation")]
     public List<UnitBehavior> m_units = new List<UnitBehavior>();
-
+    public float FormationRadius;
     private Vector3[] m_formationPosition = new Vector3[4];
 
-    protected int Xsize;
-    protected int Zsize;
 
     protected NavMeshAgent m_agent;
-
     protected bool m_moveCoroutineIsActive = false;
     protected bool m_stopBecauseInCombat = false;
-
     protected IDetect m_detectInterface;
 
 
     [Header("carry Field"), Tooltip("Declare where the building will be after carry it")]
     public Transform CarryPoint;
+    public bool IsCarrying { get; set; }
 
 
     private void Awake()
@@ -171,12 +160,12 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             }
             m_units.Add(AssignUnit(tempRef));
         }
-        CreateSquareFormation(1.5f);
+        SetFormationPositions(1.5f);
     }
 
     public void CommandUnitsToFollowMe()
     {
-        if (IsMoving())
+        if (IsMoving() && !IsCarrying)  // Begin-End Modification @Panta (Add !IsCarrying)
         {
             if (!m_moveCoroutineIsActive)
             {
@@ -218,48 +207,64 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #region Troop Formation
 
-    public void CreateSquareFormation(float inOffset = 1)
+    public void SetFormationPositions(float inOffset = 1)
     {
         if(m_troopStats == null || m_units.Count == 0)
         {
             return;
         }
 
-        Xsize = Mathf.RoundToInt(m_units[0].transform.localScale.x);
-        Zsize = Mathf.RoundToInt(m_units[0].transform.localScale.z);
-        m_formationPosition = new Vector3[4];
+
+        // Begin Modification @Panta
+        // Here we store each offset position.
+        // Note the case 2 and 4 are different cause of angle offset.
+        // In case 2 the offset is -90 degree, while in case 4 is -45 degree.
 
         switch (m_units.Count)
         {
             case 1:
-                m_formationPosition[0] = new Vector3(0, transform.position.y, 0);
+                m_formationPosition[0] = Vector3.zero;
                 break;
 
             case 2:
-                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, 0);
-                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, 0);
-                break;
+                // Reassign value to each position.
+                for (int i = 0; i < m_units.Count; i++)
+                {
+                    // Calculate the angle in radian (not degree)
+                    float angle = Mathf.PI * 2 / m_units.Count * i - (90 * Mathf.Deg2Rad);
+                    angle += transform.eulerAngles.y * Mathf.Deg2Rad;
 
-            case 3:
-                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, inOffset + Zsize / 2);
-                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, inOffset + Zsize / 2);
-                m_formationPosition[2] = new Vector3(0, transform.position.y, -inOffset - Zsize / 2);
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * FormationRadius;
+                }
                 break;
 
             case 4:
-                m_formationPosition[0] = new Vector3(-inOffset - Xsize / 2, transform.position.y, inOffset + Zsize / 2);
-                m_formationPosition[1] = new Vector3(inOffset + Xsize / 2, transform.position.y, inOffset + Zsize / 2);
-                m_formationPosition[2] = new Vector3(-inOffset - Xsize / 2, transform.position.y, -inOffset - Zsize / 2);
-                m_formationPosition[3] = new Vector3(inOffset + Xsize / 2, transform.position.y, -inOffset - Zsize / 2);
+                // Reassign value to each position.
+                for (int i = 0; i < m_units.Count; i++)
+                {
+                    // Calculate the angle in radian (not degree)
+                    float angle = Mathf.PI * 2 / m_units.Count * i - (45 * Mathf.Deg2Rad);
+                    angle += transform.eulerAngles.y * Mathf.Deg2Rad;
+
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * FormationRadius;
+                }
                 break;
 
+            default:
+                // Reassign value to each position.
+                for (int i = 0; i < m_units.Count; i++)
+                {
+                    // Calculate the angle in radian (not degree)
+                    float angle = Mathf.PI * 2 / m_units.Count * i;
+                    angle += transform.eulerAngles.y * Mathf.Deg2Rad;
+
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * FormationRadius;
+                }
+                break;
         }
+        // End modification @Panta
+
         AssignFormation(m_formationPosition);
-    }
-
-    public void CreateTriangleFormation(float inOffSet)
-    {
-
     }
 
     public void AssignFormation(Vector3[] inPos)
@@ -460,6 +465,42 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     }
 
     #endregion
+
+    // Begin Modification @Panta
+    #region Carrying
+
+    public void EnableCarryAction(bool enable)
+    {
+        // Maybe check if units are fighting 
+
+        if (enable)
+        {
+            FormationRadius = 1f;
+
+            SetFormationPositions();
+            ResetFormation();
+
+            for (int i = 0; i < m_units.Count; i++)
+            {
+                m_units[i].UnitAgent.enabled = false;
+            }
+        }
+        else
+        {
+            FormationRadius = 2f;
+
+            SetFormationPositions();
+            ResetFormation();
+
+            for (int i = 0; i < m_units.Count; i++)
+            {
+                m_units[i].UnitAgent.enabled = true;
+            }
+        }
+    }
+
+    #endregion
+    // End Modification @Panta
 
     private void OnDrawGizmos()
     {

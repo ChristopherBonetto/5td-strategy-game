@@ -31,7 +31,7 @@ namespace HF.Unit
 
         private void Start()
         {
-            m_detectionArea = new DetectionAreaGeneric<BuildingBehaviour>(1);
+            m_detectionArea = new DetectionAreaGeneric<BuildingBehaviour>(5);
         }
 
         private void Update()
@@ -61,6 +61,7 @@ namespace HF.Unit
                     // pick the carry position from the troops behaviour.
 
                     m_building.Carry(m_troopBehaviourComponent, m_troopBehaviourComponent.CarryPoint.position);
+                    EnableCarryAction(true);
 
                     // play the animation for each unit.
                     //foreach (UnitBehavior unit in m_troopBehaviourComponent.m_units)
@@ -109,6 +110,7 @@ namespace HF.Unit
                         m_building.transform.up = hit.normal;
                         m_building = null;
 
+                        EnableCarryAction(false);
                         m_isCarring = false;
                     }
                     else
@@ -119,6 +121,37 @@ namespace HF.Unit
                 else
                 {
                     Debug.Log($"You can't drop turret here");
+                }
+            }
+        }
+
+        public void EnableCarryAction(bool enable)
+        {
+            // Maybe check if units are fighting 
+
+            if (enable)
+            {
+                m_troopBehaviourComponent.FormationRadius = 1f;
+
+                m_troopBehaviourComponent.SetFormationPositions();
+                m_troopBehaviourComponent.ResetFormation();
+
+                for (int i = 0; i < m_troopBehaviourComponent.m_units.Count; i++)
+                {
+                    m_troopBehaviourComponent.m_units[i].UnitAgent.Stop();
+                    m_troopBehaviourComponent.m_units[i].UnitAgent.enabled = false;
+                }
+            }
+            else
+            {
+                m_troopBehaviourComponent.FormationRadius = 2f;
+
+                m_troopBehaviourComponent.SetFormationPositions();
+                m_troopBehaviourComponent.ResetFormation();
+
+                for (int i = 0; i < m_troopBehaviourComponent.m_units.Count; i++)
+                {
+                    m_troopBehaviourComponent.m_units[i].UnitAgent.enabled = true;
                 }
             }
         }

@@ -42,7 +42,7 @@ public class UnitBehavior : EntityBehavior, ICanMove
 
     public void Update()
     {
-        if (FocusEntity != null)
+        if (UnitAgent.isActiveAndEnabled && FocusEntity != null)
         {
             if (Timer(0.3f))
             {
@@ -116,14 +116,19 @@ public class UnitBehavior : EntityBehavior, ICanMove
 
     public void MoveFromTo(Vector3 endPosition)
     {
+        if (!UnitAgent.isActiveAndEnabled) return;
+        
         Stop(false);
         UnitAgent.SetDestination(endPosition);
     }
 
     public void Stop(bool inBool)
     {
-        if(UnitAgent.isStopped != inBool)
-        UnitAgent.isStopped = inBool;
+        if (UnitAgent.isActiveAndEnabled)
+        {
+            if(UnitAgent.isStopped != inBool)
+                UnitAgent.isStopped = inBool;
+        }
     }
 
     public bool IsMoving()
