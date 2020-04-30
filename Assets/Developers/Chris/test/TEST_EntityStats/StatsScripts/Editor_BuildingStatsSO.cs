@@ -7,23 +7,9 @@ using Types;
 [CustomEditor(typeof(BuildingsStatsSO))]
 public class Editor_BuildingStatsSO : Editor
 {
-    BuildingsStatsSO building;
-
-    private void OnEnable()
-    {
-        building = (BuildingsStatsSO)target;
-    }
-    private void OnDisable()
-    {
-        EditorUtility.SetDirty(building);
-        AssetDatabase.SaveAssets();
-    }
-
     public override void OnInspectorGUI()
     {
-        serializedObject.Update();
-
-        //BuildingsStatsSO building = target as BuildingsStatsSO;
+        BuildingsStatsSO building = target as BuildingsStatsSO;
 
         GUILayout.Label("GENERAL STATS");
         EditorGUILayout.Space();
@@ -143,6 +129,5 @@ public class Editor_BuildingStatsSO : Editor
         building.Cost.ResourceQuantity = EditorGUILayout.IntField(building.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
 
-        serializedObject.ApplyModifiedProperties();
     }
 }

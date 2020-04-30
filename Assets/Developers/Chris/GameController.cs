@@ -62,8 +62,7 @@ public class GameController : Singleton<GameController>
     [SerializeField] private GameObject m_troopsContainer;
 
     [SerializeField] Transform[] m_enemySpawnPoints;
-    public EntityBehavior Castle;
-
+    [SerializeField] Transform m_castle;
 
 
     private void Awake()
@@ -80,24 +79,23 @@ public class GameController : Singleton<GameController>
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            CreateAllEntities();
+            CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(0,0.5f,0));
         }
-    }
-
-    public void CreateAllEntities()
-    {
-        CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(5, 0, 5));
-        CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(0, 0.5f, 0));
-        Castle = CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(15, 0.5f, 5));
-        CreateEnemies();
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(0, 0.5f, 0));
+        }
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            CreateEnemies();
+        }
     }
 
     public void CreateEnemies()
     {
         for(int i = 0; i < m_enemySpawnPoints.Length; i++)
         {
-            NewTroopBehavior tempTroop = CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
-            //tempTroop.AssignFocusEntity(Castle);
+            CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
         }
     }
 
@@ -123,12 +121,12 @@ public class GameController : Singleton<GameController>
         Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    public NewTroopBehavior CreateNewTroop(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
+    public void CreateNewTroop(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!Collection.UnitsDictionary.ContainsKey(inEntityType))
         {
             Debug.Log("GameCollection don't contain " + inEntityType);
-            return null;
+            return;
         }
 
         if(inPlayerType == PlayerType.Player)
@@ -136,7 +134,7 @@ public class GameController : Singleton<GameController>
             if (!CheckResourcesAvailability(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost))
             {
                 Debug.Log("u need more resources");
-                return null;
+                return;
             }
             DecreaseResources(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost);
         }
@@ -150,20 +148,19 @@ public class GameController : Singleton<GameController>
         if (troop == null)
         {
             Debug.Log("can't take troop container because in pool it can't expand");
-            return null;
+            return;
         }
-        NewTroopBehavior tempRef = troop.GetComponent<NewTroopBehavior>();
+        TroopBehavior tempRef = troop.GetComponent<TroopBehavior>();
 
         if (tempRef == null)
         {
             Debug.LogError("Prefab need TroopsBehavior script");
-            return null;
+            return;
         }
 
         tempRef.AssignPlayer(inPlayerType);
         tempRef.AssignStats(Collection.UnitsDictionary[inEntityType].UnitStatsCopy);
 
-        return tempRef;
     }
 
 
@@ -183,12 +180,12 @@ public class GameController : Singleton<GameController>
     //-------------------------------------------------------------------------
     #region Building
 
-    public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
+    public void CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
         {
             Debug.Log("GameCollection don't contain " + inBuildingType);
-            return null;
+            return;
         }
 
         if (inPlayerType == PlayerType.Player)
@@ -196,7 +193,7 @@ public class GameController : Singleton<GameController>
             if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
             {
                 Debug.Log("u need more resources");
-                return null;
+                return;
             }
             DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
         }
@@ -210,20 +207,19 @@ public class GameController : Singleton<GameController>
         if (troop == null)
         {
             Debug.Log("can't take troop container because in pool it can't expand");
-            return null;
+            return;
         }
         BuildingBehaviour tempRef = troop.GetComponent<BuildingBehaviour>();
 
         if (tempRef == null)
         {
             Debug.LogError("Prefab need TroopsBehavior script");
-            return null;
+            return;
         }
 
         tempRef.AssignPlayer(inPlayerType);
         tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
 
-        return tempRef;
         Debug.Log("building pooled!!!");
 
     }
