@@ -37,6 +37,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     public Transform CarryPoint;
     public bool IsCarrying { get; set; }
 
+    public BattleHandler currentBattle;
 
     private void Awake()
     {
@@ -54,10 +55,15 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         if(!inCombat && !IsCarrying)
         {
-            CheckToInterctWithNearbyEntity();
-            CommandUnitsToFollowMe();
+            if (m_agent.hasPath)
+            {
+                if (m_agent.pathStatus == NavMeshPathStatus.PathComplete)
+                {
+                    CheckToInterctWithNearbyEntity();
+                    CommandUnitsToFollowMe();
+                }
+            }
         }
-        
     }
 
     #region Troop Behavior
@@ -87,13 +93,23 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         if(FocusEntity is TroopBehavior)
         {
+            ChangeInCombat(true);
+            Debug.Log("WOOOOOW");
+            TroopBehavior troop = (TroopBehavior)FocusEntity;
+            new Fight(this, troop);
+        }
+        else if(FocusEntity is BuildingBehaviour)
+        {
         }
     }
 
     //Serve per far scappare dal fight.
     public override void UnlockEntity()
     {
-        
+        if(currentBattle != null)
+        {
+            currentBattle.FinishFight();
+        }
     }
 
     #endregion
@@ -113,7 +129,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
         for (int i = 0; i < inValue; i++)
         {
-            GameObject tempUnit = ObjectPooler.SharedInstance.GetUnityObject(inType);
+            GameObject tempUnit = ObjectPooler.Instance.GetUnityObject(inType);
 
             UnitBehavior tempRef = tempUnit.GetComponent<UnitBehavior>();
 
@@ -321,21 +337,13 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     protected virtual bool CheckFocussedObjectDistance()
     {
-        if (Vector3.Distance(transform.position, FocusEntity.transform.position) <= m_agent.stoppingDistance + FocusEntity.transform.localScale.x + m_troopStats.EngageRange)
-        {
-            m_agent.velocity = Vector3.zero;
-            return true;
-        }
-        else
-        {
-            //Da vedere se serve.
-            m_agent.ResetPath();
+        float distance = m_agent.stoppingDistance + FocusEntity.transform.localScale.x + m_troopStats.EngageRange;
 
-            if (m_agent.pathStatus == NavMeshPathStatus.PathComplete)
-            {
-                m_agent.SetDestination(FocusEntity.transform.position);
-                return false;
-            }
+        if (m_agent.remainingDistance <= distance)
+        {
+            Debug.Log("STOP");
+            Stop(true);
+            return true;
         }
         return false;
     }
@@ -344,9 +352,9 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #region Troop Click
 
-    public override void Select()
+    public override void Click()
     {
-        base.Select();
+        base.Click();
     }
 
     //Come la truppa interagisce con le altre entity.
@@ -354,7 +362,17 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         if(inEntity.EntityPlayerType != this.EntityPlayerType)
         {
-            FocusEntity = inEntity;
+            //GESTIRE A STATI
+            if(inEntity is UnitBehavior)
+            {
+                Debug.Log("ATTACK");
+                FocusEntity = (inEntity as UnitBehavior).TroopRef;
+            }
+            else if(inEntity is BuildingBehaviour)
+            {
+                FocusEntity = inEntity as BuildingBehaviour;
+            }
+            m_agent.SetDestination(inEntity.transform.position);
         }
         
     }

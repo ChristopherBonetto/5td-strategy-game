@@ -96,7 +96,6 @@ public class GameController : Singleton<GameController>
         for(int i = 0; i < m_enemySpawnPoints.Length; i++)
         {
             TroopBehavior tempTroop = CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
-            tempTroop.AssignFocusEntity(Castle);
         }
     }
 
@@ -142,7 +141,7 @@ public class GameController : Singleton<GameController>
 
         //CheckFreeSpace(inPosition, 1);
         
-        GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Troop");
+        GameObject troop = ObjectPooler.Instance.GetPooledObject("Troop");
         troop.transform.position = inPosition;
         troop.SetActive(true);
 
@@ -201,7 +200,7 @@ public class GameController : Singleton<GameController>
 
         //CheckFreeSpace(inPosition, 1);
 
-        GameObject troop = ObjectPooler.SharedInstance.GetPooledObject("Building");
+        GameObject troop = ObjectPooler.Instance.GetPooledObject("Building");
         troop.transform.position = inPosition;
         troop.SetActive(true);
 

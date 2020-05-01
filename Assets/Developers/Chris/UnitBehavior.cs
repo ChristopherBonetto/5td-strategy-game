@@ -44,18 +44,13 @@ public class UnitBehavior : EntityBehavior, ICanMove
     {
         if (UnitAgent.isActiveAndEnabled && FocusEntity != null)
         {
-            if (Timer(0.3f))
+            if (!CheckFocussedObjectDistance())
             {
-                if (!CheckFocussedObjectDistance())
-                {
-                    m_unitAgent.SetDestination(FocusEntity.transform.position);
-                }
-                else
-                {
-                    //interact
-                    Stop(true);
-                    Interact();
-                }
+                m_unitAgent.SetDestination(FocusEntity.transform.position);
+            }
+            else
+            {
+                Interact();
             }
         }
     }
@@ -148,9 +143,9 @@ public class UnitBehavior : EntityBehavior, ICanMove
     #region Click interface
 
     //Esegue il select della truppa
-    public override void Select()
+    public override void Click()
     {
-        m_troopRef.Select();
+        m_troopRef.Click();
     }
 
     public void Interact()
@@ -195,8 +190,10 @@ public class UnitBehavior : EntityBehavior, ICanMove
                 {
                     if(m_attackType.SingleAttack(FocusEntity, m_unitStats.Damage))
                     {
-                        //TO DO: Chiedi alla truppa un altro bersaglio del suo oggetto focus.
-                        FocusEntity = null;
+                        if(TroopRef.currentBattle != null)
+                        {
+                            m_troopRef.currentBattle.TakeOtherTarget(this);
+                        }
                     }
                 }
             }

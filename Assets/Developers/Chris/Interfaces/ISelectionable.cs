@@ -4,9 +4,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public interface ISelectionable
+public interface IClickable
 {
-    void Select();
+    void Click();
     void AssignFocusEntity(EntityBehavior inEntity);
 }
 

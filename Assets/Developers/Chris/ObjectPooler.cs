@@ -48,7 +48,7 @@ public class ObjectPooler : MonoBehaviour
     /// <summary>
     /// Singleton instance.
     /// </summary>
-    public static ObjectPooler SharedInstance { get; private set; }
+    public static ObjectPooler Instance { get; private set; }
 
     #endregion
 
@@ -79,7 +79,7 @@ public class ObjectPooler : MonoBehaviour
     private void Awake()
     {
         // Set singleton instance
-        SharedInstance = this;
+        Instance = this;
 
         // Init Dictionary
         m_pooledObjects = new Dictionary<string, List<GameObject>>();

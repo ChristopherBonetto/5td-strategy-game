@@ -82,16 +82,16 @@ public class BuildingBehaviour : EntityBehavior, ITakeUpgrade
 
     public void CreateBuilding(BuildingType inType)
     {
-        GameObject tempUnit = ObjectPooler.SharedInstance.GetBuildingObject(inType);
+        GameObject tempUnit = ObjectPooler.Instance.GetBuildingObject(inType);
         tempUnit.SetActive(true);
         tempUnit.transform.SetParent(transform);
         tempUnit.transform.localPosition = new Vector3(0, transform.position.y, 0);
     }
 
     //Esegue il select della truppa
-    public override void Select()
+    public override void Click()
     {
-        base.Select();
+        base.Click();
 
         // Change material or highligth the one it has.
     }

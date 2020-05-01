@@ -4,6 +4,13 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 
+public enum TroopState
+{
+    FreeMove,
+    Interact,
+    Carry
+}
+
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
     private EntityStatsSO m_entityStats;
@@ -68,6 +75,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected bool m_inCombat = false;
     public bool inCombat { get => m_inCombat; }
 
+    public TroopState CurrentTroopState = TroopState.FreeMove;
+
     public virtual void Start()
     {
         m_commands = new List<Command>();
@@ -84,6 +93,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         m_inCombat = inValue;
     }
+
 
     //Maybe a new command.
     public virtual void RefreshHp()
@@ -158,7 +168,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     #region Click Interface
 
-    public virtual void Select()
+    public virtual void Click()
     {
         Debug.Log("selected " + EntityPlayerType + " " + gameObject.name);
 

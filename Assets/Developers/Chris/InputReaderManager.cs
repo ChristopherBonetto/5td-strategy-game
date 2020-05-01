@@ -88,11 +88,11 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
-            ISelectionable canBeSelected = HitInfo.transform.GetComponentInParent<ISelectionable>();
+            IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
 
             if(canBeSelected != null)
             {
-                canBeSelected.Select();
+                canBeSelected.Click();
             }
 
             // else Trigger the event "OnUnitSelected(null)"

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITakeCommand : ISelectionable
+public interface ITakeCommand : IClickable
 {
 
 }
