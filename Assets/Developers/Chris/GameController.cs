@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 using UnityEngine.AI;
+using HF.Unit;
 
 public class GameController : Singleton<GameController>
 {

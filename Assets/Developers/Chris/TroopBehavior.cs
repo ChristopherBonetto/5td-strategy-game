@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEngine.AI;
 using Types;
+using HF.Unit;
 
 
 public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
