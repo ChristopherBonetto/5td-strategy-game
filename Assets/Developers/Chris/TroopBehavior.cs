@@ -52,32 +52,33 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public void Update()
     {
-        CheckToInterctWithNearbyEntity();
-        CommandUnitsToFollowMe();
+        if(!inCombat && !IsCarrying)
+        {
+            CheckToInterctWithNearbyEntity();
+            CommandUnitsToFollowMe();
+        }
+        
     }
 
     #region Troop Behavior
 
     public void CheckToInterctWithNearbyEntity()
     {
-        if (!inCombat)
+        if (FocusEntity != null)
         {
-            if (FocusEntity != null)
+            if (!CheckFocussedObjectDistance())
             {
-                if (!CheckFocussedObjectDistance())
-                {
-                    Debug.Log("ciao");
-                    m_agent.SetDestination(FocusEntity.transform.position);
-                }
-                else
-                {
-                    Interact();
-                }
+                Debug.Log("Go to destination");
+                m_agent.SetDestination(FocusEntity.transform.position);
             }
             else
             {
-                //FocusEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
+                Interact();
             }
+        }
+        else
+        {
+            //FocusEntity = m_detectInterface.DetectArea(this.transform, EntityStats.EngageRange, ~gameObject.layer);
         }
     }
 
@@ -86,50 +87,13 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     {
         if(FocusEntity is TroopBehavior)
         {
-            Fight(FocusEntity);
-            TroopBehavior troop = (TroopBehavior)FocusEntity;
-            troop.Fight(this);
         }
     }
 
-    public void Fight(EntityBehavior inEntity)
-    {
-        ChangeInCombat(true);
-        Stop(true);
-
-        TroopBehavior troop = (TroopBehavior)inEntity;
-        int difference = (m_units.Count - troop.m_units.Count);
-
-        //TO DO :Schieramenti e controlli se ranged o melee
-        if (difference == 0)
-        {
-            for (int i = 0; i < m_units.Count; i++)
-            {
-                m_units[i].FocusEntity = troop.m_units[i];
-            }
-        }
-    }
-
+    //Serve per far scappare dal fight.
     public override void UnlockEntity()
     {
-        base.UnlockEntity();
-
-        if (FocusEntity != null)
-        {
-            FocusEntity.UnlockEntity();
-        }
         
-
-        foreach (UnitBehavior unit in m_units)
-        {
-            unit.UnlockEntity();
-        }
-
-        FocusEntity = null;
-
-        Stop(false);
-        ResetFormation();
-        Debug.Log("escape");
     }
 
     #endregion
@@ -165,11 +129,11 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     public void CommandUnitsToFollowMe()
     {
-        if (IsMoving() && !IsCarrying)  // Begin-End Modification @Panta (Add !IsCarrying)
+        if (IsMoving())  // Chris: spostato nell'update xke comune tra i metodi.  Begin-End Modification @Panta (Add !IsCarrying)
         {
             if (!m_moveCoroutineIsActive)
             {
-                StartCoroutine(MoveUnits(0.3f));
+                StartCoroutine(MoveUnits(0.15f));
             }
         }
     }
@@ -207,7 +171,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     #region Troop Formation
 
-    public void SetFormationPositions(float inOffset = 1)
+    public void SetFormationPositions(float inRadius = 1)
     {
         if(m_troopStats == null || m_units.Count == 0)
         {
@@ -234,7 +198,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                     float angle = Mathf.PI * 2 / m_units.Count * i - (90 * Mathf.Deg2Rad);
                     angle += transform.eulerAngles.y * Mathf.Deg2Rad;
 
-                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * FormationRadius;
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * inRadius;
                 }
                 break;
 
@@ -246,7 +210,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                     float angle = Mathf.PI * 2 / m_units.Count * i - (45 * Mathf.Deg2Rad);
                     angle += transform.eulerAngles.y * Mathf.Deg2Rad;
 
-                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * FormationRadius;
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * inRadius;
                 }
                 break;
 
@@ -258,7 +222,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
                     float angle = Mathf.PI * 2 / m_units.Count * i;
                     angle += transform.eulerAngles.y * Mathf.Deg2Rad;
 
-                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * FormationRadius;
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * inRadius;
                 }
                 break;
         }
@@ -291,11 +255,15 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
     //Muovi la truppa e le unita. Da usare per uscire dal fight siccome resetta tutto.
     public void MoveFromTo(Vector3 endPosition)
     {
-        UnlockEntity();
+        //cercare un altro controllo per farlo uscire dal fight
+        //UnlockEntity();
 
         m_agent.SetDestination(endPosition);
     }
 
+    //TO DO : Cambiare la coroutine se troppo pesante con un sistema che controlli se questo agent si sta muovendo
+    // Altra opzione: sistema di waypoints, cosi le truppe farebbero path piu brevi e sono si dividerebbero.
+    // Altra opzione: dare direttamente il punto.
     private IEnumerator MoveUnits(float inDestinationTime)
     {
         m_moveCoroutineIsActive = true;
@@ -307,7 +275,7 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
             {
                 m_units[unitCounter].MoveFromTo(m_agent.transform.position + m_formationPosition[unitCounter]);
                 unitCounter++;
-
+                
                 if(unitCounter > m_units.Count -1 )
                 {
                     unitCounter = 0;
@@ -356,18 +324,11 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
         if (Vector3.Distance(transform.position, FocusEntity.transform.position) <= m_agent.stoppingDistance + FocusEntity.transform.localScale.x + m_troopStats.EngageRange)
         {
             m_agent.velocity = Vector3.zero;
-
-            if (m_agent.velocity.sqrMagnitude == 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return true;
         }
         else
         {
+            //Da vedere se serve.
             m_agent.ResetPath();
 
             if (m_agent.pathStatus == NavMeshPathStatus.PathComplete)
@@ -504,10 +465,10 @@ public class TroopBehavior : EntityBehavior, ICanMove, ITakeUpgrade
 
     private void OnDrawGizmos()
     {
-        if(EntityStats != null)
+        if (Application.isPlaying && m_troopStats != null)
         {
-            if (!inCombat)
-                Gizmos.DrawWireSphere(transform.position, EntityStats.EngageRange);
+            UnityEditor.Handles.color = new Color(1, 0, 0, 0.1f);
+            UnityEditor.Handles.DrawSolidDisc(transform.position, Vector3.up, m_troopStats.EngageRange);
         }
     }
 }
