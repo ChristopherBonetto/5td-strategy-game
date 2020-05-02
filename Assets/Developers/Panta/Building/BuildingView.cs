@@ -8,6 +8,9 @@ namespace HF.Unit
     [RequireComponent(typeof(NavMeshObstacle))]
     public class BuildingView : MonoBehaviour
     {
+        [SerializeField]
+        private Transform m_weapon;
+
         // The obstacle is set to the view because we can
         // adapt the size when modify prefab.
         private NavMeshObstacle m_NavMeshObstacle;
@@ -29,6 +32,12 @@ namespace HF.Unit
         public void DropBuilding()
         {
             NavMeshObstacle.enabled = true;
+        }
+
+        public void TrackOstile(EntityBehavior ostile)
+        {
+            m_weapon.forward = (ostile.transform.position - transform.position).normalized;
+            //m_weapon.LookAt(ostile.transform);
         }
     }
 }

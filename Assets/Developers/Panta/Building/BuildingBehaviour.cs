@@ -31,18 +31,17 @@ namespace HF.Unit
             set { m_buildingStats = (BuildingsStatsSO)value; }
         }
 
-        // Create a detection area to detect ostile.
-        private DetectionEntityBehaviour<EntityBehavior> m_detectionArea;
-        private const float m_delayBetweenDetections = 1f;
-        private float m_timeElapsedbetweenDetections = 0;
-
 
         [Header("Offensive")]
 
         [SerializeField]
         private LayerMask m_ostileLayer;
-        
-        // Keep tracking the target ostile.
+
+        // Create a detection area to detect ostile.
+        private DetectionEntityBehaviour<EntityBehavior> m_detectionArea;
+        private const float m_delayBetweenDetections = 1f;
+        private float m_timeElapsedbetweenDetections = 0;
+
         // Keep tracking the target ostile.
         // When the ostile die, invoke the event that set this value to null.
         private EntityBehavior m_ostileRef;
@@ -56,7 +55,14 @@ namespace HF.Unit
 
         private void OnEnable()
         {
+            // Subsribe to event --> OnUnitDeath.
+
             Initialize();
+        }
+
+        private void OnDisable()
+        {
+            // unsubscribe from event --> OnUnitDeath.
         }
 
         private void Update()
@@ -190,6 +196,8 @@ namespace HF.Unit
         {
             if (m_ostileRef != null)
             {
+                m_view.TrackOstile(m_ostileRef);
+
                 // after the rate,
                 // instantiate the projectile,
 
@@ -204,5 +212,18 @@ namespace HF.Unit
                 }
             }
         }
+
+        #region 
+        /// <summary>
+        /// Handle ostile death.
+        /// </summary>
+        public void OnEnityDead(EntityBehavior entity)
+        {
+            if (entity == m_ostileRef)
+            {
+                m_ostileRef = null;
+            }
+        }
+        #endregion
     }
 }
