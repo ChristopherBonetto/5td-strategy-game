@@ -10,7 +10,7 @@ public class UnitsStatsSO : EntityStatsSO
 
     public AttackType AttackType;
 
-    public int TroopsQuantity = 1;
+    public int UnitQuantity = 1;
 
     public float UnitSpeed;
 

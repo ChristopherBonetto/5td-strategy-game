@@ -5,9 +5,20 @@ using Types;
 using BehaviorDesigner.Runtime;
 using System;
 
-public class EntityTree : MonoBehaviour
+public class Entity : MonoBehaviour
 {
-    public EntityStatsSO m_entityStats;
+    private EntityStatsSO m_entityStats;
+    public virtual EntityStatsSO EntityStats
+    {
+        get
+        {
+            return m_entityStats;
+        }
+        set
+        {
+            m_entityStats = value;
+        }
+    }
 
     public PlayerType EntityPlayerType;
 
@@ -32,6 +43,7 @@ public class EntityTree : MonoBehaviour
     {
         m_entityStats = null;
         BT.ExternalBehavior = null;
+        gameObject.name = "Entity";
         gameObject.SetActive(false);
     }
 
@@ -52,6 +64,7 @@ public class EntityTree : MonoBehaviour
     public virtual void AssignStats(EntityStatsSO inStats)
     {
         gameObject.name = inStats.Name + "Troops";
+        EntityStats = inStats;
         BT.ExternalBehavior = inStats.ExTree;
     }
 

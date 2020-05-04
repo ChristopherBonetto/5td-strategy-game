@@ -54,7 +54,7 @@ public class Editor_UnitStatsSO : Editor
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Troop Quantity");
-            unit.TroopsQuantity = EditorGUILayout.IntSlider(unit.TroopsQuantity, 1, 4);
+            unit.UnitQuantity = EditorGUILayout.IntSlider(unit.UnitQuantity, 1, 4);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
         }

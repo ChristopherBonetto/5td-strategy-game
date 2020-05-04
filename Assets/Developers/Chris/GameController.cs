@@ -86,8 +86,8 @@ public class GameController : Singleton<GameController>
 
     public void CreateEntity()
     {
-        CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0, 0.5f, 0));
-        CreateNewEntity(UnitType.PEASANT, PlayerType.AI, new Vector3(5, 0.5f, 5));
+        CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0, 0f, 0));
+        CreateNewEntity(UnitType.PEASANT, PlayerType.AI, new Vector3(5, 0f, 5));
     }
 
     public void CreateNewEntity(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPos)
@@ -115,7 +115,7 @@ public class GameController : Singleton<GameController>
         {
             Debug.Log("can't take troop container because in pool it can't expand");
         }
-        EntityTree tempRef = troop.GetComponent<EntityTree>();
+        Troop tempRef = troop.GetComponent<Troop>();
 
         if (tempRef == null)
         {
