@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 using BehaviorDesigner.Runtime;
+using System;
 
 public class EntityTree : MonoBehaviour
 {
@@ -19,6 +20,20 @@ public class EntityTree : MonoBehaviour
         BT = gameObject.GetComponent<BehaviorTree>();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            ResetEntity();
+        }
+    }
+
+    private void ResetEntity()
+    {
+        m_entityStats = null;
+        BT.ExternalBehavior = null;
+        gameObject.SetActive(false);
+    }
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {
