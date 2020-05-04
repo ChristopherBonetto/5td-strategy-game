@@ -17,6 +17,4 @@ public class UnitsStatsSO : EntityStatsSO
     public int CarryCapacity;
 
     public float RespawnTime;
-
-
 }

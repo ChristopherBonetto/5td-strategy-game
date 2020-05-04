@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Types;
+using BehaviorDesigner.Runtime;
 
 [CustomEditor(typeof(UnitsStatsSO))]
 public class Editor_UnitStatsSO : Editor
@@ -180,6 +181,11 @@ public class Editor_UnitStatsSO : Editor
         EditorGUILayout.BeginHorizontal();
         unit.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(unit.Cost.ResourceType);
         unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Label("Cost");
+        EditorGUILayout.BeginHorizontal();
+        unit.ExTree = EditorGUILayout.ObjectField("",unit.ExTree,typeof(ExternalBehaviorTree),true) as ExternalBehaviorTree;
         EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();

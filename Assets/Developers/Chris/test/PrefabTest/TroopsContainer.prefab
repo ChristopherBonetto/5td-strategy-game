@@ -39,8 +39,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 589420509362306081}
-  - component: {fileID: 1955451079597015750}
-  - component: {fileID: 5308391305748530915}
   - component: {fileID: 9165098821928681938}
   m_Layer: 0
   m_Name: TroopsContainer
@@ -64,41 +62,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1955451079597015750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8559416091431242413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6dc5036808cec5843a63d7f5a7071c51, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_detectionRange: 2
-  m_droppableMask:
-    serializedVersion: 2
-    m_Bits: 256
-  m_interactionMask:
-    serializedVersion: 2
-    m_Bits: 1024
---- !u!114 &5308391305748530915
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8559416091431242413}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83f55b910606c1542b82a620c6e648bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_focusEntity: {fileID: 0}
-  m_troopStats: {fileID: 0}
-  m_units: []
-  CarryPoint: {fileID: 0}
 --- !u!195 &9165098821928681938
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -4,6 +4,7 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 using HF.Unit;
+using BehaviorDesigner.Runtime;
 
 public class GameController : Singleton<GameController>
 {
@@ -65,7 +66,6 @@ public class GameController : Singleton<GameController>
     [SerializeField] Transform[] m_enemySpawnPoints;
     public EntityBehavior Castle;
 
-
     private void Awake()
     {
         Collection = Instantiate(m_gameCollection);
@@ -80,25 +80,53 @@ public class GameController : Singleton<GameController>
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            CreateEntities();
+            CreateEntity();
         }
     }
 
-    public void CreateEntities()
+    public void CreateEntity()
     {
-        CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(0, 0.5f, 0));
-        CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(5, 0.5f, 5));
-        Castle = CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(15, 0.5f, 15));
-        CreateEnemies();
+        CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0, 0.5f, 0));
+        CreateNewEntity(UnitType.PEASANT, PlayerType.AI, new Vector3(5, 0.5f, 5));
     }
 
-    public void CreateEnemies()
+    public void CreateNewEntity(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPos)
     {
-        for(int i = 0; i < m_enemySpawnPoints.Length; i++)
+        if (!Collection.UnitsDictionary.ContainsKey(inUnitType))
         {
-            TroopBehavior tempTroop = CreateNewTroop(UnitType.PEASANT, PlayerType.AI, m_enemySpawnPoints[i].position);
+            Debug.Log("GameCollection don't contain " + inUnitType);
+            return;
         }
+
+        if (inPlayerType == PlayerType.Player)
+        {
+            if (!CheckResourcesAvailability(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost))
+            {
+                Debug.Log("u need more resources");
+            }
+            DecreaseResources(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost);
+        }
+
+        GameObject troop = ObjectPooler.Instance.GetPooledObject("Troop");
+        troop.transform.position = inPos;
+        troop.SetActive(true);
+
+        if (troop == null)
+        {
+            Debug.Log("can't take troop container because in pool it can't expand");
+        }
+        EntityTree tempRef = troop.GetComponent<EntityTree>();
+
+        if (tempRef == null)
+        {
+            Debug.LogError("Prefab need TroopsBehavior script");
+        }
+
+        tempRef.AssignPlayer(inPlayerType);
+        tempRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
     }
+
+    
 
 
     public int GetGameObjectLayer(LayerMask mask)
@@ -122,47 +150,7 @@ public class GameController : Singleton<GameController>
         Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
-    public TroopBehavior CreateNewTroop(UnitType inEntityType, PlayerType inPlayerType, Vector3 inPosition)
-    {
-        if (!Collection.UnitsDictionary.ContainsKey(inEntityType))
-        {
-            Debug.Log("GameCollection don't contain " + inEntityType);
-            return null;
-        }
-
-        if(inPlayerType == PlayerType.Player)
-        {
-            if (!CheckResourcesAvailability(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost))
-            {
-                Debug.Log("u need more resources");
-                return null;
-            }
-            DecreaseResources(Collection.UnitsDictionary[inEntityType].UnitStatsCopy.Cost);
-        }
-
-        //CheckFreeSpace(inPosition, 1);
-        
-        GameObject troop = ObjectPooler.Instance.GetPooledObject("Troop");
-        troop.transform.position = inPosition;
-        troop.SetActive(true);
-
-        if (troop == null)
-        {
-            Debug.Log("can't take troop container because in pool it can't expand");
-            return null;
-        }
-        TroopBehavior tempRef = troop.GetComponent<TroopBehavior>();
-
-        if (tempRef == null)
-        {
-            Debug.LogError("Prefab need TroopsBehavior script");
-            return null;
-        }
-
-        tempRef.AssignPlayer(inPlayerType);
-        tempRef.AssignStats(Collection.UnitsDictionary[inEntityType].UnitStatsCopy);
-        return tempRef;
-    }
+    
 
 
     public UnitInfo? SearchUnit(UnitType inType)

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Types;
+using BehaviorDesigner.Runtime;
+
 
 public class EntityStatsSO : ScriptableObject
 {
@@ -34,4 +36,5 @@ public class EntityStatsSO : ScriptableObject
     [Header("Utility")]
     public QuantityOfResources Cost;
 
+    public ExternalBehaviorTree ExTree;
 }
