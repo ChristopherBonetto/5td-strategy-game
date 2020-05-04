@@ -35,6 +35,4 @@ public class EntityStatsSO : ScriptableObject
 
     [Header("Utility")]
     public QuantityOfResources Cost;
-
-    public ExternalBehaviorTree ExTree;
 }

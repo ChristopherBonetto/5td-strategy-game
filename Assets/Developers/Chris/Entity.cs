@@ -37,12 +37,13 @@ public class Entity : MonoBehaviour
         {
             ResetEntity();
         }
+        
     }
 
-    private void ResetEntity()
+    protected void ResetEntity()
     {
         m_entityStats = null;
-        BT.ExternalBehavior = null;
+        //BT.ExternalBehavior = null;
         gameObject.name = "Entity";
         gameObject.SetActive(false);
     }
@@ -65,7 +66,6 @@ public class Entity : MonoBehaviour
     {
         gameObject.name = inStats.Name + "Troops";
         EntityStats = inStats;
-        BT.ExternalBehavior = inStats.ExTree;
     }
 
     public virtual bool Timer(float destinationTime)

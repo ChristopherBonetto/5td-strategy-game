@@ -183,11 +183,6 @@ public class Editor_UnitStatsSO : Editor
         unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
 
-        GUILayout.Label("Cost");
-        EditorGUILayout.BeginHorizontal();
-        unit.ExTree = EditorGUILayout.ObjectField("",unit.ExTree,typeof(ExternalBehaviorTree),true) as ExternalBehaviorTree;
-        EditorGUILayout.EndHorizontal();
-
         serializedObject.ApplyModifiedProperties();
     }
 }

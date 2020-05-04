@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using Types;
+using BehaviorDesigner.Runtime;
 
 public class EntityDesignerWindow : EditorWindow
 {
@@ -354,6 +355,9 @@ public class GeneralSettings : EditorWindow
         unit.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(unit.Cost.ResourceType);
         unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
+
+        GUILayout.Label("External Behavior");
+        EditorGUILayout.BeginHorizontal();
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();

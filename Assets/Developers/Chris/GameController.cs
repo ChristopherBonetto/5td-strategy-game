@@ -86,8 +86,7 @@ public class GameController : Singleton<GameController>
 
     public void CreateEntity()
     {
-        CreateNewEntity(UnitType.DEFENDER, PlayerType.Player, new Vector3(0, 0f, 0));
-        CreateNewEntity(UnitType.PEASANT, PlayerType.AI, new Vector3(5, 0f, 5));
+        CreateNewEntity(UnitType.WARRIOR, PlayerType.AI, new Vector3(-10, 0f, -10));
     }
 
     public void CreateNewEntity(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPos)
@@ -98,6 +97,8 @@ public class GameController : Singleton<GameController>
             return;
         }
 
+        GameObject troop = null;
+
         if (inPlayerType == PlayerType.Player)
         {
             if (!CheckResourcesAvailability(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost))
@@ -105,21 +106,29 @@ public class GameController : Singleton<GameController>
                 Debug.Log("u need more resources");
             }
             DecreaseResources(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost);
+
+            troop = ObjectPooler.Instance.GetPooledObject("PlayerTroop");
+        }
+        else
+        {
+            troop = ObjectPooler.Instance.GetPooledObject("EnemyTroop");
         }
 
-        GameObject troop = ObjectPooler.Instance.GetPooledObject("Troop");
         troop.transform.position = inPos;
         troop.SetActive(true);
 
         if (troop == null)
         {
             Debug.Log("can't take troop container because in pool it can't expand");
+            return;
         }
         Troop tempRef = troop.GetComponent<Troop>();
 
         if (tempRef == null)
         {
+            troop.gameObject.SetActive(false);
             Debug.LogError("Prefab need TroopsBehavior script");
+            return;
         }
 
         tempRef.AssignPlayer(inPlayerType);

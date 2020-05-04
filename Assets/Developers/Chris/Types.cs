@@ -15,7 +15,8 @@ namespace Types
         PEASANT,
         LIFTER,
         DEFENDER,
-        RUNNER
+        RUNNER,
+        WARRIOR
     }
 
     public enum TowerType
