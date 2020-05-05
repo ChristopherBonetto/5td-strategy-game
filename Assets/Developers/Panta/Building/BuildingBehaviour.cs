@@ -12,7 +12,7 @@ namespace HF.Unit
         NoBehaviourRequire,
     }
 
-    public class BuildingBehaviour : Entity, ICarriable
+    public class BuildingBehaviour : EntityBehavior, ICarriable
     {
         // The view will be go inside the entity behaviour.
         private BuildingView m_view;
@@ -118,7 +118,7 @@ namespace HF.Unit
             {
                 case BuildingState.Positioned:
                     m_update += Attack;
-                    m_update += DetectArea;
+                    //m_update += DetectArea;
                     break;
 
                 case BuildingState.Carried:
@@ -181,25 +181,25 @@ namespace HF.Unit
             success = false;
         }
 
-        private void DetectArea()
-        {
-            if (m_timeElapsedbetweenDetections > m_delayBetweenDetections)
-            {
-                // Search ostile if it doens't have one.
-                if (m_focusEntity == null)
-                {
-                    // Since the detection area calculate itself the closest ostile, we don't check that.
-                    m_focusEntity = m_detectionArea.DetectFaction(transform, m_buildingStats.AttackRange, m_ostileLayer, gameObject.layer);
+        //private void DetectArea()
+        //{
+        //    if (m_timeElapsedbetweenDetections > m_delayBetweenDetections)
+        //    {
+        //        // Search ostile if it doens't have one.
+        //        if (m_focusEntity == null)
+        //        {
+        //            // Since the detection area calculate itself the closest ostile, we don't check that.
+        //            m_focusEntity = m_detectionArea.DetectFaction(transform, m_buildingStats.AttackRange, m_ostileLayer, gameObject.layer);
 
-                    // Reset timer.
-                    m_timeElapsedbetweenDetections = 0;
-                }
-            }
-            else
-            {
-                m_timeElapsedbetweenDetections += Time.deltaTime;
-            }
-        }
+        //            // Reset timer.
+        //            m_timeElapsedbetweenDetections = 0;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        m_timeElapsedbetweenDetections += Time.deltaTime;
+        //    }
+        //}
 
         public void Attack()
         {
@@ -234,7 +234,7 @@ namespace HF.Unit
 
         private void DealDamage()
         {
-            m_focusEntity.TakeDamage(m_buildingStats.Damage);
+            //m_focusEntity.TakeDamage(m_buildingStats.Damage);
         }
 
         #region 

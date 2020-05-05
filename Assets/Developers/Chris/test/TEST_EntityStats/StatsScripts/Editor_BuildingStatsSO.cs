@@ -144,11 +144,6 @@ public class Editor_BuildingStatsSO : Editor
         building.Cost.ResourceQuantity = EditorGUILayout.IntField(building.Cost.ResourceQuantity);
         EditorGUILayout.EndHorizontal();
 
-        GUILayout.Label("Cost");
-        EditorGUILayout.BeginHorizontal();
-        building.ExTree = EditorGUILayout.ObjectField("", building.ExTree, typeof(ExternalBehaviorTree), true) as ExternalBehaviorTree;
-        EditorGUILayout.EndHorizontal();
-
         serializedObject.ApplyModifiedProperties();
     }
 }

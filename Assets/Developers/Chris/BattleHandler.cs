@@ -6,10 +6,10 @@ using UnityEngine;
 
 public struct Fight
 {
-    //public TroopBehavior PlayerTroop;
-    //public TroopBehavior EnemyTroop;
+    //public TroopBehaviour PlayerTroop;
+    //public TroopBehaviour EnemyTroop;
 
-    //public Fight(TroopBehavior inPlayer, TroopBehavior inEnemy)
+    //public Fight(TroopBehaviour inPlayer, TroopBehaviour inEnemy)
     //{
     //    PlayerTroop = inPlayer;
     //    EnemyTroop = inEnemy;
@@ -24,7 +24,7 @@ public struct Fight
 
     //    BattleHandler battleScript = battleHandler.GetComponent<BattleHandler>();
 
-    //    if(battleScript != null)
+    //    if (battleScript != null)
     //    {
     //        battleScript.StartFight(PlayerTroop, EnemyTroop);
     //    }
@@ -34,10 +34,10 @@ public struct Fight
 
 public class BattleHandler : MonoBehaviour
 {
-    //private TroopBehavior playerTroop;
-    //private TroopBehavior enemyTroop;
+    //private TroopBehaviour playerTroop;
+    //private TroopBehaviour enemyTroop;
 
-    //public void StartFight(TroopBehavior inPlayer, TroopBehavior inEnemy)
+    //public void StartFight(TroopBehaviour inPlayer, TroopBehaviour inEnemy)
     //{
     //    playerTroop = inPlayer;
     //    enemyTroop = inEnemy;
@@ -87,10 +87,10 @@ public class BattleHandler : MonoBehaviour
     //    {
     //        Debug.Log("No one troop contain " + inUnit.name);
     //    }
-        
+
     //}
 
-    //private UnitBehavior TakeAnotherTargerFromTroop(UnitBehavior inUnit, TroopBehavior inTroop)
+    //private UnitBehavior TakeAnotherTargerFromTroop(UnitBehavior inUnit, TroopBehaviour inTroop)
     //{
     //    float distance = 1000f;
     //    UnitBehavior tempUnit = null;
@@ -99,19 +99,19 @@ public class BattleHandler : MonoBehaviour
     //    {
     //        if (inTroop.m_units[i].gameObject.active)
     //        {
-    //            if(Vector3.Distance(inUnit.transform.position, inTroop.m_units[i].transform.position) < distance)
+    //            if (Vector3.Distance(inUnit.transform.position, inTroop.m_units[i].transform.position) < distance)
     //            {
     //                tempUnit = inTroop.m_units[i];
     //            }
     //        }
     //    }
 
-    //    if(tempUnit == null)
+    //    if (tempUnit == null)
     //    {
     //        FinishFight();
     //        return null;
     //    }
-        
+
     //    return tempUnit;
     //}
 
@@ -124,9 +124,9 @@ public class BattleHandler : MonoBehaviour
     //    gameObject.SetActive(false);
     //}
 
-    //public void ResetFocusEntity(TroopBehavior inTroop)
+    //public void ResetFocusEntity(TroopBehaviour inTroop)
     //{
-    //    foreach(UnitBehavior unit in inTroop.m_units)
+    //    foreach (UnitBehavior unit in inTroop.m_units)
     //    {
     //        unit.FocusEntity = null;
     //    }

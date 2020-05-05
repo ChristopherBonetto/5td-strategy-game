@@ -4,13 +4,6 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 
-public enum TroopState
-{
-    FreeMove,
-    Interact,
-    Carry
-}
-
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
     private EntityStatsSO m_entityStats;
@@ -44,8 +37,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected float m_timer = 0f;
 
-    public EntityBehavior m_focusEntity = null;
-    public EntityBehavior FocusEntity
+    protected EntityBehavior m_focusEntity = null;
+    public virtual EntityBehavior FocusEntity
     {
         get
         {
@@ -75,7 +68,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected bool m_inCombat = false;
     public bool inCombat { get => m_inCombat; }
 
-    public TroopState CurrentTroopState = TroopState.FreeMove;
+    //public TroopState CurrentTroopState = TroopState.FreeMove;
 
     public virtual void Start()
     {
@@ -181,10 +174,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void AssignFocusEntity(EntityBehavior inEntity)
     {
-        //if(inEntity == null)
-        //{
-        //    Debug.Log("ciao miao");
-        //}
         FocusEntity = inEntity;
         Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
     }

@@ -125,6 +125,12 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(entity != null)
             {
+                if(entity is UnitBehavior)
+                {
+                    UnitBehavior unit = entity as UnitBehavior;
+                    entity = unit.TroopRef;
+                }
+
                 var command = new GoToInteract(CurrentEntity, entity);
                 Debug.Log(CurrentEntity + " " + entity);
                 CurrentEntity.ExecuteCommand(command);
@@ -134,6 +140,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                 if (tempLayer == LayerMask.NameToLayer("Terrain"))
                 {
                     Debug.Log("Move");
+                    CurrentEntity.FocusEntity = null;
                     var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
                     CurrentEntity.ExecuteCommand(command);
 

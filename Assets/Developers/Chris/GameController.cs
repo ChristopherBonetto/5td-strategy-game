@@ -60,11 +60,6 @@ public class GameController : Singleton<GameController>
 
     private float m_timer = 0f;
 
-    //must be take from assets folder.
-    [SerializeField] private GameObject m_troopsContainer;
-
-    [SerializeField] Transform[] m_enemySpawnPoints;
-    public EntityBehavior Castle;
 
     private void Awake()
     {
@@ -86,56 +81,54 @@ public class GameController : Singleton<GameController>
 
     public void CreateEntity()
     {
-        CreateNewEntity(UnitType.WARRIOR, PlayerType.AI, new Vector3(-10, 0f, -10));
+        CreateNewUnit(UnitType.DEFENDER, PlayerType.Player, new Vector3(-10, 0f, -10));
     }
 
-    public void CreateNewEntity(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPos)
+    public TroopBehaviour CreateNewUnit(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!Collection.UnitsDictionary.ContainsKey(inUnitType))
         {
             Debug.Log("GameCollection don't contain " + inUnitType);
-            return;
+            return null;
         }
-
-        GameObject troop = null;
 
         if (inPlayerType == PlayerType.Player)
         {
             if (!CheckResourcesAvailability(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost))
             {
                 Debug.Log("u need more resources");
+                return null;
             }
             DecreaseResources(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost);
-
-            troop = ObjectPooler.Instance.GetPooledObject("PlayerTroop");
-        }
-        else
-        {
-            troop = ObjectPooler.Instance.GetPooledObject("EnemyTroop");
         }
 
-        troop.transform.position = inPos;
+        //CheckFreeSpace(inPosition, 1);
+
+        GameObject troop = ObjectPooler.Instance.GetPooledObject("Troop");
+        troop.transform.position = inPosition;
         troop.SetActive(true);
 
         if (troop == null)
         {
             Debug.Log("can't take troop container because in pool it can't expand");
-            return;
+            return null;
         }
-        Troop tempRef = troop.GetComponent<Troop>();
+        TroopBehaviour tempRef = troop.GetComponent<TroopBehaviour>();
 
         if (tempRef == null)
         {
-            troop.gameObject.SetActive(false);
             Debug.LogError("Prefab need TroopsBehavior script");
-            return;
+            return null;
         }
 
         tempRef.AssignPlayer(inPlayerType);
         tempRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
+
+        Debug.Log("building pooled!!!");
+        return tempRef;
     }
 
-    
+
 
 
     public int GetGameObjectLayer(LayerMask mask)

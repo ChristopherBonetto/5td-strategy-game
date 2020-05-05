@@ -24,11 +24,11 @@ public class Entity : MonoBehaviour
 
     protected float m_timer = 0f;
 
-    public BehaviorTree BT;
-
-    public void Awake()
+    protected Entity m_focusEntity;
+    public virtual Entity FocusEntity
     {
-        BT = gameObject.GetComponent<BehaviorTree>();
+        get { return m_focusEntity; }
+        set { m_focusEntity = value; }
     }
 
     private void Update()

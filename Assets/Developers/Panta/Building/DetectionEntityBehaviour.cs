@@ -44,18 +44,18 @@ public class DetectionEntityBehaviour<T> : IDetectGeneric<T> where T : EntityBeh
     }
 
 
-    /// <summary>
-    /// Detection with team compare.
-    /// </summary>
-    public Entity DetectFaction(Transform inOrigin, float inRange, LayerMask inDetectionMask, int myTeam)
-    {
-        EntityBehavior entity = Detect(inOrigin, inRange, inDetectionMask);
+    ///// <summary>
+    ///// Detection with team compare.
+    ///// </summary>
+    //public Entity DetectFaction(Transform inOrigin, float inRange, LayerMask inDetectionMask, int myTeam)
+    //{
+    //    EntityBehavior entity = Detect(inOrigin, inRange, inDetectionMask);
 
-        if (entity.gameObject.layer != myTeam)
-        {
-            return entity;
-        }
+    //    if (entity.gameObject.layer != myTeam)
+    //    {
+    //        return entity;
+    //    }
 
-        return null;
-    }
+    //    return null;
+    //}
 }
