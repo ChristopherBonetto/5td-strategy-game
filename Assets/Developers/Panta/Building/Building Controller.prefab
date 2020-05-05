@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8970387941616821929}
   - component: {fileID: 7758161667498346107}
+  - component: {fileID: 9011322020621671024}
   m_Layer: 0
   m_Name: Building Controller
   m_TagString: Building
@@ -51,3 +52,43 @@ MonoBehaviour:
   m_droppableLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &9011322020621671024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4324106961584771947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7b55c7ecdb49a4a89fa5e6f9022861, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startWhenEnabled: 1
+  asynchronousLoad: 0
+  pauseWhenDisabled: 0
+  restartWhenComplete: 0
+  logTaskChanges: 0
+  group: 0
+  resetValuesOnRestart: 0
+  externalBehavior: {fileID: 11400000, guid: 2e60485582f2e1b428b2e0de1e7de84f, type: 2}
+  mBehaviorSource:
+    behaviorName: BuildingBehaviour
+    behaviorDescription: 
+    mTaskData:
+      types: []
+      parentIndex: 
+      startIndex: 
+      variableStartIndex: 
+      JSONSerialization: 
+      fieldSerializationData:
+        typeName: []
+        fieldNameHash: 
+        startIndex: 
+        dataPosition: 
+        unityObjects: []
+        byteData: 
+        byteDataArray: 
+      Version: 
+  gizmoViewMode: 2
+  showBehaviorDesignerGizmo: 1

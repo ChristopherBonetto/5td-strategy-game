@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using BehaviorDesigner.Runtime;
 using Types;
 
 [CustomEditor(typeof(BuildingsStatsSO))]
@@ -141,6 +142,11 @@ public class Editor_BuildingStatsSO : Editor
         EditorGUILayout.BeginHorizontal();
         building.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(building.Cost.ResourceType);
         building.Cost.ResourceQuantity = EditorGUILayout.IntField(building.Cost.ResourceQuantity);
+        EditorGUILayout.EndHorizontal();
+
+        GUILayout.Label("Cost");
+        EditorGUILayout.BeginHorizontal();
+        building.ExTree = EditorGUILayout.ObjectField("", building.ExTree, typeof(ExternalBehaviorTree), true) as ExternalBehaviorTree;
         EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();

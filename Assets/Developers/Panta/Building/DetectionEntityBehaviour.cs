@@ -47,7 +47,7 @@ public class DetectionEntityBehaviour<T> : IDetectGeneric<T> where T : EntityBeh
     /// <summary>
     /// Detection with team compare.
     /// </summary>
-    public EntityBehavior DetectFaction(Transform inOrigin, float inRange, LayerMask inDetectionMask, int myTeam)
+    public Entity DetectFaction(Transform inOrigin, float inRange, LayerMask inDetectionMask, int myTeam)
     {
         EntityBehavior entity = Detect(inOrigin, inRange, inDetectionMask);
 
