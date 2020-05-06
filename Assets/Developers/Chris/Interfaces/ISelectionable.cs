@@ -7,6 +7,5 @@ using UnityEngine.UI;
 public interface IClickable
 {
     void Click();
-    void AssignFocusEntity(EntityBehavior inEntity);
 }
 

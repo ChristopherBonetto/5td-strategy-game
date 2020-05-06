@@ -208,14 +208,19 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Prefab");
-        unit.Prefab = (GameObject)EditorGUILayout.ObjectField(unit.Prefab, typeof(GameObject), false);
+        GUILayout.Label("Captain");
+        unit.BehaviorHandler = (GameObject)EditorGUILayout.ObjectField(unit.BehaviorHandler, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        if (unit.Prefab == null)
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Unit Prefab");
+        unit.VisualPrefab = (GameObject)EditorGUILayout.ObjectField(unit.VisualPrefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (unit.VisualPrefab == null || unit.BehaviorHandler == null)
         {
             tempValue = false;
             EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
@@ -386,15 +391,19 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        
-
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Prefab");
-        building.Prefab = (GameObject)EditorGUILayout.ObjectField(building.Prefab, typeof(GameObject), false);
+        GUILayout.Label("Behavior Handler");
+        building.BehaviorHandler = (GameObject)EditorGUILayout.ObjectField(building.BehaviorHandler, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        if (building.Prefab == null)
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Building Prefab");
+        building.VisualPrefab = (GameObject)EditorGUILayout.ObjectField(building.VisualPrefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if (building.VisualPrefab == null)
         {
             tempValue = false;
             EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);

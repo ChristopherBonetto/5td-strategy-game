@@ -44,9 +44,9 @@ namespace HF.Unit
             NavMeshObstacle.enabled = true;
         }
 
-        public void TrackOstile(Entity ostile)
-        {
-            m_weapon.LookAt(ostile.transform);
-        }
+        //public void TrackOstile(Entity ostile)
+        //{
+        //    m_weapon.LookAt(ostile.transform);
+        //}
     }
 }

@@ -81,10 +81,11 @@ public class GameController : Singleton<GameController>
 
     public void CreateEntity()
     {
-        CreateNewUnit(UnitType.DEFENDER, PlayerType.Player, new Vector3(-10, 0f, -10));
+        CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(-10, 0f, -10));
+        
     }
 
-    public TroopBehaviour CreateNewUnit(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition)
+    public Troop CreateNewTroop(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition)
     {
         if (!Collection.UnitsDictionary.ContainsKey(inUnitType))
         {
@@ -104,28 +105,27 @@ public class GameController : Singleton<GameController>
 
         //CheckFreeSpace(inPosition, 1);
 
-        GameObject troop = ObjectPooler.Instance.GetPooledObject("Troop");
-        troop.transform.position = inPosition;
-        troop.SetActive(true);
+        GameObject TroopBrain = ObjectPooler.Instance.GetUnitBehaviorHandler(inUnitType);
+        TroopBrain.transform.position = inPosition;
+        TroopBrain.SetActive(true);
 
-        if (troop == null)
+        if (TroopBrain == null)
         {
             Debug.Log("can't take troop container because in pool it can't expand");
             return null;
         }
-        TroopBehaviour tempRef = troop.GetComponent<TroopBehaviour>();
+        Troop troopRef = TroopBrain.GetComponent<Troop>();
 
-        if (tempRef == null)
+        if (troopRef == null)
         {
             Debug.LogError("Prefab need TroopsBehavior script");
             return null;
         }
 
-        tempRef.AssignPlayer(inPlayerType);
-        tempRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
+        troopRef.AssignPlayer(inPlayerType);
+        troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
 
-        Debug.Log("building pooled!!!");
-        return tempRef;
+        return troopRef;
     }
 
 
@@ -155,7 +155,7 @@ public class GameController : Singleton<GameController>
     
 
 
-    public UnitInfo? SearchUnit(UnitType inType)
+    public UnitInfo? SearchUnitInfoInDictionary(UnitType inType)
     {
         if (Collection.UnitsDictionary.ContainsKey(inType))
         {
@@ -171,51 +171,51 @@ public class GameController : Singleton<GameController>
     //-------------------------------------------------------------------------
     #region Building
 
-    public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
-    {
-        if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
-        {
-            Debug.Log("GameCollection don't contain " + inBuildingType);
-            return null;
-        }
+    //public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
+    //{
+    //    if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
+    //    {
+    //        Debug.Log("GameCollection don't contain " + inBuildingType);
+    //        return null;
+    //    }
 
-        if (inPlayerType == PlayerType.Player)
-        {
-            if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
-            {
-                Debug.Log("u need more resources");
-                return null;
-            }
-            DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
-        }
+    //    if (inPlayerType == PlayerType.Player)
+    //    {
+    //        if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
+    //        {
+    //            Debug.Log("u need more resources");
+    //            return null;
+    //        }
+    //        DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
+    //    }
 
-        //CheckFreeSpace(inPosition, 1);
+    //    //CheckFreeSpace(inPosition, 1);
 
-        GameObject troop = ObjectPooler.Instance.GetPooledObject("Building");
-        troop.transform.position = inPosition;
-        troop.SetActive(true);
+    //    GameObject troop = ObjectPooler.Instance.GetPooledObject("Building");
+    //    troop.transform.position = inPosition;
+    //    troop.SetActive(true);
 
-        if (troop == null)
-        {
-            Debug.Log("can't take troop container because in pool it can't expand");
-            return null;
-        }
-        BuildingBehaviour tempRef = troop.GetComponent<BuildingBehaviour>();
+    //    if (troop == null)
+    //    {
+    //        Debug.Log("can't take troop container because in pool it can't expand");
+    //        return null;
+    //    }
+    //    BuildingBehaviour tempRef = troop.GetComponent<BuildingBehaviour>();
 
-        if (tempRef == null)
-        {
-            Debug.LogError("Prefab need TroopsBehavior script");
-            return null;
-        }
+    //    if (tempRef == null)
+    //    {
+    //        Debug.LogError("Prefab need TroopsBehavior script");
+    //        return null;
+    //    }
 
-        tempRef.AssignPlayer(inPlayerType);
-        tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+    //    tempRef.AssignPlayer(inPlayerType);
+    //    tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
 
-        Debug.Log("building pooled!!!");
-        return tempRef;
-    }
+    //    Debug.Log("building pooled!!!");
+    //    return tempRef;
+    //}
 
-    public BuildingInfo? SearchBuilding(BuildingType inType)
+    public BuildingInfo? SearchBuildingInfoInDictionary(BuildingType inType)
     {
         if (Collection.BuildingsDictionary.ContainsKey(inType))
         {

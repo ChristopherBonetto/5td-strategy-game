@@ -69,8 +69,12 @@ public class ObjectPooler : MonoBehaviour
     /// Currently pooled objects, ordered as (tag, List of objects) pairs.
     /// </summary>
     private Dictionary<string, List<GameObject>> m_pooledObjects;
+
     private Dictionary<UnitType, List<GameObject>> m_unitPooled;
+    private Dictionary<UnitType, List<GameObject>> m_unitBehaviorHandlerPooled;
+
     private Dictionary<BuildingType, List<GameObject>> m_buildingPooled;
+    private Dictionary<BuildingType, List<GameObject>> m_buildingBehaviorHandlerPooled;
 
     #endregion
 
@@ -83,8 +87,12 @@ public class ObjectPooler : MonoBehaviour
 
         // Init Dictionary
         m_pooledObjects = new Dictionary<string, List<GameObject>>();
+
         m_unitPooled = new Dictionary<UnitType, List<GameObject>>();
+        m_unitBehaviorHandlerPooled = new Dictionary<UnitType, List<GameObject>>();
+
         m_buildingPooled = new Dictionary<BuildingType, List<GameObject>>();
+        m_buildingBehaviorHandlerPooled = new Dictionary<BuildingType, List<GameObject>>();
     }
 
     private void Start()
@@ -94,7 +102,10 @@ public class ObjectPooler : MonoBehaviour
 
     #endregion
 
-    #region Public methods
+
+    #region Public Methods - GetObject
+
+    #region Get generic with string
 
     /// <summary>
     /// Gets a pooled object with the specified tag.
@@ -146,18 +157,22 @@ public class ObjectPooler : MonoBehaviour
         }
     }
 
-    public GameObject GetUnityObject(UnitType inType)
+    #endregion
+
+    #region Get unit 
+
+    public GameObject GetUnitBehaviorHandler(UnitType inType)
     {
         // First check if the Dictionary actually contains the tag key
-        if (m_unitPooled.ContainsKey(inType))
+        if (m_unitBehaviorHandlerPooled.ContainsKey(inType))
         {
             // Get the list corresponding to the tag
-            List<GameObject> objectsList = m_unitPooled[inType];
+            List<GameObject> objectsList = m_unitBehaviorHandlerPooled[inType];
 
             // Cycle the list to search for an available pooled object
             int count = objectsList.Count;
 
-            if(count == 0)
+            if (count == 0)
             {
                 Debug.LogError("No one object to take with : " + inType + " key");
                 return null;
@@ -171,8 +186,88 @@ public class ObjectPooler : MonoBehaviour
                 if (!obj.activeInHierarchy) return obj;
             }
 
-            UnitInfo unit = (UnitInfo)GameController.Instance.SearchUnit(inType);
-            ObjectPoolItem tempItem = new ObjectPoolItem(unit.UnitStatsCopy.Prefab, unit.UnitPoolQuantity, true);
+            UnitInfo unitType = (UnitInfo)GameController.Instance.SearchUnitInfoInDictionary(inType);
+            ObjectPoolItem tempItem = new ObjectPoolItem(unitType.UnitStatsCopy.BehaviorHandler, unitType.UnitPoolQuantity, true);
+            return AddObjectToPool(objectsList, tempItem);
+
+        }
+        else
+        {
+            // If the Dicitionary doesn't contain the tag key, send an error and return null
+            Debug.LogError("ObjectPooler '" + name + "' doesn't contain the specified tag '" + tag + "'.");
+            return null;
+        }
+    }
+
+    public GameObject GetUnitObject(UnitType inType)
+    {
+        // First check if the Dictionary actually contains the tag key
+        if (m_unitPooled.ContainsKey(inType))
+        {
+            // Get the list corresponding to the tag
+            List<GameObject> objectsList = m_unitPooled[inType];
+
+            // Cycle the list to search for an available pooled object
+            int count = objectsList.Count;
+
+            if (count == 0)
+            {
+                Debug.LogError("No one object to take with : " + inType + " key");
+                return null;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject obj = objectsList[i];
+
+                // If an available object is found, return it
+                if (!obj.activeInHierarchy) return obj;
+            }
+
+            UnitInfo unit = (UnitInfo)GameController.Instance.SearchUnitInfoInDictionary(inType);
+            ObjectPoolItem tempItem = new ObjectPoolItem(unit.UnitStatsCopy.VisualPrefab, unit.UnitPoolQuantity, true);
+            return AddObjectToPool(objectsList, tempItem);
+
+        }
+        else
+        {
+            // If the Dicitionary doesn't contain the tag key, send an error and return null
+            Debug.LogError("ObjectPooler '" + name + "' doesn't contain the specified tag '" + tag + "'.");
+            return null;
+        }
+    }
+
+    #endregion
+
+    #region Get building
+
+    public GameObject GetBuildingBehaviorHandler(BuildingType inType)
+    {
+        // First check if the Dictionary actually contains the tag key
+        if (m_buildingBehaviorHandlerPooled.ContainsKey(inType))
+        {
+            // Get the list corresponding to the tag
+            List<GameObject> objectsList = m_buildingBehaviorHandlerPooled[inType];
+
+            // Cycle the list to search for an available pooled object
+            int count = objectsList.Count;
+
+            if (count == 0)
+            {
+                Debug.LogError("No one object to take with : " + inType + " key");
+                return null;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject obj = objectsList[i];
+
+                // If an available object is found, return it
+                if (!obj.activeInHierarchy) return obj;
+            }
+
+            BuildingInfo building = (BuildingInfo)GameController.Instance.SearchBuildingInfoInDictionary(inType);
+            ObjectPoolItem tempItem = new ObjectPoolItem(building.BuildingStatsCopy.BehaviorHandler, building.BuildingPoolQuantity, true);
             return AddObjectToPool(objectsList, tempItem);
 
         }
@@ -209,8 +304,8 @@ public class ObjectPooler : MonoBehaviour
                 if (!obj.activeInHierarchy) return obj;
             }
 
-            BuildingInfo building = (BuildingInfo)GameController.Instance.SearchBuilding(inType);
-            ObjectPoolItem tempItem = new ObjectPoolItem(building.BuildingStatsCopy.Prefab, building.BuildingPoolQuantity, true);
+            BuildingInfo building = (BuildingInfo)GameController.Instance.SearchBuildingInfoInDictionary(inType);
+            ObjectPoolItem tempItem = new ObjectPoolItem(building.BuildingStatsCopy.VisualPrefab, building.BuildingPoolQuantity, true);
             return AddObjectToPool(objectsList, tempItem);
 
         }
@@ -221,6 +316,8 @@ public class ObjectPooler : MonoBehaviour
             return null;
         }
     }
+
+    #endregion
 
     #endregion
 
@@ -244,28 +341,42 @@ public class ObjectPooler : MonoBehaviour
 
         GameCollection collection = GameController.Instance.Collection;
 
-        foreach(UnitType unit in collection.UnitsDictionary.Keys)
+        
+
+        foreach (UnitType unit in collection.UnitsDictionary.Keys)
         {
+            List<GameObject> unitBehaviorHandlerList = new List<GameObject>();
             List<GameObject> unitList = new List<GameObject>();
 
             for(int i = 0; i < collection.UnitsDictionary[unit].UnitPoolQuantity; i++)
             {
-                ObjectPoolItem tempItem = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.Prefab, collection.UnitsDictionary[unit].UnitPoolQuantity, true);
+                ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.BehaviorHandler, 1, true);
+                AddObjectToPool(unitBehaviorHandlerList, tempBehaviorHandler);
+
+                ObjectPoolItem tempItem = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.VisualPrefab, collection.UnitsDictionary[unit].UnitPoolQuantity, true);
                 AddObjectToPool(unitList, tempItem);
             }
             m_unitPooled.Add(unit, unitList);
+            m_unitBehaviorHandlerPooled.Add(unit, unitBehaviorHandlerList);
         }
 
-        foreach(BuildingType building in collection.BuildingsDictionary.Keys)
+        
+
+        foreach (BuildingType building in collection.BuildingsDictionary.Keys)
         {
+            List<GameObject> buildingBehaviorHandlerList = new List<GameObject>();
             List<GameObject> buildingList = new List<GameObject>();
 
             for(int i = 0; i < collection.BuildingsDictionary[building].BuildingPoolQuantity; i++)
             {
-                ObjectPoolItem tempItem = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.Prefab, collection.BuildingsDictionary[building].BuildingPoolQuantity, true);
+                ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.VisualPrefab, 1, true);
+                AddObjectToPool(buildingBehaviorHandlerList, tempBehaviorHandler);
+
+                ObjectPoolItem tempItem = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.VisualPrefab, collection.BuildingsDictionary[building].BuildingPoolQuantity, true);
                 AddObjectToPool(buildingList, tempItem);
             }
             m_buildingPooled.Add(building, buildingList);
+            m_buildingBehaviorHandlerPooled.Add(building, buildingBehaviorHandlerList);
         }
     }
 

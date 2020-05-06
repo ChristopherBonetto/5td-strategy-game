@@ -125,11 +125,11 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(entity != null)
             {
-                if(entity is UnitBehavior)
-                {
-                    UnitBehavior unit = entity as UnitBehavior;
-                    entity = unit.TroopRef;
-                }
+                //if(entity is UnitBehavior)
+                //{
+                //    UnitBehavior unit = entity as UnitBehavior;
+                //    entity = unit.TroopRef;
+                //}
 
                 var command = new GoToInteract(CurrentEntity, entity);
                 Debug.Log(CurrentEntity + " " + entity);
@@ -143,11 +143,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
                     CurrentEntity.FocusEntity = null;
                     var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
                     CurrentEntity.ExecuteCommand(command);
-
-                    if (CurrentEntity.inCombat)
-                    {
-                        CurrentEntity.UnlockEntity();
-                    }
                 }
             }
         }

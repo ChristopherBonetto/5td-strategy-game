@@ -10,35 +10,35 @@ public class DetectBehaviors : IDetect
 
     public EntityBehavior DetectArea(Transform inStartDetectPoint, float inViewRadius, LayerMask inWantedLayer)
     {
-        inNumberOfCollidersDetected = Physics.OverlapSphereNonAlloc(inStartDetectPoint.transform.position, inViewRadius, inDetectedColliders, inWantedLayer);
+        //inNumberOfCollidersDetected = Physics.OverlapSphereNonAlloc(inStartDetectPoint.transform.position, inViewRadius, inDetectedColliders, inWantedLayer);
 
-        for (int i = 0; i < inNumberOfCollidersDetected; i++)
-        {
-            if (inDetectedColliders[i])
-            {
-                ITakeDamage damageInterface = inDetectedColliders[i].GetComponent<ITakeDamage>();
+        //for (int i = 0; i < inNumberOfCollidersDetected; i++)
+        //{
+        //    if (inDetectedColliders[i])
+        //    {
+        //        ITakeDamage damageInterface = inDetectedColliders[i].GetComponent<ITakeDamage>();
 
-                if(damageInterface != null)
-                {
-                    RaycastHit hit;
+        //        if(damageInterface != null)
+        //        {
+        //            RaycastHit hit;
 
-                    if (Physics.Raycast(inStartDetectPoint.transform.position, inDetectedColliders[i].transform.position - inStartDetectPoint.transform.position, out hit, inViewRadius, inWantedLayer))
-                    {
-                        if (hit.collider.name != inDetectedColliders[i].name)
-                        {
-                            return null;
-                        }
+        //            if (Physics.Raycast(inStartDetectPoint.transform.position, inDetectedColliders[i].transform.position - inStartDetectPoint.transform.position, out hit, inViewRadius, inWantedLayer))
+        //            {
+        //                if (hit.collider.name != inDetectedColliders[i].name)
+        //                {
+        //                    return null;
+        //                }
 
-                        EntityBehavior tempEntity = hit.transform.GetComponent<EntityBehavior>();
+        //                EntityBehavior tempEntity = hit.transform.GetComponent<EntityBehavior>();
 
-                        if (!tempEntity.inCombat)
-                        {
-                            return tempEntity;
-                        }
-                    }
-                }
-            }
-        }
+        //                if (!tempEntity.inCombat)
+        //                {
+        //                    return tempEntity;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
         return null;
     }
 }

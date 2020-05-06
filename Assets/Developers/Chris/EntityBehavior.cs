@@ -3,21 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 using UnityEngine.AI;
+using BehaviorDesigner.Runtime;
 
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
     private EntityStatsSO m_entityStats;
-    public virtual EntityStatsSO EntityStats
-    {
-        get
-        {
-            return m_entityStats;
-        }
-        set
-        {
-            m_entityStats = value;
-        }
-    }
 
     protected List<Command> m_commands;
     protected int m_currentCommandIndex;
@@ -34,8 +24,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             m_entityPlayerType = value;
         }
     }
-
-    protected float m_timer = 0f;
 
     protected EntityBehavior m_focusEntity = null;
     public virtual EntityBehavior FocusEntity
@@ -65,11 +53,13 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected IAttackTypes m_attackType;
 
-    protected bool m_inCombat = false;
-    public bool inCombat { get => m_inCombat; }
+    protected BehaviorTree m_behaviorTree;
 
-    //public TroopState CurrentTroopState = TroopState.FreeMove;
-
+    public virtual void Awake()
+    {
+        m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
+        m_behaviorTree.DisableBehavior();
+    }
     public virtual void Start()
     {
         m_commands = new List<Command>();
@@ -77,22 +67,9 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_attackType = new AttackBehaviors();
     }
 
-    public virtual void UnlockEntity()
-    {
-        ChangeInCombat(false);
-    }
-
-    public virtual void ChangeInCombat(bool inValue)
-    {
-        m_inCombat = inValue;
-    }
-
-
     //Maybe a new command.
-    public virtual void RefreshHp()
-    {
-        CurrentHp = EntityStats.MaxHp;
-    }
+
+    #region Generic Methods for entity
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {
@@ -110,27 +87,23 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void AssignStats(EntityStatsSO inStats)
     {
-        gameObject.name = inStats.Name + "Troops";
-        EntityStats = inStats;
+        m_entityStats = inStats as EntityStatsSO;
     }
 
-    public virtual bool Timer(float destinationTime)
+    public EntityStatsSO GetStats()
     {
-        m_timer += Time.deltaTime;
-
-        if (m_timer >= destinationTime)
-        {
-            m_timer = 0f;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return m_entityStats;
     }
 
+    #endregion
 
     #region Command
+
+    public virtual void AssignFocusEntity(EntityBehavior inEntity)
+    {
+        FocusEntity = inEntity;
+        Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
+    }
 
     //MAYBE INTERFACE.
     public virtual void ExecuteCommand(Command inCommand)
@@ -172,21 +145,20 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
-    public virtual void AssignFocusEntity(EntityBehavior inEntity)
-    {
-        FocusEntity = inEntity;
-        Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
-    }
-
     #endregion
 
-    #region Take Damage Inteface
+    #region Hp Methods
+
+    public virtual void RefreshHp()
+    {
+        CurrentHp = m_entityStats.MaxHp;
+    }
 
     public virtual bool TakeDamage(int Damage)
     {
-        if(EntityStats.CanTakeDamage)
+        if(m_entityStats.CanTakeDamage)
         {
-            Damage = Mathf.Clamp(Damage, 1, EntityStats.MaxHp + EntityStats.Armor);
+            Damage = Mathf.Clamp(Damage, 1, m_entityStats.MaxHp + m_entityStats.Armor);
 
             if (CurrentHp <= Damage)
             {

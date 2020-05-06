@@ -12,22 +12,22 @@ namespace BehaviorDesigner.Runtime.Tasks.Unity.Collider
         [RequiredField]
         public SharedBool storeValue;
 
-        public override TaskStatus OnUpdate()
-        {
-            if (specifiedCollider == null) {
-                Debug.LogWarning("SpecifiedObject is null");
-                return TaskStatus.Failure;
-            }
+        //public override TaskStatus OnUpdate()
+        //{
+        //    if (specifiedCollider == null) {
+        //        Debug.LogWarning("SpecifiedObject is null");
+        //        return TaskStatus.Failure;
+        //    }
 
-            storeValue.Value = specifiedCollider.Value.enabled;
+        //    storeValue.Value = specifiedCollider.Value.enabled;
 
-            return TaskStatus.Success;
-        }
+        //    return TaskStatus.Success;
+        //}
 
-        public override void OnReset()
-        {
-            specifiedCollider.Value = null;
-            storeValue = false;
-        }
+        //public override void OnReset()
+        //{
+        //    specifiedCollider.Value = null;
+        //    storeValue = false;
+        //}
     }
 }

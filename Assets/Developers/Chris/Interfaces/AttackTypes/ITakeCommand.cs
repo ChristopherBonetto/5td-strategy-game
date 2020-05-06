@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ITakeCommand : IClickable
 {
-
+    void AssignFocusEntity(EntityBehavior inEntity);
 }

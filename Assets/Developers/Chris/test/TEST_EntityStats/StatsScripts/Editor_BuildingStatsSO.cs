@@ -43,12 +43,18 @@ public class Editor_BuildingStatsSO : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Prefab");
-        building.Prefab = (GameObject)EditorGUILayout.ObjectField(building.Prefab, typeof(GameObject), false);
+        GUILayout.Label("BehaviorHandler");
+        building.BehaviorHandler = (GameObject)EditorGUILayout.ObjectField(building.BehaviorHandler, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        if(building.Prefab == null)
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Building Prefab");
+        building.VisualPrefab = (GameObject)EditorGUILayout.ObjectField(building.VisualPrefab, typeof(GameObject), false);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        if(building.VisualPrefab == null || building.BehaviorHandler == null)
         {
             EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
         }

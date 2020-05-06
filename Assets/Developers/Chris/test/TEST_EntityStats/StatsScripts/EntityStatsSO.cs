@@ -9,7 +9,9 @@ public class EntityStatsSO : ScriptableObject
 {
     [Header("Name")]
     public string Name;
-    public GameObject Prefab;
+
+    public GameObject BehaviorHandler;
+    public GameObject VisualPrefab;
     
     [Header("Defensive Stats")]
     public int MaxHp;
