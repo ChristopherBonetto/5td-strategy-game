@@ -18,8 +18,30 @@ namespace HF.Refactoring
         public string StoreTileMapAtPath = "Prefabs/Tilemap Created/";
         public string StoreMapAtPath = "Prefabs/Map Generated/"; 
 
-        private HFTileMapHandler[] m_tilemapHandlers;
-        private Dictionary<string, GameObject> m_layers = new Dictionary<string, GameObject>();
+        private HFTileMapHandler[] m_tilemapHandlers;   // All tilemaps drawn
+        private Dictionary<string, GameObject> m_layers = new Dictionary<string, GameObject>(); // All drawn tilemaps' layer
+
+
+        /*
+         * --------------------------------------------------------------------
+         * Tilemap creation optimizations.
+         * --------------------------------------------------------------------
+         */
+
+        private List<HFTileMapHandler> m_orderedLayers = new List<HFTileMapHandler>();
+
+        // Checker vectors ordered clockwise.
+        private readonly Vector3Int[] m_checkerVectors =
+        {
+            new Vector3Int(1,1,0),     //top right,
+            new Vector3Int(-1,1,0),    //top left,
+            new Vector3Int(0,1,0),     //top,
+            new Vector3Int(1,0,0),     //right,
+            new Vector3Int(-1,0,0),    //left,
+            new Vector3Int(0,-1,0),    //bottom,
+            new Vector3Int(1,-1,0),    //bottom right,
+            new Vector3Int(-1,-1,0),   //bottom left,
+        };
 
 
         // Since this is a monobheaviour class,
@@ -88,6 +110,76 @@ namespace HF.Refactoring
             }
         }
 
+        public void Streamline()
+        {
+            // Reset the list
+            m_orderedLayers.Clear();
+
+            // the toppest layer will be the first element in the array.
+            for (int i = m_tilemapHandlers.Length - 1; i >= 0; i--)
+            {
+                if (m_tilemapHandlers[i].Layer == "Bakeable")
+                {
+                    m_orderedLayers.Add(m_tilemapHandlers[i]);
+                }
+            }
+
+
+            // store what tilemap's tile to remove
+            Dictionary<HFTileMapHandler, List<Vector3Int>> positionToRemove = new Dictionary<HFTileMapHandler, List<Vector3Int>>();
+
+            // Iterate from the 2 elemnt
+            for (int i = 1; i < m_orderedLayers.Count; i++)
+            {
+                // create a list to store keys to remove
+                List<Vector3Int> positionToDelete = new List<Vector3Int>();
+
+                // reference to the tilemap
+                HFTileMapHandler tilemap = m_orderedLayers[i];
+
+
+                // Iterate every keys in the tilemap
+                foreach (Vector3Int position in tilemap.Tiles.Keys)
+                {
+                    bool isPositionFull = false;
+
+                    // Check in each position
+                    foreach (Vector3Int checkdirection in m_checkerVectors)
+                    {
+                        isPositionFull = tilemap.Tiles.ContainsKey(position + checkdirection);
+
+                        // If find null in a direction, break the loop. 
+                        // This means the tile is usefull to the renderer.
+                        if (!isPositionFull) break;
+                    }
+
+                    // If the all checked position are full 
+                    if (isPositionFull)
+                    {
+                        // Check the topper tilemap
+                        bool topIsFull = m_orderedLayers[i - 1].Tiles.ContainsKey(position);
+
+                        // If it is then add it the list to remove.
+                        if (topIsFull)
+                            positionToDelete.Add(position);
+                    }
+                }
+
+                positionToRemove.Add(tilemap, positionToDelete);
+            }
+
+
+            // Since i can't resize the dictionary in the for loop, i have to store all values,
+            // and afterwords remove they.
+            foreach (var item in positionToRemove.Keys)
+            {
+                foreach (var pos in positionToRemove[item])
+                {
+                    item.Tiles.Remove(pos);
+                }
+            }
+        }
+
         public void GenerateMap()
         {
             // If there is already a map generated, destroy it.
@@ -104,6 +196,8 @@ namespace HF.Refactoring
 
             m_layers.Clear();
 
+            Streamline();
+
             foreach (HFTileMapHandler mapHandler in m_tilemapHandlers)
             {
                 GameObject layer = null;
@@ -112,6 +206,7 @@ namespace HF.Refactoring
                 if (!m_layers.ContainsKey(mapHandler.Layer))
                 {
                     layer = new GameObject(mapHandler.Layer);
+                    layer.layer = mapHandler.Tilemap.gameObject.layer;
                     layer.transform.SetParent(transform);
                     m_layers.Add(mapHandler.Layer, layer);
                 }
@@ -159,12 +254,17 @@ namespace HF.Refactoring
                         }
                     }
 
-                    Instantiate(
+                    // store spawn position
+                    Vector3 fixedPosition = mapHandler.Tilemap.CellToLocalInterpolated(pos + new Vector3(0.5f, 0.5f, 0.5f)) + Vector3.up * mapHandler.Tilemap.transform.position.y;
+
+                    GameObject objSpawned = Instantiate(
                         objectToSpawn, 
-                        mapHandler.Tilemap.CellToLocalInterpolated(pos + new Vector3(0.5f, 0.5f, 0.5f)) + Vector3.up * mapHandler.Tilemap.transform.position.y,
+                        fixedPosition,
                         Quaternion.identity,
                         layer.transform
                         );
+
+                    objSpawned.layer = layer.layer;
                 }
             }
         }
