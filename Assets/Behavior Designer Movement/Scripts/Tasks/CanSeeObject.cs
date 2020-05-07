@@ -139,6 +139,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (returnedObject.Value != null) {
                 // Return success if an object was found
+
                 return TaskStatus.Success;
             }
             // An object is not within sight so return failure

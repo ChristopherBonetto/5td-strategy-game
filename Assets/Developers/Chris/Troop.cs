@@ -33,7 +33,7 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
     [SerializeField] private float m_formationRadius;
-    public Vector3[] m_formationPosition = new Vector3[4];
+    private Vector3[] m_formationPosition = new Vector3[4];
 
     private Vector3 m_destination;
 
@@ -212,6 +212,8 @@ public class Troop : EntityBehavior, ICanMove
         m_behaviorTree.enabled = false;
 
         m_focusEntity = null;
+        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
+        focusEntity.Value = FocusEntity;
         m_destination = endPosition;
         var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
         destination.Value = m_destination;
@@ -220,44 +222,55 @@ public class Troop : EntityBehavior, ICanMove
         m_behaviorTree.enabled = true;
     }
 
+    public void SetIdleState()
+    {
+        m_behaviorTree.enabled = true;
+
+        SetNewTroopState(TroopStates.Idle);
+        m_focusEntity = null;
+        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
+        focusEntity.Value = FocusEntity;
+
+        m_behaviorTree.enabled = true;
+    }
+
     public override void AssignFocusEntity(EntityBehavior inEntity)
     {
         m_behaviorTree.enabled = false;
+        m_focusEntity = null;
 
-        if (inEntity == null)
+        if (inEntity.EntityPlayerType != this.EntityPlayerType && !inEntity.IsBusy)
         {
-            SetNewTroopState(TroopStates.Idle);
+            if (inEntity is Troop)
+            {
+                Troop enemyTroop = inEntity as Troop;
 
-            var focusGameObject = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
-            focusGameObject.Value = null;
+                if (enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+                {
+                    m_focusEntity = enemyTroop;
+                    SetNewTroopState(TroopStates.GoToTroop);
+                    Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
+                }
+            }
         }
         else
         {
-            if (inEntity.EntityPlayerType != this.EntityPlayerType)
+            if (inEntity is BuildingBehaviour && !inEntity.IsBusy)
             {
-                if (inEntity is Troop)
-                {
-                    Troop enemyTroop = inEntity as Troop;
+                m_focusEntity = inEntity;
+                SetNewTroopState(TroopStates.GoToBuilding);
+                Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
+            }
+        }
 
-                    if(enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
-                    {
-                        m_focusEntity = enemyTroop;
-                        SetNewTroopState(TroopStates.GoToTroop);
-                        Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
-                    }
-                }
-            }
-            else
-            {
-                if(inEntity is BuildingBehaviour)
-                {
-                    m_focusEntity = inEntity;
-                    SetNewTroopState(TroopStates.GoToBuilding);
-                    Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
-                }
-            }
-            var focusGameObject = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
-            focusGameObject.Value = FocusEntity.gameObject;
+        if(FocusEntity != null)
+        {
+            var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
+            focusEntity.Value = FocusEntity;
+        }
+        else
+        {
+            SetIdleState();
         }
         m_behaviorTree.enabled = true;
     }

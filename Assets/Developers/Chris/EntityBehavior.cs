@@ -12,18 +12,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected List<Command> m_commands;
     protected int m_currentCommandIndex;
 
-    private PlayerType m_entityPlayerType;
-    public PlayerType EntityPlayerType
-    {
-        get
-        {
-            return m_entityPlayerType;
-        }
-        protected set
-        {
-            m_entityPlayerType = value;
-        }
-    }
+    protected PlayerType m_entityPlayerType;
+    public PlayerType EntityPlayerType { get => m_entityPlayerType; }
 
     protected EntityBehavior m_focusEntity = null;
     public EntityBehavior FocusEntity { get => m_focusEntity; }
@@ -45,15 +35,17 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected BehaviorTree m_behaviorTree;
 
+    protected bool m_isBusy = false;
+    public bool IsBusy { get { return m_isBusy; } set { m_isBusy = value; Debug.Log(m_isBusy); } }
+
     public virtual void Awake()
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
+        m_behaviorTree.PauseWhenDisabled = false;
+        m_behaviorTree.enabled = false;
     }
     public virtual void Start()
     {
-        m_behaviorTree.PauseWhenDisabled = false;
-        m_behaviorTree.enabled = false;
-
         m_commands = new List<Command>();
 
         m_attackType = new AttackBehaviors();
@@ -63,7 +55,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void AssignPlayer(PlayerType inPlayerType)
     {
-        EntityPlayerType = inPlayerType;
+        m_entityPlayerType = inPlayerType;
 
         if (EntityPlayerType == PlayerType.Player)
         {
