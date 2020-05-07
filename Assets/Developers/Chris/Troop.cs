@@ -4,33 +4,22 @@ using UnityEngine;
 using Types;
 using BehaviorDesigner.Runtime;
 using UnityEngine.AI;
+using HF.Unit;
 
 public enum TroopStates
 {
     Idle,
-    GoToAttack,
-    GoToLift
+    GoToTroop,
+    GoToBuilding,
+    GoToDestination
 }
 
-public class Troop : EntityBehavior
+public class Troop : EntityBehavior, ICanMove
 {
     private UnitsStatsSO m_troopStats;
 
-    public override EntityBehavior FocusEntity
-    {
-        get
-        {
-            return m_focusEntity;
-        }
-        set
-        {
-            m_focusEntity = value;
-            ChangeStateBasedOnFocusObj(m_focusEntity);
-        }
-    }
-
     private TroopStates m_currentTroopState = TroopStates.Idle;
-    public TroopStates CurrentTroopState { get => m_currentTroopState; }
+    public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
 
     private List<Unit> m_unitList;
     public List<Unit> UnitList
@@ -44,14 +33,7 @@ public class Troop : EntityBehavior
         }
     }
 
-    private NavMeshAgent m_troopAgent;
-
-    public override void Awake()
-    {
-        base.Awake();
-
-        m_troopAgent = gameObject.GetComponent<NavMeshAgent>();
-    }
+    private Vector3 m_destination;
 
     private void Update()
     {
@@ -62,37 +44,26 @@ public class Troop : EntityBehavior
                 DeassignUnitInTroop(UnitList[0]);
             }
         }
-        if (Input.GetKeyDown(KeyCode.O))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            SetNewTroopState(TroopStates.GoToAttack);
+            SetNewTroopState(TroopStates.Idle);
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            SetNewTroopState(TroopStates.GoToTroop);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            SetNewTroopState(TroopStates.GoToBuilding);
+        }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SetNewTroopState(TroopStates.GoToDestination);
         }
     }
 
     #region States
 
-    public void ChangeStateBasedOnFocusObj(EntityBehavior inEntity)
-    {
-        if(inEntity == null)
-        {
-            SetNewTroopState(TroopStates.Idle);
-        }
-        else
-        {
-            if (inEntity.EntityPlayerType != this.EntityPlayerType)
-            {
-                if (inEntity is Troop)
-                {
-                    SetNewTroopState(TroopStates.GoToAttack);
-                }
-            }
-            else
-            {
-                //if(inEntity is Building)
-            }
-        }
-        var focusGameObject = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
-        focusGameObject.Value = FocusEntity.gameObject;
-    }
     public void SetNewTroopState(TroopStates inNewState)
     {
         m_currentTroopState = inNewState;
@@ -106,8 +77,6 @@ public class Troop : EntityBehavior
     {
         m_troopStats = inStats as UnitsStatsSO;
 
-        m_troopAgent.speed = m_troopStats.UnitSpeed;
-
         CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
 
         var troopRef = (SharedTroop)m_behaviorTree.GetVariable("TroopRef");
@@ -119,7 +88,7 @@ public class Troop : EntityBehavior
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
 
-        m_behaviorTree.EnableBehavior();
+        m_behaviorTree.enabled = true;
     }
 
     public UnitsStatsSO GetStats()
@@ -178,6 +147,61 @@ public class Troop : EntityBehavior
 
         //m_troopRef = null;
         inUnit.gameObject.SetActive(false);
+    }
+
+    #endregion
+
+    #region Commands
+
+    public void MoveFromTo(Vector3 endPosition)
+    {
+        m_behaviorTree.enabled = false;
+
+        m_focusEntity = null;
+        m_destination = endPosition;
+        var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
+        destination.Value = m_destination;
+        SetNewTroopState(TroopStates.GoToDestination);
+
+        m_behaviorTree.enabled = true;
+    }
+
+    public override void AssignFocusEntity(EntityBehavior inEntity)
+    {
+        m_behaviorTree.enabled = false;
+
+        if (inEntity == null)
+        {
+            SetNewTroopState(TroopStates.Idle);
+
+            var focusGameObject = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+            focusGameObject.Value = null;
+        }
+        else
+        {
+            if (inEntity.EntityPlayerType != this.EntityPlayerType)
+            {
+                if (inEntity is Troop)
+                {
+                    m_focusEntity = inEntity;
+                    SetNewTroopState(TroopStates.GoToTroop);
+                }
+            }
+            else
+            {
+                if(inEntity is BuildingBehaviour)
+                {
+                    m_focusEntity = inEntity;
+                    SetNewTroopState(TroopStates.GoToBuilding);
+                }
+            }
+            var focusGameObject = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+            focusGameObject.Value = FocusEntity.gameObject;
+
+            
+        }
+
+        m_behaviorTree.enabled = true;
     }
 
     #endregion

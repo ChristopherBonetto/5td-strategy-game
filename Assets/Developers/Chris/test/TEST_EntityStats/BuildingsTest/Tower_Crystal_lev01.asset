@@ -10,13 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d87391f075a628640a55baf728962249, type: 3}
-  m_Name: Building
+  m_Name: Tower_Crystal_lev01
   m_EditorClassIdentifier: 
   Name: Pippo
-  Prefab: {fileID: 7818481422564293205, guid: 121d18e8c7eb1e74983eb1d964782848, type: 3}
-  MaxHp: 0
-  Armor: 0
-  CanTakeDamage: 0
+  BehaviorHandler: {fileID: 4324106961584771947, guid: 4939260c6f1b40345880617d5e489f58,
+    type: 3}
+  VisualPrefab: {fileID: 7818481422564293205, guid: 121d18e8c7eb1e74983eb1d964782848,
+    type: 3}
+  MaxHp: 10
+  Armor: 10
+  CanTakeDamage: 1
   EngageRange: 0
   AttackRange: 10
   AttackSpeed: 2
@@ -29,6 +32,5 @@ MonoBehaviour:
   Cost:
     ResourceType: 1
     ResourceQuantity: 0
-  ExTree: {fileID: 11400000, guid: 2e60485582f2e1b428b2e0de1e7de84f, type: 2}
   BuildingType: 1
   Weight: 10

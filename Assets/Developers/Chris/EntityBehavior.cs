@@ -26,17 +26,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     }
 
     protected EntityBehavior m_focusEntity = null;
-    public virtual EntityBehavior FocusEntity
-    {
-        get
-        {
-            return m_focusEntity;
-        }
-        set
-        {
-            m_focusEntity = value;
-        }
-    }
+    public EntityBehavior FocusEntity { get => m_focusEntity; }
 
     protected int m_currentHp;
     public virtual int CurrentHp
@@ -58,10 +48,12 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public virtual void Awake()
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
-        m_behaviorTree.DisableBehavior();
     }
     public virtual void Start()
     {
+        m_behaviorTree.PauseWhenDisabled = false;
+        m_behaviorTree.enabled = false;
+
         m_commands = new List<Command>();
 
         m_attackType = new AttackBehaviors();
@@ -101,7 +93,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void AssignFocusEntity(EntityBehavior inEntity)
     {
-        FocusEntity = inEntity;
+        m_focusEntity = inEntity;
         Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
     }
 
@@ -182,7 +174,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Death()
     {
-        FocusEntity = null;
+        m_focusEntity = null;
         this.gameObject.SetActive(false);
 
         //TO DO: se è il castello finisce il match.
