@@ -52,12 +52,11 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
     }
     
-
     [SerializeField] private LayerMask m_GroundMask;
 
     private Vector3 mousePositon { get => Input.mousePosition; }
 
-
+    #region Behavior Cycle
 
     // Update is called once per frame
     void Update()
@@ -72,14 +71,15 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
     }
 
+    #endregion
 
+    #region Select deselect entity
 
     private void SelectDeselectOneObject()
     {
         ClearSelection();
         ClickEntity();
     }
-
 
     private void ClickEntity()
     {
@@ -99,19 +99,20 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
     }
 
-
     public void ClearSelection()
     {
         CurrentEntity = null;
     }
 
+    #endregion
+
+    #region Command to current entity
 
     private void UnitAction()
     {
         if (CurrentEntity != null)
             CommandBasedOnClicckedObject();
     }
-
 
     private void CommandBasedOnClicckedObject()
     {
@@ -126,20 +127,20 @@ public class InputReaderManager : Singleton<InputReaderManager>
             if(entity != null)
             {
                 var command = new GoToInteract(CurrentEntity, entity);
-                Debug.Log(CurrentEntity + " " + entity);
                 CurrentEntity.ExecuteCommand(command);
             }
             else
             {
                 if (tempLayer == LayerMask.NameToLayer("Terrain"))
                 {
-                    Debug.Log("Move");
                     var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
                     CurrentEntity.ExecuteCommand(command);
                 }
             }
         }
     }
+
+    #endregion
 }
 
 

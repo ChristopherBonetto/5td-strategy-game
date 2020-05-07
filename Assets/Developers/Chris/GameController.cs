@@ -41,7 +41,6 @@ public class GameController : Singleton<GameController>
     public int m_playerLayer { get; private set; }
     public int m_aiLayer { get; private set; }
 
-
     [SerializeField] private GameCollection m_gameCollection;
 
     private GameCollection m_collection;
@@ -58,19 +57,16 @@ public class GameController : Singleton<GameController>
     }
     public QuantityOfResources[] m_currentPlayerResources { get; private set; }
 
-    private float m_timer = 0f;
-
+    #region Behavior Cycle
 
     private void Awake()
     {
         Collection = Instantiate(m_gameCollection);
     }
-    // Start is called before the first frame update
     void Start()
     {
         Initialize();
     }
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.A))
@@ -79,11 +75,45 @@ public class GameController : Singleton<GameController>
         }
     }
 
+    #endregion
+
+    #region Generic method
+
+    private void Initialize()
+    {
+        m_playerLayer = GetGameObjectLayer(Collection.PlayerLayer);
+        m_aiLayer = GetGameObjectLayer(Collection.AILayer);
+
+        m_currentPlayerResources = new QuantityOfResources[Collection.ResourcesValuesDictionary.Count];
+        Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
+    }
+
+    public int GetGameObjectLayer(LayerMask mask)
+    {
+        for (int i = 0; i < 32; ++i)
+        {
+            if (((1 << i) & mask.value) > 0)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    #endregion
+
+    #region Find and create new entities
+
     public void CreateEntity()
     {
         CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(-10, 0f, -10));
         CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 10));
+
+        CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(15, 0, 15));
+        CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(-10, 0, 0));
     }
+
+    #region Unit methods
 
     public Troop CreateNewTroop(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition)
     {
@@ -105,55 +135,23 @@ public class GameController : Singleton<GameController>
 
         //CheckFreeSpace(inPosition, 1);
 
-        GameObject TroopBrain = ObjectPooler.Instance.GetUnitBehaviorHandler(inUnitType);
-        TroopBrain.transform.position = inPosition;
-        TroopBrain.SetActive(true);
+        GameObject troopBrain = ObjectPooler.Instance.GetUnitBehaviorHandler(inUnitType);
+        Troop troopRef = troopBrain.GetComponent<Troop>();
 
-        if (TroopBrain == null)
+        if (troopBrain == null || troopRef == null)
         {
-            Debug.Log("can't take troop container because in pool it can't expand");
+            Debug.Log(inUnitType + " can't be taken from pool. Pls check Collection or add Troop script to Captain");
             return null;
         }
-        Troop troopRef = TroopBrain.GetComponent<Troop>();
 
-        if (troopRef == null)
-        {
-            Debug.LogError("Prefab need TroopsBehavior script");
-            return null;
-        }
+        troopBrain.transform.position = inPosition;
+        troopBrain.SetActive(true);
 
         troopRef.AssignPlayer(inPlayerType);
         troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
 
         return troopRef;
     }
-
-
-
-
-    public int GetGameObjectLayer(LayerMask mask)
-    {
-        for (int i = 0; i < 32; ++i)
-        {
-            if (((1 << i) & mask.value) > 0)
-            {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private void Initialize()
-    {
-        m_playerLayer = GetGameObjectLayer(Collection.PlayerLayer);
-        m_aiLayer = GetGameObjectLayer(Collection.AILayer);
-
-        m_currentPlayerResources = new QuantityOfResources[Collection.ResourcesValuesDictionary.Count];
-        Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
-    }
-
-    
-
 
     public UnitInfo? SearchUnitInfoInDictionary(UnitType inType)
     {
@@ -165,55 +163,47 @@ public class GameController : Singleton<GameController>
 
     }
 
+    #endregion
 
-    //-------------------------------------------------------------------------
-    // here is how a new building is created and instantiated for the level.
-    //-------------------------------------------------------------------------
-    #region Building
+    #region Building Methods
 
-    //public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
-    //{
-    //    if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
-    //    {
-    //        Debug.Log("GameCollection don't contain " + inBuildingType);
-    //        return null;
-    //    }
+    public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
+    {
+        if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
+        {
+            Debug.Log("GameCollection don't contain " + inBuildingType);
+            return null;
+        }
 
-    //    if (inPlayerType == PlayerType.Player)
-    //    {
-    //        if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
-    //        {
-    //            Debug.Log("u need more resources");
-    //            return null;
-    //        }
-    //        DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
-    //    }
+        if (inPlayerType == PlayerType.Player)
+        {
+            if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
+            {
+                Debug.Log("u need more resources");
+                return null;
+            }
+            DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
+        }
 
-    //    //CheckFreeSpace(inPosition, 1);
+        //CheckFreeSpace(inPosition, 1);
 
-    //    GameObject troop = ObjectPooler.Instance.GetPooledObject("Building");
-    //    troop.transform.position = inPosition;
-    //    troop.SetActive(true);
+        GameObject buildingBrain = ObjectPooler.Instance.GetBuildingBehaviorHandler(inBuildingType);
+        BuildingBehaviour tempRef = buildingBrain.GetComponent<BuildingBehaviour>();
 
-    //    if (troop == null)
-    //    {
-    //        Debug.Log("can't take troop container because in pool it can't expand");
-    //        return null;
-    //    }
-    //    BuildingBehaviour tempRef = troop.GetComponent<BuildingBehaviour>();
+        if (buildingBrain == null || tempRef == null)
+        {
+            Debug.LogError(inBuildingType + " can't be taken from pool. Pls check Collection or add Building Behavior script");
+            return null;
+        }
 
-    //    if (tempRef == null)
-    //    {
-    //        Debug.LogError("Prefab need TroopsBehavior script");
-    //        return null;
-    //    }
+        buildingBrain.transform.position = inPosition;
+        buildingBrain.SetActive(true);
 
-    //    tempRef.AssignPlayer(inPlayerType);
-    //    tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+        tempRef.AssignPlayer(inPlayerType);
+        tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
 
-    //    Debug.Log("building pooled!!!");
-    //    return tempRef;
-    //}
+        return tempRef;
+    }
 
     public BuildingInfo? SearchBuildingInfoInDictionary(BuildingType inType)
     {
@@ -224,6 +214,8 @@ public class GameController : Singleton<GameController>
         return null;
 
     }
+
+    #endregion
 
     #endregion
 
@@ -262,9 +254,7 @@ public class GameController : Singleton<GameController>
     //    return finalPosition;
     //}
 
-
-
-    #region Resources
+    #region Resources system
 
     public bool CheckResourcesAvailability(QuantityOfResources ResourcesToCheck)
     {
@@ -308,20 +298,4 @@ public class GameController : Singleton<GameController>
 
     #endregion
 
-
-    public bool Timer(float destinationTime)
-    {
-        m_timer += Time.deltaTime;
-        if (m_timer >= destinationTime)
-        {
-            m_timer = 0f;
-
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-    
 }

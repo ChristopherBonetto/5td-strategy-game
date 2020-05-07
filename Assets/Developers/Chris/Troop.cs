@@ -32,35 +32,10 @@ public class Troop : EntityBehavior, ICanMove
             tempList.Value = m_unitList;
         }
     }
+    [SerializeField] private float m_formationRadius;
+    public Vector3[] m_formationPosition = new Vector3[4];
 
     private Vector3 m_destination;
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            if(UnitList.Count > 0)
-            {
-                DeassignUnitInTroop(UnitList[0]);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            SetNewTroopState(TroopStates.Idle);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            SetNewTroopState(TroopStates.GoToTroop);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            SetNewTroopState(TroopStates.GoToBuilding);
-        }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            SetNewTroopState(TroopStates.GoToDestination);
-        }
-    }
 
     #region States
 
@@ -117,7 +92,7 @@ public class Troop : EntityBehavior, ICanMove
             }
             AssignUnitInTroop(tempRef);
         }
-        //SetFormationPositions(FormationRadius);
+        SetFormationPositions(m_formationRadius);
     }
 
     public void AssignUnitInTroop(Unit inUnit)
@@ -137,7 +112,7 @@ public class Troop : EntityBehavior, ICanMove
         //RefreshHp();
     }
 
-    public void DeassignUnitInTroop(Unit inUnit)
+    public void DismissUnitInTroop(Unit inUnit)
     {
         UnitList.Remove(inUnit);
 
@@ -148,6 +123,85 @@ public class Troop : EntityBehavior, ICanMove
         //m_troopRef = null;
         inUnit.gameObject.SetActive(false);
     }
+
+    #region Units Formation
+
+    public void SetFormationPositions(float inRadius = 1)
+    {
+        if (m_troopStats == null || UnitList.Count == 0)
+        {
+            return;
+        }
+        // Begin Modification @Panta
+        // Here we store each offset position.
+        // Note the case 2 and 4 are different cause of angle offset.
+        // In case 2 the offset is -90 degree, while in case 4 is -45 degree.
+        switch (UnitList.Count)
+        {
+            case 1:
+                m_formationPosition[0] = Vector3.zero;
+                break;
+
+            case 2:
+                // Reassign value to each position.
+                for (int i = 0; i < UnitList.Count; i++)
+                {
+                    // Calculate the angle in radian (not degree)
+                    float angle = Mathf.PI * 2 / UnitList.Count * i - (90 * Mathf.Deg2Rad);
+                    angle += transform.eulerAngles.y * Mathf.Deg2Rad;
+
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * inRadius;
+                }
+                break;
+
+            case 4:
+                // Reassign value to each position.
+                for (int i = 0; i < UnitList.Count; i++)
+                {
+                    // Calculate the angle in radian (not degree)
+                    float angle = Mathf.PI * 2 / UnitList.Count * i - (45 * Mathf.Deg2Rad);
+                    angle += transform.eulerAngles.y * Mathf.Deg2Rad;
+
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * inRadius;
+                }
+                break;
+
+            default:
+                // Reassign value to each position.
+                for (int i = 0; i < UnitList.Count; i++)
+                {
+                    // Calculate the angle in radian (not degree)
+                    float angle = Mathf.PI * 2 / UnitList.Count * i;
+                    angle += transform.eulerAngles.y * Mathf.Deg2Rad;
+
+                    m_formationPosition[i] = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle)) * inRadius;
+                }
+                break;
+        }
+        // End modification @Panta
+        AssignFormation(m_formationPosition);
+    }
+
+    public void AssignFormation(Vector3[] inPos)
+    {
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            UnitList[i].UnitAgent.Warp(transform.position + inPos[i]);
+        }
+    }
+
+    public void ResetFormation()
+    {
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            UnitList[i].UnitAgent.isStopped = false;
+            Vector3 destination = transform.position + m_formationPosition[i];
+            UnitList[i].UnitAgent.destination = destination;
+        }
+    }
+
+    #endregion
+
 
     #endregion
 
@@ -183,8 +237,14 @@ public class Troop : EntityBehavior, ICanMove
             {
                 if (inEntity is Troop)
                 {
-                    m_focusEntity = inEntity;
-                    SetNewTroopState(TroopStates.GoToTroop);
+                    Troop enemyTroop = inEntity as Troop;
+
+                    if(enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+                    {
+                        m_focusEntity = enemyTroop;
+                        SetNewTroopState(TroopStates.GoToTroop);
+                        Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
+                    }
                 }
             }
             else
@@ -193,15 +253,28 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     m_focusEntity = inEntity;
                     SetNewTroopState(TroopStates.GoToBuilding);
+                    Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
                 }
             }
             var focusGameObject = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
             focusGameObject.Value = FocusEntity.gameObject;
-
-            
         }
-
         m_behaviorTree.enabled = true;
+    }
+
+    public void DismissTroop()
+    {
+        foreach (Unit unit in UnitList)
+        {
+            DismissUnitInTroop(unit);
+        }
+        UnitList = null;
+
+        m_troopStats = null;
+
+        m_behaviorTree.enabled = false;
+        gameObject.SetActive(false);
+        //Return to the pool
     }
 
     #endregion

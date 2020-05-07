@@ -59,8 +59,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_attackType = new AttackBehaviors();
     }
 
-    //Maybe a new command.
-
     #region Generic Methods for entity
 
     public virtual void AssignPlayer(PlayerType inPlayerType)

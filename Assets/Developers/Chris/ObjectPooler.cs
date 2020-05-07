@@ -339,9 +339,9 @@ public class ObjectPooler : MonoBehaviour
             m_pooledObjects.Add(item.ObjectToPool.tag, objectsList);
         }
 
-        GameCollection collection = GameController.Instance.Collection;
 
-        
+
+        GameCollection collection = GameController.Instance.Collection;
 
         foreach (UnitType unit in collection.UnitsDictionary.Keys)
         {
@@ -360,8 +360,6 @@ public class ObjectPooler : MonoBehaviour
             m_unitBehaviorHandlerPooled.Add(unit, unitBehaviorHandlerList);
         }
 
-        
-
         foreach (BuildingType building in collection.BuildingsDictionary.Keys)
         {
             List<GameObject> buildingBehaviorHandlerList = new List<GameObject>();
@@ -369,7 +367,7 @@ public class ObjectPooler : MonoBehaviour
 
             for(int i = 0; i < collection.BuildingsDictionary[building].BuildingPoolQuantity; i++)
             {
-                ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.VisualPrefab, 1, true);
+                ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.BehaviorHandler, 1, true);
                 AddObjectToPool(buildingBehaviorHandlerList, tempBehaviorHandler);
 
                 ObjectPoolItem tempItem = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.VisualPrefab, collection.BuildingsDictionary[building].BuildingPoolQuantity, true);
