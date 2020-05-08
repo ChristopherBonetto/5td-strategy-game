@@ -6,133 +6,148 @@ using UnityEngine;
 
 public struct Fight
 {
-    //public TroopBehaviour PlayerTroop;
-    //public TroopBehaviour EnemyTroop;
+    public Troop PlayerTroop;
+    public Troop EnemyTroop;
 
-    //public Fight(TroopBehaviour inPlayer, TroopBehaviour inEnemy)
-    //{
-    //    PlayerTroop = inPlayer;
-    //    EnemyTroop = inEnemy;
+    public Fight(Troop inPlayer, Troop inEnemy)
+    {
+        PlayerTroop = inPlayer;
+        EnemyTroop = inEnemy;
 
-    //    //Prende l'oggetto dalla pool e li assegna le due unita
-    //    TakeBattleHandler();
-    //}
+        //Prende l'oggetto dalla pool e li assegna le due unita
+        TakeBattleHandler();
+    }
 
-    //private void TakeBattleHandler()
-    //{
-    //    GameObject battleHandler = ObjectPooler.Instance.GetPooledObject("BattleHandler");
+    private void TakeBattleHandler()
+    {
+        GameObject battleHandler = ObjectPooler.Instance.GetPooledObject("BattleHandler");
 
-    //    BattleHandler battleScript = battleHandler.GetComponent<BattleHandler>();
+        BattleHandler battleScript = battleHandler.GetComponent<BattleHandler>();
 
-    //    if (battleScript != null)
-    //    {
-    //        battleScript.StartFight(PlayerTroop, EnemyTroop);
-    //    }
-    //}
+        if (battleScript != null)
+        {
+            battleScript.StartFight(PlayerTroop, EnemyTroop);
+        }
+    }
 }
 
 
 public class BattleHandler : MonoBehaviour
 {
-    //private TroopBehaviour playerTroop;
-    //private TroopBehaviour enemyTroop;
+    private Troop playerTroop;
+    private Troop enemyTroop;
 
-    //public void StartFight(TroopBehaviour inPlayer, TroopBehaviour inEnemy)
-    //{
-    //    playerTroop = inPlayer;
-    //    enemyTroop = inEnemy;
+    public void StartFight(Troop inPlayer, Troop inEnemy)
+    {
+        playerTroop = inPlayer;
+        enemyTroop = inEnemy;
 
-    //    playerTroop.FocusEntity = enemyTroop;
-    //    enemyTroop.FocusEntity = playerTroop;
+        playerTroop.FocusEntity = enemyTroop;
+        enemyTroop.FocusEntity = playerTroop;
 
-    //    playerTroop.Stop(true);
-    //    enemyTroop.Stop(true);
+        playerTroop.StopTree(true);
+        enemyTroop.StopTree(true);
 
-    //    playerTroop.ChangeInCombat(true);
-    //    enemyTroop.ChangeInCombat(true);
+        playerTroop.IsBusy = true;
+        enemyTroop.IsBusy = true;
 
-    //    inPlayer.currentBattle = this;
-    //    inEnemy.currentBattle = this;
+        inPlayer.m_currentBattle = this;
+        inEnemy.m_currentBattle = this;
 
-    //    int enemyIndex = 0;
-    //    int playerIndex = 0;
+        int enemyIndex = 0;
+        int playerIndex = 0;
 
-    //    for (int i = 0; i < playerTroop.m_units.Count; i++)
-    //    {
-    //        playerTroop.m_units[i].FocusEntity = enemyTroop.m_units[enemyIndex];
+        for (int i = 0; i < playerTroop.UnitList.Count; i++)
+        {
+            playerTroop.UnitList[i].AssignFocusUnit(enemyTroop.UnitList[enemyIndex]);
 
-    //        enemyIndex++;
-    //        enemyIndex = (int)Mathf.Repeat(0f, (float)enemyTroop.m_units.Count);
-    //    }
-    //    for (int i = 0; i < enemyTroop.m_units.Count; i++)
-    //    {
-    //        enemyTroop.m_units[i].FocusEntity = playerTroop.m_units[playerIndex];
+            playerTroop.UnitList[i].StopTree(false);
+            enemyIndex++;
+            enemyIndex = (int)Mathf.Repeat(enemyIndex, (float)enemyTroop.UnitList.Count);
+        }
+        for (int i = 0; i < enemyTroop.UnitList.Count; i++)
+        {
+            enemyTroop.UnitList[i].AssignFocusUnit(playerTroop.UnitList[playerIndex]);
 
-    //        playerIndex++;
-    //        playerIndex = (int)Mathf.Repeat(0f, (float)playerTroop.m_units.Count);
-    //    }
-    //}
+            playerTroop.UnitList[i].StopTree(false);
+            playerIndex++;
+            playerIndex = (int)Mathf.Repeat(playerIndex, (float)playerTroop.UnitList.Count);
+        }
+    }
 
-    //public void TakeOtherTarget(UnitBehavior inUnit)
-    //{
-    //    if (playerTroop.m_units.Contains(inUnit))
-    //    {
-    //        inUnit.FocusEntity = TakeAnotherTargerFromTroop(inUnit, enemyTroop);
-    //    }
-    //    else if (enemyTroop.m_units.Contains(inUnit))
-    //    {
-    //        inUnit.FocusEntity = TakeAnotherTargerFromTroop(inUnit, playerTroop);
-    //    }
-    //    else
-    //    {
-    //        Debug.Log("No one troop contain " + inUnit.name);
-    //    }
+    public void TakeOtherTarget(Unit inUnit)
+    {
+        if (playerTroop.UnitList.Contains(inUnit))
+        {
+            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, enemyTroop));
+        }
+        else if (enemyTroop.UnitList.Contains(inUnit))
+        {
+            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, playerTroop));
+        }
+        else
+        {
+            Debug.Log("No one troop contain " + inUnit.name);
+        }
 
-    //}
+    }
 
-    //private UnitBehavior TakeAnotherTargerFromTroop(UnitBehavior inUnit, TroopBehaviour inTroop)
-    //{
-    //    float distance = 1000f;
-    //    UnitBehavior tempUnit = null;
+    private Unit TakeAnotherTargerFromTroop(Unit inUnit, Troop inTroop)
+    {
+        float distance = 1000f;
+        Unit tempUnit = null;
 
-    //    for (int i = 0; i < inTroop.m_units.Count; i++)
-    //    {
-    //        if (inTroop.m_units[i].gameObject.active)
-    //        {
-    //            if (Vector3.Distance(inUnit.transform.position, inTroop.m_units[i].transform.position) < distance)
-    //            {
-    //                tempUnit = inTroop.m_units[i];
-    //            }
-    //        }
-    //    }
+        for (int i = 0; i < inTroop.UnitList.Count; i++)
+        {
+            if (inTroop.UnitList[i].gameObject.active)
+            {
+                if (Vector3.Distance(inUnit.transform.position, inTroop.UnitList[i].transform.position) < distance)
+                {
+                    tempUnit = inTroop.UnitList[i];
+                }
+            }
+        }
 
-    //    if (tempUnit == null)
-    //    {
-    //        FinishFight();
-    //        return null;
-    //    }
+        if (tempUnit == null)
+        {
+            FinishFight();
+            return null;
+        }
 
-    //    return tempUnit;
-    //}
+        return tempUnit;
+    }
 
-    //public void FinishFight()
-    //{
-    //    Debug.Log("Fight completed");
-    //    ResetFocusEntity(playerTroop);
-    //    ResetFocusEntity(enemyTroop);
+    public void FinishFight()
+    {
+        Debug.Log("Fight completed");
+        playerTroop.SetIdleState();
+        enemyTroop.SetIdleState();
 
-    //    gameObject.SetActive(false);
-    //}
+        gameObject.SetActive(false);
+    }
 
-    //public void ResetFocusEntity(TroopBehaviour inTroop)
-    //{
-    //    foreach (UnitBehavior unit in inTroop.m_units)
-    //    {
-    //        unit.FocusEntity = null;
-    //    }
+    public void EscapeFight()
+    {
+        foreach (Unit unit in playerTroop.UnitList)
+        {
+            unit.StopTree(true);
+            unit.AssignFocusUnit(null);
+        }
+        foreach (Unit unit in enemyTroop.UnitList)
+        {
+            unit.StopTree(true);
+            unit.AssignFocusUnit(null);
+        }
 
-    //    inTroop.currentBattle = null;
-    //    inTroop.FocusEntity = null;
-    //}
 
+        playerTroop.StopTree(false);
+        enemyTroop.StopTree(false);
+
+        playerTroop.m_currentBattle = null;
+        enemyTroop.m_currentBattle = null;
+
+        playerTroop.IsBusy = false;
+        enemyTroop.IsBusy = false;
+    }
 }
+

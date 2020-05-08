@@ -21,7 +21,7 @@ public class Troop : EntityBehavior, ICanMove
     private TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
 
-    private List<Unit> m_unitList;
+    public List<Unit> m_unitList;
     public List<Unit> UnitList
     {
         get { return m_unitList; }
@@ -36,6 +36,20 @@ public class Troop : EntityBehavior, ICanMove
     private Vector3[] m_formationPosition = new Vector3[4];
 
     private Vector3 m_destination;
+
+    public BattleHandler m_currentBattle = null;
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SetIdleState();
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            DismissUnitInTroop(UnitList[0]);
+        }
+    }
 
     #region States
 
@@ -98,29 +112,24 @@ public class Troop : EntityBehavior, ICanMove
     public void AssignUnitInTroop(Unit inUnit)
     {
         UnitList.Add(inUnit);
+        inUnit.StopTree(true);
         inUnit.gameObject.transform.parent = this.transform;
         inUnit.gameObject.layer = gameObject.layer;
         inUnit.transform.localPosition = Vector3.zero;
         inUnit.gameObject.SetActive(true);
+        inUnit.AssignUnitInTroop(this);
         
-        //m_troopRef = inTroop;
-        //EntityStats = inTroop.m_troopStats;
-
-        //EntityPlayerType = inTroop.EntityPlayerType;
-
-        //UnitAgent.speed = TroopRef.m_troopStats.UnitSpeed;
-        //RefreshHp();
+        inUnit.RefreshHp();
     }
 
     public void DismissUnitInTroop(Unit inUnit)
     {
+        inUnit.StopTree(true);
+
         UnitList.Remove(inUnit);
+        inUnit.AssignUnitInTroop(null);
 
         inUnit.gameObject.transform.parent = null;
-
-        //FocusEntity = null;
-
-        //m_troopRef = null;
         inUnit.gameObject.SetActive(false);
     }
 
@@ -194,9 +203,12 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
-            UnitList[i].UnitAgent.isStopped = false;
-            Vector3 destination = transform.position + m_formationPosition[i];
-            UnitList[i].UnitAgent.destination = destination;
+            if (UnitList[i].gameObject.active)
+            {
+                UnitList[i].UnitAgent.isStopped = false;
+                Vector3 destination = transform.position + m_formationPosition[i];
+                UnitList[i].UnitAgent.destination = destination;
+            }
         }
     }
 
@@ -209,27 +221,20 @@ public class Troop : EntityBehavior, ICanMove
 
     public void MoveFromTo(Vector3 endPosition)
     {
+        if(m_currentBattle != null)
+        {
+            m_currentBattle.EscapeFight();
+        }
+
         m_behaviorTree.enabled = false;
 
         m_focusEntity = null;
-        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-        focusEntity.Value = FocusEntity;
+        var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+        focusEntity.Value = null;
         m_destination = endPosition;
         var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
         destination.Value = m_destination;
         SetNewTroopState(TroopStates.GoToDestination);
-
-        m_behaviorTree.enabled = true;
-    }
-
-    public void SetIdleState()
-    {
-        m_behaviorTree.enabled = true;
-
-        SetNewTroopState(TroopStates.Idle);
-        m_focusEntity = null;
-        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-        focusEntity.Value = FocusEntity;
 
         m_behaviorTree.enabled = true;
     }
@@ -263,15 +268,45 @@ public class Troop : EntityBehavior, ICanMove
             }
         }
 
-        if(FocusEntity != null)
+        if (FocusEntity != null)
         {
-            var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-            focusEntity.Value = FocusEntity;
+            var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+            focusEntity.Value = FocusEntity.gameObject;
         }
         else
         {
             SetIdleState();
         }
+        m_behaviorTree.enabled = true;
+    }
+
+    #endregion
+
+    public override void Attack()
+    {
+        new Fight(this, FocusEntity as Troop);
+    }
+
+    public void SetIdleState()
+    {
+        m_behaviorTree.enabled = false;
+
+        SetNewTroopState(TroopStates.Idle);
+        m_focusEntity = null;
+        var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+        focusEntity.Value = null;
+        IsBusy = false;
+
+        foreach(Unit unit in UnitList)
+        {
+            unit.StopTree(true);
+            unit.AssignFocusUnit(null);
+        }
+
+        m_currentBattle = null;
+
+        ResetFormation();
+
         m_behaviorTree.enabled = true;
     }
 
@@ -288,6 +323,45 @@ public class Troop : EntityBehavior, ICanMove
         m_behaviorTree.enabled = false;
         gameObject.SetActive(false);
         //Return to the pool
+    }
+
+    #region Troop Hp
+
+    public void TroopTakeDamage(Unit inUnit)
+    {
+        DismissUnitInTroop(inUnit);
+
+        if (CurrentHp == 0)
+        {
+            if (EntityPlayerType == PlayerType.AI)
+            {
+                Death();
+                return;
+            }
+            else
+            {
+                if (InputReaderManager.Instance.CurrentEntity == this)
+                {
+                    InputReaderManager.Instance.CurrentEntity = null;
+                }
+                StartCoroutine(Respawn());
+            }
+        }
+    }
+
+    public override void Death()
+    {
+        SetIdleState();
+        StopTree(true);
+        gameObject.SetActive(false);
+    }
+
+    //Respawna le unita dopo un timer
+    IEnumerator Respawn()
+    {
+        transform.position = new Vector3(0, 0.5f, 0);
+        yield return new WaitForSeconds(m_troopStats.RespawnTime);
+        CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
     }
 
     #endregion

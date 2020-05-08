@@ -16,7 +16,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public PlayerType EntityPlayerType { get => m_entityPlayerType; }
 
     protected EntityBehavior m_focusEntity = null;
-    public EntityBehavior FocusEntity { get => m_focusEntity; }
+    public EntityBehavior FocusEntity { get { return m_focusEntity; } set { m_focusEntity = value; } }
 
     protected int m_currentHp;
     public virtual int CurrentHp
@@ -36,7 +36,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected BehaviorTree m_behaviorTree;
 
     protected bool m_isBusy = false;
-    public bool IsBusy { get { return m_isBusy; } set { m_isBusy = value; Debug.Log(m_isBusy); } }
+    public bool IsBusy { get { return m_isBusy; } set { m_isBusy = value; } }
 
     public virtual void Awake()
     {
@@ -75,6 +75,11 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public EntityStatsSO GetStats()
     {
         return m_entityStats;
+    }
+
+    public void StopTree(bool inValue)
+    {
+        m_behaviorTree.enabled = !inValue;
     }
 
     #endregion
@@ -173,7 +178,11 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     #endregion
 
+    #region Attack
+
     public virtual void Attack()
     {
     }
+
+    #endregion
 }

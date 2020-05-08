@@ -12,12 +12,9 @@ namespace BehaviorDesigner.Runtime.Tasks
         [Tooltip("The GameObject to get the field on")]
         public SharedGameObject targetGameObject;
 
-        [Tooltip("The GameObject to get the field on")]
-        public SharedGameObject targetBuilding;
-
         public override TaskStatus OnUpdate()
         {
-            if (targetGameObject.Value == null && targetBuilding.Value == null)
+            if (targetGameObject.Value == null)
             {
                 return TaskStatus.Failure;
             }

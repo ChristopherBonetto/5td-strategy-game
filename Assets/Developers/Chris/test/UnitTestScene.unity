@@ -242,7 +242,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b4a012e36a43344a38b7bf2d712139, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_itemsToPool: []
+  m_itemsToPool:
+  - ObjectToPool: {fileID: 5413669747350254245, guid: 849adf457eb1e9244bdb9093847cc2dc,
+      type: 3}
+    AmountToPool: 5
+    ShouldExpand: 1
 --- !u!4 &352006230
 Transform:
   m_ObjectHideFlags: 0
@@ -550,7 +554,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0.04296875, y: 0.1640625, z: 0.0390625, w: -0.04296875}
+  m_BoundingSphereOverride: {x: 1.5964e-41, y: 2.87e-42, z: 2.511e-42, w: -3.59e-43}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0

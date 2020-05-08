@@ -45,18 +45,13 @@ public class AttackBehaviors : IAttackTypes
 
     
 
-    public bool SingleAttack(EntityBehavior inEntity, int inDamage)
+    public bool SingleAttack(GameObject inObj, int inDamage)
     {
-        if (!inEntity.gameObject.active)
-        {
-            return false;
-        }
+        ITakeDamage takeDamage = inObj.GetComponent<ITakeDamage>();
 
-        ITakeDamage damageInterface = inEntity.GetComponent<ITakeDamage>();
-
-        if(damageInterface != null)
+        if(takeDamage != null)
         {
-            if (damageInterface.TakeDamage(inDamage))
+            if (takeDamage.TakeDamage(inDamage))
             {
                 return true;
             }
