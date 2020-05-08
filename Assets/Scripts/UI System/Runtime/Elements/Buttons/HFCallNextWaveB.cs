@@ -3,64 +3,52 @@ using System.Collections.Generic;
 using UnityEngine;
 using HF.Refactoring;
 
-public class HFCallNextWaveB : HFButton
+public class HFCallNextWaveB : HFButton, IHFTutorial
 {
-    private TutorialID m_tutorialID = TutorialID.None;
-    private bool m_isMatchingTutorialID;
+    public GameEventData Events;
+    public GameEventData Initialization;
+    public TutorialID TutorialID { get; set; } = TutorialID.Call_wave;
 
-    protected override void OnEnable()
+    // Tutorial variables
+    private bool m_tutorialMatch = true;
+
+
+    private void Awake()
     {
-        base.OnEnable();
-
-        // Hardcode the reference about level tutorial
-        if (HFScenesManager.Instance.CurrentLevelSelected != null && HFScenesManager.Instance.CurrentLevelSelected.LevelScene.name == "Level_00")
-        {
-            // If it's in the tutorial level, we don't want to call nezt wave until the tutorial pop up say that.
-            m_tutorialID = TutorialID.Call_wave;
-            HFEventManager.SubscribeTo<TutorialID>(HFEventID.OnTutorialQuestOn, OnTutorialQuestOn);
-        }
-        else
-        {
-            // If it's not the tutorial level, reset value. Now the next wave can be called at any moments.
-            ResetListeningInputCondition();
-        }
+        Events.AddListener(this);
+        Initialization.AddListener(this);
     }
 
-    protected override void OnDisable()
+    private void OnDestroy()
     {
-        base.OnDisable();
-
-        // Unsubscribe from the event only if the player is in the tutorial level. (same as above)
-        if (HFScenesManager.Instance.CurrentLevelSelected != null && HFScenesManager.Instance.CurrentLevelSelected.LevelScene.name == "Level_00")
-        {
-            HFEventManager.UnsubscribeFrom<TutorialID>(HFEventID.OnTutorialQuestOn, OnTutorialQuestOn);
-        }
+        Events.RemoveListener(this);
+        Initialization.RemoveListener(this);
     }
 
     public void CallNextWave()
     {
-        if (m_isListeningInput)
+        if (m_isListeningInput && m_tutorialMatch)
         {
             HFEventManager.TriggerEvent(HFEventID.OnWaveBeginned);
             HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Call_wave);
         }
     }
 
-    private void ResetListeningInputCondition()
+    public void OnGlobalInitialization()
     {
-        m_tutorialID = TutorialID.None;
-        m_isMatchingTutorialID = true;
+        m_tutorialMatch = false;
+        this.gameObject.SetActive(false);
     }
 
-    private void OnTutorialQuestOn(TutorialID id)
+    public void OnStepInitialization()
     {
-        m_isMatchingTutorialID = m_tutorialID == id || m_tutorialID == TutorialID.None;
-        m_isListeningInput = m_isMatchingWindowID && m_isMatchingTutorialID;
+        m_tutorialMatch = true;
+        this.gameObject.SetActive(true);
+        // Turn on UI feedbacks.
     }
 
-    protected override void IsMatchingWiindowID(HFUIWindowID id)
+    public void OnStepCompleted()
     {
-        m_isMatchingWindowID = MyWindowID == id;
-        m_isListeningInput =  m_isMatchingWindowID && m_isMatchingTutorialID;
+        
     }
 }

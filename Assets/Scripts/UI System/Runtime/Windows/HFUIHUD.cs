@@ -11,7 +11,7 @@ namespace HF.Refactoring
 
         [Header("Tutorial Field")]
 
-        public HFTutorialPopUp[] Popups;
+        public HFTutorialPopUp Popup;
 
         [Header("Generic buttons")]
 
