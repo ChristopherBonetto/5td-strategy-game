@@ -1,92 +1,116 @@
 ﻿public enum HFEventID
 {
 	/// <summary>
-	/// GameStates preState,
-	/// GameStates postState
+	/// <see cref="GameStates"/> preState.
+	/// <see cref="GameStates"/> postState.
 	/// </summary>
 	OnBeforeChangeState,
+
 	/// <summary>
-	/// GameStates newState
+	/// <see cref="GameStates"/> newState.
 	/// </summary>
 	OnGameStateChanged,
 
     /// <summary>
-    /// HFLevelInfoSO
+    /// <see cref="HFLevelInfoSO"/> current level selected.
     /// </summary>
     OnInitializeLevel,
+
 	/// <summary>
-	/// empty
+	/// 
 	/// </summary>
 	OnLevelReady,
+
 	/// <summary>
-	/// bool	winCondition
+	/// <see cref="bool"/> is win?
 	/// </summary>
 	OnEndLevel,
 
     /// <summary>
-    /// int	rewardValue,
-    /// HFUnit	instigatorUnit
+    /// <see cref="int"/> reward value.
+    /// <see cref="HF.HFUnit"/> ostile unit.
     /// </summary>
     GainReward,
 
 
-	//----------------------------------------------------------------------------------
-	// Units
-	//----------------------------------------------------------------------------------
+	/*
+	 *--------------------------------------- 
+	 * Units
+	 * ---------------------------------------
+	 */
 
-    /// <summary>
-    /// HFUnit	unit
-    /// </summary>
-    OnUnitDeath,
 	/// <summary>
-	/// 1) <see cref="HF.HFUnit"/> unit
-	/// 2) <see cref="HF.HFUnit.Team"/> team
+	/// <see cref="HF.HFUnit"/> unit.
+	/// </summary>
+	OnUnitDeath,
+
+	/// <summary>
+	/// <see cref="HF.HFUnit"/> unit.
+	/// <see cref="int"/> team.
 	/// </summary>
 	OnUnitSelected,
+
 	/// <summary>
-	/// 1) <see cref="HF.HFUnit"/> unit
-	/// 2) <see cref="HF.HFUnit.Team"/> team
+	/// <see cref="HF.HFUnit"/> unit.
+	/// <see cref="int"/> team.
 	/// </summary>
 	OnUnitSpecialized,
+
 	/// <summary>
-	/// 1) <see cref="HF.HFUnit"/> unit
-	/// 2) <see cref="HF.HFUnit.Team"/> team
+	/// <see cref="HF.HFUnit"/> unit.
+	/// <see cref="int"/> team.
 	/// </summary>
 	OnUnitUpgraded,
+
 	/// <summary>
-	/// 1) <see cref="HF.HFController.Team"/> int
-	/// 2) <see cref="HFBaseStats"/> List<HFBaseStats>
+	/// <see cref="int"/> team.
+	/// <see cref="HFBaseStats"/> List<HFBaseStats>.
 	/// </summary>
 	OnUnitsPossessed,
 
 
-	//----------------------------------------------------------------------------------
-	// Wave
-	//----------------------------------------------------------------------------------
+	/*
+	 *--------------------------------------- 
+	 * Wave
+	 * ---------------------------------------
+	 */
 
 	OnWaveBeginned,
+
 	/// <summary>
-	/// 1) <see cref="HF.Refactoring.HFWaveController.WaveIndex"/> int,
-	/// 2) <see cref="HF.Refactoring.HFWaveCollection.GetWaves().Count"/> int
+	/// <see cref="int"/> wave index.
+	/// <see cref="int"/> waves count.
 	/// </summary>
 	OnWaveIndexUpdate,
+
+	/// <summary>
+	/// 
+	/// </summary>
 	OnWaveCleared,
+
+	/// <summary>
+	/// 
+	/// </summary>
 	OnWaveEnded,
+
     /// <summary>
-    /// HFUnit	unit
+    /// <see cref="HF.HFUnit"/> unit.
     /// </summary>
     OnFinishedLoadEvents,
 
-	//----------------------------------------------------------------------------------
-	// Tutorial
-	//----------------------------------------------------------------------------------
+	/*
+	 *--------------------------------------- 
+	 * Tutorial
+	 * ---------------------------------------
+	 */
 
 	/// <summary>
-	/// 1) <see cref="TutorialID"/> id
+	/// <see cref="TutorialID"/> id.
 	/// </summary>
 	OnTutorialQuestCompleted,
+
 	/// <summary>
-	/// 2) <see cref="TutorialID"/> id
+	/// <see cref="TutorialID"/> id.
 	/// </summary>
 	OnTutorialQuestOn,
 }

@@ -23,7 +23,7 @@ namespace HF.Refactoring
             HFScenesManager sceneM = HFScenesManager.Instance;
             HFLevelContainerSO levelContainer = sceneM.LevelContainer;
 
-            for (int i = 0; i < levelContainer.Levels.Count; i++)
+            for (int i = 0; i < m_loadLevelButtons.Length; i++)
             {
                 m_loadLevelButtons[i].ButtonText.text = PrefixButtonText + " " + (i + 1).ToString();
                 m_loadLevelButtons[i].Level = levelContainer.Levels[i];

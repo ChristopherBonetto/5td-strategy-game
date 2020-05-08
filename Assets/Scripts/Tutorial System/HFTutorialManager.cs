@@ -4,13 +4,15 @@ using UnityEngine;
 using HF.Refactoring;
 using HF;
 
-//-----------------------------------------------------------------------------
-// This class manage the tutorial pop-ups throw events. This class will be not 
-// a singleton because it doesn't need to be.
-// We track the right tutorial to perform storing a Queue of "TutorialPopUp",
-// If the ID from the first of the queue correspond to the one triggered by an 
-// event, then go to next one if there are any.
-//-----------------------------------------------------------------------------
+/*
+* -----------------------------------------------------------------------------
+* This class manage the tutorial pop-ups throw events. This class will be not 
+* a singleton because it doesn't need to be.
+* We track the right tutorial to perform storing a Queue of "TutorialPopUp",
+* If the ID from the first of the queue correspond to the one triggered by an 
+* event, then go to next one if there are any.
+* -----------------------------------------------------------------------------
+*/
 
 public enum TutorialID
 {
@@ -64,6 +66,20 @@ public class HFTutorialManager : MonoBehaviour
         }
     }
 
+
+    /// <summary>
+    /// Restart the tutorial
+    /// </summary>
+    public void RestartTutorial()
+    {
+        LoadTutorialPopups();
+
+        if (m_popups.Count > 0)
+        {
+            PeekAndEnableOn();
+        }
+    }
+
     /// <summary>
     /// Laod every popup from the HUD window
     /// <see cref="HFUIHUD"/>
@@ -72,6 +88,8 @@ public class HFTutorialManager : MonoBehaviour
     {
         HFUIHUD hud = HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD);
 
+        m_popups.Clear();
+
         foreach (HFTutorialPopUp popUp in hud.Popups)
         {
             m_popups.Enqueue(popUp);
@@ -79,9 +97,11 @@ public class HFTutorialManager : MonoBehaviour
     }
 
 
-    // Event that respond to the triggers,
-    // If the parameter ID correspond to the pop-up
-    // then go to the next one.
+    /*
+    * Event that respond to the triggers,
+    * If the parameter ID correspond to the pop-up
+    * then go to the next one.
+    */
     private void OnTutorialQuestCompleted(TutorialID id)
     {
         // No pop-up available.
