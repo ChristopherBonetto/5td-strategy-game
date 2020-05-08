@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-[CreateAssetMenu(menuName = "Human Factor/Tile Map/Rule Tile", fileName = "New_HF_RuleTile")]
+[CreateAssetMenu(menuName = "Human Factor/Tile Map/Rule Tile", fileName = "so_RT_name")]
 public class HFRuleTileCustom : RuleTile<HFRuleTileCustom.Neighbor>
 {
 

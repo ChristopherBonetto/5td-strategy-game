@@ -63,7 +63,7 @@ public class HFStringKV : HFKeyVal<string>
 public class HFBoolKV : HFKeyVal<bool>
 { }
 
-[CreateAssetMenu(fileName = "Stats_", menuName = "GoodNorth/Statistics")]
+[CreateAssetMenu(fileName = "so_Stats_", menuName = "Good North/Units/Statistics")]
 public class HFBaseStats : ScriptableObject
 {
 	[Serializable]

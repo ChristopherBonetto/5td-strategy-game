@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-[CreateAssetMenu(fileName = "PoolID_name", menuName = "Human Factor/PoolID")]
+[CreateAssetMenu(fileName = "so_PoolID_name", menuName = "Human Factor/Pool system/Pool ID")]
 public class HFPoolID : ScriptableObject
 {
 	public int ID;

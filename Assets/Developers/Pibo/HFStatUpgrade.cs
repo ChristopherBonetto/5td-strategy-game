@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Upgrades_", menuName = "GoodNorth/Upgrades")]
+[CreateAssetMenu(fileName = "so_Upgrades_", menuName = "Good North/Units/Upgrades")]
 public class HFStatUpgrade : ScriptableObject, IHFStatModifier
 {
 	[SerializeField]
