@@ -340,6 +340,9 @@ namespace HF
 				UpdateVisuals();
 
 				HFEventManager.TriggerEvent(HFEventID.OnUnitUpgraded, this, Team);
+
+				if (Team == HFGameParameters.PlayerTeam)
+					HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
 			}
 		}
 
@@ -1244,6 +1247,9 @@ namespace HF
 
 		public void Select()
 		{
+			if (Team == HFGameParameters.PlayerTeam)
+				HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
+
 			HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, this, Team);
 			m_isSelected = true;
 			if (m_selectedMaterial)

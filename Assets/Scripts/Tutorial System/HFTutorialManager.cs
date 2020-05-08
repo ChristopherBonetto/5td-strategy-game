@@ -27,6 +27,9 @@ public enum TutorialID
     None,
 }
 
+/// <summary>
+/// Handle the flow of the tutorial.
+/// </summary>
 public class HFTutorialManager : MonoBehaviour
 {
     // Queue of tutorials to show 
@@ -39,15 +42,11 @@ public class HFTutorialManager : MonoBehaviour
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<TutorialID>(HFEventID.OnTutorialQuestCompleted, OnTutorialQuestCompleted);
-        HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
-        HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitUpgraded);
     }
 
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<TutorialID>(HFEventID.OnTutorialQuestCompleted, OnTutorialQuestCompleted);
-        HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
-        HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitUpgraded, OnUnitUpgraded);
 
         HFUIHUD hud = HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD);
         foreach (HFTutorialPopUp popUp in hud.Popups)
@@ -58,12 +57,7 @@ public class HFTutorialManager : MonoBehaviour
 
     private void Start()
     {
-        LoadTutorialPopups();
-
-        if (m_popups.Count > 0)
-        {
-            PeekAndEnableOn();
-        }
+        RestartTutorial();
     }
 
 
@@ -150,24 +144,4 @@ public class HFTutorialManager : MonoBehaviour
         // This event allow other component to respond when a new pop up is shown.
         HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestOn, popUp.ID);
     }
-
-    #region Events
-
-    private void OnUnitSelected(HFUnit unit, int team)
-    {
-        if (team == HFGameParameters.PlayerTeam)
-        {
-            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
-        }
-    }
-
-    private void OnUnitUpgraded(HFUnit unit, int team)
-    {
-        if (team == HFGameParameters.PlayerTeam)
-        {
-            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
-        }
-    }
-
-    #endregion
 }
