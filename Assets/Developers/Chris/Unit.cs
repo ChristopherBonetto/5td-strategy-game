@@ -55,13 +55,13 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_troopRef = inValue;
             m_unitStats = m_troopRef.GetStats();
-            AssignValuesToTree(m_unitStats.AttackRange, m_unitStats.UnitSpeed);
+            AssignValuesToTree(2, m_unitStats.UnitSpeed);
         }
         else
         {
             m_troopRef = null;
             m_unitStats = null;
-            AssignValuesToTree(0f, 0f);
+            AssignValuesToTree(2, 2);
         }
     }
 

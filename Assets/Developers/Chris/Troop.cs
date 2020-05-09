@@ -17,6 +17,10 @@ public enum TroopStates
 public class Troop : EntityBehavior, ICanMove
 {
     private UnitsStatsSO m_troopStats;
+    public override int CurrentHp
+    {
+        get { return TakeTroopHealth(); }
+    }
 
     private TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
@@ -72,6 +76,8 @@ public class Troop : EntityBehavior, ICanMove
         troopRef.Value = this;
         var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
         engageRange.Value = m_troopStats.EngageRange;
+        var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
+        attackRange.Value = m_troopStats.AttackRange;
         var canAttack = (SharedBool)m_behaviorTree.GetVariable("CanAttack");
         canAttack.Value = m_troopStats.CanAttack;
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
@@ -219,11 +225,12 @@ public class Troop : EntityBehavior, ICanMove
 
     #region Commands
 
+    //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
         if(m_currentBattle != null)
         {
-            m_currentBattle.EscapeFight();
+            m_currentBattle.FinishFight();
         }
 
         m_behaviorTree.enabled = false;
@@ -280,8 +287,8 @@ public class Troop : EntityBehavior, ICanMove
         m_behaviorTree.enabled = true;
     }
 
-    #endregion
 
+    //Custom commands for troop/entity
     public override void Attack()
     {
         new Fight(this, FocusEntity as Troop);
@@ -297,7 +304,7 @@ public class Troop : EntityBehavior, ICanMove
         focusEntity.Value = null;
         IsBusy = false;
 
-        foreach(Unit unit in UnitList)
+        foreach (Unit unit in UnitList)
         {
             unit.StopTree(true);
             unit.AssignFocusUnit(null);
@@ -325,7 +332,27 @@ public class Troop : EntityBehavior, ICanMove
         //Return to the pool
     }
 
+    #endregion
+
     #region Troop Hp
+
+    public int TakeTroopHealth()
+    {
+        int health = 0;
+
+        if (UnitList.Count == 0)
+        {
+            Debug.Log("This troop don't have units");
+            return health;
+        }
+
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            health += UnitList[i].UnitHp;
+        }
+
+        return health;
+    }
 
     public void TroopTakeDamage(Unit inUnit)
     {

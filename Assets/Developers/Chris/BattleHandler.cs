@@ -69,7 +69,7 @@ public class BattleHandler : MonoBehaviour
         {
             enemyTroop.UnitList[i].AssignFocusUnit(playerTroop.UnitList[playerIndex]);
 
-            playerTroop.UnitList[i].StopTree(false);
+            enemyTroop.UnitList[i].StopTree(false);
             playerIndex++;
             playerIndex = (int)Mathf.Repeat(playerIndex, (float)playerTroop.UnitList.Count);
         }
@@ -124,30 +124,6 @@ public class BattleHandler : MonoBehaviour
         enemyTroop.SetIdleState();
 
         gameObject.SetActive(false);
-    }
-
-    public void EscapeFight()
-    {
-        foreach (Unit unit in playerTroop.UnitList)
-        {
-            unit.StopTree(true);
-            unit.AssignFocusUnit(null);
-        }
-        foreach (Unit unit in enemyTroop.UnitList)
-        {
-            unit.StopTree(true);
-            unit.AssignFocusUnit(null);
-        }
-
-
-        playerTroop.StopTree(false);
-        enemyTroop.StopTree(false);
-
-        playerTroop.m_currentBattle = null;
-        enemyTroop.m_currentBattle = null;
-
-        playerTroop.IsBusy = false;
-        enemyTroop.IsBusy = false;
     }
 }
 
