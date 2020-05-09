@@ -108,9 +108,10 @@ public class GameController : Singleton<GameController>
     {
         CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(-10, 0f, -10));
         CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 10));
+        CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 20));
 
         CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(15, 0, 15));
-        CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(-10, 0, 0));
+        CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(-10, 0, -30));
     }
 
     #region Unit methods
@@ -201,6 +202,12 @@ public class GameController : Singleton<GameController>
 
         tempRef.AssignPlayer(inPlayerType);
         tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+
+        if(inBuildingType == BuildingType.CASTLE)
+        {
+            var castle = GlobalVariables.Instance.GetVariable("Castle");
+            castle.SetValue(tempRef.gameObject);
+        }
 
         return tempRef;
     }

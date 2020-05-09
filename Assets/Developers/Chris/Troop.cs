@@ -9,8 +9,8 @@ using HF.Unit;
 public enum TroopStates
 {
     Idle,
-    GoToTroop,
-    GoToBuilding,
+    GoToEnemy,
+    GoToAlly,
     GoToDestination
 }
 
@@ -260,8 +260,20 @@ public class Troop : EntityBehavior, ICanMove
                 if (enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
                 {
                     m_focusEntity = enemyTroop;
-                    SetNewTroopState(TroopStates.GoToTroop);
+                    SetNewTroopState(TroopStates.GoToEnemy);
                     Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
+                }
+            }
+
+            if (inEntity is BuildingBehaviour)
+            {
+                BuildingBehaviour enemyBuilding = inEntity as BuildingBehaviour;
+
+                if (enemyBuilding.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+                {
+                    m_focusEntity = enemyBuilding;
+                    SetNewTroopState(TroopStates.GoToEnemy);
+                    Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
                 }
             }
         }
@@ -270,7 +282,7 @@ public class Troop : EntityBehavior, ICanMove
             if (inEntity is BuildingBehaviour && !inEntity.IsBusy)
             {
                 m_focusEntity = inEntity;
-                SetNewTroopState(TroopStates.GoToBuilding);
+                SetNewTroopState(TroopStates.GoToAlly);
                 Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
             }
         }

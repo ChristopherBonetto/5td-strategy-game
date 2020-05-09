@@ -110,12 +110,17 @@ public class Unit : MonoBehaviour, ITakeDamage
             {
                 if (m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage))
                 {
-                    if(TroopRef.m_currentBattle != null)
-                    {
-                        TroopRef.m_currentBattle.TakeOtherTarget(this);
-                    }
+                    AssignFocusUnit(null);
                 }
             }
+        }
+    }
+
+    public void CheckAnotherTarget()
+    {
+        if (TroopRef.m_currentBattle != null)
+        {
+            TroopRef.m_currentBattle.TakeOtherTarget(this);
         }
     }
 

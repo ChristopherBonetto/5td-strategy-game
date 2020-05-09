@@ -7,7 +7,7 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskDescription("Gets the value from the field specified. Returns success if the field was retrieved.")]
     [TaskCategory("Reflection")]
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
-    public class CheckMyTarget : Action
+    public class CheckMyEntityTarget : Action
     {
         [Tooltip("The GameObject to get the field on")]
         public SharedGameObject targetGameObject;
