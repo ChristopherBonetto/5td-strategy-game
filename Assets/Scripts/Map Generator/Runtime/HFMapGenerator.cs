@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+#region
+using UnityEditor;
+#endregion
 
 namespace HF.Refactoring
 {
@@ -257,13 +259,12 @@ namespace HF.Refactoring
                     // store spawn position
                     Vector3 fixedPosition = mapHandler.Tilemap.CellToLocalInterpolated(pos + new Vector3(0.5f, 0.5f, 0.5f)) + Vector3.up * mapHandler.Tilemap.transform.position.y;
 
-                    GameObject objSpawned = Instantiate(
+                    GameObject objSpawned = (GameObject)PrefabUtility.InstantiatePrefab(
                         objectToSpawn, 
-                        fixedPosition,
-                        Quaternion.identity,
                         layer.transform
                         );
 
+                    objSpawned.transform.position = fixedPosition;
                     objSpawned.layer = layer.layer;
                 }
             }
