@@ -385,6 +385,11 @@ public class Troop : EntityBehavior, ICanMove
                 }
                 StartCoroutine(Respawn());
             }
+
+            if(m_currentBattle != null)
+            {
+                m_currentBattle.FinishFight();
+            }
         }
     }
 

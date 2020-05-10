@@ -99,7 +99,7 @@ public class BattleHandler : MonoBehaviour
 
         for (int i = 0; i < inTroop.UnitList.Count; i++)
         {
-            if (inTroop.UnitList[i].gameObject.active)
+            if (inTroop.UnitList[i].gameObject.activeInHierarchy)
             {
                 if (Vector3.Distance(inUnit.transform.position, inTroop.UnitList[i].transform.position) < distance)
                 {
