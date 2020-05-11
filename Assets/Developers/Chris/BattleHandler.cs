@@ -28,6 +28,12 @@ public struct Fight
         {
             battleScript.StartFight(PlayerTroop, EnemyTroop);
         }
+
+        Vector3 objectLine = (EnemyTroop.transform.position - PlayerTroop.transform.position);
+        float distance = objectLine.magnitude;
+        objectLine = objectLine.normalized;
+        battleHandler.gameObject.SetActive(true);
+        battleHandler.transform.position = objectLine;
     }
 }
 
@@ -56,6 +62,9 @@ public class BattleHandler : MonoBehaviour
 
         int enemyIndex = 0;
         int playerIndex = 0;
+
+        
+        
 
         for (int i = 0; i < playerTroop.UnitList.Count; i++)
         {

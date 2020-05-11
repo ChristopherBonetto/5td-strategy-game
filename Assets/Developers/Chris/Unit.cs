@@ -23,7 +23,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private IAttackTypes m_unitAttackType;
 
-    private Unit m_focusUnit;
+    public Unit m_focusUnit;
 
     private void Awake()
     {
@@ -55,36 +55,44 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_troopRef = inValue;
             m_unitStats = m_troopRef.GetStats();
-            AssignValuesToTree(2, m_unitStats.UnitSpeed);
+            AssignValuesToTree(m_troopRef, 2, m_unitStats.UnitSpeed, m_unitStats.AttackSpeed);
         }
         else
         {
             m_troopRef = null;
             m_unitStats = null;
-            AssignValuesToTree(2, 2);
+            AssignValuesToTree(null, 2, 2, 2);
         }
     }
 
     public void AssignFocusUnit(Unit inUnit)
     {
-        m_focusUnit = inUnit;
-        
-        if(m_focusUnit != null)
+        StopTree(true);
+
+        if(inUnit != null)
         {
-            var unitRef = (SharedGameObject)UnitTree.GetVariable("FocusTarget");
-            unitRef.Value = m_focusUnit.gameObject;
+            m_focusUnit = inUnit;
+            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
+            focusObj.Value = inUnit.gameObject;
         }
         else
         {
-            var unitRef = (SharedGameObject)UnitTree.GetVariable("FocusTarget");
-            unitRef.Value = null;
+            m_focusUnit = null;
+            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
+            focusObj.Value = null;
         }
+
+        StopTree(false);
     }
 
-    private void AssignValuesToTree(float inAttackRange, float inMovSpeed)
+    private void AssignValuesToTree(Troop inTroop, float inAttackRange, float inMovSpeed, float inAttackSpeed)
     {
+        var troopRef = (SharedTroop)UnitTree.GetVariable("TroopRef");
+        troopRef.Value = inTroop;
         var movSpeed = (SharedFloat)UnitTree.GetVariable("MovSpeed");
         movSpeed.Value = inMovSpeed;
+        var attackSpeed = (SharedFloat)UnitTree.GetVariable("AttackSpeed");
+        attackSpeed.Value = inAttackSpeed;
         var attackRange = (SharedFloat)UnitTree.GetVariable("AttackRange");
         attackRange.Value = inAttackRange;
     }
@@ -104,15 +112,9 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void UnitAttack()
     {
-        if (m_unitAttackType.CanAttack(TroopRef.GetStats().AttackSpeed))
+        if (TroopRef.GetStats().AttackType == AttackType.MELEE)
         {
-            if (TroopRef.GetStats().AttackType == AttackType.MELEE)
-            {
-                if (m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage))
-                {
-                    AssignFocusUnit(null);
-                }
-            }
+            m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage);
         }
     }
 
@@ -146,12 +148,16 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_unitHp -= Damage;
             return false;
-
         }
     }
 
     public void Death()
     {
+        if(m_focusUnit != null)
+        {
+            m_focusUnit.AssignFocusUnit(null);
+        }
+        m_focusUnit = null;
         TroopRef.TroopTakeDamage(this);
     }
 

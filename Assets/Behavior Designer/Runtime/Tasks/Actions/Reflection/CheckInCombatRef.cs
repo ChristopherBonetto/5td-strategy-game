@@ -7,16 +7,21 @@ namespace BehaviorDesigner.Runtime.Tasks
     [TaskDescription("Gets the value from the field specified. Returns success if the field was retrieved.")]
     [TaskCategory("Reflection")]
     [TaskIcon("{SkinColor}ReflectionIcon.png")]
-    public class CheckUnitTarget : Action
+    public class CheckInCombatRef : Action
     {
         [Tooltip("The GameObject to get the field on")]
-        public SharedUnit unitRef;
+        public SharedTroop troopRef;
 
         public override TaskStatus OnUpdate()
         {
-            if (unitRef.Value.m_focusUnit == null)
+            if (troopRef == null || !troopRef.Value.gameObject.activeInHierarchy)
             {
-                Debug.LogWarning("try to catch another");
+                Debug.LogWarning("Unable to get field - field value is null");
+                return TaskStatus.Failure;
+            }
+
+            if (troopRef.Value.m_currentBattle == null)
+            {
                 return TaskStatus.Failure;
             }
 
@@ -25,7 +30,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnReset()
         {
-            unitRef = null;
+            troopRef = null;
         }
     }
 }

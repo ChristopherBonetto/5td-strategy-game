@@ -375,7 +375,6 @@ public class Troop : EntityBehavior, ICanMove
             if (EntityPlayerType == PlayerType.AI)
             {
                 Death();
-                return;
             }
             else
             {

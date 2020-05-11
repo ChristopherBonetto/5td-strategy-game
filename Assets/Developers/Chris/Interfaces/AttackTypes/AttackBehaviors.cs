@@ -47,15 +47,19 @@ public class AttackBehaviors : IAttackTypes
 
     public bool SingleAttack(GameObject inObj, int inDamage)
     {
-        ITakeDamage takeDamage = inObj.GetComponent<ITakeDamage>();
-
-        if(takeDamage != null)
+        if (inObj.activeInHierarchy)
         {
-            if (takeDamage.TakeDamage(inDamage))
+            ITakeDamage takeDamage = inObj.GetComponent<ITakeDamage>();
+
+            if (takeDamage != null)
             {
-                return true;
+                if (takeDamage.TakeDamage(inDamage))
+                {
+                    return true;
+                }
             }
         }
+        
         m_lastAttack = Time.time;
         return false;
     }
