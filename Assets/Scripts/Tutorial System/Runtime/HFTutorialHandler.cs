@@ -24,6 +24,7 @@ public enum TutorialID
     Carry_Turret,
     Reposition_Turret,
     Upgrade_Unit,
+    Pause_Mode,
     Call_wave,
     None,
 }

@@ -79,7 +79,6 @@ namespace HF.Refactoring
         /// </summary>
         private void OnGameStateChange(GameStates inState)
         {
-                Debug.Log(inState);
             // Handle all game state variables.
             switch (inState)
             {

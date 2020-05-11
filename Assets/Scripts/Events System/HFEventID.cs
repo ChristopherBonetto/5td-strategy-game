@@ -32,6 +32,11 @@
     /// </summary>
     GainReward,
 
+	/// <summary>
+	/// <see cref="bool"/> freeze / unfreeze. 
+	/// </summary>
+	OnPauseMode,
+
 
 	/*
 	 *--------------------------------------- 

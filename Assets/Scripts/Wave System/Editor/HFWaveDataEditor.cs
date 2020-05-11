@@ -113,8 +113,7 @@ namespace HF.Refactoring
             {
                 if (m_serializedProperty == null)
                 {
-                    List<HFWaveData.HFWaveBehaviourData> datas = new List<HFWaveData.HFWaveBehaviourData>();
-                    m_serializedProperty = m_serializedObject.FindProperty("m_behaviours");
+                    m_serializedProperty.arraySize = 1;
                 }
                 else
                 {
@@ -135,8 +134,7 @@ namespace HF.Refactoring
 
                 if (m_serializedProperty.arraySize > 0)
                 {
-                    m_selectedProperty = null;
-                    m_serializedProperty.arraySize--;
+                    m_serializedProperty.DeleteArrayElementAtIndex(m_serializedProperty.arraySize - 1);
                 }
             }
         }

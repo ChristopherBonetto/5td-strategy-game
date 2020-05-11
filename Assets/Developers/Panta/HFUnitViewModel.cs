@@ -4,7 +4,10 @@ using UnityEngine;
 
 namespace HF
 {
-    public class HFUnitView : MonoBehaviour
+    /// <summary>
+    /// Handle pause mode bheaviour.
+    /// </summary>
+    public class HFUnitViewModel : MonoBehaviour
     {
         [SerializeField]
         private HFPoolID m_UnitPopUpID;
@@ -14,21 +17,73 @@ namespace HF
         private GameObject m_pooledGameObject;
 
 
+        private Animator m_animator;
+        private HFUnit m_unit;
+
         private void Awake()
         {
             m_unitComponent = GetComponent<HFUnit>();
+            m_animator = GetComponent<Animator>();
+            m_unit = GetComponent<HFUnit>();
         }
 
         private void OnEnable()
         {
             HFEventManager.SubscribeTo<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
+            HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
         private void OnDisable()
         {
             HFEventManager.UnsubscribeFrom<HFUnit, int>(HFEventID.OnUnitSelected, OnUnitSelected);
+            HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
+
+
+        public void OnPauseMode(bool freeze)
+        {
+            if (freeze)
+                StartCoroutine(Freeze());
+            else
+                StartCoroutine(UnFreeze());
+        }
+
+        IEnumerator Freeze()
+        {
+            float timeScale = 1;
+            float targetTimeScale = 0;
+
+            while(timeScale > targetTimeScale)
+            {
+                timeScale -= Time.deltaTime;
+                timeScale = Mathf.Clamp(timeScale, 0, 1);
+                //m_animator.speed = timeScale;
+                yield return null;
+            }
+
+            if (m_unit.m_navAgent.isOnNavMesh)
+                m_unit.m_navAgent.isStopped = true;
+            m_unit.Updaiting = false;
+        }
+
+        IEnumerator UnFreeze()
+        {
+            float timeScale = 0;
+            float targetTimeScale = 1;
+
+            while (timeScale < targetTimeScale)
+            {
+                timeScale += Time.deltaTime;
+                timeScale = Mathf.Clamp(timeScale, 0, 1);
+                //m_animator.speed = timeScale;
+                yield return null;
+            }
+
+            if (m_unit.m_navAgent.isOnNavMesh)
+                m_unit.m_navAgent.isStopped = false;
+            m_unit.Updaiting = true;
+        }
 
         //-----------------------------------------------------------
         // Interact with this component through events. If the ally

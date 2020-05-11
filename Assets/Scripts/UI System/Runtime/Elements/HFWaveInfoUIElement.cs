@@ -17,11 +17,14 @@ public class HFWaveInfoUIElement : MonoBehaviour
     //between waves.
     private float m_timeElapsed;
 
+    private bool Pausing = false;
+
     private void OnEnable()
     {
         HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
         HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnWaveBeginned);
         HFEventManager.SubscribeTo<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
     }
 
     private void OnDisable()
@@ -29,11 +32,12 @@ public class HFWaveInfoUIElement : MonoBehaviour
         HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
         HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnWaveBeginned);
         HFEventManager.UnsubscribeFrom<int, int>(HFEventID.OnWaveIndexUpdate, OnWaveIndexUpdate);
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
     }
 
     private void Update()
     {
-        if (m_enableTimer)
+        if (m_enableTimer && Pausing)
             ExecuteTimer();
     }
 
@@ -66,6 +70,11 @@ public class HFWaveInfoUIElement : MonoBehaviour
     private void OnWaveCleared()
     {
         m_enableTimer = false;
+    }
+
+    private void OnPauseMode(bool freeze)
+    {
+        Pausing = freeze;
     }
 
     #endregion

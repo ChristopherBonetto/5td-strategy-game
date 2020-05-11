@@ -31,6 +31,7 @@ namespace HF.Refactoring
         List<HFWaveData.HFWaveBehaviourData> TotalBehaviours => m_currentWave.GetBehaviours();
         Queue<HFWaveBehaviour> m_behavioursToPerform = new Queue<HFWaveBehaviour>();
         HFWaveBehaviour m_currentBehaviour = null;
+        private bool Pausing = false;
 
         //--------------------------------
         // Enemies
@@ -52,6 +53,7 @@ namespace HF.Refactoring
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnWaveBeggined);
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnUnitDead);
+            HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
         private void OnDisable()
@@ -59,6 +61,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnWaveBeggined);
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnUnitDead);
+            HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
         private void Start()
@@ -68,7 +71,7 @@ namespace HF.Refactoring
 
         private void Update()
         {
-            if (m_currentBehaviour != null)
+            if (m_currentBehaviour != null && !Pausing)
             {
                 m_currentBehaviour.Execute(this);
                 m_currentBehaviour.Exit(this);
@@ -226,6 +229,11 @@ namespace HF.Refactoring
                     HFEventManager.TriggerEvent(HFEventID.OnWaveCleared);
                 }
             }
+        }
+
+        private void OnPauseMode(bool freeze)
+        {
+            Pausing = freeze;
         }
 
         #endregion

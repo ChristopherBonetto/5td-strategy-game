@@ -20,6 +20,8 @@ namespace HF
 
 	public class HFUnit : MonoBehaviour, IHFDamageable, IHFTargetable
 	{
+		public bool Updaiting { get; set; } = true;
+
 		#region Variables
 
 		/*** Components */
@@ -28,7 +30,7 @@ namespace HF
 
 		private Renderer[] m_renderers = new Renderer[0];
 
-		private NavMeshAgent m_navAgent = null;
+		public NavMeshAgent m_navAgent { get; private set; } = null;
 
 		private NavMeshObstacle m_navObstacle = null;
 
@@ -239,28 +241,31 @@ namespace HF
 
         void Update()
 		{
-			if (IsKilled || !m_controller)
+			if (Updaiting)
 			{
-				return;
-			}
-
-			RefreshCommands();
-
-			if (m_isCommandComplete)
-			{
-				TryStartAction();
-			}
-			else if (m_currentCommand != null)
-			{
-				m_currentCommand.Perform(this);
-			}
-
-			if (m_needsRespawn && Team == HFGameParameters.PlayerTeam) //&& !isClashing
-			{
-				m_respawnTimer += Time.deltaTime;
-				if (m_respawnTimer >= m_stats[HFStatistics.SoldierRespawnDelay])
+				if (IsKilled || !m_controller)
 				{
-					RespawnSoldier();
+					return;
+				}
+
+				RefreshCommands();
+
+				if (m_isCommandComplete)
+				{
+					TryStartAction();
+				}
+				else if (m_currentCommand != null)
+				{
+					m_currentCommand.Perform(this);
+				}
+
+				if (m_needsRespawn && Team == HFGameParameters.PlayerTeam) //&& !isClashing
+				{
+					m_respawnTimer += Time.deltaTime;
+					if (m_respawnTimer >= m_stats[HFStatistics.SoldierRespawnDelay])
+					{
+						RespawnSoldier();
+					}
 				}
 			}
 		}
