@@ -32,7 +32,6 @@ public class GameController : Singleton<GameController>
                     else
                         DontDestroyOnLoad(_instance);
                 }
-
                 return _instance;
             }
         }
@@ -202,6 +201,11 @@ public class GameController : Singleton<GameController>
 
         buildingRef.AssignPlayer(inPlayerType);
         buildingRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+
+        if(inBuildingType == BuildingType.CASTLE)
+        {
+            GlobalVariables.Instance.SetVariableValue("Castle",buildingRef.gameObject);
+        }
 
         return buildingRef;
     }

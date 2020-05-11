@@ -377,6 +377,15 @@ public class Troop : EntityBehavior, ICanMove
         //Return to the pool
     }
 
+    public void Lift()
+    {
+        if(FocusEntity != null)
+        {
+            StopTree(true);
+            FocusEntity.IsBusy = true;
+        }
+    }
+
     #endregion
 
     #region Troop Hp
