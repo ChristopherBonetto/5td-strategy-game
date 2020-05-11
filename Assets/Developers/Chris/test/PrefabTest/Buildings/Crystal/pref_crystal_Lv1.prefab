@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2846428939003802224}
   - component: {fileID: 8411604125564620425}
   - component: {fileID: 7818481422564293203}
-  - component: {fileID: 7818481422564293204}
+  - component: {fileID: 577150123515944125}
   m_Layer: 0
   m_Name: pref_crystal_Lv1
   m_TagString: Untagged
@@ -96,16 +96,16 @@ NavMeshObstacle:
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 0.76900005, z: 0}
   m_TimeToStationary: 0.5
---- !u!114 &7818481422564293204
-MonoBehaviour:
+--- !u!65 &577150123515944125
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7818481422564293205}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99b2c6b127f9ecf41a73b6c432575181, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_weapon: {fileID: 0}
+  serializedVersion: 2
+  m_Size: {x: 1.681002, y: 1.5383871, z: 1.6809984}
+  m_Center: {x: -0.000001847744, y: 0.7691934, z: -0.000001013279}

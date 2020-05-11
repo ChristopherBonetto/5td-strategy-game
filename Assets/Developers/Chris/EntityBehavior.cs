@@ -65,6 +65,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_commands = new List<Command>();
 
         m_attackType = new AttackBehaviors();
+
+        IsBusy = false;
     }
 
     #region Generic Methods for entity

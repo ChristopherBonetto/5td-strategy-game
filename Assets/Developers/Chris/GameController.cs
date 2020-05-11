@@ -110,7 +110,7 @@ public class GameController : Singleton<GameController>
         CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 10));
         CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 20));
 
-        CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(15, 0, 15));
+        CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(35, 0, 15));
         CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(-10, 0, -30));
     }
 
@@ -189,27 +189,21 @@ public class GameController : Singleton<GameController>
         //CheckFreeSpace(inPosition, 1);
 
         GameObject buildingBrain = ObjectPooler.Instance.GetBuildingBehaviorHandler(inBuildingType);
-        BuildingBehaviour tempRef = buildingBrain.GetComponent<BuildingBehaviour>();
+        BuildingBehaviour buildingRef = buildingBrain.GetComponent<BuildingBehaviour>();
 
-        if (buildingBrain == null || tempRef == null)
+        if (buildingBrain == null || buildingRef == null)
         {
-            Debug.LogError(inBuildingType + " can't be taken from pool. Pls check Collection or add Building Behavior script");
+            Debug.Log(inBuildingType + " can't be taken from pool. Pls check Collection or add Troop script to Captain");
             return null;
         }
 
         buildingBrain.transform.position = inPosition;
         buildingBrain.SetActive(true);
 
-        tempRef.AssignPlayer(inPlayerType);
-        tempRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+        buildingRef.AssignPlayer(inPlayerType);
+        buildingRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
 
-        if(inBuildingType == BuildingType.CASTLE)
-        {
-            var castle = GlobalVariables.Instance.GetVariable("Castle");
-            castle.SetValue(tempRef.gameObject);
-        }
-
-        return tempRef;
+        return buildingRef;
     }
 
     public BuildingInfo? SearchBuildingInfoInDictionary(BuildingType inType)

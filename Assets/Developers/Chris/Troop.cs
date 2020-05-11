@@ -21,6 +21,14 @@ public class Troop : EntityBehavior, ICanMove
     {
         get { return TakeTroopHealth(); }
     }
+    private float m_currentCarryCapacity;
+    public float CurrentCarryCapacity
+    {
+        get
+        {
+            return TakeTroopCarryCapacity();
+        }
+    }
 
     private TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
@@ -42,18 +50,6 @@ public class Troop : EntityBehavior, ICanMove
     private Vector3 m_destination;
 
     public BattleHandler m_currentBattle = null;
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            SetIdleState();
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            DismissUnitInTroop(UnitList[0]);
-        }
-    }
 
     #region States
 
@@ -89,6 +85,39 @@ public class Troop : EntityBehavior, ICanMove
     public UnitsStatsSO GetStats()
     {
         return m_troopStats as UnitsStatsSO;
+    }
+
+    public int TakeTroopHealth()
+    {
+        int health = 0;
+
+        if (UnitList.Count == 0)
+        {
+            Debug.Log("This troop don't have units");
+            return health;
+        }
+
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            health += UnitList[i].UnitHp;
+        }
+
+        return health;
+    }
+
+    public int TakeTroopCarryCapacity()
+    {
+        int capacity = 0;
+
+        if (UnitList.Count == 0)
+        {
+            Debug.Log("This troop don't have units");
+            return capacity;
+        }
+
+        capacity = UnitList.Count * m_troopStats.CarryCapacity;
+
+        return capacity;
     }
 
     #endregion
@@ -265,25 +294,30 @@ public class Troop : EntityBehavior, ICanMove
                 }
             }
 
-            if (inEntity is BuildingBehaviour)
-            {
-                BuildingBehaviour enemyBuilding = inEntity as BuildingBehaviour;
+            //if (inEntity is BuildingBehaviour)
+            //{
+            //    BuildingBehaviour enemyBuilding = inEntity as BuildingBehaviour;
 
-                if (enemyBuilding.GetStats().CanTakeDamage && m_troopStats.CanAttack)
-                {
-                    m_focusEntity = enemyBuilding;
-                    SetNewTroopState(TroopStates.GoToEnemy);
-                    Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
-                }
-            }
+            //    if (enemyBuilding.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+            //    {
+            //        m_focusEntity = enemyBuilding;
+            //        SetNewTroopState(TroopStates.GoToEnemy);
+            //        Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
+            //    }
+            //}
         }
         else
         {
             if (inEntity is BuildingBehaviour && !inEntity.IsBusy)
             {
-                m_focusEntity = inEntity;
-                SetNewTroopState(TroopStates.GoToAlly);
-                Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
+                BuildingBehaviour building = inEntity as BuildingBehaviour;
+                Debug.Log(CurrentCarryCapacity);
+                if(CurrentCarryCapacity >= building.GetStats().Weight)
+                {
+                    m_focusEntity = inEntity;
+                    SetNewTroopState(TroopStates.GoToAlly);
+                    Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
+                }
             }
         }
 
@@ -298,7 +332,6 @@ public class Troop : EntityBehavior, ICanMove
         }
         m_behaviorTree.enabled = true;
     }
-
 
     //Custom commands for troop/entity
     public override void Attack()
@@ -348,23 +381,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #region Troop Hp
 
-    public int TakeTroopHealth()
-    {
-        int health = 0;
-
-        if (UnitList.Count == 0)
-        {
-            Debug.Log("This troop don't have units");
-            return health;
-        }
-
-        for (int i = 0; i < UnitList.Count; i++)
-        {
-            health += UnitList[i].UnitHp;
-        }
-
-        return health;
-    }
+    
 
     public void TroopTakeDamage(Unit inUnit)
     {
@@ -402,9 +419,11 @@ public class Troop : EntityBehavior, ICanMove
     //Respawna le unita dopo un timer
     IEnumerator Respawn()
     {
+        IsBusy = true;
         transform.position = new Vector3(0, 0.5f, 0);
         yield return new WaitForSeconds(m_troopStats.RespawnTime);
         CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
+        SetIdleState();
     }
 
     #endregion
