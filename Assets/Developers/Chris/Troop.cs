@@ -278,6 +278,12 @@ public class Troop : EntityBehavior, ICanMove
     public override void AssignFocusEntity(EntityBehavior inEntity)
     {
         m_behaviorTree.enabled = false;
+
+        if (m_currentBattle != null)
+        {
+            m_currentBattle.FinishFight();
+        }
+
         m_focusEntity = null;
 
         if (inEntity.EntityPlayerType != this.EntityPlayerType && !inEntity.IsBusy)
