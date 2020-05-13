@@ -17,6 +17,24 @@ MonoBehaviour:
   lastModified: 637217285001364637
   LoadResult: 0
   FileSizes: []
+  Exists: 0
+--- !u!114 &-8019427762482703610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/StreamingAssets/FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637230039068159610
+  LoadResult: 0
+  FileSizes: []
   Exists: 1
 --- !u!114 &-6524084285574574079
 MonoBehaviour:
@@ -33,7 +51,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/MoveComandSound/unit_movecomand
   guid: 909ca7580c0715458d9825b8427f20bf
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -56,7 +75,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/SwordSlash/unit_swordslash
   guid: 69b70467eeaf1040a4f5684717b62010
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -64,6 +84,24 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 475
+--- !u!114 &-4907772151262229481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/StreamingAssets/FmodBuilds/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637230039068159610
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-4440456193771237348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79,7 +117,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Turrets/Ballista/ballista_shoot
   guid: 7cfa069520118b4a9aab1d1cc3760c39
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -101,7 +140,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: Assets/StreamingAssets/FmodBuilds/Desktop/Master.strings.bank
   SubDir: 
-  lastModified: 637217285001364637
+  lastModified: 637230039068179542
   LoadResult: 0
   FileSizes:
   - Name: 
@@ -122,7 +161,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/LiftTurret/unit_liftturret
   guid: 5f85e0934c51164dbdf231be80821fba
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -145,7 +185,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/Hit 2/unit_hit2
   guid: 52b15d62565fbb47b284243783869242
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -168,7 +209,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/SpearAttack/unit_spearattack
   guid: 31b2618f8adac54a846b8b0b65b6acd3
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -209,7 +251,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Turrets/Cannon/cannon_shoot
   guid: 665cb5cd5a6de74cb28605f38a477800
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -232,7 +275,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/BowAttack/unit_bowattack
   guid: 3d129f295ca9184daa4f829f364b8329
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -254,7 +298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: -3833138975120946131}
-  - {fileID: -8429224436857422693}
+  - {fileID: -8019427762482703610}
   EditorEvents:
   - {fileID: -2533274732096234771}
   - {fileID: -50044256290030325}
@@ -268,10 +312,10 @@ MonoBehaviour:
   - {fileID: 2472386927934243728}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -8019427762482703610}
   StringsBanks:
   - {fileID: -3833138975120946131}
-  stringsBankWriteTime: 637217285001364637
+  stringsBankWriteTime: 637230039068179542
   cacheVersion: 3
 --- !u!114 &2118081525027120832
 MonoBehaviour:
@@ -306,7 +350,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/Hit/unit_hit
   guid: b8dfcd32fe5dbd4fb028ea918f6843af
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
@@ -329,7 +374,8 @@ MonoBehaviour:
   Path: event:/GameSounds/Units/Death/unit_death
   guid: 6887daefa1422f4aa3192bf1eb12743b
   Banks:
-  - {fileID: -8429224436857422693}
+  - {fileID: -4907772151262229481}
+  - {fileID: -8019427762482703610}
   IsStream: 0
   Is3D: 1
   IsOneShot: 1
