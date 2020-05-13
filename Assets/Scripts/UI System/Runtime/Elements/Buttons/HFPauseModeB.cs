@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.LWRP;
 
 namespace HF.Refactoring
 {
@@ -12,11 +14,35 @@ namespace HF.Refactoring
         public GameEventData Events;
         public GameEventData Initialization;
 
+        
+        public LightweightRenderPipelineAsset standard;
+        public LightweightRenderPipelineAsset pause;
+
+
         private void Awake()
         {
             Initialization.AddListener(this);
             Events.AddListener(this);
         }
+
+        private void Update()
+        {
+            if (isPaused == true)
+            {
+                if (GraphicsSettings.renderPipelineAsset != pause)
+                {
+                    GraphicsSettings.renderPipelineAsset = pause;
+                }
+            }
+            else
+            {
+                if(GraphicsSettings.renderPipelineAsset != standard)
+                {
+                    GraphicsSettings.renderPipelineAsset = standard;
+                }
+            }
+        }
+
 
         private void OnDestroy()
         {
@@ -48,5 +74,9 @@ namespace HF.Refactoring
         {
             gameObject.SetActive(true);
         }
+
+
+
+       
     }
 }

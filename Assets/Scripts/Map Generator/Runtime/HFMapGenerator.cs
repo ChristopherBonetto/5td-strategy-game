@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-#region
+#if UNITY_EDITOR
 using UnityEditor;
-#endregion
+
 
 namespace HF.Refactoring
 {
@@ -260,7 +260,7 @@ namespace HF.Refactoring
                     Vector3 fixedPosition = mapHandler.Tilemap.CellToLocalInterpolated(pos + new Vector3(0.5f, 0.5f, 0.5f)) + Vector3.up * mapHandler.Tilemap.transform.position.y;
 
                     GameObject objSpawned = (GameObject)PrefabUtility.InstantiatePrefab(
-                        objectToSpawn, 
+                        objectToSpawn,
                         layer.transform
                         );
 
@@ -271,3 +271,4 @@ namespace HF.Refactoring
         }
     }
 }
+#endif
