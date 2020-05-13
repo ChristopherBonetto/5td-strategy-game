@@ -44,12 +44,47 @@ public class ObjectPooler : MonoBehaviour
 
 
     #region Static variables
+    private bool m_isInitialized = false;
 
     /// <summary>
     /// Singleton instance.
     /// </summary>
-    public static ObjectPooler Instance { get; private set; }
+    private static ObjectPooler m_Instance;
+    public static ObjectPooler Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+            {
+                ObjectPooler[] managers = FindObjectsOfType<ObjectPooler>();
 
+                // Destroy if there are multiple instance of them.
+                if (managers.Length > 0)
+                {
+                    for (int i = 1; i < managers.Length; i++)
+                    {
+                        Destroy(managers[i].gameObject);
+                    }
+
+                    m_Instance = managers[0];
+                }
+
+
+                if (m_Instance == null)
+                {
+                    m_Instance = Instantiate(Resources.Load("Managers/UIManager", typeof(ObjectPooler))) as ObjectPooler;
+                }
+
+                if (m_Instance)
+                {
+                    m_Instance.InitPool();
+                    DontDestroyOnLoad(m_Instance);
+                }
+            }
+
+            return m_Instance;
+        }
+    }
     #endregion
 
 
@@ -82,9 +117,6 @@ public class ObjectPooler : MonoBehaviour
 
     private void Awake()
     {
-        // Set singleton instance
-        Instance = this;
-
         // Init Dictionary
         m_pooledObjects = new Dictionary<string, List<GameObject>>();
 
@@ -326,55 +358,60 @@ public class ObjectPooler : MonoBehaviour
     /// </summary>
     private void InitPool()
     {
-        foreach (ObjectPoolItem item in m_itemsToPool)
+        if (!m_isInitialized)
         {
-            // Create the list corresponding to the item
-            List<GameObject> objectsList = new List<GameObject>();
-
-            // Add items to the pool
-            for (int i = 0; i < item.AmountToPool; i++)
-                AddObjectToPool(objectsList, item);
-
-            // Add the list to the Dictionary, using the item's object's tag as a key
-            m_pooledObjects.Add(item.ObjectToPool.tag, objectsList);
-        }
-
-
-
-        GameCollection collection = GameController.Instance.Collection;
-
-        foreach (UnitType unit in collection.UnitsDictionary.Keys)
-        {
-            List<GameObject> unitBehaviorHandlerList = new List<GameObject>();
-            List<GameObject> unitList = new List<GameObject>();
-
-            for(int i = 0; i < collection.UnitsDictionary[unit].UnitPoolQuantity; i++)
+            foreach (ObjectPoolItem item in m_itemsToPool)
             {
-                ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.BehaviorHandler, 1, true);
-                AddObjectToPool(unitBehaviorHandlerList, tempBehaviorHandler);
+                // Create the list corresponding to the item
+                List<GameObject> objectsList = new List<GameObject>();
 
-                ObjectPoolItem tempItem = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.VisualPrefab, collection.UnitsDictionary[unit].UnitPoolQuantity, true);
-                AddObjectToPool(unitList, tempItem);
+                // Add items to the pool
+                for (int i = 0; i < item.AmountToPool; i++)
+                    AddObjectToPool(objectsList, item);
+
+                // Add the list to the Dictionary, using the item's object's tag as a key
+                m_pooledObjects.Add(item.ObjectToPool.tag, objectsList);
             }
-            m_unitPooled.Add(unit, unitList);
-            m_unitBehaviorHandlerPooled.Add(unit, unitBehaviorHandlerList);
-        }
 
-        foreach (BuildingType building in collection.BuildingsDictionary.Keys)
-        {
-            List<GameObject> buildingBehaviorHandlerList = new List<GameObject>();
-            List<GameObject> buildingList = new List<GameObject>();
 
-            for(int i = 0; i < collection.BuildingsDictionary[building].BuildingPoolQuantity; i++)
+
+            GameCollection collection = GameController.Instance.Collection;
+
+            foreach (UnitType unit in collection.UnitsDictionary.Keys)
             {
-                ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.BehaviorHandler, 1, true);
-                AddObjectToPool(buildingBehaviorHandlerList, tempBehaviorHandler);
+                List<GameObject> unitBehaviorHandlerList = new List<GameObject>();
+                List<GameObject> unitList = new List<GameObject>();
 
-                ObjectPoolItem tempItem = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.VisualPrefab, collection.BuildingsDictionary[building].BuildingPoolQuantity, true);
-                AddObjectToPool(buildingList, tempItem);
+                for(int i = 0; i < collection.UnitsDictionary[unit].UnitPoolQuantity; i++)
+                {
+                    ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.BehaviorHandler, 1, true);
+                    AddObjectToPool(unitBehaviorHandlerList, tempBehaviorHandler);
+
+                    ObjectPoolItem tempItem = new ObjectPoolItem(collection.UnitsDictionary[unit].UnitStatsCopy.VisualPrefab, collection.UnitsDictionary[unit].UnitPoolQuantity, true);
+                    AddObjectToPool(unitList, tempItem);
+                }
+                m_unitPooled.Add(unit, unitList);
+                m_unitBehaviorHandlerPooled.Add(unit, unitBehaviorHandlerList);
             }
-            m_buildingPooled.Add(building, buildingList);
-            m_buildingBehaviorHandlerPooled.Add(building, buildingBehaviorHandlerList);
+
+            foreach (BuildingType building in collection.BuildingsDictionary.Keys)
+            {
+                List<GameObject> buildingBehaviorHandlerList = new List<GameObject>();
+                List<GameObject> buildingList = new List<GameObject>();
+
+                for(int i = 0; i < collection.BuildingsDictionary[building].BuildingPoolQuantity; i++)
+                {
+                    ObjectPoolItem tempBehaviorHandler = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.BehaviorHandler, 1, true);
+                    AddObjectToPool(buildingBehaviorHandlerList, tempBehaviorHandler);
+
+                    ObjectPoolItem tempItem = new ObjectPoolItem(collection.BuildingsDictionary[building].BuildingStatsCopy.VisualPrefab, collection.BuildingsDictionary[building].BuildingPoolQuantity, true);
+                    AddObjectToPool(buildingList, tempItem);
+                }
+                m_buildingPooled.Add(building, buildingList);
+                m_buildingBehaviorHandlerPooled.Add(building, buildingBehaviorHandlerList);
+            }
+
+            m_isInitialized = true;
         }
     }
 
