@@ -72,7 +72,7 @@ public class ObjectPooler : MonoBehaviour
 
                 if (m_Instance == null)
                 {
-                    m_Instance = Instantiate(Resources.Load("Managers/UIManager", typeof(ObjectPooler))) as ObjectPooler;
+                    m_Instance = Instantiate(Resources.Load("Managers/ObjectPooler", typeof(ObjectPooler))) as ObjectPooler;
                 }
 
                 if (m_Instance)

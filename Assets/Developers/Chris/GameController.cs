@@ -65,13 +65,7 @@ public class GameController : Singleton<GameController>
     {
         Initialize();
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            CreateEntity();
-        }
-    }
+   
 
     #endregion
 
@@ -101,16 +95,6 @@ public class GameController : Singleton<GameController>
     #endregion
 
     #region Find and create new entities
-
-    public void CreateEntity()
-    {
-        CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(-10, 0f, -10));
-        CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 10));
-        CreateNewTroop(UnitType.WARRIOR, PlayerType.AI, new Vector3(10, 0f, 20));
-
-        CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, new Vector3(35, 0, 15));
-        CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, new Vector3(-10, 0, -30));
-    }
 
     #region Unit methods
 

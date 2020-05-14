@@ -41,7 +41,7 @@ namespace HF.Refactoring
                 m_properties[i] = m_serializedProperty.GetArrayElementAtIndex(i);
 
                 SerializedProperty behaviourType = m_properties[i].FindPropertyRelative("Type");
-                SerializedProperty unitData = m_properties[i].FindPropertyRelative("UnitData");
+                SerializedProperty unitType = m_properties[i].FindPropertyRelative("UnitType");
                 SerializedProperty spawnPointID = m_properties[i].FindPropertyRelative("SpawnPointID");
                 SerializedProperty timeToWait = m_properties[i].FindPropertyRelative("TimeToWait");
                 SerializedProperty amountToSpawn = m_properties[i].FindPropertyRelative("AmountToSpawn");
@@ -74,7 +74,7 @@ namespace HF.Refactoring
                         case BehaviourType.SINGLE:
                             GUI.backgroundColor = Color.cyan;
                             EditorGUILayout.PropertyField(behaviourType, drawChildren);
-                            EditorGUILayout.PropertyField(unitData, drawChildren);
+                            EditorGUILayout.PropertyField(unitType, drawChildren);
                             EditorGUILayout.PropertyField(spawnPointID, drawChildren);
                             amountToSpawn.intValue = 1;
                             break;
@@ -88,7 +88,7 @@ namespace HF.Refactoring
                         case BehaviourType.BULK:
                             GUI.backgroundColor = Color.grey;
                             EditorGUILayout.PropertyField(behaviourType, drawChildren);
-                            EditorGUILayout.PropertyField(unitData, drawChildren);
+                            EditorGUILayout.PropertyField(unitType, drawChildren);
                             EditorGUILayout.PropertyField(timeToWait, drawChildren);
                             EditorGUILayout.PropertyField(spawnPointID, drawChildren);
                             EditorGUILayout.PropertyField(amountToSpawn, drawChildren);

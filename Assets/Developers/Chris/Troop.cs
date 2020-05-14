@@ -36,12 +36,7 @@ public class Troop : EntityBehavior, ICanMove
     public List<Unit> UnitList
     {
         get { return m_unitList; }
-        set
-        {
-            m_unitList = value;
-            var tempList = (SharedUnitList)m_behaviorTree.GetVariable("Units");
-            tempList.Value = m_unitList;
-        }
+        set { m_unitList = value; }
     }
     [SerializeField] private float m_formationRadius;
     private Vector3[] m_formationPosition = new Vector3[4];

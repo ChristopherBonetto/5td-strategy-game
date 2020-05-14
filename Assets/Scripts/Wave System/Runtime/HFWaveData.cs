@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using HF;
+using Types;
 
 namespace HF.Refactoring
 {
@@ -29,7 +30,7 @@ namespace HF.Refactoring
         public class HFWaveBehaviourData
         {
             public BehaviourType Type = BehaviourType.SINGLE;
-            public HFBaseStats UnitData = null;
+            public UnitType UnitType = UnitType.PEASANT;
             public int SpawnPointID = 0;
             public float TimeToWait = 0;
             public int AmountToSpawn = 0;

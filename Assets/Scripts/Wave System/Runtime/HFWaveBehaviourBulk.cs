@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Types;
 
 namespace HF.Refactoring
 {
@@ -11,16 +12,16 @@ namespace HF.Refactoring
         int m_spawnedUnitCount = 0;
         float m_timeToWaitBetweenUnits = 0;
         float m_timeElapsed = 0;
-        HFBaseStats m_unitStatsData = null;
+        UnitType m_unitType = UnitType.PEASANT;
 
 
 
-        public HFWaveBehaviourBulk(int spawnPointID, int amountToSpawn, float waitBetweenUnits, HFBaseStats unitStats) : base()
+        public HFWaveBehaviourBulk(int spawnPointID, int amountToSpawn, float waitBetweenUnits, UnitType unitType) : base()
         {
             m_spawnPointID = spawnPointID;
             m_amountToSpawn = amountToSpawn;
             m_spawnedUnitCount = 0;
-            m_unitStatsData = unitStats;
+            m_unitType = unitType;
             m_timeToWaitBetweenUnits = waitBetweenUnits;
         }
 
@@ -34,7 +35,8 @@ namespace HF.Refactoring
             else
             {
                 // Instatiate unit with the given position and data.
-                controller.Controller.SpawnUnit(m_unitStatsData, controller.SpawnPoints[m_spawnPointID]);
+                GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition);
+                Debug.Log(m_unitType);
 
                 // Increment index
                 m_spawnedUnitCount++;
