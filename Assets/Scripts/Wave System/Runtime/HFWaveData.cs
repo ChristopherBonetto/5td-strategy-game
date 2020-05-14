@@ -55,6 +55,7 @@ namespace HF.Refactoring
 
             foreach (var behaviour in m_behaviours)
             {
+                if(behaviour.Type!= BehaviourType.WAIT)
                 valueToReturn += behaviour.AmountToSpawn;
             }
 
