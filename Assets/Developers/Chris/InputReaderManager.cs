@@ -91,9 +91,9 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
-
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
+            Debug.Log(HitInfo.transform.name);
             IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
 
             if(canBeSelected != null)
