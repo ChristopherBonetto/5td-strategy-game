@@ -35,8 +35,8 @@ namespace HF.Refactoring
             else
             {
                 // Instatiate unit with the given position and data.
-                GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition);
-                Debug.Log(m_unitType);
+                Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, Vector3.zero);
+                troop.Agent.Warp(controller.SpawnPoints[m_spawnPointID].SpawnPosition);
 
                 // Increment index
                 m_spawnedUnitCount++;

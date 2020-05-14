@@ -13,8 +13,10 @@ public enum TroopStates
     GoToDestination
 }
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class Troop : EntityBehavior, ICanMove
 {
+    public NavMeshAgent Agent;
     private UnitsStatsSO m_troopStats;
     public override int CurrentHp
     {
