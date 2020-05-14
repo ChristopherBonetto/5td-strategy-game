@@ -88,6 +88,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public virtual void AssignStats(EntityStatsSO inStats)
     {
         m_entityStats = inStats as EntityStatsSO;
+        Debug.Log(m_entityStats);
     }
 
     public EntityStatsSO GetStats()
@@ -146,7 +147,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if(EntityPlayerType == PlayerType.Player)
         {
             InputReaderManager.Instance.CurrentEntity = this;
-            // Trigger the event "OnUnitSelected(this)"
+            HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, this, 0);
         }
     }
 
@@ -202,5 +203,19 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
     }
 
+    #endregion
+
+    #region Specialization
+    public void Specialization(UnitType type)
+    {
+        gameObject.SetActive(false);
+        GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position);
+    }
+
+    public void Specialization(BuildingType type)
+    {
+        gameObject.SetActive(false);
+        GameController.Instance.CreateNewBuilding(type, PlayerType.Player, this.transform.position);
+    }
     #endregion
 }
