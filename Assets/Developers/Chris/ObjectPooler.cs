@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Types;
 
-public class ObjectPooler : MonoBehaviour
+public class ObjectPooler : Singleton<ObjectPooler>
 {
     #region Inner struct
 
@@ -49,40 +49,31 @@ public class ObjectPooler : MonoBehaviour
     /// <summary>
     /// Singleton instance.
     /// </summary>
-    private static ObjectPooler m_Instance;
-    public static ObjectPooler Instance
+    new public static ObjectPooler Instance
     {
         get
         {
-            if (m_Instance == null)
+            if (applicationIsQuitting)
+                return null;
+
+            lock (_lock)
             {
-                ObjectPooler[] managers = FindObjectsOfType<ObjectPooler>();
-
-                // Destroy if there are multiple instance of them.
-                if (managers.Length > 0)
+                if (_instance == null)
                 {
-                    for (int i = 1; i < managers.Length; i++)
+                    _instance = (ObjectPooler)FindObjectOfType(typeof(ObjectPooler));
+
+                    if (_instance == null)
                     {
-                        Destroy(managers[i].gameObject);
+                        GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/ObjectPooler"));
+                        _instance = outGO.GetComponent<ObjectPooler>();
+
+                        DontDestroyOnLoad(_instance);
                     }
-
-                    m_Instance = managers[0];
+                    else
+                        DontDestroyOnLoad(_instance);
                 }
-
-
-                if (m_Instance == null)
-                {
-                    m_Instance = Instantiate(Resources.Load("Managers/ObjectPooler", typeof(ObjectPooler))) as ObjectPooler;
-                }
-
-                if (m_Instance)
-                {
-                    m_Instance.InitPool();
-                    DontDestroyOnLoad(m_Instance);
-                }
+                return _instance;
             }
-
-            return m_Instance;
         }
     }
     #endregion
@@ -117,6 +108,9 @@ public class ObjectPooler : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+            Destroy(gameObject);
+
         // Init Dictionary
         m_pooledObjects = new Dictionary<string, List<GameObject>>();
 
@@ -424,6 +418,7 @@ public class ObjectPooler : MonoBehaviour
     private GameObject AddObjectToPool(List<GameObject> pooledList, ObjectPoolItem item)
     {
         GameObject obj = Instantiate(item.ObjectToPool);
+        DontDestroyOnLoad(obj);
         obj.SetActive(false);
         pooledList.Add(obj);
 
