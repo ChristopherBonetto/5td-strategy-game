@@ -36,6 +36,12 @@ public class Editor_UnitStatsSO : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Unit Icon");
+        unit.Icon = (Sprite)EditorGUILayout.ObjectField("Sprite", unit.Icon, typeof(Sprite), true);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Name");
         unit.Name = EditorGUILayout.TextField(unit.Name);
         EditorGUILayout.EndHorizontal();

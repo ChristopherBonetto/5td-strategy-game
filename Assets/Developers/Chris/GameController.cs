@@ -286,4 +286,20 @@ public class GameController : Singleton<GameController>
 
     #endregion
 
+
+    /// <summary>
+    /// Get icon from unit stats type.
+    /// </summary>
+    public Sprite GetIcon(UnitType unitType)
+    {
+        return Collection.UnitsDictionary[unitType].OriginalUnitStats.Icon;
+    }
+
+    /// <summary>
+    /// Get icon from building stats type.
+    /// </summary>
+    public Sprite GetIcon(BuildingType unitType)
+    {
+        return Collection.BuildingsDictionary[unitType].OriginalBuildingStats.Icon;
+    }
 }

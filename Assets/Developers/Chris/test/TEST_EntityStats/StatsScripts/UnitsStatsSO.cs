@@ -6,6 +6,8 @@ using Types;
 [CreateAssetMenuAttribute(fileName = "New unit data", menuName = "EntityData/Unit")]
 public class UnitsStatsSO : EntityStatsSO
 {
+    public Sprite Icon;
+
     public UnitType UnitType;
 
     public AttackType AttackType;
