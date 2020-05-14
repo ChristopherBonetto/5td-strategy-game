@@ -18,11 +18,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             navMeshAgents = new NavMeshAgent[troopRef.Value.UnitList.Count];
             transforms = new Transform[troopRef.Value.UnitList.Count];
+            troopRef.Value.Agent.enabled = true;
 
             for (int i = 0; i < troopRef.Value.UnitList.Count; ++i)
             {
+
                 transforms[i] = troopRef.Value.UnitList[i].transform;
                 navMeshAgents[i] = troopRef.Value.UnitList[i].GetComponent<NavMeshAgent>();
+                navMeshAgents[i].enabled = true;
                 navMeshAgents[i].speed = troopRef.Value.GetStats().UnitSpeed;
                 navMeshAgents[i].angularSpeed = angularSpeed.Value;
                 navMeshAgents[i].isStopped = false;
@@ -39,6 +42,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 return true;
             }
+
             return navMeshAgents[index].SetDestination(target);
         }
 

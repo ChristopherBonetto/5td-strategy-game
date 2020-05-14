@@ -33,6 +33,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         /// </summary>
         public override void OnStart()
         {
+            navMeshAgent.enabled = true;
             navMeshAgent.speed = speed.Value;
             navMeshAgent.angularSpeed = angularSpeed.Value;
             navMeshAgent.isStopped = false;
@@ -47,6 +48,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         /// <returns>True if the destination is valid.</returns>
         protected override bool SetDestination(Vector3 destination)
         {
+            if (!navMeshAgent.isActiveAndEnabled) navMeshAgent.enabled = true;
             navMeshAgent.isStopped = false;
             return navMeshAgent.SetDestination(destination);
         }
