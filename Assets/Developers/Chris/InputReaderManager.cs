@@ -22,6 +22,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                 {
                     _instance = (InputReaderManager)FindObjectOfType(typeof(InputReaderManager));
 
+
                     if (_instance == null)
                     {
                         GameObject outGO = Instantiate(Resources.Load<GameObject>("Managers/InputReader"));
@@ -32,6 +33,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                     else
                         DontDestroyOnLoad(_instance);
                 }
+
                 return _instance;
             }
         }
@@ -55,12 +57,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
     private Vector3 mousePositon { get => Input.mousePosition; }
 
     #region Behavior Cycle
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
-    }
 
     // Update is called once per frame
     void Update()
@@ -93,6 +89,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
         {
             IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
+
             if(canBeSelected != null)
             {
                 canBeSelected.Click();

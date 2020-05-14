@@ -59,23 +59,13 @@ public class GameController : Singleton<GameController>
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-            Destroy(gameObject);
         Collection = Instantiate(m_gameCollection);
     }
-
     void Start()
     {
         Initialize();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            CreateNewTroop(UnitType.DEFENDER, PlayerType.Player, new Vector3(100, 3.5f, 0f));
-        }
-    }
+   
 
     #endregion
 
