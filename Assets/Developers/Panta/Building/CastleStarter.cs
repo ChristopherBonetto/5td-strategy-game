@@ -4,33 +4,23 @@ using UnityEngine;
 using Types;
 using BehaviorDesigner.Runtime;
 
-public class CastleStarter : BuildingBehaviour
+public class CastleStarter : MonoBehaviour
 {
-    [SerializeField]
-    private Transform[] m_spawnPoints;
-
-    // Start is called before the first frame update
-    public override void Start()
+    private void OnEnable()
     {
-        base.Start();
-
-        AssignPlayer(PlayerType.Player);
-        AssignStats(GameController.Instance.Collection.BuildingsDictionary[BuildingType.CASTLE].BuildingStatsCopy);
-
-        // Set this castel as reference in the bh tree.
-        GlobalVariables.Instance.SetVariableValue("Castle", this.gameObject);
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, CreateCastleWhenStartLevel);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, CreateCastleWhenStartLevel);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (m_spawnPoints == null) return;
 
-            foreach (Transform t in m_spawnPoints)
-            {
-                GameController.Instance.CreateNewTroop(UnitType.PEASANT, PlayerType.Player, t.position);
-            }
+    public void CreateCastleWhenStartLevel(GameStates inState)
+    {
+        if(inState == GameStates.InitializeLevel)
+        {
+            GameController.Instance.CreateNewBuilding(BuildingType.CASTLE, PlayerType.Player, transform.position);
         }
     }
 }
