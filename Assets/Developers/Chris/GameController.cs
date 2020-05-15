@@ -219,7 +219,7 @@ public class GameController : Singleton<GameController>
 
     #endregion
 
-    Vector3? RandomPoint(Vector3 center, float range)
+    public Vector3? RandomPoint(Vector3 center, float range)
     {
         for (int i = 0; i < 30; i++)
         {

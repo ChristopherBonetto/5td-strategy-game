@@ -158,8 +158,11 @@ public class Troop : EntityBehavior, ICanMove
         inUnit.StopTree(true);
         inUnit.gameObject.transform.parent = this.transform;
         inUnit.gameObject.layer = gameObject.layer;
-        inUnit.transform.localPosition = Vector3.zero;
+
+        inUnit.UnitAgent.enabled = true;
+        inUnit.UnitAgent.Warp(transform.position);
         inUnit.gameObject.SetActive(true);
+
         inUnit.AssignUnitInTroop(this);
         
         inUnit.RefreshHp();
@@ -238,7 +241,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
-            UnitList[i].UnitAgent.Warp(transform.position + inPos[i]);
+            UnitList[i].UnitAgent.SetDestination(transform.position + inPos[i]);
         }
     }
 
