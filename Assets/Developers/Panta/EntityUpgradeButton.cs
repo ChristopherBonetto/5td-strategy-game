@@ -13,7 +13,18 @@ public class EntityUpgradeButton : MonoBehaviour
     public Vector3 Offset;
     public Button UpgradeButton;
     public Image ButtonImage;
-    
+
+
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitUpgraded, OnUnitupgraded);
+    }
+
+    private void OnDisable()
+    {
+
+        HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitUpgraded, OnUnitupgraded);
+    }
 
     private void Update()
     {
@@ -23,21 +34,47 @@ public class EntityUpgradeButton : MonoBehaviour
         }
     }
 
+    public void OnUnitupgraded(EntityBehavior entity, int team)
+    {
+        gameObject.SetActive(false);
+        SetUpgradeButton(Entity);
+    }
+
     public void SetUpgradeButton(EntityBehavior entity)
     {
         gameObject.SetActive(true);
 
         Entity = entity;
 
-        if (Entity.GetStats().CanUpgrade) // && has enough money
+        if (entity is Troop)
         {
-            ButtonImage.color = Color.white;
-            UpgradeButton.onClick.AddListener(() => entity.GetStats().Upgrade());
+            Troop troop = entity.GetComponent<Troop>();
+
+            if (troop.GetStats().CanUpgrade) // && has enough money
+            {
+                ButtonImage.color = Color.white;
+                UpgradeButton.onClick.AddListener(() => troop.GetStats().Upgrade());
+            }
+            else //!canUpgrade || not enough money
+            {
+                ButtonImage.color = Color.grey;
+                //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+            }
         }
-        else //!canUpgrade || not enough money
+        else if (entity is BuildingBehaviour)
         {
-            ButtonImage.color = Color.grey;
-            //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+            BuildingBehaviour building = entity.GetComponent<BuildingBehaviour>();
+
+            if (building.GetStats().CanUpgrade) // && has enough money
+            {
+                ButtonImage.color = Color.white;
+                UpgradeButton.onClick.AddListener(() => building.GetStats().Upgrade());
+            }
+            else //!canUpgrade || not enough money
+            {
+                ButtonImage.color = Color.grey;
+                //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+            }
         }
     }
 }
