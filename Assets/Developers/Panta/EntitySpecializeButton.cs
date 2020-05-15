@@ -14,12 +14,28 @@ public class EntitySpecializeButton : MonoBehaviour
     public Image[] ButtonImage;
 
 
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
+    }
+
+    private void OnDisable()
+    {
+        
+        HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
+    }
+
     private void Update()
     {
         if (Entity != null)
         {
             transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, Entity.transform.position + Offset);
         }
+    }
+
+    public void OnUnitSpecialized(EntityBehavior entity, int team)
+    {
+        gameObject.SetActive(false);
     }
 
     public void SetSpecializeButton(EntityBehavior entity)
