@@ -150,6 +150,11 @@ public class Editor_BuildingStatsSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Upgrades");
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("Upgrades"), true);
+        EditorGUILayout.EndHorizontal();
+
         GUILayout.Label("Cost");
         EditorGUILayout.BeginHorizontal();
         building.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(building.Cost.ResourceType);
