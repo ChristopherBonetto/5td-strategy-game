@@ -47,6 +47,12 @@ public class Troop : EntityBehavior, ICanMove
 
     public BattleHandler m_currentBattle = null;
 
+    private void Update()
+    {
+        Debug.Log(Agent.enabled + " en");
+        Debug.Log(Agent.isStopped + " stop");
+    }
+
     #region States
 
     public void SetNewTroopState(TroopStates inNewState)
@@ -74,6 +80,8 @@ public class Troop : EntityBehavior, ICanMove
         canAttack.Value = m_troopStats.CanAttack;
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
+
+        Agent.enabled = true;
 
         m_behaviorTree.enabled = true;
     }
@@ -259,6 +267,8 @@ public class Troop : EntityBehavior, ICanMove
         }
 
         m_behaviorTree.enabled = false;
+
+        Agent.Warp(transform.position);
 
         m_focusEntity = null;
         var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");

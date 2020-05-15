@@ -137,11 +137,13 @@ public class InputReaderManager : Singleton<InputReaderManager>
             }
             else
             {
-                if (tempLayer == LayerMask.NameToLayer("Terrain"))
-                {
-                    var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
-                    CurrentEntity.ExecuteCommand(command);
-                }
+                Debug.Log(HitInfo.point);
+                var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
+                CurrentEntity.ExecuteCommand(command);
+                //if (tempLayer == LayerMask.NameToLayer("Terrain"))
+                //{
+                    
+                //}
             }
         }
     }
