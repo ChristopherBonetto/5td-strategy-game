@@ -25,19 +25,19 @@ public class EntityUpgradeButton : MonoBehaviour
 
     public void SetUpgradeButton(EntityBehavior entity)
     {
-        gameObject.SetActive(true);
+        //gameObject.SetActive(true);
 
-        Entity = entity;
+        //Entity = entity;
 
-        if (Entity.GetStats().CanUpgrade) // && has enough money
-        {
-            ButtonImage.color = Color.white;
-            UpgradeButton.onClick.AddListener(() => entity.GetStats().Upgrade());
-        }
-        else //!canUpgrade || not enough money
-        {
-            ButtonImage.color = Color.grey;
-            //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
-        }
+        //if (Entity.GetStats().CanUpgrade) // && has enough money
+        //{
+        //    ButtonImage.color = Color.white;
+        //    UpgradeButton.onClick.AddListener(() => entity.GetStats().Upgrade());
+        //}
+        //else //!canUpgrade || not enough money
+        //{
+        //    ButtonImage.color = Color.grey;
+        //    //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+        //}
     }
 }
