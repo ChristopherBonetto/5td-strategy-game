@@ -8,7 +8,7 @@ namespace HF.Refactoring
 {
     public class HFPauseModeB : HFButton, IHFTutorial
     {
-        bool isPaused = false;
+       public bool isPaused = false;
 
         public TutorialID TutorialID { get; set; } = TutorialID.Pause_Mode;
         public GameEventData Events;
@@ -74,6 +74,8 @@ namespace HF.Refactoring
         {
             gameObject.SetActive(true);
         }
+
+      
 
 
 

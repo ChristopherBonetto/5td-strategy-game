@@ -1440,10 +1440,10 @@ namespace HF
 		#endregion
 
 #if UNITY_EDITOR
-		private void OnDrawGizmosSelected()
-		{
-			UnityEditor.Handles.DrawSolidDisc(transform.position, Vector3.up, m_stats[HFStatistics.AttackRange]);
-		}
+		//private void OnDrawGizmosSelected()
+		//{
+		//	UnityEditor.Handles.DrawSolidDisc(transform.position, Vector3.up, m_stats[HFStatistics.AttackRange]);
+		//}
 #endif
 	}
 
