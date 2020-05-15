@@ -106,6 +106,19 @@ public class GameController : Singleton<GameController>
             return null;
         }
 
+        Vector3? closestPoint = RandomPoint(inPosition, 1);
+
+        if(closestPoint != null)
+        {
+            inPosition = closestPoint.Value;
+        }
+        else
+        {
+            Debug.Log("Not finded a point");
+            return null;
+        }
+
+
         if (inPlayerType == PlayerType.Player)
         {
             if (!CheckResourcesAvailability(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost))
@@ -116,8 +129,6 @@ public class GameController : Singleton<GameController>
             DecreaseResources(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost);
         }
 
-        //CheckFreeSpace(inPosition, 1);
-
         GameObject troopBrain = ObjectPooler.Instance.GetUnitBehaviorHandler(inUnitType);
         Troop troopRef = troopBrain.GetComponent<Troop>();
 
@@ -127,7 +138,7 @@ public class GameController : Singleton<GameController>
             return null;
         }
 
-        troopBrain.transform.position = inPosition;
+        troopRef.Agent.Warp(inPosition);
         troopBrain.SetActive(true);
 
         troopRef.AssignPlayer(inPlayerType);
@@ -143,8 +154,9 @@ public class GameController : Singleton<GameController>
             return Collection.UnitsDictionary[inType];
         }
         return null;
-
     }
+
+
 
     #endregion
 
@@ -207,40 +219,19 @@ public class GameController : Singleton<GameController>
 
     #endregion
 
-    //public void CheckFreeSpace(Vector3 inPos, float inRadius)
-    //{
-    //    int layerToCheck = 9 << 10;
-
-    //    Collider[] collider = Physics.OverlapSphere(inPos, inRadius, layerToCheck);
-
-    //    EntityBehavior entity = null;
-
-    //    for (int i = 0; i < collider.Length; i++)
-    //    {
-    //        EntityBehavior tempEntity = collider[i].GetComponentInParent<EntityBehavior>();
-
-    //        if (tempEntity != entity)
-    //        {
-    //            entity = tempEntity;
-    //            var command = new TeleportCommand(entity, new Vector3(10,0,10));
-    //            entity.ExecuteCommand(command);
-    //        }
-    //    }
-    //}
-
-    //protected virtual Vector3 RandomNavmeshLocation(float radius)
-    //{
-    //    Vector3 randomDirection = Random.insideUnitSphere * radius;
-    //    randomDirection += transform.position;
-    //    NavMeshHit hit;
-    //    Vector3 finalPosition = Vector3.zero;
-    //    if (NavMesh.SamplePosition(randomDirection, out hit, radius, 1))
-    //    {
-    //        finalPosition = hit.position;
-    //    }
-
-    //    return finalPosition;
-    //}
+    Vector3? RandomPoint(Vector3 center, float range)
+    {
+        for (int i = 0; i < 30; i++)
+        {
+            Vector3 randomPoint = center + Random.insideUnitSphere * range;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            {
+                return hit.position;
+            }
+        }
+        return null;
+    }
 
     #region Resources system
 

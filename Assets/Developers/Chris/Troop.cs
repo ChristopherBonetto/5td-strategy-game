@@ -49,8 +49,12 @@ public class Troop : EntityBehavior, ICanMove
 
     private void Update()
     {
-        Debug.Log(Agent.enabled + " en");
-        Debug.Log(Agent.isStopped + " stop");
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            DismissUnitInTroop(UnitList[0]);
+        }
+
+        Debug.Log(Agent.isOnNavMesh);
     }
 
     #region States
@@ -401,8 +405,6 @@ public class Troop : EntityBehavior, ICanMove
     #endregion
 
     #region Troop Hp
-
-    
 
     public void TroopTakeDamage(Unit inUnit)
     {

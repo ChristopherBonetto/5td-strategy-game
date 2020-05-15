@@ -30,6 +30,11 @@ public class Unit : MonoBehaviour, ITakeDamage
         Initialize();
     }
 
+    private void Update()
+    {
+        Debug.Log("units : " + m_unitAgent.isOnNavMesh);
+    }
+
     #region Initialize
 
     private void Initialize()
