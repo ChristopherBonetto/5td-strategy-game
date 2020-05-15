@@ -10,6 +10,8 @@ public class EntityStatsSO : ScriptableObject
     [Header("Name")]
     public string Name;
 
+    public Sprite Icon;
+
     public GameObject BehaviorHandler;
     public GameObject VisualPrefab;
     
@@ -32,9 +34,28 @@ public class EntityStatsSO : ScriptableObject
     [Header("Visual")]
     public Mesh Mesh;
 
-    [Header("Roles")]
-    public EntityStatsSO[] Specializations;
+    [Header("Upgrade")]
+    public EntityStatsMultiplierSO[] Upgrades;
+    public int Level { get; set; } = 0;
+    public bool CanUpgrade { get { return Level < Upgrades.Length; } }
 
     [Header("Utility")]
     public QuantityOfResources Cost;
+
+
+    public void Upgrade()
+    {
+        if (CanUpgrade)
+        {
+            EntityStatsMultiplierSO upgrade = Upgrades[Level];
+            MaxHp += Mathf.RoundToInt(MaxHp * upgrade.MaxHpMultiplier);
+            Armor += Mathf.RoundToInt(Armor * upgrade.ArmorMultuplier);
+            EngageRange += Mathf.RoundToInt(EngageRange * upgrade.EngageRangeMultiplier);
+            AttackRange += Mathf.RoundToInt(AttackRange * upgrade.AttackRangeMultiplier);
+            AttackSpeed += AttackSpeed * upgrade.AttackSpeedMultiplier;
+            Damage += Mathf.RoundToInt(Damage * upgrade.DamageMultiplier);
+
+            Level++;
+        }
+    }
 }

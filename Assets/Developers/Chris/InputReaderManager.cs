@@ -100,8 +100,10 @@ public class InputReaderManager : Singleton<InputReaderManager>
             {
                 canBeSelected.Click();
             }
-
-            // else Trigger the event "OnUnitSelected(null)"
+            else
+            {
+                HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, null as EntityBehavior, 0);
+            }
         }
     }
 
