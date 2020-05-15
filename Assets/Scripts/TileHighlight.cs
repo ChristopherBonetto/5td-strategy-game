@@ -41,7 +41,7 @@ public class TileHighlight : MonoBehaviour
     {
         transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         yield return new WaitForSeconds(0.2f);
-        gameObject.SetActive(false);
+        
     }
 
   
