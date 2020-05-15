@@ -139,7 +139,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
             }
             else
             {
-                Debug.Log(HitInfo.point);
                 var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
                 CurrentEntity.ExecuteCommand(command);
                 //if (tempLayer == LayerMask.NameToLayer("Terrain"))

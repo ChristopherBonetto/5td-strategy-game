@@ -47,15 +47,6 @@ public class Troop : EntityBehavior, ICanMove
 
     public BattleHandler m_currentBattle = null;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            DismissUnitInTroop(UnitList[0]);
-        }
-
-        Debug.Log(Agent.isOnNavMesh);
-    }
 
     #region States
 

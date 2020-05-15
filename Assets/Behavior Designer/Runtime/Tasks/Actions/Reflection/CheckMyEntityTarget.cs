@@ -19,6 +19,7 @@ namespace BehaviorDesigner.Runtime.Tasks
             if (targetGameObject == null || !targetGameObject.Value.activeInHierarchy)
             {
                 Debug.LogWarning("Unable to get field - field value is null");
+                targetGameObject = null;
                 return TaskStatus.Failure;
             }
 
@@ -26,11 +27,13 @@ namespace BehaviorDesigner.Runtime.Tasks
             if (entityRef == null)
             {
                 Debug.LogWarning("Unable to get field - type is null");
+                targetGameObject = null;
                 return TaskStatus.Failure;
             }
 
             if (entityRef.IsBusy)
             {
+                targetGameObject = null;
                 return TaskStatus.Failure;
             }
 
