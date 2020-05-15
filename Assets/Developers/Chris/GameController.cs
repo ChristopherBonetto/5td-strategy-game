@@ -127,9 +127,25 @@ public class GameController : Singleton<GameController>
             return null;
         }
 
+        inPosition = inPosition.SnapLocation();
         troopBrain.transform.position = inPosition;
         troopBrain.SetActive(true);
 
+        if (!troopRef.Agent.isOnNavMesh)
+        {
+            troopRef.Agent.Warp(inPosition);
+
+            if (!troopRef.Agent.isOnNavMesh)
+            {
+                Debug.Log("non risolto");
+            }
+            else
+            {
+                Debug.Log("risolto");
+            }
+        }
+
+        
         troopRef.AssignPlayer(inPlayerType);
         troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
 

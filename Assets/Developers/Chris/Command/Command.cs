@@ -46,7 +46,7 @@ public class MoveWithAgent : Command
 
     public MoveWithAgent(EntityBehavior inEntity, Vector3 inDestination) : base(inEntity)
     {
-        m_destination = inDestination;
+        m_destination = inDestination.SnapLocation();
         canMove = inEntity.GetComponent<ICanMove>() as ICanMove;
     }
 
