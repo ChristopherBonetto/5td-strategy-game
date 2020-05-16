@@ -83,7 +83,7 @@ public class BuildingBehaviour : EntityBehavior
             Debug.Log($"i'm attacking {m_focusEntity.name}");
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {
-                m_view.SpawnBullet();
+                //m_view.SpawnBullet();
                 StartCoroutine(DealDamge(m_focusEntity));
                 m_attackDelayElapsed = 0;
             }
@@ -96,7 +96,7 @@ public class BuildingBehaviour : EntityBehavior
 
     IEnumerator DealDamge(EntityBehavior entity)
     {
-        EntityBehavior target = entity;
+        Troop target = entity.GetComponent<Troop>();
         float distance = Vector3.Distance(transform.position, m_focusEntity.transform.position);
         float time = distance / m_view.BulletSpeed;
 
@@ -106,6 +106,13 @@ public class BuildingBehaviour : EntityBehavior
             yield return null;
         }
 
-        target.TakeDamage(m_buildingStats.Damage);
+
+        int count = target.UnitList.Count;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (target.UnitList[i].TakeDamage(m_buildingStats.Damage)) FocusEntity = null;
+            break;
+        }
     }
 }
