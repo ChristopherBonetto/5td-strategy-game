@@ -9,15 +9,16 @@ namespace HF.Unit
     public class BuildingView : MonoBehaviour
     {
         [SerializeField]
-        private Transform m_weapon;
-
-        [SerializeField]
         private Transform m_SpawnPoint;
         public Transform SpawnPoint => m_SpawnPoint;
 
         [SerializeField]
         private HFPoolID m_BulletID;
         public HFPoolID BulletID => m_BulletID;
+
+        [SerializeField]
+        private float m_BulletSpeed;
+        public float BulletSpeed => m_BulletSpeed;
 
         /*
         * The obstacle is set to the view because we can
@@ -42,6 +43,17 @@ namespace HF.Unit
         public void DropBuilding()
         {
             NavMeshObstacle.enabled = true;
+        }
+
+        public void SpawnBullet()
+        {
+            // Get bullet from pool.
+            GameObject go = HFPoolManager.Instance.GetPooledObject(m_BulletID.ID);
+            // Set spawn position and rotation.
+            go.transform.position = m_SpawnPoint.position;
+            go.transform.rotation = m_SpawnPoint.rotation;
+            go.GetComponent<HFBullet>().SetParameters(new HFBulletParameters(null, 0, 0, m_BulletSpeed));
+            // Add force to it.
         }
 
         //public void TrackOstile(Entity ostile)
