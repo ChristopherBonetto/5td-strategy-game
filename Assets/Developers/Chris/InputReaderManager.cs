@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using Types;
+using HF.Refactoring;
 
 
 public class InputReaderManager : Singleton<InputReaderManager>
@@ -91,7 +92,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
-        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
+        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity) && !HFUIManager.IsPointerOverUIElement())
         {
             Debug.Log(HitInfo.transform.name);
             IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
@@ -102,7 +103,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
             }
             else
             {
-                HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, null as EntityBehavior, 0);
+                HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
             }
         }
     }
