@@ -43,6 +43,7 @@ public class EntityUpgradeButton : MonoBehaviour
     public void SetUpgradeButton(EntityBehavior entity)
     {
         gameObject.SetActive(true);
+        UpgradeButton.onClick.RemoveAllListeners();
 
         Entity = entity;
 
@@ -50,10 +51,18 @@ public class EntityUpgradeButton : MonoBehaviour
         {
             Troop troop = entity.GetComponent<Troop>();
 
-            if (troop.GetStats().CanUpgrade) // && has enough money
+            if (troop.CanUpgrade) // && has enough money
             {
                 ButtonImage.color = Color.white;
-                UpgradeButton.onClick.AddListener(() => troop.GetStats().Upgrade());
+                UpgradeButton.onClick.AddListener(() =>
+                {
+                    if (HFUIManager.IsPointerOverUIElement())
+                    {
+                        troop.Upgrade();
+                        HFEventManager.TriggerEvent(HFEventID.OnUnitUpgraded, troop, 0);
+                    }
+                });
+
             }
             else //!canUpgrade || not enough money
             {
@@ -65,10 +74,18 @@ public class EntityUpgradeButton : MonoBehaviour
         {
             BuildingBehaviour building = entity.GetComponent<BuildingBehaviour>();
 
-            if (building.GetStats().CanUpgrade) // && has enough money
+            if (building.CanUpgrade) // && has enough money
             {
                 ButtonImage.color = Color.white;
-                UpgradeButton.onClick.AddListener(() => building.GetStats().Upgrade());
+                UpgradeButton.onClick.AddListener(() =>
+                {
+                    if (HFUIManager.IsPointerOverUIElement())
+                    {
+                        Debug.Log("Upgrade!!!!" + building.Level);
+                        building.Upgrade();
+                        HFEventManager.TriggerEvent(HFEventID.OnUnitUpgraded, building, 0);
+                    }
+                });
             }
             else //!canUpgrade || not enough money
             {

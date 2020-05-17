@@ -41,6 +41,9 @@ public class EntitySpecializeButton : MonoBehaviour
     public void SetSpecializeButton(EntityBehavior entity)
     {
         gameObject.SetActive(true);
+        SpecializeButton[0].onClick.RemoveAllListeners();
+        SpecializeButton[1].onClick.RemoveAllListeners();
+        SpecializeButton[2].onClick.RemoveAllListeners();
 
         Entity = entity;
 
@@ -53,9 +56,9 @@ public class EntitySpecializeButton : MonoBehaviour
         ButtonImage[1].color = Color.white;
         ButtonImage[2].color = Color.white;
 
-        SpecializeButton[0].onClick.AddListener(() => entity.Specialization(Types.UnitType.LIFTER));
-        SpecializeButton[1].onClick.AddListener(() => entity.Specialization(Types.UnitType.DEFENDER));
-        SpecializeButton[2].onClick.AddListener(() => entity.Specialization(Types.UnitType.RUNNER));
+        SpecializeButton[0].onClick.AddListener(() => { entity.Specialization(Types.UnitType.LIFTER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+        SpecializeButton[1].onClick.AddListener(() => { entity.Specialization(Types.UnitType.DEFENDER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+        SpecializeButton[2].onClick.AddListener(() => { entity.Specialization(Types.UnitType.RUNNER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
 
         // else
         //ButtonImage[0].color = Color.grey;

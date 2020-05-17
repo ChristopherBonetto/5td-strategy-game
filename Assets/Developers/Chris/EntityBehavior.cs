@@ -7,7 +7,12 @@ using BehaviorDesigner.Runtime;
 
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
-    private EntityStatsSO m_entityStats;
+    protected EntityStatsSO m_entityStats;
+    public virtual EntityStatsSO EntityStats
+    {
+        get { return m_entityStats; }
+        set { m_entityStats = value; }
+    }
 
     protected List<Command> m_commands;
     protected int m_currentCommandIndex;
@@ -51,6 +56,26 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             {
                 transform.tag = "NoBusy";
             }
+        }
+    }
+
+    public int Level { get; set; } = 0;
+    public bool CanUpgrade { get { return Level < EntityStats.Upgrades.Length; } }
+
+    public void Upgrade()
+    {
+        if (CanUpgrade)
+        {
+            EntityStatsMultiplierSO upgrade = EntityStats.Upgrades[Level];
+            EntityStats.MaxHp += Mathf.RoundToInt(EntityStats.MaxHp * upgrade.MaxHpMultiplier);
+            EntityStats.Armor += Mathf.RoundToInt(EntityStats.Armor * upgrade.ArmorMultuplier);
+            EntityStats.EngageRange += Mathf.RoundToInt(EntityStats.EngageRange * upgrade.EngageRangeMultiplier);
+            EntityStats.AttackRange += Mathf.RoundToInt(EntityStats.AttackRange * upgrade.AttackRangeMultiplier);
+            EntityStats.AttackSpeed += EntityStats.AttackSpeed * upgrade.AttackSpeedMultiplier;
+            EntityStats.Damage += Mathf.RoundToInt(EntityStats.Damage * upgrade.DamageMultiplier);
+
+            Level++;
+            Debug.Log("Current level is: " + Level);
         }
     }
 

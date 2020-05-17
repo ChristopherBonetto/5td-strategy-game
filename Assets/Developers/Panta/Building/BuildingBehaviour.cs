@@ -11,7 +11,12 @@ public class BuildingBehaviour : EntityBehavior
 {
     private BuildingView m_view;
 
-    private BuildingsStatsSO m_buildingStats;
+    public BuildingsStatsSO m_buildingStats;
+    public override EntityStatsSO EntityStats
+    {
+        get { return m_buildingStats; }
+        set { m_buildingStats = (BuildingsStatsSO)value; }
+    }
     private float m_attackDelayElapsed = 0;
 
 
@@ -19,7 +24,7 @@ public class BuildingBehaviour : EntityBehavior
 
     public override void AssignStats(EntityStatsSO inStats)
     {
-        m_buildingStats = inStats as BuildingsStatsSO;
+        EntityStats = inStats;
 
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
         attackRange.Value = m_buildingStats.AttackRange;
@@ -59,7 +64,7 @@ public class BuildingBehaviour : EntityBehavior
 
     new public BuildingsStatsSO GetStats()
     {
-        return m_buildingStats as BuildingsStatsSO;
+        return m_buildingStats;
     }
 
     #endregion

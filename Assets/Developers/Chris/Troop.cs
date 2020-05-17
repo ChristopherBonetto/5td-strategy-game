@@ -17,7 +17,12 @@ public enum TroopStates
 public class Troop : EntityBehavior, ICanMove
 {
     public NavMeshAgent Agent;
-    private UnitsStatsSO m_troopStats;
+    public UnitsStatsSO m_troopStats;
+    public override EntityStatsSO EntityStats
+    {
+        get { return m_troopStats; }
+        set { m_troopStats = (UnitsStatsSO)value; }
+    }
     public override int CurrentHp
     {
         get { return TakeTroopHealth(); }
