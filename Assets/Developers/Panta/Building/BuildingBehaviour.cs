@@ -32,6 +32,11 @@ public class BuildingBehaviour : EntityBehavior
         m_behaviorTree.enabled = true;
     }
 
+    public override bool TakeDamage(int Damage)
+    {
+        return base.TakeDamage(Damage);
+    }
+
     public void TakeVisualPrefab(BuildingType inType)
     {
         if (inType == BuildingType.CASTLE)

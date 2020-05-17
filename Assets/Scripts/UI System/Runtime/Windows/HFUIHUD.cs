@@ -77,6 +77,9 @@ namespace HF.Refactoring
         {
             if (entity != null)
             {
+                EntitySpecializeButton.gameObject.SetActive(false);
+                EntityUpgradeButton.gameObject.SetActive(false);
+
                 // The case it's a unit
                 if (entity is Troop)
                 {
