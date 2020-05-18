@@ -75,7 +75,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             EntityStats.Damage += Mathf.RoundToInt(EntityStats.Damage * upgrade.DamageMultiplier);
 
             Level++;
-            Debug.Log("Current level is: " + Level);
+            HFEventManager.TriggerEvent(HFEventID.OnUnitUpgraded, this, 0);
         }
     }
 

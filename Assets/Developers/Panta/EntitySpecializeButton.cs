@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class EntitySpecializeButton : MonoBehaviour
 {
@@ -41,6 +42,9 @@ public class EntitySpecializeButton : MonoBehaviour
     public void SetSpecializeButton(EntityBehavior entity)
     {
         gameObject.SetActive(true);
+        transform.localScale = Vector3.zero;
+        transform.DOScale(1, 0.3f);
+
         SpecializeButton[0].onClick.RemoveAllListeners();
         SpecializeButton[1].onClick.RemoveAllListeners();
         SpecializeButton[2].onClick.RemoveAllListeners();

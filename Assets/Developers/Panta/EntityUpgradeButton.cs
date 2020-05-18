@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using HF.Refactoring;
+using DG.Tweening;
 
 public class EntityUpgradeButton : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public class EntityUpgradeButton : MonoBehaviour
     public void SetUpgradeButton(EntityBehavior entity)
     {
         gameObject.SetActive(true);
+        transform.localScale = Vector3.zero;
+        transform.DOScale(1, 0.3f);
         UpgradeButton.onClick.RemoveAllListeners();
 
         Entity = entity;
