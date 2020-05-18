@@ -52,6 +52,8 @@ public class Troop : EntityBehavior, ICanMove
 
     public BattleHandler m_currentBattle = null;
 
+    private BuildingBehaviour m_buildingHandled;
+    public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
 
     #region States
 
@@ -245,7 +247,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
-            if (UnitList[i].gameObject.active)
+            if (UnitList[i].gameObject.activeSelf)
             {
                 UnitList[i].UnitAgent.isStopped = false;
                 Vector3 destination = transform.position + m_formationPosition[i];
@@ -394,10 +396,43 @@ public class Troop : EntityBehavior, ICanMove
 
     public void Lift()
     {
-        if(FocusEntity != null)
+        if (FocusEntity != null)
         {
             StopTree(true);
-            FocusEntity.IsBusy = true;
+
+            BuildingHandled = FocusEntity as BuildingBehaviour;
+
+            BuildingHandled.transform.parent = this.transform;
+            BuildingHandled.Carry(this.transform.position + new Vector3(0, 3, 0));
+
+            for (int i = 0; i < UnitList.Count; i++)
+            {
+                UnitList[i].UnitAgent.enabled = false;
+                UnitList[i].transform.position = transform.position + m_formationPosition[i];
+            }
+
+            Agent.SetDestination(FocusEntity.transform.position);
+        }
+    }
+
+    public void Drop()
+    {
+        if (FocusEntity != null)
+        {
+            BuildingBehaviour building = FocusEntity as BuildingBehaviour;
+
+            FocusEntity.transform.parent = null;
+            building.Drop(transform.position + transform.forward);
+
+
+
+            foreach (Unit unit in UnitList)
+            {
+                unit.UnitAgent.enabled = true;
+            }
+
+            StopTree(false);
+            FocusEntity = null;
         }
     }
 
