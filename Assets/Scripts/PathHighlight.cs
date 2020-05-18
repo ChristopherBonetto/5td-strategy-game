@@ -11,7 +11,7 @@ public class PathHighlight : MonoBehaviour
 {
     private LineRenderer myLineRenderer;
     private NavMeshAgent myNavMeshAgent;
-    public float verticalOffset = 0.1f;
+    public float verticalOffset = 2;
     [SerializeField] private GameObject destinationMarker;
 
 
@@ -24,7 +24,7 @@ public class PathHighlight : MonoBehaviour
 
         myLineRenderer.startWidth = 0.5f;
         destinationMarker.SetActive(false);
-        myLineRenderer.endWidth = 0.1f;
+        myLineRenderer.endWidth = 0.5f;
         myLineRenderer.positionCount = 0;
   
 
@@ -61,7 +61,7 @@ public class PathHighlight : MonoBehaviour
         {
             
             
-                Vector3 pointPosition = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y, myNavMeshAgent.path.corners[i].z);
+                Vector3 pointPosition = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y+verticalOffset, myNavMeshAgent.path.corners[i].z);
                 myLineRenderer.SetPosition(i, pointPosition);
                 destinationMarker.SetActive(true);
                 destinationMarker.transform.position = myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length-1];
