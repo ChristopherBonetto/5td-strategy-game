@@ -84,7 +84,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
     private void SelectDeselectOneObject()
     {
-        ClearSelection();
         ClickEntity();
     }
 
@@ -99,10 +98,17 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(canBeSelected != null)
             {
+                if ((EntityBehavior)canBeSelected != CurrentEntity)
+                {
+                    ClearSelection();
+                    HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
+                }
+
                 canBeSelected.Click();
             }
             else
             {
+                ClearSelection();
                 HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
             }
         }
@@ -142,6 +148,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
             {
                 var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
                 CurrentEntity.ExecuteCommand(command);
+                Debug.Log(CurrentEntity);
                 //if (tempLayer == LayerMask.NameToLayer("Terrain"))
                 //{
                     
