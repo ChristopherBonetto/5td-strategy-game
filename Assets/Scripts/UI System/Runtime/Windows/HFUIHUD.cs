@@ -88,20 +88,21 @@ namespace HF.Refactoring
                 EntitySpecializeButton.gameObject.SetActive(false);
                 EntityUpgradeButton.gameObject.SetActive(false);
 
-                if (entity.IsBusy)
-                {
-                    // Trigger an event that display "Unit can't be upgraded"
-                    return;
-                }
-                if ((entity as Troop).BuildingHandled != null)
-                {
-                    // Trigger an event that display "Unit can't be upgraded"
-                    return;
-                }
 
                 // The case it's a unit
                 if (entity is Troop)
                 {
+                    if (entity.IsBusy)
+                    {
+                        // Trigger an event that display "Unit can't be upgraded"
+                        return;
+                    }
+                    if ((entity as Troop).BuildingHandled != null)
+                    {
+                        // Trigger an event that display "Unit can't be upgraded"
+                        return;
+                    }
+
                     UnitsStatsSO stats = entity.GetComponent<Troop>().GetStats();
 
                     if (stats.UnitType != Types.UnitType.PEASANT)

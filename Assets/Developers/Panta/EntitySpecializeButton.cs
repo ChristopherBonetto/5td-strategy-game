@@ -51,23 +51,47 @@ public class EntitySpecializeButton : MonoBehaviour
 
         Entity = entity;
 
-        ButtonImage[0].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER].OriginalUnitStats.Icon;
-        ButtonImage[1].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER].OriginalUnitStats.Icon;
-        ButtonImage[2].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER].OriginalUnitStats.Icon;
+        if (Entity is Troop)
+        {
+            ButtonImage[0].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER].OriginalUnitStats.Icon;
+            ButtonImage[1].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER].OriginalUnitStats.Icon;
+            ButtonImage[2].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER].OriginalUnitStats.Icon;
 
-        // if has enough money
-        ButtonImage[0].color = Color.white;
-        ButtonImage[1].color = Color.white;
-        ButtonImage[2].color = Color.white;
+            // if has enough money
+            ButtonImage[0].color = Color.white;
+            ButtonImage[1].color = Color.white;
+            ButtonImage[2].color = Color.white;
 
-        SpecializeButton[0].onClick.AddListener(() => { entity.Specialization(Types.UnitType.LIFTER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
-        SpecializeButton[1].onClick.AddListener(() => { entity.Specialization(Types.UnitType.DEFENDER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
-        SpecializeButton[2].onClick.AddListener(() => { entity.Specialization(Types.UnitType.RUNNER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+            SpecializeButton[0].onClick.AddListener(() => { entity.Specialization(Types.UnitType.LIFTER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+            SpecializeButton[1].onClick.AddListener(() => { entity.Specialization(Types.UnitType.DEFENDER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+            SpecializeButton[2].onClick.AddListener(() => { entity.Specialization(Types.UnitType.RUNNER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
 
-        // else
-        //ButtonImage[0].color = Color.grey;
-        //ButtonImage[1].color = Color.grey;
-        //ButtonImage[2].color = Color.grey;
-        //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+            // else
+            //ButtonImage[0].color = Color.grey;
+            //ButtonImage[1].color = Color.grey;
+            //ButtonImage[2].color = Color.grey;
+            //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+        }
+        else if (Entity is BuildingBehaviour)
+        {
+            //ButtonImage[0].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER].OriginalUnitStats.Icon;
+            //ButtonImage[1].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER].OriginalUnitStats.Icon;
+            //ButtonImage[2].sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER].OriginalUnitStats.Icon;
+
+            //// if has enough money
+            //ButtonImage[0].color = Color.white;
+            //ButtonImage[1].color = Color.white;
+            //ButtonImage[2].color = Color.white;
+
+            //SpecializeButton[0].onClick.AddListener(() => { entity.Specialization(Types.UnitType.LIFTER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+            //SpecializeButton[1].onClick.AddListener(() => { entity.Specialization(Types.UnitType.DEFENDER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+            //SpecializeButton[2].onClick.AddListener(() => { entity.Specialization(Types.UnitType.RUNNER); HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, entity, 0); });
+
+            // else
+            //ButtonImage[0].color = Color.grey;
+            //ButtonImage[1].color = Color.grey;
+            //ButtonImage[2].color = Color.grey;
+            //UpgradeButton.onClick.AddListener(/*trigger event => can't be upgraded*/);
+        }
     }
 }
