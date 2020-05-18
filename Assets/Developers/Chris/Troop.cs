@@ -249,6 +249,7 @@ public class Troop : EntityBehavior, ICanMove
         {
             if (UnitList[i].gameObject.activeSelf)
             {
+                UnitList[i].UnitAgent.enabled = true;
                 UnitList[i].UnitAgent.isStopped = false;
                 Vector3 destination = transform.position + m_formationPosition[i];
                 UnitList[i].UnitAgent.destination = destination;
@@ -412,27 +413,25 @@ public class Troop : EntityBehavior, ICanMove
             }
 
             Agent.SetDestination(FocusEntity.transform.position);
+
+            HFEventManager.TriggerEvent(HFEventID.OnUnitLift);
         }
     }
 
     public void Drop()
     {
-        if (FocusEntity != null)
+        if (BuildingHandled != null)
         {
-            BuildingBehaviour building = FocusEntity as BuildingBehaviour;
+            BuildingHandled.transform.parent = null;
+            BuildingHandled.Drop(transform.position + transform.forward);
 
-            FocusEntity.transform.parent = null;
-            building.Drop(transform.position + transform.forward);
-
-
-
-            foreach (Unit unit in UnitList)
-            {
-                unit.UnitAgent.enabled = true;
-            }
-
-            StopTree(false);
+            BuildingHandled = null;
+            
             FocusEntity = null;
+
+            ResetFormation();
+
+            HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
         }
     }
 
