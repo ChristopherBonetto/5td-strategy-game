@@ -35,14 +35,27 @@ namespace HF.Unit
             }
         }
 
+        private Collider m_Collider;
+        public Collider Collider
+        {
+            get
+            {
+                if (m_Collider == null)
+                    m_Collider = GetComponent<Collider>();
+                return m_Collider;
+            }
+        }
+
         public void CarryBuilding()
         {
             NavMeshObstacle.enabled = false;
+            Collider.enabled = false;
         }
 
         public void DropBuilding()
         {
             NavMeshObstacle.enabled = true;
+            Collider.enabled = true;
         }
 
         public void SpawnBullet()

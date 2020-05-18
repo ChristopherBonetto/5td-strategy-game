@@ -73,6 +73,10 @@
 	/// </summary>
 	OnUnitsPossessed,
 
+	OnUnitLift,
+
+	OnUnitDropBuilding,
+
 
 	/*
 	 *--------------------------------------- 
