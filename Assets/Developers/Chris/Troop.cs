@@ -422,16 +422,19 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (BuildingHandled != null)
         {
-            BuildingHandled.transform.parent = null;
-            BuildingHandled.Drop(transform.position + transform.forward);
+            if (BuildingHandled.Drop(transform.position + transform.forward))
+            {
 
-            BuildingHandled = null;
+                BuildingHandled.transform.parent = null;
+
+                BuildingHandled = null;
             
-            FocusEntity = null;
+                FocusEntity = null;
 
-            ResetFormation();
+                ResetFormation();
 
-            HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
+                HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
+            }
         }
     }
 

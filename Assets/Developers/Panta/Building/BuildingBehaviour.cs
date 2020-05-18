@@ -80,11 +80,9 @@ public class BuildingBehaviour : EntityBehavior
 
     public bool Drop(Vector3 dropPosition)
     {
-        if (Physics.CheckSphere(dropPosition + Vector3.up, 1))
-            return false;
-
         m_view.DropBuilding();
         transform.DOJump(dropPosition, 5, 1, 0.5f);
+        StopTree(false);
         return true;
     }
 

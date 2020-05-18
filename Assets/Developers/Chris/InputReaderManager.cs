@@ -103,6 +103,10 @@ public class InputReaderManager : Singleton<InputReaderManager>
                     ClearSelection();
                     HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
                 }
+                else
+                {
+                    HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, (EntityBehavior)canBeSelected, 0);
+                }
 
                 canBeSelected.Click();
             }

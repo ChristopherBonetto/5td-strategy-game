@@ -171,8 +171,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
         if(EntityPlayerType == PlayerType.Player)
         {
-            if (InputReaderManager.Instance.CurrentEntity)
-                HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, this, 0);
             InputReaderManager.Instance.CurrentEntity = this;
         }
     }
