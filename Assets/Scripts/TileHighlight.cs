@@ -18,7 +18,7 @@ public class TileHighlight : MonoBehaviour
     private void OnMouseOver()
     {
 
-            mouseOver = true;
+        mouseOver = true;
         transform.localScale = new Vector3(1f, 1f, 1f);
         coll.size = new Vector3(6f, 6f, 0.1f);
         if(Input.GetMouseButton(1))
