@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace HF.Refactoring
 {
-    public class HFLoadLevelB : HFButton
+    public class HFLoadLevelB : HFButton, IPointerEnterHandler, IPointerExitHandler
     {
         /// <summary>
         /// S.O. of the level.
@@ -17,6 +18,7 @@ namespace HF.Refactoring
         /// in form of string.
         /// </summary>
         public Text ButtonText;
+        public Button button;
 
         /// <summary>
         /// On click() event: Load the level associated.
@@ -32,6 +34,19 @@ namespace HF.Refactoring
                 // Turn on the second window declared (after loading).
                 HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(Level.LevelSceneIndex);
             }
+        }
+
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            button.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+            ButtonText.fontSize += 50;
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            button.transform.localScale = new Vector3(1, 1, 1);
+            ButtonText.fontSize = 100;
+
         }
     }
 }
