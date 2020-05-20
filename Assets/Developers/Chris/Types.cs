@@ -16,20 +16,20 @@ namespace Types
         LIFTER,
         DEFENDER,
         RUNNER,
-        WARRIOR
-    }
-
-    public enum TowerType
-    {
-        BALLISTA,
-        CANNON,
-        ENERGY
+        WARRIOR,
+        ARCHER,
+        TANK,
+        SPEARMAN,
+        STANDARDENEMY,
     }
 
     public enum BuildingType
     {
         CASTLE,
-        TOWER
+        TOWER,
+        BALLISTA,
+        CANNON,
+        ENERGY,
     }
 
     [System.Flags]
@@ -52,14 +52,5 @@ namespace Types
     {
         Player,
         AI
-    }
-
-    public enum ActionTypes
-    {
-        Idle,
-        Move,
-        Attack,
-        Lift,
-        Collect
     }
 }
