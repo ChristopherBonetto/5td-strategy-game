@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
 using HF;
 
 public class HFUIUnitInfo : MonoBehaviour
@@ -15,9 +16,11 @@ public class HFUIUnitInfo : MonoBehaviour
     [SerializeField]
     private HFPoolID m_unitIconID;
 
+
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<int, List<HFBaseStats>>(HFEventID.OnUnitsPossessed, SetUnitsIcon);
+
     }
 
     private void OnDisable()
@@ -53,4 +56,6 @@ public class HFUIUnitInfo : MonoBehaviour
             }
         }
     }
+
+
 }

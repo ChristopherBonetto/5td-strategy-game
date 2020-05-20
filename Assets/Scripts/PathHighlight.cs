@@ -26,11 +26,11 @@ public class PathHighlight : MonoBehaviour
         destinationMarker.SetActive(false);
         myLineRenderer.endWidth = 0.5f;
         myLineRenderer.positionCount = 0;
-  
+
 
     }
 
-    // Update is called once per frame
+
     void Update()
     {
 
@@ -46,10 +46,10 @@ public class PathHighlight : MonoBehaviour
         myLineRenderer.positionCount = myNavMeshAgent.path.corners.Length;
         myLineRenderer.SetPosition(0, transform.position);
 
-     
-        
-       
-       
+
+
+
+
 
 
         if (myNavMeshAgent.path.corners.Length < 2)
@@ -61,9 +61,9 @@ public class PathHighlight : MonoBehaviour
         {
             
             
-                Vector3 pointPosition = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y+verticalOffset, myNavMeshAgent.path.corners[i].z);
-                myLineRenderer.SetPosition(i, pointPosition);
-                destinationMarker.SetActive(true);
+                Vector3 pointPosition = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y, myNavMeshAgent.path.corners[i].z);
+            myLineRenderer.SetPosition(i, pointPosition);
+            destinationMarker.SetActive(true);
                 destinationMarker.transform.position = myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length-1];
             
        
