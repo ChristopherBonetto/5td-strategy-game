@@ -4821,8 +4821,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4641069261801621652}
   - component: {fileID: 2750675292378656545}
-  - component: {fileID: 2450785364705475668}
   - component: {fileID: 2799524059049740409}
+  - component: {fileID: 7406498000133296795}
   m_Layer: 0
   m_Name: Balista_Bullet 1
   m_TagString: Untagged
@@ -4863,20 +4863,6 @@ MonoBehaviour:
   m_mesh: {fileID: 3645907187480041922}
   m_explosionHit: {fileID: 1950152180697656706}
   m_explosionMissed: {fileID: 8836061568395830681}
---- !u!64 &2450785364705475668
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1455427389740590923}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &2799524059049740409
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4893,6 +4879,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7406498000133296795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455427389740590923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36788e272508db54ca616b88033ca719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueID: {fileID: 11400000, guid: b272f9bcacd29734bad36d5ea8f88b22, type: 2}
 --- !u!1 &2407395351672503143
 GameObject:
   m_ObjectHideFlags: 0

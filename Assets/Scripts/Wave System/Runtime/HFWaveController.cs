@@ -10,10 +10,6 @@ namespace HF.Refactoring
         HFSpawnPoint[] m_spawnPoints;
         public HFSpawnPoint[] SpawnPoints => m_spawnPoints;
 
-        [SerializeField]
-        private HFController m_Controller;
-        public HFController Controller => m_Controller;
-
         HFWaveCollection m_waveCollection = null;
 
         //--------------------------------
@@ -110,7 +106,7 @@ namespace HF.Refactoring
                 switch (behaviour.Type)
                 {
                     case BehaviourType.SINGLE:
-                        m_behavioursToPerform.Enqueue(new HFWaveBehaviourSingle(behaviour.SpawnPointID, behaviour.AmountToSpawn, behaviour.UnitData));
+                        m_behavioursToPerform.Enqueue(new HFWaveBehaviourSingle(behaviour.SpawnPointID, behaviour.AmountToSpawn, behaviour.UnitType));
                         break;
 
                     case BehaviourType.WAIT:
@@ -118,7 +114,7 @@ namespace HF.Refactoring
                         break;
 
                     case BehaviourType.BULK:
-                        m_behavioursToPerform.Enqueue(new HFWaveBehaviourBulk(behaviour.SpawnPointID, behaviour.AmountToSpawn, behaviour.TimeToWait, behaviour.UnitData));
+                        m_behavioursToPerform.Enqueue(new HFWaveBehaviourBulk(behaviour.SpawnPointID, behaviour.AmountToSpawn, behaviour.TimeToWait, behaviour.UnitType));
                         break;
                 }
             }
@@ -173,14 +169,6 @@ namespace HF.Refactoring
             // Set the current wave to perform 
             // when the wave begin
             SetCurrentBehaviourToPerform();
-
-            // TO DO: find a better implementation @Panta
-            List<HFBaseStats> stats = new List<HFBaseStats>();
-            foreach (HFWaveData.HFWaveBehaviourData data in m_currentWave.GetBehaviours())
-            {
-                stats.Add(data.UnitData);
-            }
-            HFEventManager.TriggerEvent<int, List<HFBaseStats>>(HFEventID.OnUnitsPossessed, Controller.Team, stats);
 
             // Update wave index in UI.
             HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, WaveIndex + 1, TotalWaves.Count);

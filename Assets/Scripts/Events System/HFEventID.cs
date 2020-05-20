@@ -14,7 +14,7 @@
     /// <summary>
     /// <see cref="HFLevelInfoSO"/> current level selected.
     /// </summary>
-    OnInitializeLevel,
+    OnInitializeLevel,	// Call this to pool allies units.
 
 	/// <summary>
 	/// 
@@ -72,6 +72,10 @@
 	/// <see cref="HFBaseStats"/> List<HFBaseStats>.
 	/// </summary>
 	OnUnitsPossessed,
+
+	OnUnitLift,
+
+	OnUnitDropBuilding,
 
 
 	/*
