@@ -404,7 +404,7 @@ public class Troop : EntityBehavior, ICanMove
             BuildingHandled = FocusEntity as BuildingBehaviour;
 
             BuildingHandled.transform.parent = this.transform;
-            BuildingHandled.Carry(this.transform.position + new Vector3(0, 3, 0));
+            BuildingHandled.Carry(Agent.transform.position + new Vector3(0, 3, 0));
 
             for (int i = 0; i < UnitList.Count; i++)
             {
@@ -422,7 +422,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (BuildingHandled != null)
         {
-            if (BuildingHandled.Drop(transform.position + transform.forward))
+            if (BuildingHandled.Drop(Agent.transform.position + Agent.transform.forward))
             {
 
                 BuildingHandled.transform.parent = null;

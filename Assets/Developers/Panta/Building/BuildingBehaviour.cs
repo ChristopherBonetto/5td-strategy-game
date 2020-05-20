@@ -82,6 +82,7 @@ public class BuildingBehaviour : EntityBehavior
     {
         m_view.DropBuilding();
         transform.DOJump(dropPosition, 5, 1, 0.5f);
+        IsBusy = false;
         StopTree(false);
         return true;
     }
