@@ -36,6 +36,11 @@ namespace HF.Refactoring
         int TotalEnemiesInTheWave => m_currentWave.GetCountOfEnemies();
         int m_currentEnemiesCount = 0;
 
+        TileHighlight lastLocator;
+        public LayerMask LocatorLayer;
+
+
+
 
         #region Helpers
         private const string m_debugColor = "#FFFF00";
@@ -63,6 +68,7 @@ namespace HF.Refactoring
         private void Start()
         {
             Initialization();
+            LocatorLayer = LayerMask.GetMask("LocatorLayer");
         }
 
         private void Update()
@@ -72,6 +78,20 @@ namespace HF.Refactoring
                 m_currentBehaviour.Execute(this);
                 m_currentBehaviour.Exit(this);
             }
+            
+            LocatorRay();
+
+            if (lastLocator != null)
+            {
+                if (Input.GetMouseButtonDown(1))
+                {
+                    lastLocator.OnClick();
+
+
+                }
+            }
+
+
         }
 
         #endregion
@@ -224,6 +244,38 @@ namespace HF.Refactoring
             Pausing = freeze;
         }
 
-        #endregion
+        #endregion 
+
+        private void LocatorRay()
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, LocatorLayer))
+            {
+                if (hit.collider != null)
+                {
+                    TileHighlight tmpLoc = hit.collider.GetComponent<TileHighlight>();
+
+                    if (lastLocator != null && lastLocator == tmpLoc) return;
+
+                    lastLocator?.MouseExit();
+
+
+                    lastLocator = tmpLoc;
+
+                    lastLocator.MouseEnter();
+
+                }
+            }
+            else
+            {
+                if (lastLocator != null)
+                {
+                    lastLocator?.MouseExit();
+
+
+                    lastLocator = null;
+                }
+            }
+        }
     }
 }
