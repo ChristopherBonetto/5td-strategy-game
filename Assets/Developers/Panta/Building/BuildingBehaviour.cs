@@ -74,14 +74,24 @@ public class BuildingBehaviour : EntityBehavior
         IsBusy = true;
         m_view.CarryBuilding();
         transform.DOJump(carryPosition, 5, 1, 0.5f);
+        transform.up = Vector3.up;
         StopTree(true);
         return true;
     }
 
     public bool Drop(Vector3 dropPosition)
     {
+        Vector3 fixedUpDirection = Vector3.up;
+        RaycastHit hit;
+
+        if (Physics.Raycast(dropPosition + Vector3.up * 1.5f, Vector3.down, out hit, 5f))
+        {
+            fixedUpDirection = hit.normal;
+        }
+
         m_view.DropBuilding();
         transform.DOJump(dropPosition, 5, 1, 0.5f);
+        transform.up = fixedUpDirection;
         IsBusy = false;
         StopTree(false);
         return true;
