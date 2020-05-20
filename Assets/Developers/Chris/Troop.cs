@@ -422,7 +422,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (BuildingHandled != null)
         {
-            if (BuildingHandled.Drop(Agent.transform.position + Agent.transform.forward))
+            if (BuildingHandled.Drop(Agent.destination))
             {
 
                 BuildingHandled.transform.parent = null;
@@ -432,6 +432,8 @@ public class Troop : EntityBehavior, ICanMove
                 FocusEntity = null;
 
                 ResetFormation();
+
+                SetIdleState();
 
                 HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
             }
