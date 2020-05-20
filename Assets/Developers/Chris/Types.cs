@@ -21,15 +21,63 @@ namespace Types
         TANK,
         SPEARMAN,
         STANDARDENEMY,
+
+        // Upgrade
+
+        // Lifter
+        LIFTER_LVL1,
+        LIFTER_LVL2,
+        LIFTER_LVL3,
+
+        // Defender
+        DEFENDER_LVL1,
+        DEFENDER_LVL2,
+        DEFENDER_LVL3,
+
+        // Runner
+        RUNNER_LVL1,
+        RUNNER_LVL2,
+        RUNNER_LVL3,
+
+        // Warrior
+        WARRIOR_LVL1,
+        WARRIOR_LVL2,
+        WARRIOR_LVL3,
+
+        // Archer
+        ARCHER_LVL1,
+        ARCHER_LVL2,
+        ARCHER_LVL3,
+
+        //Tank
+        TANK_LVL1,
+        TANK_LVL2,
+        TANK_LVL3,
+
+        //Spearmean
+        SPEARMAN_LVL1,
+        SPEARMAN_LVL2,
+        SPEARMAN_LVL3,
+
+        //Standard enemy
+        STANDARDENEMY_LVL1,
+        STANDARDENEMY_LVL2,
+        STANDARDENEMY_LVL3,
     }
 
     public enum BuildingType
     {
         CASTLE,
         TOWER,
-        BALLISTA,
-        CANNON,
-        ENERGY,
+        BALLISTA_LVL1,
+        BALLISTA_LVL2,
+        BALLISTA_LVL3,
+        MORTAR_LVL1,
+        MORTAR_LVL2,
+        MORTAR_LVL3,
+        CRYSTAL_LVL1,
+        CRYSTAL_LVL2,
+        CRYSTAL_LVL3,
     }
 
     [System.Flags]

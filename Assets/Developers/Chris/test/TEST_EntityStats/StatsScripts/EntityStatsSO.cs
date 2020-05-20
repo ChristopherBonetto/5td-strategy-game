@@ -35,9 +35,6 @@ public class EntityStatsSO : ScriptableObject
     [Header("Visual")]
     public Mesh Mesh;
 
-    [Header("Upgrade")]
-    public EntityStatsMultiplierSO[] Upgrades;
-
     [Header("Utility")]
     public QuantityOfResources Cost;
 }

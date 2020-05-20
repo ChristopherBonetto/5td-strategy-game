@@ -59,26 +59,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
-    public int Level { get; set; } = 0;
-    public bool CanUpgrade { get { return Level < EntityStats.Upgrades.Length; } }
-
-    public void Upgrade()
-    {
-        if (CanUpgrade)
-        {
-            EntityStatsMultiplierSO upgrade = EntityStats.Upgrades[Level];
-            EntityStats.MaxHp += Mathf.RoundToInt(EntityStats.MaxHp * upgrade.MaxHpMultiplier);
-            EntityStats.Armor += Mathf.RoundToInt(EntityStats.Armor * upgrade.ArmorMultuplier);
-            EntityStats.EngageRange += Mathf.RoundToInt(EntityStats.EngageRange * upgrade.EngageRangeMultiplier);
-            EntityStats.AttackRange += Mathf.RoundToInt(EntityStats.AttackRange * upgrade.AttackRangeMultiplier);
-            EntityStats.AttackSpeed += EntityStats.AttackSpeed * upgrade.AttackSpeedMultiplier;
-            EntityStats.Damage += Mathf.RoundToInt(EntityStats.Damage * upgrade.DamageMultiplier);
-
-            Level++;
-            HFEventManager.TriggerEvent(HFEventID.OnUnitUpgraded, this, 0);
-        }
-    }
-
     public virtual void Awake()
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
