@@ -10,7 +10,7 @@ namespace HF.Refactoring
         int m_spawnPointID = 0;
         int m_amountToSpawn = 0;
         int m_spawnedUnitCount = 0;
-        UnitType m_unitType = UnitType.PEASANT;
+        UnitType m_unitType = UnitType.STANDARD_ALLY;
 
 
 

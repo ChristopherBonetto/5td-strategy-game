@@ -36,8 +36,6 @@ public struct UnitInfo
 [System.Serializable]
 public struct BuildingInfo
 {
-    public string BuildingName;
-
     [SerializeField] private BuildingsStatsSO m_OriginalBuildingStats;
     public BuildingsStatsSO OriginalBuildingStats { get { return m_OriginalBuildingStats; } }
 

@@ -12,11 +12,11 @@ namespace Types
 
     public enum UnitType
     {
-        PEASANT,
+        STANDARD_ALLY,
         LIFTER,
         DEFENDER,
         RUNNER,
-        WARRIOR,
+        STANDARD_ENEMY,
         ARCHER,
         TANK,
         SPEARMAN,

@@ -30,7 +30,7 @@ namespace HF.Refactoring
         public class HFWaveBehaviourData
         {
             public BehaviourType Type = BehaviourType.SINGLE;
-            public UnitType UnitType = UnitType.PEASANT;
+            public UnitType UnitType = UnitType.STANDARD_ALLY;
             public int SpawnPointID = 0;
             public float TimeToWait = 0;
             public int AmountToSpawn = 0;

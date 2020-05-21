@@ -12,7 +12,7 @@ namespace HF.Refactoring
         int m_spawnedUnitCount = 0;
         float m_timeToWaitBetweenUnits = 0;
         float m_timeElapsed = 0;
-        UnitType m_unitType = UnitType.PEASANT;
+        UnitType m_unitType = UnitType.STANDARD_ALLY;
 
 
 
