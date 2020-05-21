@@ -1,6 +1,6 @@
 ﻿public class HFGameParameters
 {
-	public const float TileSize = 2f;
+	public const float TileSize = 3f;
 
 	public const int PlayerTeam = 0;
 	public const int NoTeam = 99;

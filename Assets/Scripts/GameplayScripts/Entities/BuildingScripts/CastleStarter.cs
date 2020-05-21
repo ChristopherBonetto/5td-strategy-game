@@ -30,8 +30,8 @@ public class CastleStarter : BuildingBehaviour
             foreach (Transform t in m_spawnPoints)
             {
                 GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, t.position.SnapLocation());
-                GameController.Instance.CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, t.position.SnapLocation());
             }
+            GameController.Instance.CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, (new Vector3(transform.position.x + 5, transform.position.y, transform.position.z + 5).SnapLocation()));
         }
     }
 }

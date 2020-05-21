@@ -3317,22 +3317,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 68570ecfeb7b5c148aed33b0a510bc9d, type: 3}
---- !u!1 &313607395
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 2027236004}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2027236005}
-  m_Layer: 0
-  m_Name: Missing Prefab (Dummy)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1001 &324128816
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -37357,7 +37341,7 @@ Transform:
   - {fileID: 127560459}
   - {fileID: 768763420}
   - {fileID: 502733598}
-  - {fileID: 2034157558}
+  - {fileID: 2027236005}
   - {fileID: 1676666048}
   - {fileID: 695515634}
   - {fileID: 1204345003}
@@ -139534,6 +139518,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1673913745}
     m_Modifications:
+    - target: {fileID: 469778536301135933, guid: 16e34848c84c717488e700d46ee80245,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_Ruins
+      objectReference: {fileID: 0}
+    - target: {fileID: 469778536301135933, guid: 16e34848c84c717488e700d46ee80245,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 68708380521099175, guid: 16e34848c84c717488e700d46ee80245,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -139610,16 +139604,6 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 459770098404103453, guid: 16e34848c84c717488e700d46ee80245,
-        type: 3}
-      propertyPath: m_Layer
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 469778536301135933, guid: 16e34848c84c717488e700d46ee80245,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_Ruins
-      objectReference: {fileID: 0}
-    - target: {fileID: 469778536301135933, guid: 16e34848c84c717488e700d46ee80245,
         type: 3}
       propertyPath: m_Layer
       value: 10
@@ -139781,52 +139765,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16e34848c84c717488e700d46ee80245, type: 3}
---- !u!4 &2027236005
+--- !u!4 &2027236005 stripped
 Transform:
-  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 68708380521099175, guid: 16e34848c84c717488e700d46ee80245,
     type: 3}
   m_PrefabInstance: {fileID: 2027236004}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 313607395}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2034157558}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2034157557
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 2027236004}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2034157558}
-  m_Layer: 0
-  m_Name: PF_Ruins (Missing Prefab)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2034157558
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 2027236004}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2034157557}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 2027236005}
-  m_Father: {fileID: 1673913745}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2037888759
 PrefabInstance:
   m_ObjectHideFlags: 0
