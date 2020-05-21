@@ -41,7 +41,7 @@ public class TileHighlight : MonoBehaviour
     public void MouseEnter ()
     {
         transform.DOScale(1.2f, 0.3f);
-        transform.DOShakePosition(0.3f, new Vector3(0.1f, 0, 0.1f),10,90,false,false).SetLoops(2, LoopType.Yoyo);
+        transform.DOShakePosition(0.3f, new Vector3(0.3f, 0, 0.3f),10,90,false,false).SetLoops(2, LoopType.Yoyo);
 
 
 

@@ -57,7 +57,8 @@ public class PathHighlight : MonoBehaviour
             
             
                 Vector3 pointPosition = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y, myNavMeshAgent.path.corners[i].z);
-            myLineRenderer.SetPosition(i, pointPosition);
+                myLineRenderer.SetPosition(i, pointPosition);
+            
             //destinationMarker.SetActive(true);
             //    destinationMarker.transform.position = myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length-1];
             
