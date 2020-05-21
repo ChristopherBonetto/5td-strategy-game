@@ -11,27 +11,36 @@ public class TileHighlight : MonoBehaviour
     bool mouseOver = false;
     private BoxCollider coll;
     private bool isOnPlayableArea;
-    private SpriteRenderer spriteColor;
+    public SpriteRenderer spriteColor;
     public Color selectedColor;
-    private Color startClor;
+    private Color startColor;
+    public Sprite[] RandomSpriteList;
 
     
 
 
     private void Awake()
     {
-        coll = GetComponent<BoxCollider>();
+        
+        coll = GetComponentInParent<BoxCollider>();
         isOnPlayableArea = false;
         spriteColor = GetComponent<SpriteRenderer>();
-        startClor = spriteColor.color;
+        spriteColor.sprite = RandomSpriteList[Random.Range(0, RandomSpriteList.Length-1)];
+        startColor = spriteColor.color;
 
+
+    }
+    public void Start()
+    {
+        if (coll.gameObject.layer != LayerMask.NameToLayer("Terrain"))
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     public void MouseEnter ()
     {
-        mouseOver = true;
-        transform.DOScale(1f, 0.3f);
-        coll.size = new Vector3(6f, 6f, 0.001f);
+        transform.DOScale(1.2f, 0.3f);
         transform.DOShakePosition(0.3f, new Vector3(0.1f, 0, 0.1f),10,90,false,false).SetLoops(2, LoopType.Yoyo);
 
 
@@ -61,10 +70,8 @@ public class TileHighlight : MonoBehaviour
     public void MouseExit()
     {
 
-        mouseOver = false;
-        transform.DOScale(0.8f, 0.3f);
-        coll.size = new Vector3(6f, 6f, 0.001f); 
-        spriteColor.DOColor(startClor, 0.2f);
+        transform.DOScale(1f, 0.3f);
+        spriteColor.DOColor(startColor, 0.2f);
 
     }
 

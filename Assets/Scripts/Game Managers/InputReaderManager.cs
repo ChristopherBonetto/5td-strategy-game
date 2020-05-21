@@ -150,13 +150,18 @@ public class InputReaderManager : Singleton<InputReaderManager>
             }
             else
             {
-                var command = new MoveWithAgent(CurrentEntity, HitInfo.point);
-                CurrentEntity.ExecuteCommand(command);
-                Debug.Log(CurrentEntity);
-                //if (tempLayer == LayerMask.NameToLayer("Terrain"))
-                //{
+
+                if (tempLayer == LayerMask.NameToLayer("Terrain"))
+                {
+                    TileHighlight tile = HitInfo.transform.GetComponentInChildren<TileHighlight>();
+                    if (tile != null)
+                    {
+                        var command = new MoveWithAgent(CurrentEntity, tile.transform.position);
+                        CurrentEntity.ExecuteCommand(command);
+                        Debug.Log(CurrentEntity);
+                    }
                     
-                //}
+                }
             }
         }
     }

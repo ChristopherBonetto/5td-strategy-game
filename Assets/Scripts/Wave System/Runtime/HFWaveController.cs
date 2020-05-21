@@ -68,7 +68,7 @@ namespace HF.Refactoring
         private void Start()
         {
             Initialization();
-            LocatorLayer = LayerMask.GetMask("LocatorLayer");
+            LocatorLayer = LayerMask.GetMask("Terrain");
         }
 
         private void Update()
@@ -253,7 +253,7 @@ namespace HF.Refactoring
             {
                 if (hit.collider != null)
                 {
-                    TileHighlight tmpLoc = hit.collider.GetComponent<TileHighlight>();
+                    TileHighlight tmpLoc = hit.collider.GetComponentInChildren<TileHighlight>();
 
                     if (lastLocator != null && lastLocator == tmpLoc) return;
 
@@ -262,7 +262,7 @@ namespace HF.Refactoring
 
                     lastLocator = tmpLoc;
 
-                    lastLocator.MouseEnter();
+                    lastLocator?.MouseEnter();
 
                 }
             }
