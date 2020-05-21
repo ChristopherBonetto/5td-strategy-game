@@ -27,7 +27,7 @@ public class HFUILevelInfo : MonoBehaviour
         switch (state)
         {
             case GameStates.PlayingLevel:
-                m_text.text = "Level " + (HFScenesManager.Instance.CurrentLevelSelected.LevelSceneIndex - 1).ToString();
+                m_text.text = (HFScenesManager.Instance.CurrentLevelSelected.LevelSceneIndex - 1).ToString();
                 break;
 
             default:
