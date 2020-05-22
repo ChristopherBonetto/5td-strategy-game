@@ -37,6 +37,16 @@
 	/// </summary>
 	OnPauseMode,
 
+	/// <summary>
+	/// <see cref="int"/> total player money
+	/// </summary>
+	OnRewardGained,
+
+	/// <summary>
+	/// <see cref="int"/> total player money
+	/// </summary>
+	OnPurchrased,
+
 
 	/*
 	 *--------------------------------------- 
