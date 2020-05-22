@@ -50,11 +50,17 @@ public class Troop : EntityBehavior, ICanMove
     private Vector3[] m_formationPosition = new Vector3[4];
 
     private Vector3 m_destination;
+    private Vector3 m_startingPos;
 
     public BattleHandler m_currentBattle = null;
 
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
+
+    private void OnEnable()
+    {
+        m_startingPos = transform.position;
+    }
 
     #region States
 
@@ -490,8 +496,8 @@ public class Troop : EntityBehavior, ICanMove
     IEnumerator Respawn()
     {
         IsBusy = true;
-        transform.position = new Vector3(0, 0.5f, 0);
         yield return new WaitForSeconds(m_troopStats.RespawnTime);
+        Agent.Warp(m_startingPos);
         CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
         SetIdleState();
     }
