@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace HF.Refactoring
 {
-    public class HFLoadLevelB : HFButton, IPointerEnterHandler, IPointerExitHandler
+    public class HFLoadLevelB : HFButton
     {
         /// <summary>
         /// S.O. of the level.
@@ -36,17 +36,6 @@ namespace HF.Refactoring
             }
         }
 
-        public void OnPointerEnter(PointerEventData eventData)
-        {
-            button.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
-            ButtonText.fontSize += 50;
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            button.transform.localScale = new Vector3(1, 1, 1);
-            ButtonText.fontSize = 100;
-
-        }
+ 
     }
 }
