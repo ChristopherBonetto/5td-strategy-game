@@ -4,6 +4,7 @@ using UnityEngine;
 using Types;
 using BehaviorDesigner.Runtime;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public enum TroopStates
 {
@@ -68,6 +69,8 @@ public class Troop : EntityBehavior, ICanMove
 
     public override void AssignStats(EntityStatsSO inStats)
     {
+        m_behaviorTree.enabled = false;
+
         m_troopStats = inStats as UnitsStatsSO;
 
         CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
@@ -154,6 +157,9 @@ public class Troop : EntityBehavior, ICanMove
     {
         UnitList.Add(inUnit);
         inUnit.StopTree(true);
+
+        inUnit.transform.localScale = Vector3.zero;
+
         inUnit.gameObject.transform.parent = this.transform;
         inUnit.gameObject.layer = gameObject.layer;
 
@@ -164,6 +170,8 @@ public class Troop : EntityBehavior, ICanMove
         inUnit.AssignUnitInTroop(this);
         
         inUnit.RefreshHp();
+
+        inUnit.transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
     }
 
     public void DismissUnitInTroop(Unit inUnit)
