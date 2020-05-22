@@ -27,8 +27,7 @@ namespace HF.Refactoring
             for (int i = 0; i < m_amountToSpawn; i++)
             {
                 // Instantitate prefab at the given position with the given data.
-                Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, Vector3.zero);
-                troop.Agent.Warp(controller.SpawnPoints[m_spawnPointID].SpawnPosition);
+                Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition);
                 m_spawnedUnitCount++;
             }
         }

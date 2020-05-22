@@ -5,6 +5,7 @@ using Types;
 using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 
+[RequireComponent(typeof(BehaviorTree))]
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
     protected EntityStatsSO m_entityStats;
@@ -62,8 +63,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public virtual void Awake()
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
-        m_behaviorTree.PauseWhenDisabled = false;
-        m_behaviorTree.enabled = false;
+        StopTree(true);
     }
     public virtual void Start()
     {
