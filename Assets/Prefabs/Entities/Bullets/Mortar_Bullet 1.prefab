@@ -4823,6 +4823,7 @@ GameObject:
   - component: {fileID: 2750675292378656545}
   - component: {fileID: 2450785364705475668}
   - component: {fileID: 2799524059049740409}
+  - component: {fileID: -5326792935755310107}
   m_Layer: 0
   m_Name: Mortar_Bullet 1
   m_TagString: Untagged
@@ -4893,6 +4894,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-5326792935755310107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455427389740590923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36788e272508db54ca616b88033ca719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uniqueID: {fileID: 11400000, guid: e0536d7ec8227be4787f150ba0116cd2, type: 2}
 --- !u!1 &2407395351672503143
 GameObject:
   m_ObjectHideFlags: 0
@@ -9925,16 +9939,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4641069261801621652}
     m_Modifications:
-    - target: {fileID: 4465331464640000232, guid: 6961823af66a2594dacc3826e4759f52,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Mortar_Hit_Lv3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4465331464640000234, guid: 6961823af66a2594dacc3826e4759f52,
-        type: 3}
-      propertyPath: lengthInSec
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 4465331464640000235, guid: 6961823af66a2594dacc3826e4759f52,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10004,6 +10008,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4465331464640000234, guid: 6961823af66a2594dacc3826e4759f52,
+        type: 3}
+      propertyPath: lengthInSec
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4465331464640000232, guid: 6961823af66a2594dacc3826e4759f52,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Mortar_Hit_Lv3
       objectReference: {fileID: 0}
     - target: {fileID: 4465331464721300686, guid: 6961823af66a2594dacc3826e4759f52,
         type: 3}
