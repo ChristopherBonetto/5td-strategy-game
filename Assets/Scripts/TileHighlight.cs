@@ -25,8 +25,8 @@ public class TileHighlight : MonoBehaviour
         coll = GetComponentInParent<BoxCollider>();
         isOnPlayableArea = false;
         spriteColor = GetComponent<SpriteRenderer>();
-        spriteColor.sprite = RandomSpriteList[Random.Range(0, RandomSpriteList.Length-1)];
-        startColor = spriteColor.color;
+        //spriteColor.sprite = RandomSpriteList[Random.Range(0, RandomSpriteList.Length-1)];
+        //startColor = spriteColor.color;
 
 
     }
