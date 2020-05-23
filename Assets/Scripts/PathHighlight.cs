@@ -14,7 +14,7 @@ public class PathHighlight : MonoBehaviour
     public float verticalOffset = 2;
     
     public Vector3[] pointPosition = new Vector3[0];
-    //[SerializeField] private GameObject destinationMarker;
+    [SerializeField] private GameObject destinationMarker;
 
 
 
@@ -25,7 +25,7 @@ public class PathHighlight : MonoBehaviour
         myLineRenderer = GetComponent<LineRenderer>();
 
         myLineRenderer.startWidth = 0.5f;
-        //destinationMarker.SetActive(false);
+        destinationMarker.SetActive(false);
         myLineRenderer.endWidth = 0.5f;
         myLineRenderer.positionCount = 0;
 
@@ -41,7 +41,7 @@ public class PathHighlight : MonoBehaviour
         {
             DrawPath();
         }
-        //else destinationMarker.SetActive(false);
+        else destinationMarker.SetActive(false);
     }
     void DrawPath()
     {
@@ -61,6 +61,7 @@ public class PathHighlight : MonoBehaviour
             if (myNavMeshAgent.path.corners[i].y > myNavMeshAgent.path.corners[i - 1].y)
             {
                 pointPosition[i] = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y+verticalOffset, myNavMeshAgent.path.corners[i].z);
+               
                 
                 //myLineRenderer.SetPosition(i, pointPosition);
             }
@@ -69,12 +70,12 @@ public class PathHighlight : MonoBehaviour
                 pointPosition[i] = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y, myNavMeshAgent.path.corners[i].z);
                 //myLineRenderer.SetPosition(i, pointPosition);
             }
-            //destinationMarker.SetActive(true);
-            //    destinationMarker.transform.position = myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length-1];
-            
-       
-           
-         
+            destinationMarker.SetActive(true);
+            destinationMarker.transform.position = myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length - 1];
+
+
+
+
         }
             
     }
