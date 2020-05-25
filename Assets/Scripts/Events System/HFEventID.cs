@@ -17,7 +17,7 @@
     OnInitializeLevel,	// Call this to pool allies units.
 
 	/// <summary>
-	/// 
+	/// no args
 	/// </summary>
 	OnLevelReady,
 
@@ -55,18 +55,18 @@
 	 */
 
 	/// <summary>
-	/// <see cref="HF.HFUnit"/> unit.
+	/// <see cref="EntityBehavior"/> unit.
 	/// </summary>
 	OnUnitDeath,
 
 	/// <summary>
-	/// <see cref="HF.HFUnit"/> unit.
+	/// <see cref="EntityBehavior"/> unit.
 	/// <see cref="int"/> team.
 	/// </summary>
 	OnUnitSelected,
 
 	/// <summary>
-	/// <see cref="HF.HFUnit"/> unit.
+	/// <see cref="EntityBehavior"/> unit.
 	/// <see cref="int"/> team.
 	/// </summary>
 	OnUnitSpecialized,
@@ -83,8 +83,14 @@
 	/// </summary>
 	OnUnitsPossessed,
 
+	/// <summary>
+	/// no args
+	/// </summary>
 	OnUnitLift,
 
+	/// <summary>
+	/// no args
+	/// </summary>
 	OnUnitDropBuilding,
 
 
