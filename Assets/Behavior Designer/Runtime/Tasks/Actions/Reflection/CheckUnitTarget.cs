@@ -14,9 +14,15 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (unitRef.Value.m_focusUnit == null)
+            if (unitRef.Value.m_focusUnit == null )
             {
                 Debug.Log("try to catch another");
+                return TaskStatus.Failure;
+            }
+
+            if (!unitRef.Value.m_focusUnit.gameObject.activeSelf)
+            {
+                unitRef.Value.m_focusUnit = null;
                 return TaskStatus.Failure;
             }
 
