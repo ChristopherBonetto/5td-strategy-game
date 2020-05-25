@@ -13,7 +13,7 @@ public class TileHighlight : MonoBehaviour
     private bool isOnPlayableArea;
     public SpriteRenderer spriteColor;
     public Color selectedColor;
-    private Color startColor;
+    public Color startColor;
     public Sprite[] RandomSpriteList;
 
     

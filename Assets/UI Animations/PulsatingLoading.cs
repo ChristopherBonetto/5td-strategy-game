@@ -19,6 +19,6 @@ public class PulsatingLoading : MonoBehaviour
 
     void Update()
     {
-        my_text.transform.DOScale(2f, 1f).SetLoops(10, LoopType.Yoyo);
+        my_text.transform.DOScale(2f, 10f);
     }
 }
