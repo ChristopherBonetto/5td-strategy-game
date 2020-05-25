@@ -49,12 +49,12 @@ public class TileHighlight : MonoBehaviour
 
     public void OnClick()
     {
-        transform.DOScale(1.5f, 0.3f).SetLoops(2, LoopType.Yoyo);
-        spriteColor.DOColor(selectedColor, 0.2f).SetLoops(2, LoopType.Yoyo);
+        transform.DOScale(1.5f, 0.3f)/*.SetLoops(2, LoopType.Yoyo)*/;
+        spriteColor.DOColor(selectedColor, 0.2f)/*.SetLoops(2, LoopType.Yoyo)*/;
     }
     //public void OnMouseOver()
     //{
-  
+
     //    if (Input.GetMouseButtonDown(1))
     //    {
     //        transform.DOScale(1.5f, 0.3f);

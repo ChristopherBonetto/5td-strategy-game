@@ -13,21 +13,29 @@ public class SlidingSpecializationBar : MonoBehaviour
 
 
 
+
+
     void Start()
     {
         slidingBar = GetComponent<RectTransform>();
+        slidingBar.DOScaleX(0.3f, 0.5f);
+        slidingBar.DOAnchorPosX(-160, 0.5f);
+
+
 
     }
 
     private void OnEnable()
     {
-        slidingBar.DOAnchorPos(new Vector2(150, 0), 2f);
-        slidingBar.DOShakeAnchorPos(1f, new Vector2(20, 0), 10, 90, false, true);
-
+        slidingBar.DOScaleX(1f, .5f);
+        slidingBar.DOShakeScale(.2f, new Vector3(.1f, 0, 0), 10, 50, true);
+        slidingBar.DOAnchorPosX(50, 0.5f);
+ 
     }
     private void OnDisable()
     {
-        slidingBar.DOAnchorPos(new Vector2(150, 0), 0.6f);
+        slidingBar.DOScaleX(0.3f, .5f);
+        slidingBar.DOAnchorPosX(-160, 0.5f);
     }
 
     

@@ -294,7 +294,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
     //Generic Load
     public void LoadSceneFromIndex(int inSceneIndex)
     {
-        SceneManager.LoadScene(inSceneIndex);
+        SceneManager.LoadSceneAsync(inSceneIndex);
     }
 
     //Load next scene
@@ -304,12 +304,12 @@ public class HFScenesManager : Singleton<HFScenesManager>
         if (IndexCurrentScene < SceneManager.sceneCountInBuildSettings - 1)
         {
             // Load next scene
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
         }
         else
         {
             // Load war room
-            SceneManager.LoadScene(1);
+            SceneManager.LoadSceneAsync(1);
         }
     }
 
