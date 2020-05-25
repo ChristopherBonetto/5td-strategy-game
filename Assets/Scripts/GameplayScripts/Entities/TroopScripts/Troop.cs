@@ -414,6 +414,9 @@ public class Troop : EntityBehavior, ICanMove
         m_troopStats = null;
 
         m_behaviorTree.enabled = false;
+
+        UnitList.Clear();
+
         gameObject.SetActive(false);
         //Return to the pool
     }
