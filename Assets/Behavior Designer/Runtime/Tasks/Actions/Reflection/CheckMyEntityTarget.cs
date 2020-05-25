@@ -16,7 +16,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override TaskStatus OnUpdate()
         {
-            if (targetGameObject == null || !targetGameObject.Value.activeInHierarchy)
+            if (targetGameObject.Value == null || !targetGameObject.Value.activeInHierarchy)
             {
                 Debug.LogWarning("Unable to get field - field value is null");
                 targetGameObject = null;
@@ -42,7 +42,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnReset()
         {
-            targetGameObject = null;
+            //targetGameObject = null;
             entityRef = null;
         }
     }

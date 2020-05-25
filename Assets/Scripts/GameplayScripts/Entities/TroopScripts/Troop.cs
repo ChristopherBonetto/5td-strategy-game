@@ -301,6 +301,14 @@ public class Troop : EntityBehavior, ICanMove
         m_behaviorTree.enabled = true;
     }
 
+    public void AssignGameObjectEntity(GameObject inObj)
+    {
+        EntityBehavior entity = inObj.GetComponent<EntityBehavior>();
+        if(entity != null)
+        {
+            AssignFocusEntity(entity);
+        }
+    }
     public override void AssignFocusEntity(EntityBehavior inEntity)
     {
         m_behaviorTree.enabled = false;
@@ -465,6 +473,11 @@ public class Troop : EntityBehavior, ICanMove
 
         if (CurrentHp == 0)
         {
+            if (m_currentBattle != null)
+            {
+                m_currentBattle.FinishFight();
+            }
+
             if (EntityPlayerType == PlayerType.AI)
             {
                 Death();
@@ -476,11 +489,6 @@ public class Troop : EntityBehavior, ICanMove
                     InputReaderManager.Instance.CurrentEntity = null;
                 }
                 StartCoroutine(Respawn());
-            }
-
-            if(m_currentBattle != null)
-            {
-                m_currentBattle.FinishFight();
             }
         }
     }

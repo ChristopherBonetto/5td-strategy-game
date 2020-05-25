@@ -1,3 +1,4 @@
+using FMOD;
 using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
@@ -8,6 +9,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}CanSeeObjectIcon.png")]
     public class CanSeeObject : Conditional
     {
+        public string FocusTag = "NoBusy";
+
         [Tooltip("Should the 2D version be used?")]
         public bool usePhysics2D;
         [Tooltip("The object that we are searching for")]
@@ -139,8 +142,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (returnedObject.Value != null) {
                 // Return success if an object was found
+                if(returnedObject.Value.tag == FocusTag)
+                {
+                    return TaskStatus.Success;
+                }
 
-                return TaskStatus.Success;
             }
             // An object is not within sight so return failure
             return TaskStatus.Failure;
