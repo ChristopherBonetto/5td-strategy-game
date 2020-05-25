@@ -6,13 +6,13 @@ using UnityEngine;
 
 public struct Fight
 {
-    public Troop PlayerTroop;
-    public Troop EnemyTroop;
+    public Troop Attacker;
+    public Troop Defender;
 
     public Fight(Troop inPlayer, Troop inEnemy)
     {
-        PlayerTroop = inPlayer;
-        EnemyTroop = inEnemy;
+        Attacker = inPlayer;
+        Defender = inEnemy;
 
         //Prende l'oggetto dalla pool e li assegna le due unita
         TakeBattleHandler();
@@ -26,10 +26,10 @@ public struct Fight
 
         if (battleScript != null)
         {
-            battleScript.StartFight(PlayerTroop, EnemyTroop);
+            battleScript.StartFight(Attacker, Defender);
         }
 
-        Vector3 objectLine = (EnemyTroop.transform.position - PlayerTroop.transform.position);
+        Vector3 objectLine = (Defender.transform.position - Attacker.transform.position);
         float distance = objectLine.magnitude;
         objectLine = objectLine.normalized;
         battleHandler.gameObject.SetActive(true);
@@ -40,59 +40,78 @@ public struct Fight
 
 public class BattleHandler : MonoBehaviour
 {
-    private Troop playerTroop;
-    private Troop enemyTroop;
+    private Troop attacker;
+    private EntityBehavior defender;
 
-    public void StartFight(Troop inPlayer, Troop inEnemy)
+    public void StartFight(Troop inAttacker, EntityBehavior inDefender)
     {
-        playerTroop = inPlayer;
-        enemyTroop = inEnemy;
+        attacker = inAttacker;
+        defender = inDefender;
 
-        playerTroop.FocusEntity = enemyTroop;
-        enemyTroop.FocusEntity = playerTroop;
+        attacker.FocusEntity = defender;
+        defender.FocusEntity = attacker;
 
-        playerTroop.StopTree(true);
-        enemyTroop.StopTree(true);
+        attacker.StopTree(true);
+        defender.StopTree(true);
 
-        playerTroop.IsBusy = true;
-        enemyTroop.IsBusy = true;
+        attacker.IsBusy = true;
+        defender.IsBusy = true;
 
-        inPlayer.m_currentBattle = this;
-        inEnemy.m_currentBattle = this;
+        inAttacker.m_currentBattle = this;
 
-        int enemyIndex = 0;
-        int playerIndex = 0;
-
-        
-        
-
-        for (int i = 0; i < playerTroop.UnitList.Count; i++)
+        // Case the defender is a troop.
+        if (inDefender is Troop)
         {
-            playerTroop.UnitList[i].AssignFocusUnit(enemyTroop.UnitList[enemyIndex]);
+            Troop defenderT = inDefender as Troop;
+            defenderT.m_currentBattle = this;
 
-            playerTroop.UnitList[i].StopTree(false);
-            enemyIndex++;
-            enemyIndex = (int)Mathf.Repeat(enemyIndex, (float)enemyTroop.UnitList.Count);
+            int enemyIndex = 0;
+            int playerIndex = 0;
+
+            for (int i = 0; i < attacker.UnitList.Count; i++)
+            {
+                attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
+
+                attacker.UnitList[i].StopTree(false);
+                enemyIndex++;
+                enemyIndex = (int)Mathf.Repeat(enemyIndex, (float)defenderT.UnitList.Count);
+            }
+            for (int i = 0; i < defenderT.UnitList.Count; i++)
+            {
+                defenderT.UnitList[i].AssignFocusUnit(attacker.UnitList[playerIndex]);
+
+                defenderT.UnitList[i].StopTree(false);
+                playerIndex++;
+                playerIndex = (int)Mathf.Repeat(playerIndex, (float)attacker.UnitList.Count);
+            }
         }
-        for (int i = 0; i < enemyTroop.UnitList.Count; i++)
+        // Case the defender is a building
+        else if (inDefender is BuildingBehaviour)
         {
-            enemyTroop.UnitList[i].AssignFocusUnit(playerTroop.UnitList[playerIndex]);
+            BuildingBehaviour defenderB = inDefender as BuildingBehaviour;
 
-            enemyTroop.UnitList[i].StopTree(false);
-            playerIndex++;
-            playerIndex = (int)Mathf.Repeat(playerIndex, (float)playerTroop.UnitList.Count);
+            for (int i = 0; i < attacker.UnitList.Count; i++)
+            {
+                attacker.UnitList[i].AssignFocusBuilding(defenderB);
+
+                attacker.UnitList[i].StopTree(false);
+            }
         }
     }
 
     public void TakeOtherTarget(Unit inUnit)
     {
-        if (playerTroop.UnitList.Contains(inUnit))
+        if (!(defender is Troop)) return;
+
+        Troop defenderT = defender as Troop;
+
+        if (attacker.UnitList.Contains(inUnit))
         {
-            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, enemyTroop));
+            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, defenderT));
         }
-        else if (enemyTroop.UnitList.Contains(inUnit))
+        else if (defenderT.UnitList.Contains(inUnit))
         {
-            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, playerTroop));
+            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, attacker));
         }
         else
         {
@@ -129,10 +148,14 @@ public class BattleHandler : MonoBehaviour
     public void FinishFight()
     {
         Debug.Log("Fight completed");
-        playerTroop.SetIdleState();
-        enemyTroop.SetIdleState();
+        attacker.SetIdleState();
+
+        if (defender is Troop)
+        {
+            Troop defenderT = defender as Troop;
+            defenderT.SetIdleState();
+        }
 
         gameObject.SetActive(false);
     }
 }
-

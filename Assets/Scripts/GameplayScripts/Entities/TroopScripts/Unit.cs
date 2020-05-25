@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     private IAttackTypes m_unitAttackType;
 
     public Unit m_focusUnit;
+    public BuildingBehaviour m_focusBuilding;
 
     private void Awake()
     {
@@ -73,6 +74,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void AssignFocusUnit(Unit inUnit)
     {
         StopTree(true);
+        m_focusBuilding = null;
 
         if(inUnit != null)
         {
@@ -83,6 +85,27 @@ public class Unit : MonoBehaviour, ITakeDamage
         else
         {
             m_focusUnit = null;
+            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
+            focusObj.Value = null;
+        }
+
+        StopTree(false);
+    }
+
+    public void AssignFocusBuilding(BuildingBehaviour building)
+    {
+        StopTree(true);
+        m_focusUnit = null;
+
+        if (building != null)
+        {
+            m_focusBuilding = building;
+            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
+            focusObj.Value = building.gameObject;
+        }
+        else
+        {
+            m_focusBuilding = null;
             var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
             focusObj.Value = null;
         }
@@ -117,9 +140,27 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void UnitAttack()
     {
-        if (TroopRef.GetStats().AttackType == AttackType.MELEE)
+        if (m_focusUnit)
         {
-            m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage);
+            if (TroopRef.GetStats().AttackType == AttackType.MELEE)
+            {
+                m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage);
+            }
+            else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
+            {
+                m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage);
+            }
+        }
+        else if (m_focusBuilding)
+        {
+            if (TroopRef.GetStats().AttackType == AttackType.MELEE)
+            {
+                m_unitAttackType.SingleAttack(m_focusBuilding.gameObject, m_unitStats.Damage);
+            }
+            else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
+            {
+                m_unitAttackType.SingleAttack(m_focusBuilding.gameObject, m_unitStats.Damage);
+            }
         }
     }
 
@@ -163,6 +204,7 @@ public class Unit : MonoBehaviour, ITakeDamage
             m_focusUnit.AssignFocusUnit(null);
         }
         m_focusUnit = null;
+        m_focusBuilding = null;
         TroopRef.TroopTakeDamage(this);
     }
 
