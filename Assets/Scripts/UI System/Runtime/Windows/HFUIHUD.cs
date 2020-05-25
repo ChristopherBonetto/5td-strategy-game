@@ -31,6 +31,7 @@ namespace HF.Refactoring
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSelected, OnUnitSelected);
             HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
+            HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
 
             ButtonCallNextWave.gameObject.SetActive(true);
         }
@@ -41,6 +42,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSelected, OnUnitSelected);
             HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
+            HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
         }
 
         #region Events
@@ -70,6 +72,12 @@ namespace HF.Refactoring
 
             if (entity.gameObject.layer == GameController.Instance.m_playerLayer)
             {
+                if (entity.IsBusy)
+                {
+                    UnitSelectedContainer.SetActive(false);
+                    return;
+                }
+
                 SetUpSpecializationButton(entity);
                 UnitSelectedContainer.SetActive(true);
 
@@ -81,6 +89,14 @@ namespace HF.Refactoring
         private void OnUnitSpecialized(EntityBehavior entity, int team)
         {
             UnitSelectedContainer.SetActive(false);
+        }
+
+        private void OnUnitFight(EntityBehavior entity)
+        {
+            if (entity == InputReaderManager.Instance.CurrentEntity)
+            {
+                UnitSelectedContainer.SetActive(false);
+            }
         }
 
         #endregion

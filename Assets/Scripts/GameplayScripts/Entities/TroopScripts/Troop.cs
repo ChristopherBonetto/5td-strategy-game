@@ -377,6 +377,7 @@ public class Troop : EntityBehavior, ICanMove
     public override void Attack()
     {
         new Fight(this, FocusEntity as Troop);
+        HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
     }
 
     public void SetIdleState()
@@ -498,6 +499,7 @@ public class Troop : EntityBehavior, ICanMove
         SetIdleState();
         StopTree(true);
         gameObject.SetActive(false);
+        HFEventManager.TriggerEvent(HFEventID.OnUnitDeath);
     }
 
     //Respawna le unita dopo un timer

@@ -84,6 +84,11 @@
 	OnUnitsPossessed,
 
 	/// <summary>
+	/// <see cref="EntityBehavior"/> ally troop.
+	/// </summary>
+	OnUnitFight,
+
+	/// <summary>
 	/// no args
 	/// </summary>
 	OnUnitLift,
