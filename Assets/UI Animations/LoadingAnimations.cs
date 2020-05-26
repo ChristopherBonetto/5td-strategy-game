@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
-public class PulsatingText : MonoBehaviour
+public class LoadingAnimations : MonoBehaviour
 {
     public Text[] dots;
     public float delay= 0.5f;
