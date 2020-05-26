@@ -17,6 +17,7 @@ public enum GameStates
 
 public class HFGameManager : Singleton<HFGameManager>
 {
+
     new public static HFGameManager Instance
     {
         get
@@ -46,6 +47,8 @@ public class HFGameManager : Singleton<HFGameManager>
     }
 
     public GameStates m_currentGameState = GameStates.None;
+    public float TileActivationRadius;
+
     public GameStates CurrentGameState
     {
         get

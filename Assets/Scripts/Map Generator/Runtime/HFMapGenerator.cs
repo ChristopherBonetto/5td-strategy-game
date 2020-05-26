@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 #region
 using UnityEditor;
 #endregion
-
+#if UNITY_EDITOR
 namespace HF.Refactoring
 {
     /// <summary>
@@ -271,3 +271,4 @@ namespace HF.Refactoring
         }
     }
 }
+#endif
