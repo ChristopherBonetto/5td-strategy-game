@@ -22,7 +22,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             for (int i = 0; i < troopRef.Value.UnitList.Count; ++i)
             {
-
                 transforms[i] = troopRef.Value.UnitList[i].transform;
                 navMeshAgents[i] = troopRef.Value.UnitList[i].GetComponent<NavMeshAgent>();
                 navMeshAgents[i].enabled = true;

@@ -47,7 +47,7 @@ public class Troop : EntityBehavior, ICanMove
         set { m_unitList = value; }
     }
     [SerializeField] private float m_formationRadius;
-    private Vector3[] m_formationPosition = new Vector3[4];
+    public Vector3[] m_formationPosition { get; private set; } = new Vector3[4];
 
     private Vector3 m_destination;
     private Vector3 m_startingPos;

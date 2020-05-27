@@ -31,7 +31,6 @@ public class BuildingBehaviour : EntityBehavior
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
         attackRange.Value = m_buildingStats.AttackRange;
 
-        Debug.Log(gameObject.name, gameObject);
         TakeVisualPrefab(m_buildingStats.BuildingType);
 
         CurrentHp = m_buildingStats.MaxHp;
