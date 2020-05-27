@@ -79,7 +79,7 @@ namespace HF.Refactoring
                 m_currentBehaviour.Exit(this);
             }
             
-            LocatorRay();
+            //LocatorRay();
 
             if (lastLocator != null)
             {
@@ -248,6 +248,7 @@ namespace HF.Refactoring
 
         private void LocatorRay()
         {
+            //Deprecated
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, LocatorLayer))
             {
@@ -257,12 +258,12 @@ namespace HF.Refactoring
 
                     if (lastLocator != null && lastLocator == tmpLoc) return;
 
-                    lastLocator?.MouseExit();
+                    //lastLocator?.MouseExit();
 
 
                     lastLocator = tmpLoc;
 
-                    lastLocator?.MouseEnter();
+                    //lastLocator?.MouseEnter();
 
                 }
             }
@@ -270,7 +271,7 @@ namespace HF.Refactoring
             {
                 if (lastLocator != null)
                 {
-                    lastLocator?.MouseExit();
+                    //lastLocator?.MouseExit();
 
 
                     lastLocator = null;

@@ -48,6 +48,8 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public GameStates m_currentGameState = GameStates.None;
     public float TileActivationRadius;
+    public float TileQuantizationFactor;
+    public float TileDistanceFactor;
 
     public GameStates CurrentGameState
     {
