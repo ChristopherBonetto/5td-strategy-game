@@ -40,7 +40,10 @@ public class BuildingBehaviour : EntityBehavior
 
     public override bool TakeDamage(int Damage)
     {
-        return base.TakeDamage(Damage);
+        m_currentHp -= Damage;
+
+        if (m_currentHp <= 0) return true;
+        return false;
     }
 
     public void TakeVisualPrefab(BuildingType inType)

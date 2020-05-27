@@ -7,9 +7,9 @@ using UnityEngine;
 public struct Fight
 {
     public Troop Attacker;
-    public Troop Defender;
+    public EntityBehavior Defender;
 
-    public Fight(Troop inPlayer, Troop inEnemy)
+    public Fight(Troop inPlayer, EntityBehavior inEnemy)
     {
         Attacker = inPlayer;
         Defender = inEnemy;
