@@ -62,6 +62,14 @@ public class Troop : EntityBehavior, ICanMove
         m_startingPos = transform.position;
     }
 
+    /// <summary>
+    /// This will be called after the troop is instantiated by the wave controller.
+    /// </summary>
+    public void SetTargetCastle(BuildingBehaviour castle)
+    {
+        m_behaviorTree.SetVariableValue("TargetCastle", castle);
+    }
+
     #region States
 
     public void SetNewTroopState(TroopStates inNewState)
@@ -91,6 +99,8 @@ public class Troop : EntityBehavior, ICanMove
         canAttack.Value = m_troopStats.CanAttack;
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
+
+        m_behaviorTree.SetVariableValue("AttackSpeed", m_troopStats.AttackSpeed);
 
         Agent.enabled = true;
 
@@ -291,11 +301,15 @@ public class Troop : EntityBehavior, ICanMove
         Agent.Warp(transform.position);
 
         m_focusEntity = null;
-        var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
-        focusEntity.Value = null;
+        //var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+        //focusEntity.Value = null;
+        m_behaviorTree.SetVariableValue("FocusObject", m_focusEntity);
+
         m_destination = endPosition;
-        var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
-        destination.Value = m_destination;
+        //var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
+        //destination.Value = m_destination;
+        m_behaviorTree.SetVariableValue("Destination", m_destination);
+
         SetNewTroopState(TroopStates.GoToDestination);
 
         m_behaviorTree.enabled = true;
@@ -376,8 +390,22 @@ public class Troop : EntityBehavior, ICanMove
     //Custom commands for troop/entity
     public override void Attack()
     {
-        new Fight(this, FocusEntity as Troop);
-        HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
+        new Fight(this, FocusEntity); // The problem is here!
+
+        if (gameObject.layer == LayerMask.GetMask("Player"))
+            HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
+    }
+
+    public void AttackCastle()
+    {
+        SharedBuilding castle = (SharedBuilding)m_behaviorTree.GetVariable("TargetCastle");
+        Debug.Log($"Attacking castle: {castle.Value.CurrentHp}");
+
+        if (castle.Value.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+        {
+            castle.Value.TakeDamage(m_troopStats.Damage);
+            Debug.Log($"Attacking castle: {castle.Value.CurrentHp}");
+        }
     }
 
     public void SetIdleState()
@@ -386,7 +414,7 @@ public class Troop : EntityBehavior, ICanMove
 
         SetNewTroopState(TroopStates.Idle);
         m_focusEntity = null;
-        var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
+        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusObject");
         focusEntity.Value = null;
         IsBusy = false;
 

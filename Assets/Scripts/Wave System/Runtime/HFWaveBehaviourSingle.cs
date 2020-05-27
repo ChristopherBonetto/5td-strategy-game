@@ -28,6 +28,7 @@ namespace HF.Refactoring
             {
                 // Instantitate prefab at the given position with the given data.
                 Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition);
+                troop.SetTargetCastle(controller.SpawnPoints[m_spawnPointID].TargetCastle);
                 m_spawnedUnitCount++;
             }
         }
