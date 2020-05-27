@@ -147,7 +147,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Click()
     {
-        Debug.Log("selected " + EntityPlayerType + " " + gameObject.name);
+        //Debug.Log("selected " + EntityPlayerType + " " + gameObject.name);
 
         if(EntityPlayerType == PlayerType.Player)
         {
