@@ -11,9 +11,9 @@ namespace HF
 		{
 			HFUnit newUnit = base.SpawnUnit(stats, spawnPoint);
 
-			newUnit.SetStartCommand(new HFMoveCommand(spawnPoint.TargetPosition));
+			//newUnit.SetStartCommand(new HFMoveCommand(spawnPoint.TargetPosition));
 
 			return newUnit;
 		}
-    }
+	}
 }

@@ -60,6 +60,31 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+
+    protected virtual void OnEnable()
+    {
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+    }
+
+    protected virtual void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+    }
+
+    protected virtual void GameStateChanged(GameStates inState)
+    {
+        if((inState == GameStates.EndLevel))
+        {
+            Debug.Log(gameObject.name);
+            ResetEntity();
+        }
+    }
+
+    protected virtual void ResetEntity()
+    {
+        this.gameObject.SetActive(false);
+    }
+
     public virtual void Awake()
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();

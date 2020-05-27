@@ -326,6 +326,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
             {
                 GameObject obj = objectsList[i];
 
+                if (obj == null) break;
                 // If an available object is found, return it
                 if (!obj.activeInHierarchy) return obj;
             }

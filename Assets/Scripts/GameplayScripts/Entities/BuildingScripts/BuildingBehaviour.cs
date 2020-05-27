@@ -9,6 +9,7 @@ using DG.Tweening;
 
 public class BuildingBehaviour : EntityBehavior
 {
+    private GameObject m__viewObj;
     private BuildingView m_view;
 
     public BuildingsStatsSO m_buildingStats;
@@ -48,22 +49,16 @@ public class BuildingBehaviour : EntityBehavior
 
     public void TakeVisualPrefab(BuildingType inType)
     {
-        if (inType == BuildingType.CASTLE)
+        m__viewObj = ObjectPooler.Instance.GetBuildingObject(inType);
+        m__viewObj.gameObject.transform.parent = this.transform;
+        m__viewObj.gameObject.layer = gameObject.layer;
+        m__viewObj.transform.localPosition = Vector3.zero;
+
+        if (inType != BuildingType.CASTLE)
         {
-            GameObject go = ObjectPooler.Instance.GetBuildingObject(inType);
-            go.gameObject.transform.parent = this.transform;
-            go.gameObject.layer = gameObject.layer;
-            go.transform.localPosition = Vector3.zero;
-            go.gameObject.SetActive(true);
+            m_view = m__viewObj.GetComponent<BuildingView>();
         }
-        else
-        {
-            m_view = ObjectPooler.Instance.GetBuildingObject(inType).GetComponent<BuildingView>();
-            m_view.gameObject.transform.parent = this.transform;
-            m_view.gameObject.layer = gameObject.layer;
-            m_view.transform.localPosition = Vector3.zero;
-            m_view.gameObject.SetActive(true);
-        }
+        m__viewObj.gameObject.SetActive(true);
     }
 
     new public BuildingsStatsSO GetStats()
@@ -139,5 +134,15 @@ public class BuildingBehaviour : EntityBehavior
             if (target.UnitList[i].TakeDamage(m_buildingStats.Damage)) FocusEntity = null;
             break;
         }
+    }
+
+    protected override void ResetEntity()
+    {
+        StopTree(true);
+        m_buildingStats = null;
+        m__viewObj.gameObject.SetActive(false);
+        m__viewObj.gameObject.transform.parent = null;
+        m__viewObj = null;
+        this.gameObject.SetActive(false);
     }
 }

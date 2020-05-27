@@ -36,5 +36,10 @@ public class CastleStarter : BuildingBehaviour
 
             GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
         }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            HFScenesManager.Instance.EndCurrentLevel(false);
+        }
     }
 }

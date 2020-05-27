@@ -5,6 +5,7 @@ using Types;
 using BehaviorDesigner.Runtime;
 using UnityEngine.AI;
 using DG.Tweening;
+using System.Linq;
 
 public enum TroopStates
 {
@@ -57,9 +58,11 @@ public class Troop : EntityBehavior, ICanMove
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         m_startingPos = transform.position;
+
+        base.OnEnable();
     }
 
     /// <summary>
@@ -99,8 +102,6 @@ public class Troop : EntityBehavior, ICanMove
         canAttack.Value = m_troopStats.CanAttack;
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
-
-        m_behaviorTree.SetVariableValue("AttackSpeed", m_troopStats.AttackSpeed);
 
         Agent.enabled = true;
 
@@ -433,17 +434,17 @@ public class Troop : EntityBehavior, ICanMove
 
     public void DismissTroop()
     {
-        foreach (Unit unit in UnitList)
+        foreach (Unit unit in UnitList.ToList())
         {
             DismissUnitInTroop(unit);
         }
+        UnitList.Clear();
         UnitList = null;
 
         m_troopStats = null;
 
         m_behaviorTree.enabled = false;
 
-        UnitList.Clear();
 
         gameObject.SetActive(false);
         //Return to the pool
@@ -493,6 +494,12 @@ public class Troop : EntityBehavior, ICanMove
 
             }
         }
+    }
+
+    protected override void ResetEntity()
+    {
+        SetIdleState();
+        DismissTroop();
     }
 
     #endregion

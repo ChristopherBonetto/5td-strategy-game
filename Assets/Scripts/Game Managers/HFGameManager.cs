@@ -60,7 +60,7 @@ public class HFGameManager : Singleton<HFGameManager>
             if (CheckNextState(value))
             {
                 //Used to reset somethings before change state
-                ActionBeforeChangeGMState(m_currentGameState, value);
+                //ActionBeforeChangeGMState(m_currentGameState, value);
 
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
@@ -94,41 +94,42 @@ public class HFGameManager : Singleton<HFGameManager>
 
     #region GAME STATE SYSTEM, and trigger event.
 
-    public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
-    {
-        switch (preState)
-        {
-            case GameStates.LoadStartingInfo:
-                break;
+    //Deprecated
+ //   public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
+ //   {
+ //       switch (preState)
+ //       {
+ //           case GameStates.LoadStartingInfo:
+ //               break;
 
-            case GameStates.StartGame:
-                //used to take all the player info and if the player want load another file info
-                break;
+ //           case GameStates.StartGame:
+ //               //used to take all the player info and if the player want load another file info
+ //               break;
 
-            case GameStates.WarRoom:
-                //level selection
-                break;
+ //           case GameStates.WarRoom:
+ //               //level selection
+ //               break;
 
-            case GameStates.InitializeLevel:
-                //give info to all
-                break;
+ //           case GameStates.InitializeLevel:
+ //               //give info to all
+ //               break;
 
-            case GameStates.PlayingLevel:
-                //level in play
-                break;
+ //           case GameStates.PlayingLevel:
+ //               //level in play
+ //               break;
 
-            case GameStates.EndLevel:
-                break;
+ //           case GameStates.EndLevel:
+ //               break;
 
-            case GameStates.Pause:
-                break;
+ //           case GameStates.Pause:
+ //               break;
 
-            default:
-                break;
-        }
-        //Debug.Log("Do something before change " + preState + " in " + postState);
-		HFEventManager.TriggerEvent<GameStates, GameStates>(HFEventID.OnBeforeChangeState, preState, postState);
-	}
+ //           default:
+ //               break;
+ //       }
+ //       //Debug.Log("Do something before change " + preState + " in " + postState);
+	//	HFEventManager.TriggerEvent<GameStates, GameStates>(HFEventID.OnBeforeChangeState, preState, postState);
+	//}
 
 	public void ActionAfterChangeGMState(GameStates inState)
     {
@@ -188,9 +189,6 @@ public class HFGameManager : Singleton<HFGameManager>
     }
 
     #endregion
-
-
-
 
 
     private IEnumerator WaitAllLoadCompleted()
