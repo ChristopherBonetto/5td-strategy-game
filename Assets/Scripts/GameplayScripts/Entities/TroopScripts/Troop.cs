@@ -391,22 +391,14 @@ public class Troop : EntityBehavior, ICanMove
     //Custom commands for troop/entity
     public override void Attack()
     {
-        new Fight(this, FocusEntity); // The problem is here!
+        // Remember to get the focus entity or it will run a null reference.
+        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusObject");
+        FocusEntity = focusEntity.Value;
+        Debug.Log($"''{gameObject.name}'' is attacking: {focusEntity.Value.gameObject.name}");
+        new Fight(this, FocusEntity);
 
         if (gameObject.layer == LayerMask.GetMask("Player"))
             HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
-    }
-
-    public void AttackCastle()
-    {
-        SharedBuilding castle = (SharedBuilding)m_behaviorTree.GetVariable("TargetCastle");
-        Debug.Log($"Attacking castle: {castle.Value.CurrentHp}");
-
-        if (castle.Value.GetStats().CanTakeDamage && m_troopStats.CanAttack)
-        {
-            castle.Value.TakeDamage(m_troopStats.Damage);
-            Debug.Log($"Attacking castle: {castle.Value.CurrentHp}");
-        }
     }
 
     public void SetIdleState()

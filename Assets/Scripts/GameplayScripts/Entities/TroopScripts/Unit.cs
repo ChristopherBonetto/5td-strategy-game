@@ -95,13 +95,13 @@ public class Unit : MonoBehaviour, ITakeDamage
         if (building != null)
         {
             m_focusBuilding = building;
-            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
-            focusObj.Value = building.gameObject;
+            var focusObj = (SharedBuilding)UnitTree.GetVariable("FocusBuilding");
+            focusObj.Value = building;
         }
         else
         {
             m_focusBuilding = null;
-            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
+            var focusObj = (SharedBuilding)UnitTree.GetVariable("FocusBuilding");
             focusObj.Value = null;
         }
 
@@ -151,6 +151,8 @@ public class Unit : MonoBehaviour, ITakeDamage
             if (TroopRef.GetStats().AttackType == AttackType.MELEE)
             {
                 m_unitAttackType.SingleAttack(m_focusBuilding.gameObject, m_unitStats.Damage);
+
+                Debug.Log($"Damagin castle: {m_focusBuilding.CurrentHp}");
             }
             else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
             {
