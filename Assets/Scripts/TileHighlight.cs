@@ -125,16 +125,22 @@ public class TileHighlight : MonoBehaviour
     }
     public void UpdateTiles()
     {
-        if (enabledebug)
-        {
-            Debug.Log("TileUpdated");
-        }
+
         TileActivationRadius = HFGameManager.Instance.TileActivationRadius;
         RelativePos = Cam.WorldToScreenPoint(transform.position);
         Vector2 FlatRelativePos = new Vector2(RelativePos.x, RelativePos.y);
         MousePos = Input.mousePosition;
         Vector2 FlatMousePos = new Vector2(MousePos.x, MousePos.y);
-        float dist = Vector3.Distance(FlatRelativePos, FlatMousePos);
+        Vector2 Vectordist = FlatRelativePos - FlatMousePos;
+        float Rotationfactor = 1/Mathf.Sin(Mathf.Deg2Rad *Cam.transform.eulerAngles.x);
+        Vectordist.y = Vectordist.y* Rotationfactor;
+        float dist = Vectordist.magnitude;
+        if (enabledebug)
+        {
+
+            Debug.Log("Cam Angle: "+Cam.transform.eulerAngles.x+" RotFac: "+ Rotationfactor);
+        }
+ 
 
 
 
