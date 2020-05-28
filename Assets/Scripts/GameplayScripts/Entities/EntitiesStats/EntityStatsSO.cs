@@ -36,5 +36,5 @@ public class EntityStatsSO : ScriptableObject
     public Mesh Mesh;
 
     [Header("Utility")]
-    public QuantityOfResources Cost;
+    public int Cost;
 }

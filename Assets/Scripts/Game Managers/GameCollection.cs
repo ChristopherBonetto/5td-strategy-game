@@ -5,13 +5,6 @@ using Types;
 
 
 [System.Serializable]
-public struct QuantityOfResources
-{
-    public ResourceType ResourceType;
-    public int ResourceQuantity;
-}
-
-[System.Serializable]
 public struct UnitInfo
 {
     [SerializeField] private UnitsStatsSO m_OriginalUnitStats;
@@ -78,10 +71,6 @@ public class GameCollection : ScriptableObject
         }
     }
 
-    [SerializeField] private QuantityOfResources[] m_PlayerStartingResources;
-    public QuantityOfResources[] PayerStartingResources { get { return m_PlayerStartingResources; } private set { } }
-
-
     [Space, Header("Civilitazion's Units")]
     [SerializeField] private UnitInfo[] m_GameUnits;
 
@@ -90,15 +79,12 @@ public class GameCollection : ScriptableObject
 
     public Dictionary<UnitType, UnitInfo> UnitsDictionary { get; private set; }
     public Dictionary<BuildingType, BuildingInfo> BuildingsDictionary { get; private set; }
-    public Dictionary<ResourceType, QuantityOfResources> ResourcesValuesDictionary { get; private set; }
-
 
     private void Awake()
     {
 
         UnitsDictionary = new Dictionary<UnitType, UnitInfo>();
         BuildingsDictionary = new Dictionary<BuildingType, BuildingInfo>();
-        ResourcesValuesDictionary = new Dictionary<ResourceType, QuantityOfResources>();
 
         for (int i = 0; i < m_GameUnits.Length; i++)
         {
@@ -123,18 +109,6 @@ public class GameCollection : ScriptableObject
             else
             {
                 Debug.Log(m_GameBuildings[i].OriginalBuildingStats.BuildingType + " can't be added because there is another key with same value");
-            }
-        }
-
-        for (int i = 0; i < m_PlayerStartingResources.Length; i++)
-        {
-            if (!ResourcesValuesDictionary.ContainsKey(m_PlayerStartingResources[i].ResourceType))
-            {
-                ResourcesValuesDictionary.Add(m_PlayerStartingResources[i].ResourceType, m_PlayerStartingResources[i]);
-            }
-            else
-            {
-                Debug.Log(m_PlayerStartingResources[i].ResourceType + " can't be added because there is another key with same value");
             }
         }
 

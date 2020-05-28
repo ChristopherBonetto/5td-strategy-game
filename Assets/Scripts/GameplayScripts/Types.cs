@@ -90,12 +90,6 @@ namespace Types
         Cavalry = 1 << 3,
     }
 
-    public enum ResourceType
-    {
-        Gold,
-        Gems
-    }
-
     public enum PlayerType
     {
         Player,
