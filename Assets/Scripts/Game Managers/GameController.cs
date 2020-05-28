@@ -174,7 +174,7 @@ public class GameController : Singleton<GameController>
         {
             if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
             {
-                Debug.Log("u need more resources");
+                Debug.Log("u need more resources" + "\n" + "Trigger event");
                 return null;
             }
             DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);

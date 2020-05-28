@@ -236,18 +236,20 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     #region Specialization
     public void Specialization(UnitType type)
     {
-        gameObject.SetActive(false);
-        GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position);
-
-        HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+        if (GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position) != null)
+        {
+            gameObject.SetActive(false);
+            HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+        }
     }
 
     public void Specialization(BuildingType type)
     {
-        gameObject.SetActive(false);
-        GameController.Instance.CreateNewBuilding(type, PlayerType.Player, this.transform.position);
-
-        HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+        if (GameController.Instance.CreateNewBuilding(type, PlayerType.Player, this.transform.position) != null)
+        {
+            gameObject.SetActive(false);
+            HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+        }
     }
     #endregion
 }
