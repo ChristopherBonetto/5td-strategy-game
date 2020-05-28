@@ -90,18 +90,18 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void AssignFocusBuilding(BuildingBehaviour building)
     {
         StopTree(true);
-        m_focusUnit = null;
+        m_focusBuilding = null;
 
         if (building != null)
         {
             m_focusBuilding = building;
-            var focusObj = (SharedBuilding)UnitTree.GetVariable("FocusBuilding");
-            focusObj.Value = building;
+            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
+            focusObj.Value = building.gameObject;
         }
         else
         {
-            m_focusBuilding = null;
-            var focusObj = (SharedBuilding)UnitTree.GetVariable("FocusBuilding");
+            m_focusUnit = null;
+            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
             focusObj.Value = null;
         }
 
@@ -139,24 +139,23 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             if (TroopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusUnit, m_unitStats.Damage);
             }
             else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_unitAttackType.SingleAttack(m_focusUnit.gameObject, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusUnit, m_unitStats.Damage);
             }
         }
         else if (m_focusBuilding)
         {
             if (TroopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleAttack(m_focusBuilding.gameObject, m_unitStats.Damage);
-
+                m_unitAttackType.SingleAttack(m_focusBuilding, m_unitStats.Damage);
                 Debug.Log($"Damagin castle: {m_focusBuilding.CurrentHp}");
             }
             else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_unitAttackType.SingleAttack(m_focusBuilding.gameObject, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusBuilding, m_unitStats.Damage);
             }
         }
     }

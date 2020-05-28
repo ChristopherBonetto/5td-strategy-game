@@ -38,7 +38,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                    go = overlapColliders[i].gameObject;
                 }
             }
-            UnityEngine.Debug.Log(numberOfCollisions);
 
             if (go != null)
             {
