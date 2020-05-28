@@ -304,7 +304,7 @@ public class Troop : EntityBehavior, ICanMove
         m_focusEntity = null;
         //var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
         //focusEntity.Value = null;
-        m_behaviorTree.SetVariableValue("FocusObject", m_focusEntity);
+        m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
 
         m_destination = endPosition;
         //var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
@@ -378,8 +378,8 @@ public class Troop : EntityBehavior, ICanMove
 
         if (FocusEntity != null)
         {
-            var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
-            focusEntity.Value = FocusEntity.gameObject;
+            var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
+            focusEntity.Value = FocusEntity;
         }
         else
         {
@@ -392,7 +392,7 @@ public class Troop : EntityBehavior, ICanMove
     public override void Attack()
     {
         // Remember to get the focus entity or it will run a null reference.
-        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusObject");
+        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
         FocusEntity = focusEntity.Value;
         Debug.Log($"''{gameObject.name}'' is attacking: {focusEntity.Value.gameObject.name}");
         new Fight(this, FocusEntity);
@@ -407,7 +407,7 @@ public class Troop : EntityBehavior, ICanMove
 
         SetNewTroopState(TroopStates.Idle);
         m_focusEntity = null;
-        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusObject");
+        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
         focusEntity.Value = null;
         IsBusy = false;
 
