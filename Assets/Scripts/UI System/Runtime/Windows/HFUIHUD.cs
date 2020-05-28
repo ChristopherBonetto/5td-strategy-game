@@ -131,16 +131,16 @@ namespace HF.Refactoring
                     }
 
                     SpecializationButtons[0].AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
-                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Icon,
-                                                        GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Cost.ResourceQuantity);
+                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].UnitStatsCopy.Icon,
+                                                        GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].UnitStatsCopy.Cost);
 
                     SpecializationButtons[1].AddListener(() => entity.Specialization(Types.UnitType.LIFTER_LVL1));
-                    SpecializationButtons[1].SetUpButton(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].OriginalUnitStats.Icon,
-                                                        GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].OriginalUnitStats.Cost.ResourceQuantity);
+                    SpecializationButtons[1].SetUpButton(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].UnitStatsCopy.Icon,
+                                                        GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].UnitStatsCopy.Cost);
 
                     SpecializationButtons[2].AddListener(() => entity.Specialization(Types.UnitType.RUNNER_LVL1));
-                    SpecializationButtons[2].SetUpButton(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].OriginalUnitStats.Icon,
-                                                        GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].OriginalUnitStats.Cost.ResourceQuantity);
+                    SpecializationButtons[2].SetUpButton(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].UnitStatsCopy.Icon,
+                                                        GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].UnitStatsCopy.Cost);
                 }
                 else
                 {
@@ -162,24 +162,24 @@ namespace HF.Refactoring
                     else if ((int)stats.UnitType >= (int)Types.UnitType.DEFENDER_LVL1 && (int)stats.UnitType < (int)Types.UnitType.DEFENDER_LVL3)
                     {
                         UpgradeButton.AddListener(() => entity.Specialization(stats.UnitType + 1));
-                        UpgradeButton.SetUpButton(GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].OriginalUnitStats.Icon,
-                                    GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].OriginalUnitStats.Cost.ResourceQuantity);
+                        UpgradeButton.SetUpButton(GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].UnitStatsCopy.Icon,
+                                    GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].UnitStatsCopy.Cost);
                     }
 
                     // Lifter
                     else if ((int)stats.UnitType >= (int)Types.UnitType.LIFTER_LVL1 && (int)stats.UnitType < (int)Types.UnitType.LIFTER_LVL3)
                     {
                         UpgradeButton.AddListener(() => entity.Specialization(stats.UnitType + 1));
-                        UpgradeButton.SetUpButton(GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].OriginalUnitStats.Icon,
-                                    GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].OriginalUnitStats.Cost.ResourceQuantity);
+                        UpgradeButton.SetUpButton(GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].UnitStatsCopy.Icon,
+                                    GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].UnitStatsCopy.Cost);
                     }
 
                     // Runner
                     else if ((int)stats.UnitType >= (int)Types.UnitType.RUNNER_LVL1 && (int)stats.UnitType < (int)Types.UnitType.RUNNER_LVL3)
                     {
                         UpgradeButton.AddListener(() => entity.Specialization(stats.UnitType + 1));
-                        UpgradeButton.SetUpButton(GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].OriginalUnitStats.Icon,
-                                    GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].OriginalUnitStats.Cost.ResourceQuantity);
+                        UpgradeButton.SetUpButton(GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].UnitStatsCopy.Icon,
+                                    GameController.Instance.Collection.UnitsDictionary[stats.UnitType + 1].UnitStatsCopy.Cost);
                     }
                 }
             }
@@ -197,16 +197,16 @@ namespace HF.Refactoring
                     }
 
                     SpecializationButtons[0].AddListener(() => entity.Specialization(Types.BuildingType.BALLISTA_LVL1));
-                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].OriginalBuildingStats.Icon,
-                                                        GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].OriginalBuildingStats.Cost.ResourceQuantity);
+                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].BuildingStatsCopy.Icon,
+                                                        GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].BuildingStatsCopy.Cost);
 
                     SpecializationButtons[0].AddListener(() => entity.Specialization(Types.BuildingType.CRYSTAL_LVL1));
-                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].OriginalBuildingStats.Icon,
-                                                        GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].OriginalBuildingStats.Cost.ResourceQuantity);
+                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].BuildingStatsCopy.Icon,
+                                                        GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].BuildingStatsCopy.Cost);
 
                     SpecializationButtons[0].AddListener(() => entity.Specialization(Types.BuildingType.MORTAR_LVL1));
-                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].OriginalBuildingStats.Icon,
-                                                        GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].OriginalBuildingStats.Cost.ResourceQuantity);
+                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].BuildingStatsCopy.Icon,
+                                                        GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].BuildingStatsCopy.Cost);
                 }
                 else
                 {
@@ -228,24 +228,24 @@ namespace HF.Refactoring
                     else if ((int)stats.BuildingType >= (int)Types.BuildingType.BALLISTA_LVL1 && (int)stats.BuildingType < (int)Types.BuildingType.BALLISTA_LVL3)
                     {
                         UpgradeButton.AddListener(() => entity.Specialization(stats.BuildingType + 1));
-                        UpgradeButton.SetUpButton(GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].OriginalBuildingStats.Icon,
-                                    GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].OriginalBuildingStats.Cost.ResourceQuantity);
+                        UpgradeButton.SetUpButton(GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].BuildingStatsCopy.Icon,
+                                    GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].BuildingStatsCopy.Cost);
                     }
 
                     // Crystal
                     else if ((int)stats.BuildingType >= (int)Types.BuildingType.CRYSTAL_LVL1 && (int)stats.BuildingType < (int)Types.BuildingType.CRYSTAL_LVL3)
                     {
                         UpgradeButton.AddListener(() => entity.Specialization(stats.BuildingType + 1));
-                        UpgradeButton.SetUpButton(GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].OriginalBuildingStats.Icon,
-                                    GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].OriginalBuildingStats.Cost.ResourceQuantity);
+                        UpgradeButton.SetUpButton(GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].BuildingStatsCopy.Icon,
+                                    GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].BuildingStatsCopy.Cost);
                     }
 
                     // Mortar
                     else if ((int)stats.BuildingType >= (int)Types.BuildingType.MORTAR_LVL1 && (int)stats.BuildingType < (int)Types.BuildingType.MORTAR_LVL3)
                     {
                         UpgradeButton.AddListener(() => entity.Specialization(stats.BuildingType + 1));
-                        UpgradeButton.SetUpButton(GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].OriginalBuildingStats.Icon,
-                                    GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].OriginalBuildingStats.Cost.ResourceQuantity);
+                        UpgradeButton.SetUpButton(GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].BuildingStatsCopy.Icon,
+                                    GameController.Instance.Collection.BuildingsDictionary[stats.BuildingType + 1].BuildingStatsCopy.Cost);
                     }
                 }
             }

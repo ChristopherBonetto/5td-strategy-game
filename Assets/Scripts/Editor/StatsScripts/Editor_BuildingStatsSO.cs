@@ -152,8 +152,7 @@ public class Editor_BuildingStatsSO : Editor
 
         GUILayout.Label("Cost");
         EditorGUILayout.BeginHorizontal();
-        building.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(building.Cost.ResourceType);
-        building.Cost.ResourceQuantity = EditorGUILayout.IntField(building.Cost.ResourceQuantity);
+        building.Cost = EditorGUILayout.IntField(building.Cost);
         EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();

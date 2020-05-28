@@ -192,8 +192,7 @@ public class Editor_UnitStatsSO : Editor
 
         GUILayout.Label("Cost");
         EditorGUILayout.BeginHorizontal();
-        unit.Cost.ResourceType = (ResourceType)EditorGUILayout.EnumPopup(unit.Cost.ResourceType);
-        unit.Cost.ResourceQuantity = EditorGUILayout.IntField(unit.Cost.ResourceQuantity);
+        unit.Cost = EditorGUILayout.IntField(unit.Cost);
         EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();

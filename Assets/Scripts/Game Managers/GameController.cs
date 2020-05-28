@@ -53,7 +53,7 @@ public class GameController : Singleton<GameController>
             m_collection = value;
         }
     }
-    public QuantityOfResources[] m_currentPlayerResources { get; private set; }
+    public int m_currentPlayerResources;
 
     #region Behavior Cycle
 
@@ -75,9 +75,6 @@ public class GameController : Singleton<GameController>
     {
         m_playerLayer = GetGameObjectLayer(Collection.PlayerLayer);
         m_aiLayer = GetGameObjectLayer(Collection.AILayer);
-
-        m_currentPlayerResources = new QuantityOfResources[Collection.ResourcesValuesDictionary.Count];
-        Collection.ResourcesValuesDictionary.Values.CopyTo(m_currentPlayerResources, 0);
     }
 
     public int GetGameObjectLayer(LayerMask mask)
@@ -121,12 +118,14 @@ public class GameController : Singleton<GameController>
 
         if (inPlayerType == PlayerType.Player)
         {
-            if (!CheckResourcesAvailability(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost))
+            int cost = Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost;
+
+            if (!CheckResourcesAvailability(cost))
             {
-                Debug.Log("u need more resources");
+                Debug.LogWarning("U don't have resources to create " + inUnitType);
                 return null;
             }
-            DecreaseResources(Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost);
+            AddResources(-cost);
         }
 
         GameObject troopBrain = ObjectPooler.Instance.GetUnitBehaviorHandler(inUnitType);
@@ -172,12 +171,14 @@ public class GameController : Singleton<GameController>
 
         if (inPlayerType == PlayerType.Player)
         {
-            if (!CheckResourcesAvailability(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost))
+            int cost = Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost;
+
+            if (!CheckResourcesAvailability(cost))
             {
-                Debug.Log("u need more resources" + "\n" + "Trigger event");
+                Debug.LogWarning("U don't have resources to create " + inBuildingType);
                 return null;
             }
-            DecreaseResources(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
+            AddResources(-cost);
         }
 
         //CheckFreeSpace(inPosition, 1);
@@ -235,44 +236,19 @@ public class GameController : Singleton<GameController>
 
     #region Resources system
 
-    public bool CheckResourcesAvailability(QuantityOfResources ResourcesToCheck)
+    public bool CheckResourcesAvailability(int inCost)
     {
-        for (int j = 0; j < m_currentPlayerResources.Length; j++)
-        {
-            if (m_currentPlayerResources[j].ResourceType == ResourcesToCheck.ResourceType)
-            {
-                if (m_currentPlayerResources[j].ResourceQuantity >= ResourcesToCheck.ResourceQuantity)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return m_currentPlayerResources >= inCost;
     }
 
-    public void DecreaseResources(QuantityOfResources inResource)
+    public void AddResources(int inValue)
     {
-        for (int j = 0; j < m_currentPlayerResources.Length; j++)
-        {
-            if (m_currentPlayerResources[j].ResourceType == inResource.ResourceType)
-            {
-                if (m_currentPlayerResources[j].ResourceQuantity >= inResource.ResourceQuantity)
-                {
-                    m_currentPlayerResources[j].ResourceQuantity -= inResource.ResourceQuantity;
-                }
-            }
-        }
+        m_currentPlayerResources += inValue;
     }
 
-    public void AddResources(QuantityOfResources inResource)
+    public void SetResources(int inValue)
     {
-        for (int j = 0; j < m_currentPlayerResources.Length; j++)
-        {
-            if (m_currentPlayerResources[j].ResourceType == inResource.ResourceType)
-            {
-                m_currentPlayerResources[j].ResourceQuantity += inResource.ResourceQuantity;
-            }
-        }
+        m_currentPlayerResources = inValue;
     }
 
     #endregion
