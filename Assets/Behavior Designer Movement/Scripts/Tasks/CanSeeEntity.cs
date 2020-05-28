@@ -11,6 +11,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     {
         [Tooltip("The object that we are searching for")]
         public SharedEntity targetObject;
+        [Tooltip("Enable object to detect player's building/tower")]
+        public SharedBool canSeeBuilding;
         [Tooltip("The LayerMask of the objects that we are searching for")]
         public LayerMask objectLayerMask;
         [Tooltip("The LayerMask of the objects to ignore when performing the line of sight check")]
@@ -42,8 +44,17 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 returnedObject.Value = go.GetComponent<EntityBehavior>();
 
-                //MAYBE can see if the entity is busy or not.
-                return TaskStatus.Success;
+                if (!returnedObject.Value.IsBusy)
+                {
+                    if (returnedObject.Value is BuildingBehaviour && canSeeBuilding.Value)
+                    {
+                        return TaskStatus.Success;
+                    }
+                    else if (returnedObject.Value is Troop)
+                    {
+                        return TaskStatus.Success;
+                    }
+                }
             }
 
             // An object is not within sight so return failure
