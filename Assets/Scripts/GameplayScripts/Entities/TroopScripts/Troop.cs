@@ -408,7 +408,7 @@ public class Troop : EntityBehavior, ICanMove
         SetNewTroopState(TroopStates.Idle);
         m_focusEntity = null;
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-        focusEntity.Value = null;
+        focusEntity = null;
         IsBusy = false;
 
         foreach (Unit unit in UnitList)

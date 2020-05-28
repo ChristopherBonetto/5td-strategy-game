@@ -12,7 +12,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         [Tooltip("The GameObject to get the field on")]
         public SharedTroop troopRef;
 
-        public SharedGameObject focusObjRef;
+        public SharedEntity focusEntityRef;
 
         public override TaskStatus OnUpdate()
         {
@@ -22,19 +22,12 @@ namespace BehaviorDesigner.Runtime.Tasks
                 return TaskStatus.Failure;
             }
 
-            if(focusObjRef == null)
+            if(focusEntityRef == null)
             {
                 return TaskStatus.Failure;
             }
 
-            EntityBehavior tempEntity = focusObjRef.Value.GetComponent<EntityBehavior>();
-
-            if(tempEntity == null)
-            {
-                return TaskStatus.Failure;
-            }
-
-            troopRef.Value.AssignFocusEntity(tempEntity);
+            troopRef.Value.AssignFocusEntity(focusEntityRef.Value);
 
             return TaskStatus.Success;
         }
@@ -42,7 +35,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         public override void OnReset()
         {
             troopRef = null;
-            focusObjRef = null;
+            focusEntityRef = null;
         }
     }
 }

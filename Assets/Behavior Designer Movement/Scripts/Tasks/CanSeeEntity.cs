@@ -9,8 +9,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}CanSeeObjectIcon.png")]
     public class CanSeeEntity : Conditional
     {
-        public string FocusTag = "NoBusy";
-
         [Tooltip("The object that we are searching for")]
         public SharedEntity targetObject;
         [Tooltip("The LayerMask of the objects that we are searching for")]
@@ -43,6 +41,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if (go != null)
             {
                 returnedObject.Value = go.GetComponent<EntityBehavior>();
+
+                //MAYBE can see if the entity is busy or not.
                 return TaskStatus.Success;
             }
 

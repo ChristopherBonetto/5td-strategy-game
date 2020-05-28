@@ -80,7 +80,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             return navMeshAgent.velocity;
         }
-
+        
         /// <summary>
         /// Returns true if the position is a valid pathfinding position.
         /// </summary>
