@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -345,7 +345,7 @@ RectTransform:
   m_GameObject: {fileID: 222966458998852194}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1256043919869105749}
   m_RootOrder: 0
@@ -376,7 +376,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1415,7 +1415,7 @@ RectTransform:
   m_GameObject: {fileID: 1361085623299503875}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 2311461539838289478}
   - {fileID: 5201812338346391122}
@@ -1425,7 +1425,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 80, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1146352626283495280
 CanvasRenderer:
@@ -1455,8 +1455,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 1854193576003738168, guid: 5bb757f06240a854a82f1a27f9875f6e,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: df8104b00aab54446bf5d9c46670852c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1605,9 +1604,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   my_text: {fileID: 4375964792731358842}
-  highlightButtonSize: 1.2
+  highlightButtonSize: 0.75
   highlightTextSize: 1.5
-  standardButtonSize: 1
+  standardButtonSize: 0.5
   standardTextSize: 1
 --- !u!1 &1433497326330255886
 GameObject:
@@ -2100,7 +2099,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -2489,25 +2488,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 2, y: -2}
   m_UseGraphicAlpha: 1
---- !u!95 &4496603961384071242
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2250314811208123199}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 080442b20a9b28b4e892ae1af3f117e1, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &8852957075767799949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4923,7 +4903,7 @@ RectTransform:
   m_GameObject: {fileID: 4904615365935876300}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2712763380152425887}
   m_RootOrder: 0
@@ -4954,7 +4934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -5924,7 +5904,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6616,7 +6596,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6862745}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -6828,7 +6808,7 @@ RectTransform:
   m_GameObject: {fileID: 6401177657622980925}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 8837303907793259840}
   - {fileID: 6187044852046032946}
@@ -6838,7 +6818,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8275928642769844069
 CanvasRenderer:
@@ -6868,8 +6848,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 2496208525778584076, guid: 5bb757f06240a854a82f1a27f9875f6e,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0981c21079c35b9428de97ceb4085bd6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7018,9 +6997,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   my_text: {fileID: 6890437749668067209}
-  highlightButtonSize: 1.2
+  highlightButtonSize: 0.75
   highlightTextSize: 1.5
-  standardButtonSize: 1
+  standardButtonSize: 0.5
   standardTextSize: 1
 --- !u!1 &6790953002395660115
 GameObject:
@@ -7291,7 +7270,7 @@ RectTransform:
   m_GameObject: {fileID: 7187467995408958452}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2574592169024471981}
   m_RootOrder: 0
@@ -7987,7 +7966,7 @@ RectTransform:
   m_GameObject: {fileID: 8168263784002154642}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 1546056284865772779}
   - {fileID: 1554041049664783009}
@@ -7997,7 +7976,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -205.4, y: 9.5}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1619386033372502907
 CanvasRenderer:
@@ -8027,8 +8006,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 1854193576003738168, guid: 5bb757f06240a854a82f1a27f9875f6e,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: df8104b00aab54446bf5d9c46670852c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8177,9 +8155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   my_text: {fileID: 735209973641501174}
-  highlightButtonSize: 1.2
+  highlightButtonSize: 0.75
   highlightTextSize: 1.5
-  standardButtonSize: 1
+  standardButtonSize: 0.5
   standardTextSize: 1
 --- !u!1 &8175515908063351644
 GameObject:
@@ -9280,7 +9258,7 @@ RectTransform:
   m_GameObject: {fileID: 9173646786491570013}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 449747514974017074}
   - {fileID: 4114084716240724194}
@@ -9290,7 +9268,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -80, y: 0}
-  m_SizeDelta: {x: 50, y: 50}
+  m_SizeDelta: {x: 90, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3484647362084185211
 CanvasRenderer:
@@ -9320,8 +9298,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: -4661999864480653206, guid: 5bb757f06240a854a82f1a27f9875f6e,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 154c60a487902194fbbe7a278b1d299e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9470,9 +9447,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   my_text: {fileID: 7827877708936100901}
-  highlightButtonSize: 1.2
+  highlightButtonSize: 0.75
   highlightTextSize: 1.5
-  standardButtonSize: 1
+  standardButtonSize: 0.5
   standardTextSize: 1
 --- !u!1 &9178682950355399105
 GameObject:
@@ -9501,7 +9478,7 @@ RectTransform:
   m_GameObject: {fileID: 9178682950355399105}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3200352179619287704}
   m_RootOrder: 0
@@ -9532,7 +9509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.6745098}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -9766,12 +9743,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5fd52048f9df53548a462f6f1df2c1ed, type: 3}
---- !u!224 &7708722724501282141 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8936219127830891618, guid: 5fd52048f9df53548a462f6f1df2c1ed,
-    type: 3}
-  m_PrefabInstance: {fileID: 1655408810778956095}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &7023536713189383598 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8611354071789030545, guid: 5fd52048f9df53548a462f6f1df2c1ed,
@@ -9793,6 +9764,12 @@ MonoBehaviour:
 --- !u!1 &2250314811208123199 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 703556526984679936, guid: 5fd52048f9df53548a462f6f1df2c1ed,
+    type: 3}
+  m_PrefabInstance: {fileID: 1655408810778956095}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &7708722724501282141 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8936219127830891618, guid: 5fd52048f9df53548a462f6f1df2c1ed,
     type: 3}
   m_PrefabInstance: {fileID: 1655408810778956095}
   m_PrefabAsset: {fileID: 0}
