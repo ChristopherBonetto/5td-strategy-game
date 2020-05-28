@@ -17,9 +17,9 @@ public class SlidingSpecializationBar : MonoBehaviour
 
     void Start()
     {
-        slidingBar = GetComponent<RectTransform>();
-        slidingBar.DOScaleX(0.3f, 0.5f);
-        slidingBar.DOAnchorPosX(-160, 0.5f);
+        //slidingBar = GetComponent<RectTransform>();
+        //slidingBar.DOScaleX(1f, 0.5f);
+        //slidingBar.DOAnchorPosX(0f, 0.5f);
 
 
 
