@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 4423182055241356954}
   - component: {fileID: 4940343841544448975}
   - component: {fileID: 3989602161042982268}
+  - component: {fileID: 8365911442627121300}
   m_Layer: 0
   m_Name: PF_BaseTurret_Ballista_Lvl2
   m_TagString: Untagged
@@ -96,6 +97,19 @@ MonoBehaviour:
   m_SpawnPoint: {fileID: 4978984865627196281}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
   m_BulletSpeed: 5
+--- !u!65 &8365911442627121300
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4463904800000262798}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &7185032863478395005
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +121,6 @@ GameObject:
   - component: {fileID: 6191610056286782062}
   - component: {fileID: 2933534637130709080}
   - component: {fileID: 8902080853366080673}
-  - component: {fileID: 3254779489801756426}
   m_Layer: 0
   m_Name: SM_BaseTurret_Balista_Lvl2
   m_TagString: Untagged
@@ -176,20 +189,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &3254779489801756426
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7185032863478395005}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 2018142531696853406, guid: 9df0d24936cc9724eaa1a97e2560e67f, type: 3}
 --- !u!1001 &2368075819266567822
 PrefabInstance:
   m_ObjectHideFlags: 0

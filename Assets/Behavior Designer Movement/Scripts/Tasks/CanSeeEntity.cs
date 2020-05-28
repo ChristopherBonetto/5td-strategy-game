@@ -22,7 +22,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("The object that is within sight")]
         public SharedEntity returnedObject;
 
-        private Collider[] overlapColliders = new Collider[5];
+        private Collider[] overlapColliders = new Collider[1];
 
         private int numberOfCollisions;
 
@@ -41,7 +41,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (go != null)
             {
-                returnedObject.Value = go.GetComponent<EntityBehavior>();
+                returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
 
                 if (!returnedObject.Value.IsBusy)
                 {

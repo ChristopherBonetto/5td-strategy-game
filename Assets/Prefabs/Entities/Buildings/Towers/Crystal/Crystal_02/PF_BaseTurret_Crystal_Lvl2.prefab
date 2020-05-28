@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &6866102932550183529
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3910795311838253741}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: -4840205654356761956, guid: e3e0c2a9fffeafe46a6893814408c890, type: 3}
 --- !u!1 &4805425151478081973
 GameObject:
   m_ObjectHideFlags: 0
@@ -25,6 +11,7 @@ GameObject:
   - component: {fileID: 4765083078248005025}
   - component: {fileID: 1322421197110934976}
   - component: {fileID: 3058834172054917653}
+  - component: {fileID: 5966896033993141498}
   m_Layer: 0
   m_Name: PF_BaseTurret_Crystal_Lvl2
   m_TagString: Untagged
@@ -79,6 +66,19 @@ MonoBehaviour:
   m_SpawnPoint: {fileID: 6688100454551920319}
   m_BulletID: {fileID: 11400000, guid: b272f9bcacd29734bad36d5ea8f88b22, type: 2}
   m_BulletSpeed: 5
+--- !u!65 &5966896033993141498
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4805425151478081973}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &5173573453007973232
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,12 +295,6 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: ecd7651c6597cb543ac34f15a9bb3fdd, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3e0c2a9fffeafe46a6893814408c890, type: 3}
---- !u!1 &3910795311838253741 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: e3e0c2a9fffeafe46a6893814408c890,
-    type: 3}
-  m_PrefabInstance: {fileID: 5000124285691268004}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8644657994473662 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: e3e0c2a9fffeafe46a6893814408c890,

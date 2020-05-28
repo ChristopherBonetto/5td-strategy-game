@@ -42,6 +42,7 @@ GameObject:
   - component: {fileID: 981617075828475544}
   - component: {fileID: 6356803287115670844}
   - component: {fileID: 7917665576484260144}
+  - component: {fileID: 6006036625742545479}
   m_Layer: 0
   m_Name: PF_BaseTurret_Mortar_Lvl2
   m_TagString: Untagged
@@ -96,6 +97,19 @@ MonoBehaviour:
   m_SpawnPoint: {fileID: 1613680038490673023}
   m_BulletID: {fileID: 11400000, guid: e0536d7ec8227be4787f150ba0116cd2, type: 2}
   m_BulletSpeed: 5
+--- !u!65 &6006036625742545479
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941202709721158284}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &2673708875620060660
 GameObject:
   m_ObjectHideFlags: 0
@@ -107,7 +121,6 @@ GameObject:
   - component: {fileID: 1387590093546618855}
   - component: {fileID: 7933850959493285329}
   - component: {fileID: 4406273068942932264}
-  - component: {fileID: 1137548594218180587}
   m_Layer: 0
   m_Name: SM_BaseTurret_Mortar_Lvl2
   m_TagString: Untagged
@@ -180,20 +193,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1137548594218180587
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2673708875620060660}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 3380712118819526203, guid: 7721e6836ce25ee4db28947f6772b5a1, type: 3}
 --- !u!1001 &1144547329558075872
 PrefabInstance:
   m_ObjectHideFlags: 0
