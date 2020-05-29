@@ -60,7 +60,7 @@ namespace HF.Refactoring
             if (m_isListeningInput)
             {
                 isPaused = !isPaused;
-                HFEventManager.TriggerEvent(HFEventID.OnPauseMode, isPaused);
+                HFEventManager.TriggerEvent<bool>(HFEventID.OnPauseMode, isPaused);
                 HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID);
             }
         }

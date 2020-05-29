@@ -27,9 +27,46 @@ public class Unit : MonoBehaviour, ITakeDamage
     public Unit m_focusUnit;
     public BuildingBehaviour m_focusBuilding;
 
+
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, FreezeMode);
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, FreezeMode);
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+    }
     private void Awake()
     {
         Initialize();
+    }
+
+    protected virtual void FreezeMode(bool inValue)
+    {
+        StopTree(inValue);
+    }
+
+    protected virtual void GameStateChanged(GameStates inState)
+    {
+        if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
+        {
+        }
+        else if (inState == GameStates.Pause)
+        {
+            if(TroopRef.m_currentBattle != null)
+            {
+                StopTree(true);
+            }
+        }
+        else if (inState == GameStates.PlayingLevel)
+        {
+            if (TroopRef.m_currentBattle != null)
+            {
+                StopTree(false);
+            }
+        }
     }
 
     #region Initialize

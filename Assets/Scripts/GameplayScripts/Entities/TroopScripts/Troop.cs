@@ -65,6 +65,14 @@ public class Troop : EntityBehavior, ICanMove
         base.OnEnable();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            Death();
+        }
+    }
+
     /// <summary>
     /// This will be called after the troop is instantiated by the wave controller.
     /// </summary>

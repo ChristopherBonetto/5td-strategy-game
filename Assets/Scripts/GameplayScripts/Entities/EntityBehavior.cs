@@ -4,6 +4,7 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
+using System.ComponentModel;
 
 [RequireComponent(typeof(BehaviorTree))]
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
@@ -60,38 +61,21 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+    #region Events
 
     protected virtual void OnEnable()
     {
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, FreezeMode);
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
     }
 
     protected virtual void OnDisable()
     {
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, FreezeMode);
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
     }
 
-    protected virtual void GameStateChanged(GameStates inState)
-    {
-        if((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
-        {
-            Debug.Log(gameObject.name);
-            ResetEntity();
-        }
-        else if(inState == GameStates.Pause)
-        {
-            StopTree(true);
-        }
-        else if(inState == GameStates.PlayingLevel)
-        {
-            StopTree(false);
-        }
-    }
-
-    protected virtual void ResetEntity()
-    {
-        this.gameObject.SetActive(false);
-    }
+    #endregion
 
     public virtual void Awake()
     {
@@ -137,6 +121,33 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public void StopTree(bool inValue)
     {
         m_behaviorTree.enabled = !inValue;
+    }
+
+    protected virtual void ResetEntity()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    protected virtual void FreezeMode(bool inValue)
+    {
+        StopTree(inValue);
+    }
+
+    protected virtual void GameStateChanged(GameStates inState)
+    {
+        if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
+        {
+            Debug.Log(gameObject.name);
+            ResetEntity();
+        }
+        else if (inState == GameStates.Pause)
+        {
+            StopTree(true);
+        }
+        else if (inState == GameStates.PlayingLevel)
+        {
+            StopTree(false);
+        }
     }
 
     #endregion

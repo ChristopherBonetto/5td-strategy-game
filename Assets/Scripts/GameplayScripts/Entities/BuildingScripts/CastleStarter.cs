@@ -10,16 +10,20 @@ public class CastleStarter : BuildingBehaviour
 
     [SerializeField] private Transform m_unitSpawnPoint;
 
+    public bool m_canSpawn = true;
+
     protected override void OnEnable()
     {
         base.OnEnable();
         HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, CheckEntityDead);
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, CheckFreeze);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, CheckEntityDead);
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, CheckFreeze);
     }
 
     // Start is called before the first frame update
@@ -50,6 +54,11 @@ public class CastleStarter : BuildingBehaviour
         }
     }
 
+    public void CheckFreeze(bool inValue)
+    {
+        m_canSpawn = !inValue;
+    }
+
     public void CheckEntityDead(EntityBehavior inEntity)
     {
         if(inEntity.EntityPlayerType == PlayerType.Player && inEntity is Troop)
@@ -60,7 +69,28 @@ public class CastleStarter : BuildingBehaviour
 
     IEnumerator Respawn(Troop troop)
     {
-        yield return new WaitForSeconds(troop.GetStats().RespawnTime);
-        GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
+        float timer = 0;
+
+        UnitsStatsSO stats = troop.GetStats();
+
+        bool go = true;
+
+        while (go)
+        {
+            if (m_canSpawn)
+            {
+                timer += Time.deltaTime;
+            }
+
+            Debug.Log(timer + " " + stats.RespawnTime);
+
+            if (timer >= stats.RespawnTime)
+            {
+                GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
+                go = false;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+
     }
 }

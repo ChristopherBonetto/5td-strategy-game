@@ -16,6 +16,7 @@ namespace HF.Refactoring
         {
             if (m_isMatchingWindowID)
             {
+                HFGameManager.Instance.ChangeGMState(GameStates.Pause);
                 HFUIManager.Instance.ShowAndAddToHistory(WindowIDToShow, ShowAddittive);    
             }
         }
