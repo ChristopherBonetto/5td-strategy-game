@@ -144,6 +144,7 @@ public class BuildingBehaviour : EntityBehavior
     protected override void ResetEntity()
     {
         StopTree(true);
+        StopAllCoroutines();
         m_buildingStats = null;
         m__viewObj.gameObject.SetActive(false);
         m__viewObj.gameObject.transform.parent = null;
@@ -157,5 +158,12 @@ public class BuildingBehaviour : EntityBehavior
         m_view.gameObject.SetActive(false);
         gameObject.SetActive(false);
         base.Specialization(type);
+    }
+
+    public override void Death()
+    {
+        HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath, this);
+        StopAllCoroutines();
+        ResetEntity();
     }
 }

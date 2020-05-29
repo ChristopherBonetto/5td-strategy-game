@@ -518,20 +518,11 @@ public class Troop : EntityBehavior, ICanMove
 
     public override void Death()
     {
+        HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath,this);
         ResetEntity();
-        HFEventManager.TriggerEvent(HFEventID.OnUnitDeath);
     }
 
-    //Respawna le unita dopo un timer
-    //IEnumerator Respawn()
-    //{
-    //    GameController.Instance
-    //    IsBusy = true;
-    //    yield return new WaitForSeconds(m_troopStats.RespawnTime);
-    //    Agent.Warp(m_startingPos);
-    //    CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
-    //    SetIdleState();
-    //}
+    
 
     #endregion
 

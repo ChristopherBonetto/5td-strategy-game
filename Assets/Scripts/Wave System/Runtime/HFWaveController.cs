@@ -53,7 +53,7 @@ namespace HF.Refactoring
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnWaveBeggined);
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
-            HFEventManager.SubscribeTo<HFUnit>(HFEventID.OnUnitDeath, OnUnitDead);
+            HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
@@ -61,7 +61,7 @@ namespace HF.Refactoring
         {
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnWaveBeggined);
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
-            HFEventManager.UnsubscribeFrom<HFUnit>(HFEventID.OnUnitDeath, OnUnitDead);
+            HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
@@ -223,10 +223,9 @@ namespace HF.Refactoring
         /// <summary>
         /// Triggered when an enemy die.
         /// </summary>
-        private void OnUnitDead(HFUnit unit)
+        private void OnEntityDead(EntityBehavior entity)
         {
-            // Is the enemy team?
-            if (unit.Team != HFGameParameters.PlayerTeam)
+            if(entity.EntityPlayerType == Types.PlayerType.AI)
             {
                 m_currentEnemiesCount++;
 

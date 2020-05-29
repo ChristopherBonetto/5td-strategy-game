@@ -57,7 +57,7 @@
 	/// <summary>
 	/// <see cref="EntityBehavior"/> unit.
 	/// </summary>
-	OnUnitDeath,
+	OnEntityDeath,
 
 	/// <summary>
 	/// <see cref="EntityBehavior"/> unit.

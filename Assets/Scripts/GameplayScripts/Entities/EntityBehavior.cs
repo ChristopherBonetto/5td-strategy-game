@@ -78,6 +78,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             Debug.Log(gameObject.name);
             ResetEntity();
         }
+        else if(inState == GameStates.Pause)
+        {
+            StopTree(true);
+        }
+        else if(inState == GameStates.PlayingLevel)
+        {
+            StopTree(false);
+        }
     }
 
     protected virtual void ResetEntity()
@@ -220,7 +228,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_focusEntity = null;
         this.gameObject.SetActive(false);
 
-        HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
+        //HFEventManager.TriggerEvent(HFEventID.OnEntityDeath, this);
     }
 
     #endregion

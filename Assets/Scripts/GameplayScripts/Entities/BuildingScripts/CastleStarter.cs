@@ -10,6 +10,18 @@ public class CastleStarter : BuildingBehaviour
 
     [SerializeField] private Transform m_unitSpawnPoint;
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, CheckEntityDead);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, CheckEntityDead);
+    }
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -36,6 +48,19 @@ public class CastleStarter : BuildingBehaviour
 
             GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
         }
+    }
 
+    public void CheckEntityDead(EntityBehavior inEntity)
+    {
+        if(inEntity.EntityPlayerType == PlayerType.Player && inEntity is Troop)
+        {
+            StartCoroutine(Respawn(inEntity as Troop));
+        }
+    }
+
+    IEnumerator Respawn(Troop troop)
+    {
+        yield return new WaitForSeconds(troop.GetStats().RespawnTime);
+        GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
     }
 }

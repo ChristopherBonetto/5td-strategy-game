@@ -100,13 +100,13 @@ public class HFScenesManager : Singleton<HFScenesManager>
     {
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
 
-        HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, CheckWhichUnitDeath);
+        HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, CheckWhichUnitDeath);
     }
     private void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GiveAllReferenceToTheSelectedLevel);
 
-        HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, CheckWhichUnitDeath);
+        HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, CheckWhichUnitDeath);
     }
 
     #endregion
@@ -134,11 +134,19 @@ public class HFScenesManager : Singleton<HFScenesManager>
     }
 
     // #TEMP Move this to missions/win condition check (remember to subscribe event) or change entirely
-    private void CheckWhichUnitDeath(HF.HFUnit killedUnit)
+    private void CheckWhichUnitDeath(EntityBehavior inKilledEntity)
     {
-        if (killedUnit.ControllerType == HF.InputType.Player && killedUnit.UnitType == HFUnitType.Castle)
+        if((inKilledEntity.EntityPlayerType == Types.PlayerType.Player))
         {
-            EndCurrentLevel(false);
+            if(inKilledEntity is BuildingBehaviour)
+            {
+                BuildingBehaviour building = inKilledEntity as BuildingBehaviour;
+
+                if(building.GetStats().BuildingType == Types.BuildingType.CASTLE)
+                {
+                    EndCurrentLevel(false);
+                }
+            }
         }
     }
 
