@@ -4,6 +4,7 @@ using UnityEngine;
 using Types;
 using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
+using UnityEngine.XR.WSA.Input;
 
 public class GameController : Singleton<GameController>
 {
@@ -244,11 +245,15 @@ public class GameController : Singleton<GameController>
     public void AddResources(int inValue)
     {
         m_currentPlayerResources += inValue;
+
+        HFEventManager.TriggerEvent<int, bool>(HFEventID.OnGemChanged, m_currentPlayerResources, inValue > 0);
+        
     }
 
     public void SetResources(int inValue)
     {
         m_currentPlayerResources = inValue;
+        HFEventManager.TriggerEvent<int, bool>(HFEventID.OnGemChanged, m_currentPlayerResources, false);
     }
 
     #endregion

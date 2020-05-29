@@ -7,32 +7,32 @@ public class HFPlayerRewardUIElement : MonoBehaviour
     public Image RewardIcon;
     public Text RewardText;
 
-	private int m_value;
-
     [SerializeField]
     private HFPulseScale m_scaleComponent;
 
     private void OnEnable()
     {
         ResetValue();
-        HFEventManager.SubscribeTo<int, HFUnit>(HFEventID.GainReward, OnGainReward);
+        HFEventManager.SubscribeTo<int,bool>(HFEventID.OnGemChanged, OnGainReward);
     }
 
     private void OnDisable()
     {
-        HFEventManager.UnsubscribeFrom<int, HFUnit>(HFEventID.GainReward, OnGainReward);
+        HFEventManager.UnsubscribeFrom<int,bool>(HFEventID.OnGemChanged, OnGainReward);
     }
 
     public void ResetValue()
     {
-		m_value = 0;
         RewardText.text = "0";
     }
 
-    public void OnGainReward(int value, HFUnit unit)
+    public void OnGainReward(int value, bool inGained)
     {
-		m_value += value;
-        RewardText.text = m_value.ToString();
-        StartCoroutine(m_scaleComponent.Pulse());
+        RewardText.text = value.ToString();
+        if (inGained)
+        {
+            StartCoroutine(m_scaleComponent.Pulse());
+        }
+        
     }
 }
