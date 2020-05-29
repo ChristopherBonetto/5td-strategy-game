@@ -30,6 +30,7 @@ namespace HF.Refactoring
 
         public Image EntitySelectedIcon;
         public HFSpecializationB[] SpecializationButtons;
+        public SlidingSpecializationBar SpecializationBar;
         public HFSpecializationB UpgradeButton;
 
         private void OnEnable()
@@ -268,6 +269,7 @@ namespace HF.Refactoring
             }
 
             UpgradeButton.gameObject.SetActive(false);
+            SpecializationBar.gameObject.SetActive(false);
 
             if (entity is Troop)
             {
@@ -280,6 +282,7 @@ namespace HF.Refactoring
                         SpecializationButtons[i].Icon.sprite = TroopIconsSpecializations[i];
                         SpecializationButtons[i].gameObject.SetActive(true);
                     }
+                    SpecializationBar.gameObject.SetActive(true);
                     SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
                     SpecializationButtons[1].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.LIFTER_LVL1));
                     SpecializationButtons[2].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.RUNNER_LVL1));
@@ -312,6 +315,7 @@ namespace HF.Refactoring
                         SpecializationButtons[i].Icon.sprite = BuildingIconsSpecializations[i];
                         SpecializationButtons[i].gameObject.SetActive(true);
                     }
+                    SpecializationBar.gameObject.SetActive(true);
                     SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.BuildingType.BALLISTA_LVL1));
                     SpecializationButtons[1].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.BuildingType.CRYSTAL_LVL1));
                     SpecializationButtons[2].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.BuildingType.MORTAR_LVL1));
