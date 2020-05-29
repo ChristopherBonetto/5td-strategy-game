@@ -10,6 +10,8 @@ public class SlidingSpecializationBar : MonoBehaviour
 {
 
     public RectTransform slidingBar;
+    public Image slidingBarImage;
+    public Button upgradeButton;
 
 
 
@@ -17,10 +19,11 @@ public class SlidingSpecializationBar : MonoBehaviour
 
     void Start()
     {
-        //slidingBar = GetComponent<RectTransform>();
-        //slidingBar.DOScaleX(1f, 0.5f);
-        //slidingBar.DOAnchorPosX(0f, 0.5f);
-
+        if (upgradeButton.enabled == false)
+        {
+            slidingBarImage.enabled = true;
+        }
+        else slidingBarImage.enabled = false;
 
 
     }
@@ -35,7 +38,7 @@ public class SlidingSpecializationBar : MonoBehaviour
     private void OnDisable()
     {
         slidingBar.DOScaleX(0.3f, .5f);
-        slidingBar.DOAnchorPosX(-160, 0.5f);
+        slidingBar.DOAnchorPosX(-120, 0.5f);
     }
 
     
