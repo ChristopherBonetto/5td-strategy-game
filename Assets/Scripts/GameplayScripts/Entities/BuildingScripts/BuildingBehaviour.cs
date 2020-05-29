@@ -114,6 +114,12 @@ public class BuildingBehaviour : EntityBehavior
         }
     }
 
+    public void TakeFocusTargetFromTree()
+    {
+        var troop = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
+        FocusEntity = troop.Value;
+    }
+
     IEnumerator DealDamge(EntityBehavior entity)
     {
         Troop target = entity.GetComponent<Troop>();
@@ -125,7 +131,6 @@ public class BuildingBehaviour : EntityBehavior
             time -= Time.deltaTime;
             yield return null;
         }
-
 
         int count = target.UnitList.Count;
 

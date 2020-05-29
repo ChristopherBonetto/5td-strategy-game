@@ -16,7 +16,6 @@ namespace Types
         LIFTER,
         DEFENDER,
         RUNNER,
-        STANDARD_ENEMY,
         ARCHER,
         TANK,
         SPEARMAN,

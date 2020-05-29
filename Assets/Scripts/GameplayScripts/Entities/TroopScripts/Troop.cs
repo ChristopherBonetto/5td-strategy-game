@@ -509,18 +509,20 @@ public class Troop : EntityBehavior, ICanMove
                 m_currentBattle.FinishFight();
             }
 
-            if (EntityPlayerType == PlayerType.AI)
+            if (InputReaderManager.Instance.CurrentEntity == this)
             {
-                Death();
+                InputReaderManager.Instance.CurrentEntity = null;
             }
-            else
-            {
-                if (InputReaderManager.Instance.CurrentEntity == this)
-                {
-                    InputReaderManager.Instance.CurrentEntity = null;
-                }
-                StartCoroutine(Respawn());
-            }
+            Death();
+            //if (EntityPlayerType == PlayerType.AI)
+            //{
+                
+            //}
+            //else
+            //{
+                
+            //    StartCoroutine(Respawn());
+            //}
         }
     }
 
