@@ -514,7 +514,7 @@ namespace HF
 		{
 			if (value > 0)
 			{
-				HFEventManager.TriggerEvent(HFEventID.GainReward, value, this);
+				HFEventManager.TriggerEvent(HFEventID.OnGemChanged, value, this);
 			}
 		}
 
@@ -1398,7 +1398,7 @@ namespace HF
 // 				m_navObstacle.enabled = true;
 // 			}
 
-			HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
+			//HFEventManager.TriggerEvent(HFEventID.OnUnitDeath, this);
 
 			if (m_baseStats.RewardCondition == HFRewardCondition.Kill && ControllerType != InputType.Player)
 			{

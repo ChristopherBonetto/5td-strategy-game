@@ -26,11 +26,11 @@
 	/// </summary>
 	OnEndLevel,
 
-    /// <summary>
-    /// <see cref="int"/> reward value.
-    /// <see cref="HF.HFUnit"/> ostile unit.
-    /// </summary>
-    GainReward,
+	/// <summary>
+	/// <see cref="int"/> reward value.
+	/// /// <see cref="bool"/> earned/losed. 
+	/// </summary>
+	OnGemChanged,
 
 	/// <summary>
 	/// <see cref="bool"/> freeze / unfreeze. 

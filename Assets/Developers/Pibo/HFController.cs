@@ -41,7 +41,7 @@ namespace HF
 
             if (Team == HFGameParameters.PlayerTeam)
 			{
-				HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
+				//HFEventManager.SubscribeTo<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
 			}
 		}
 
@@ -53,7 +53,7 @@ namespace HF
 
             if(Team == HFGameParameters.PlayerTeam)
 			{
-                HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
+                //HFEventManager.UnsubscribeFrom<HF.HFUnit>(HFEventID.OnUnitDeath, ReceiveUnitDeath);
 			}
         }
 
