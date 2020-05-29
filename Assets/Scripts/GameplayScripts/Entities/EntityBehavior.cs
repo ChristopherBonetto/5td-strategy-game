@@ -233,21 +233,20 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     #endregion
 
+
     #region Specialization
-    public void Specialization(UnitType type)
+    public virtual void Specialization(UnitType type)
     {
         if (GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position) != null)
         {
-            gameObject.SetActive(false);
             HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         }
     }
 
-    public void Specialization(BuildingType type)
+    public virtual void Specialization(BuildingType type)
     {
         if (GameController.Instance.CreateNewBuilding(type, PlayerType.Player, this.transform.position) != null)
         {
-            gameObject.SetActive(false);
             HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         }
     }

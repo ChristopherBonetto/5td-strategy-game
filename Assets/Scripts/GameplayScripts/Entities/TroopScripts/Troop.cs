@@ -546,4 +546,10 @@ public class Troop : EntityBehavior, ICanMove
     //}
 
     #endregion
+
+    public override void Specialization(UnitType type)
+    {
+        ResetEntity();
+        base.Specialization(type);
+    }
 }

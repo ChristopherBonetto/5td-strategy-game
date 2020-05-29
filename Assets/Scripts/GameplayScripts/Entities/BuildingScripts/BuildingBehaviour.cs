@@ -150,4 +150,12 @@ public class BuildingBehaviour : EntityBehavior
         m__viewObj = null;
         this.gameObject.SetActive(false);
     }
+
+    public override void Specialization(BuildingType type)
+    {
+        m_view.transform.SetParent(null);
+        m_view.gameObject.SetActive(false);
+        gameObject.SetActive(false);
+        base.Specialization(type);
+    }
 }
