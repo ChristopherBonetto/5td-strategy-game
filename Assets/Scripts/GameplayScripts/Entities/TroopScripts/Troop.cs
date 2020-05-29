@@ -425,6 +425,8 @@ public class Troop : EntityBehavior, ICanMove
 
     public void DismissTroop()
     {
+        m_behaviorTree.enabled = false;
+
         foreach (Unit unit in UnitList.ToList())
         {
             DismissUnitInTroop(unit);
@@ -433,9 +435,6 @@ public class Troop : EntityBehavior, ICanMove
         UnitList = null;
 
         m_troopStats = null;
-
-        m_behaviorTree.enabled = false;
-
 
         gameObject.SetActive(false);
         //Return to the pool
@@ -507,29 +506,13 @@ public class Troop : EntityBehavior, ICanMove
             {
                 m_currentBattle.FinishFight();
             }
-
-            if (InputReaderManager.Instance.CurrentEntity == this)
-            {
-                InputReaderManager.Instance.CurrentEntity = null;
-            }
-            if (EntityPlayerType == PlayerType.AI)
-            {
-                Death();    
-            }
-            else
-            {
-                gameObject.SetActive(false);
-                StopTree(true);
-                GameController.Instance.RespawnAllyTroopCall(m_troopStats.UnitType, PlayerType.Player, m_startingPos, m_troopStats.RespawnTime);
-            }
+            Death();
         }
     }
 
     public override void Death()
     {
-        SetIdleState();
-        StopTree(true);
-        gameObject.SetActive(false);
+        ResetEntity();
         HFEventManager.TriggerEvent(HFEventID.OnUnitDeath);
     }
 

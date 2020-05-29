@@ -204,8 +204,8 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_focusUnit.AssignFocusUnit(null);
         }
-        m_focusUnit = null;
-        m_focusBuilding = null;
+        AssignFocusUnit(null);
+        AssignFocusBuilding(null);
 
         if(TroopRef.EntityPlayerType == PlayerType.AI)
         {
