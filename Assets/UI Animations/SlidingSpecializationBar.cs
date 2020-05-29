@@ -19,11 +19,11 @@ public class SlidingSpecializationBar : MonoBehaviour
 
     void Start()
     {
-        if (upgradeButton.enabled == false)
-        {
-            slidingBarImage.enabled = true;
-        }
-        else slidingBarImage.enabled = false;
+        //if (upgradeButton.enabled == false)
+        //{
+        //    slidingBarImage.enabled = true;
+        //}
+        //else slidingBarImage.enabled = false;
 
 
     }
