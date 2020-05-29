@@ -139,7 +139,7 @@ public class BuildingBehaviour : EntityBehavior
             int count = target.UnitList.Count;
             for (int i = 0; i < count; i++)
             {
-                if (target.UnitList[i].TakeDamage(m_buildingStats.Damage))
+                if (target.UnitList != null && target.UnitList[i].TakeDamage(m_buildingStats.Damage))
                 {
                     m_behaviorTree.SetVariableValue("FocusEntity", null);
                 }
@@ -148,7 +148,7 @@ public class BuildingBehaviour : EntityBehavior
         }
         else
         {
-            if (target.UnitList[0].TakeDamage(m_buildingStats.Damage))
+            if (target.UnitList != null && target.UnitList[0].TakeDamage(m_buildingStats.Damage))
             {
                 m_behaviorTree.SetVariableValue("FocusEntity", null);
             }
