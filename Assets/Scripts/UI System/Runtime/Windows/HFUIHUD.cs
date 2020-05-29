@@ -200,12 +200,12 @@ namespace HF.Refactoring
                     SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].BuildingStatsCopy.Icon,
                                                         GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].BuildingStatsCopy.Cost);
 
-                    SpecializationButtons[0].AddListener(() => entity.Specialization(Types.BuildingType.CRYSTAL_LVL1));
-                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].BuildingStatsCopy.Icon,
+                    SpecializationButtons[1].AddListener(() => entity.Specialization(Types.BuildingType.CRYSTAL_LVL1));
+                    SpecializationButtons[1].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].BuildingStatsCopy.Icon,
                                                         GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].BuildingStatsCopy.Cost);
 
-                    SpecializationButtons[0].AddListener(() => entity.Specialization(Types.BuildingType.MORTAR_LVL1));
-                    SpecializationButtons[0].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].BuildingStatsCopy.Icon,
+                    SpecializationButtons[2].AddListener(() => entity.Specialization(Types.BuildingType.MORTAR_LVL1));
+                    SpecializationButtons[2].SetUpButton(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].BuildingStatsCopy.Icon,
                                                         GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].BuildingStatsCopy.Cost);
                 }
                 else
