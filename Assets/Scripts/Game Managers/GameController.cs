@@ -269,4 +269,16 @@ public class GameController : Singleton<GameController>
     {
         return Collection.BuildingsDictionary[unitType].OriginalBuildingStats.Icon;
     }
+
+    public void RespawnAllyTroopCall(UnitType type, PlayerType pType, Vector3 position, float waitTime)
+    {
+        StartCoroutine(RespawnAllyTroop(type, pType, position, waitTime));
+    }
+
+    public IEnumerator RespawnAllyTroop(UnitType type, PlayerType pType, Vector3 position, float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        CreateNewTroop(type, pType, position);
+        yield return null;
+    }
 }

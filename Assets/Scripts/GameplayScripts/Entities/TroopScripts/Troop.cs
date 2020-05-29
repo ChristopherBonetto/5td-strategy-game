@@ -513,16 +513,16 @@ public class Troop : EntityBehavior, ICanMove
             {
                 InputReaderManager.Instance.CurrentEntity = null;
             }
-            Death();
-            //if (EntityPlayerType == PlayerType.AI)
-            //{
-                
-            //}
-            //else
-            //{
-                
-            //    StartCoroutine(Respawn());
-            //}
+            if (EntityPlayerType == PlayerType.AI)
+            {
+                Death();    
+            }
+            else
+            {
+                gameObject.SetActive(false);
+                StopTree(true);
+                GameController.Instance.RespawnAllyTroopCall(m_troopStats.UnitType, PlayerType.Player, m_startingPos, m_troopStats.RespawnTime);
+            }
         }
     }
 
@@ -535,14 +535,15 @@ public class Troop : EntityBehavior, ICanMove
     }
 
     //Respawna le unita dopo un timer
-    IEnumerator Respawn()
-    {
-        IsBusy = true;
-        yield return new WaitForSeconds(m_troopStats.RespawnTime);
-        Agent.Warp(m_startingPos);
-        CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
-        SetIdleState();
-    }
+    //IEnumerator Respawn()
+    //{
+    //    GameController.Instance
+    //    IsBusy = true;
+    //    yield return new WaitForSeconds(m_troopStats.RespawnTime);
+    //    Agent.Warp(m_startingPos);
+    //    CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
+    //    SetIdleState();
+    //}
 
     #endregion
 }
