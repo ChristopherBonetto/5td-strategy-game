@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 using Types;
+using BehaviorDesigner.Runtime.Tasks;
 
 public class Unit : MonoBehaviour, ITakeDamage
 {
@@ -62,6 +63,8 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_troopRef = null;
             m_unitStats = null;
+            AssignFocusBuilding(null);
+            AssignFocusUnit(null);
             AssignValuesToTree(null, 2, 2, 2);
         }
     }
