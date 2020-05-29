@@ -132,12 +132,26 @@ public class BuildingBehaviour : EntityBehavior
             yield return null;
         }
 
-        int count = target.UnitList.Count;
+        if (target == null || entity == null || target.UnitList == null) yield return null;
 
-        for (int i = 0; i < count; i++)
+        if ((bool)m_behaviorTree.GetVariable("DamageMultipleTargets").GetValue())
         {
-            if (target.UnitList[i].TakeDamage(m_buildingStats.Damage)) FocusEntity = null;
-            break;
+            int count = target.UnitList.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (target.UnitList[i].TakeDamage(m_buildingStats.Damage))
+                {
+                    m_behaviorTree.SetVariableValue("FocusEntity", null);
+                }
+                yield return null;
+            }
+        }
+        else
+        {
+            if (target.UnitList[0].TakeDamage(m_buildingStats.Damage))
+            {
+                m_behaviorTree.SetVariableValue("FocusEntity", null);
+            }
         }
     }
 
