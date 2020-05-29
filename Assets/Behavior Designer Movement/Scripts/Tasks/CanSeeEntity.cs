@@ -11,6 +11,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     {
         [Tooltip("The object that we are searching for")]
         public SharedEntity targetObject;
+        [Tooltip("Enable to see busying troops")]
+        public SharedBool canSeeBusyTroop;
         [Tooltip("Enable object to detect player's building/tower")]
         public SharedBool canSeeBuilding;
         [Tooltip("The LayerMask of the objects that we are searching for")]
@@ -43,7 +45,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
 
-                if (!returnedObject.Value.IsBusy)
+                if (!returnedObject.Value.IsBusy || canSeeBusyTroop.Value && returnedObject.Value.IsBusy)
                 {
                     if (returnedObject.Value is BuildingBehaviour && canSeeBuilding.Value)
                     {

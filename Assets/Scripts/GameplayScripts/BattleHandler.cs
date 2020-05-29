@@ -70,19 +70,31 @@ public class BattleHandler : MonoBehaviour
 
             for (int i = 0; i < attacker.UnitList.Count; i++)
             {
+                if (defenderT.UnitList.Count == 0)
+                {
+                    FinishFight();
+                    goto end;
+                }
+
+                enemyIndex = Mathf.Max(0, enemyIndex);
                 attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
 
                 attacker.UnitList[i].StopTree(false);
-                enemyIndex++;
-                enemyIndex = (int)Mathf.Repeat(enemyIndex, (float)defenderT.UnitList.Count);
+                enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
             }
             for (int i = 0; i < defenderT.UnitList.Count; i++)
             {
+                if (attacker.UnitList.Count == 0)
+                {
+                    FinishFight();
+                    goto end;
+                }
+
+                playerIndex = Mathf.Max(0, playerIndex);
                 defenderT.UnitList[i].AssignFocusUnit(attacker.UnitList[playerIndex]);
 
                 defenderT.UnitList[i].StopTree(false);
-                playerIndex++;
-                playerIndex = (int)Mathf.Repeat(playerIndex, (float)attacker.UnitList.Count);
+                playerIndex = (playerIndex + 1) % attacker.UnitList.Count;
             }
         }
         // Case the defender is a building
@@ -97,6 +109,7 @@ public class BattleHandler : MonoBehaviour
                 attacker.UnitList[i].StopTree(false);
             }
         }
+    end:;
     }
 
     public void TakeOtherTarget(Unit inUnit)
