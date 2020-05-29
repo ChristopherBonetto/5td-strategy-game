@@ -325,6 +325,12 @@ public class Troop : EntityBehavior, ICanMove
     }
     public override void AssignFocusEntity(EntityBehavior inEntity)
     {
+        if (m_buildingHandled != null)
+        {
+            //m_buildingHandled.Drop(this.transform.position);
+            return;
+        }
+
         m_behaviorTree.enabled = false;
 
         if (m_currentBattle != null)
