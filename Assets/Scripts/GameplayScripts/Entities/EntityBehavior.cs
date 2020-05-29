@@ -73,7 +73,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected virtual void GameStateChanged(GameStates inState)
     {
-        if((inState == GameStates.EndLevel))
+        if((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
         {
             Debug.Log(gameObject.name);
             ResetEntity();
