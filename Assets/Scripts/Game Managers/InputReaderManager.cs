@@ -91,7 +91,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
-        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity) && !HFUIManager.IsPointerOverUIElement())
+        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity,(1<<8)+(1<<9)) && !HFUIManager.IsPointerOverUIElement())
         {
             Debug.Log(HitInfo.transform.name);
             IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
@@ -113,6 +113,15 @@ public class InputReaderManager : Singleton<InputReaderManager>
                 HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
             }
         }
+        else
+        {
+           if(HFUIManager.IsPointerOverUIElement()==false)
+            {
+                ClearSelection();
+                HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
+            }
+        }
+
     }
 
     public void ClearSelection()
