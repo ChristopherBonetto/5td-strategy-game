@@ -10,40 +10,27 @@ namespace BehaviorDesigner.Runtime.Tasks
     public class CheckMyEntityTarget : Action
     {
         [Tooltip("The GameObject to get the field on")]
-        public SharedGameObject targetGameObject;
+        public SharedTroop troopRef;
 
-        private EntityBehavior entityRef;
+        public SharedEntity focus;
 
         public override TaskStatus OnUpdate()
         {
-            if (targetGameObject.Value == null || !targetGameObject.Value.activeInHierarchy)
+            if(troopRef.Value != null && focus != null)
             {
-                Debug.LogWarning("Unable to get field - field value is null");
-                targetGameObject = null;
-                return TaskStatus.Failure;
+                if (focus.Value.gameObject.activeSelf && !focus.Value.IsBusy)
+                {
+                    Debug.Log("ok");
+                    return TaskStatus.Success;
+                }
             }
 
-            entityRef = targetGameObject.Value.GetComponent<EntityBehavior>();
-            if (entityRef == null)
-            {
-                Debug.LogWarning("Unable to get field - type is null");
-                targetGameObject = null;
-                return TaskStatus.Failure;
-            }
-
-            if (entityRef.IsBusy)
-            {
-                targetGameObject = null;
-                return TaskStatus.Failure;
-            }
-
-            return TaskStatus.Running;
+                    Debug.Log("no");
+            return TaskStatus.Failure;
         }
 
         public override void OnReset()
         {
-            //targetGameObject = null;
-            entityRef = null;
         }
     }
 }

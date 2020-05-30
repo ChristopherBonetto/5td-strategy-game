@@ -21,11 +21,11 @@ namespace BehaviorDesigner.Runtime.Tasks
             }
 
 
-            if (unitRef.Value.m_focusUnit != null && !unitRef.Value.m_focusUnit.gameObject.activeSelf && 
-                unitRef.Value.m_focusUnit == null && !unitRef.Value.m_focusBuilding.gameObject.activeSelf)
+            if (unitRef.Value.m_focusUnit != null && !unitRef.Value.m_focusUnit.gameObject.activeSelf || 
+                unitRef.Value.m_focusBuilding != null && !unitRef.Value.m_focusBuilding.gameObject.activeSelf)
             {
-                unitRef.Value.m_focusUnit = null;
-                unitRef.Value.m_focusBuilding = null;
+                unitRef.Value.AssignFocusUnit(null);
+                unitRef.Value.AssignFocusBuilding(null);
                 return TaskStatus.Failure;
             }
 
