@@ -474,6 +474,7 @@ public class Troop : EntityBehavior, ICanMove
             Agent.SetDestination(FocusEntity.transform.position);
 
             HFEventManager.TriggerEvent(HFEventID.OnUnitLift);
+            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Carry_Turret);
         }
     }
 
@@ -495,7 +496,7 @@ public class Troop : EntityBehavior, ICanMove
                 SetIdleState();
 
                 HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
-
+                HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Reposition_Turret);
             }
         }
     }

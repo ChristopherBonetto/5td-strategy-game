@@ -259,6 +259,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if (GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position) != null)
         {
             HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
         }
     }
 
@@ -267,6 +268,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if (GameController.Instance.CreateNewBuilding(type, PlayerType.Player, this.transform.position) != null)
         {
             HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
         }
     }
     #endregion

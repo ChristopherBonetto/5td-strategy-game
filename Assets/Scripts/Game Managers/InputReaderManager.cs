@@ -102,6 +102,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                 {
                     ClearSelection();
                     HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, (EntityBehavior)canBeSelected, 0);
+                    HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
                 }
 
                 canBeSelected.Click();
@@ -154,7 +155,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                     {
                         var command = new MoveWithAgent(CurrentEntity, tile.transform.position);
                         CurrentEntity.ExecuteCommand(command);
-                        Debug.Log(CurrentEntity);
+                        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Unit);
                     }
                     
                 }
