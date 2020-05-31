@@ -68,25 +68,28 @@ public class TileHighlight : MonoBehaviour
         HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSelected, EnableTiles);
     }
 
-
-    public void OnClick()
+   
+    public void OnMouseOver()
     {
-        transform.DOScale(1.5f, 0.3f)/*.SetLoops(2, LoopType.Yoyo)*/;
-        SpRender.DOColor(selectedColor, 0.2f)/*.SetLoops(2, LoopType.Yoyo)*/;
-    }
-    //public void OnMouseOver()
-    //{
+    
+        if(isActive==true)
+        {
+            transform.DOScale(1.5f, 0.3f);
+           
 
-    //    if (Input.GetMouseButtonDown(1))
-    //    {
-    //        transform.DOScale(1.5f, 0.3f);
-    //        spriteColor.DOColor(selectedColor, 0.2f).SetLoops(2, LoopType.Yoyo);
-    //    }
-    //    else if (Input.GetMouseButtonUp(1))
-    //    {
-    //        transform.DOScale(1f, 0.3f);
-    //    }
-    //}
+            if (Input.GetMouseButtonDown(1))
+            {
+                transform.DOScale(1.5f, 0.3f);
+                SpRender.DOColor(selectedColor, 0.2f).SetLoops(2, LoopType.Yoyo);
+            }
+            else if (Input.GetMouseButtonUp(1))
+            {
+                transform.DOScale(1f, 0.3f);
+            }
+        }
+     
+    }
+
 
 
     void EnableTiles(EntityBehavior entity, int team)
@@ -94,6 +97,8 @@ public class TileHighlight : MonoBehaviour
         if (entity != null && entity.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
             isActive = true;
+   
+ 
 
         }
         else 

@@ -81,15 +81,15 @@ namespace HF.Refactoring
             
             //LocatorRay();
 
-            if (lastLocator != null)
-            {
-                if (Input.GetMouseButtonDown(1))
-                {
-                    lastLocator.OnClick();
+            //if (lastLocator != null)
+            //{
+            //    if (Input.GetMouseButtonDown(1))
+            //    {
+            //        lastLocator.OnClick();
 
 
-                }
-            }
+            //    }
+            //}
 
 
         }
