@@ -33,6 +33,7 @@ Transform:
   - {fileID: 1103929617776918831}
   - {fileID: 8537175328848886052}
   - {fileID: 3942617979338384736}
+  - {fileID: 2132869732677285116}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -297,6 +298,81 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5344443370640632373}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5829498237458578317
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5115425005433608774}
+    m_Modifications:
+    - target: {fileID: 6462419346236322318, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_VFX_Upgrade_Turret_Lv1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: eb19485da31f4a0408fdf174da5c885b, type: 3}
+--- !u!4 &2132869732677285116 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
+    type: 3}
+  m_PrefabInstance: {fileID: 5829498237458578317}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8366656579714027804
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -304,6 +380,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5115425005433608774}
     m_Modifications:
+    - target: {fileID: 6115505207342611273, guid: 247faace6bf7c9e43af4af9f75eb925c,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_Turret_Radius
+      objectReference: {fileID: 0}
     - target: {fileID: 4803841057269904508, guid: 247faace6bf7c9e43af4af9f75eb925c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -373,11 +454,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 6115505207342611273, guid: 247faace6bf7c9e43af4af9f75eb925c,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_Turret_Radius
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 247faace6bf7c9e43af4af9f75eb925c, type: 3}
