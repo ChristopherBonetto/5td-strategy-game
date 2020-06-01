@@ -84,11 +84,13 @@ namespace HF.Refactoring
         private void OnEnable()
         {
             HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+            HFEventManager.SubscribeTo<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
         }
 
         private void OnDisable()
         {
             HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, OnGameStateChange);
+            HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
         }
 
         private void Start()
@@ -136,9 +138,19 @@ namespace HF.Refactoring
                 case GameStates.EndLevel:
                     ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
                     HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
-                    endLevel.m_enableSequence.Restart();
+                    endLevel.m_victorySequence.Restart();
                     break;
             }
+        }
+
+        private void OnEndLevel(HFLevelInfoSO level, bool isVictory) 
+        {
+            HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
+
+            if (isVictory)
+                endLevel.m_victorySequence.Restart();
+            else
+                endLevel.m_defeatSequence.Restart();
         }
         #endregion
 
