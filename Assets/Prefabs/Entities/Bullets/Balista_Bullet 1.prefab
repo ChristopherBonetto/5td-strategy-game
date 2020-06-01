@@ -4823,6 +4823,7 @@ GameObject:
   - component: {fileID: 2750675292378656545}
   - component: {fileID: 2799524059049740409}
   - component: {fileID: 7406498000133296795}
+  - component: {fileID: 2092150594020481709}
   m_Layer: 0
   m_Name: Balista_Bullet 1
   m_TagString: Untagged
@@ -4891,7 +4892,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36788e272508db54ca616b88033ca719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  uniqueID: {fileID: 11400000, guid: b272f9bcacd29734bad36d5ea8f88b22, type: 2}
+  uniqueID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
+--- !u!135 &2092150594020481709
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1455427389740590923}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2407395351672503143
 GameObject:
   m_ObjectHideFlags: 0

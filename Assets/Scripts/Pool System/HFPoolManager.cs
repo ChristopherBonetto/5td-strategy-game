@@ -16,7 +16,6 @@ public class HFPoolManager : MonoBehaviour
 				// Destroy if there are multiple instance of them.
 				if (managers.Length > 0)
 				{
-					m_Instance = managers[0];
 
 					for (int i = 1; i < managers.Length; i++)
 					{
@@ -30,12 +29,6 @@ public class HFPoolManager : MonoBehaviour
 				if (m_Instance == null)
 				{
 					m_Instance = Instantiate(Resources.Load("Managers/PoolManager", typeof(HFPoolManager))) as HFPoolManager;
-				}
-
-				if (m_Instance)
-				{
-					m_Instance.StartPooling();
-					DontDestroyOnLoad(m_Instance);
 				}
 			}
 
@@ -89,6 +82,14 @@ public class HFPoolManager : MonoBehaviour
 	#region Helpers
 	private const string m_debugColor = "#FF4500";
 	#endregion
+
+	private void Awake() {
+		DontDestroyOnLoad(gameObject);
+	}
+
+	private void Start() {
+		StartPooling();
+	}
 
 	public void StartPooling()
 	{
@@ -159,12 +160,8 @@ public class HFPoolManager : MonoBehaviour
 			if (m_poolItems[i].uniqueID.ID == poolID && m_poolItems[i].CanExpand)
 			{
 				HFPoolableObject obj = null;
-				// Warn to review design
-				for (int j = 0; j < m_poolItems[i].PoolExpandSize && m_poolItems[i].CurrentCount < m_poolItems[i].MaxPoolSize; j++)
-				{
-					obj = CreateNewObject(m_poolItems[i]);
-				}
-				return obj ? obj.gameObject : null;
+				obj = CreateNewObject(m_poolItems[i], m_poolItems[i].SpawnUnderCanvas);
+				return obj.gameObject;
 			}
 		}
 		return null;

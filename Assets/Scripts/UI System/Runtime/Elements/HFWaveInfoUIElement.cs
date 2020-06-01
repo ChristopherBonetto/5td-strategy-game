@@ -35,11 +35,11 @@ public class HFWaveInfoUIElement : MonoBehaviour
         HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
     }
 
-    private void Update()
-    {
-        if (m_enableTimer && Pausing)
-            ExecuteTimer();
-    }
+    //private void Update()
+    //{
+    //    if (m_enableTimer && Pausing)
+    //        ExecuteTimer();
+    //}
 
     private void ExecuteTimer()
     {

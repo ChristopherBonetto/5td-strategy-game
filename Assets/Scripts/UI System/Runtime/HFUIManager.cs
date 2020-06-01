@@ -135,16 +135,12 @@ namespace HF.Refactoring
                     break;
                 case GameStates.PlayingLevel:
                     break;
-                case GameStates.EndLevel:
-                    ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
-                    HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
-                    endLevel.m_victorySequence.Restart();
-                    break;
             }
         }
 
         private void OnEndLevel(HFLevelInfoSO level, bool isVictory) 
         {
+            ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
             HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
 
             if (isVictory)

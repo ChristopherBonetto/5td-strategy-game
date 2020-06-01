@@ -62,10 +62,19 @@ namespace HF.Unit
         {
             // Get bullet from pool.
             GameObject go = HFPoolManager.Instance.GetPooledObject(m_BulletID.ID);
+
+            Debug.Log(go);
             // Set spawn position and rotation.
-            go.transform.position = m_SpawnPoint.position;
-            go.transform.rotation = m_SpawnPoint.rotation;
-            go.GetComponent<HFBullet>().SetParameters(new HFBulletParameters(null, 0, 0, m_BulletSpeed));
+            if (go != null) 
+            {
+                go.transform.position = m_SpawnPoint.position;
+                go.transform.rotation = m_SpawnPoint.rotation;
+                go.SetActive(true);
+
+                HFBullet bullet = go.GetComponent<HFBullet>();
+                bullet.SetParameters(new HFBulletParameters(null, 0, 0, m_BulletSpeed));
+                bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
+            }
             // Add force to it.
         }
 

@@ -100,10 +100,10 @@ public class BuildingBehaviour : EntityBehavior
     {
         if (m_focusEntity != null)
         {
-            Debug.Log($"i'm attacking {m_focusEntity.name}");
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {
-                //m_view.SpawnBullet();
+                m_view.SpawnPoint.forward = (m_focusEntity.transform.position - m_view.SpawnPoint.position).normalized;
+                m_view.SpawnBullet();
                 StartCoroutine(DealDamge(m_focusEntity));
                 m_attackDelayElapsed = 0;
             }

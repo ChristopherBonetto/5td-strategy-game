@@ -34,6 +34,7 @@ namespace HF
 		private Transform m_transform;
 
 		private Rigidbody m_rigidbody;
+		private string m_layer;
 
 		private HFBulletParameters m_parameters = new HFBulletParameters();
 
@@ -41,8 +42,6 @@ namespace HF
 		{
 			m_transform = transform;
 			m_rigidbody = GetComponent<Rigidbody>();
-
-			Destroy(gameObject, 1.5f);
 		}
 
 		void Start()
@@ -52,34 +51,17 @@ namespace HF
 
 		private void OnTriggerEnter(Collider other)
 		{
-			// Ignore self
-			if (m_parameters.Instigator.Colliders.Contains(other))
-			{
-				return;
-			}
+			if (other.gameObject.layer != LayerMask.NameToLayer(m_layer))
+				gameObject.SetActive(false);
+		}
 
-			bool bHit = false;
-			m_target = other.gameObject.GetComponentInParent<HFUnit>();
-			if (m_target && m_target.enabled)
-			{
-				bHit = true;
-				DamageInfo damageInfo = new DamageInfo(
-					m_parameters.Instigator,
-					m_parameters.UnitDamage,
-					m_parameters.BuildingDamage
-					);
-				m_target.TakeDamage(damageInfo);
-			}
-
-			ParticleSystem explosion = (bHit ? m_explosionHit : m_explosionMissed);
-			if (explosion)
-			{
-				explosion.Play();
-			}
-
-			m_mesh.enabled = false;
-
-			Destroy(gameObject, 0.5f);
+		/// <summary>
+		/// Put the layer of the gameobject that spawn it.
+		/// </summary>
+		/// <param name="layer"></param>
+		public void SetAllyLayer(string layer) 
+		{
+			m_layer = layer;
 		}
 
 		public void SetTarget(HFUnit inTarget)
