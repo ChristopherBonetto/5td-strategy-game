@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
+using DG.Tweening;
 
 namespace HF.Refactoring
 {
@@ -134,6 +135,8 @@ namespace HF.Refactoring
                     break;
                 case GameStates.EndLevel:
                     ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
+                    HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
+                    endLevel.m_enableSequence.Restart();
                     break;
             }
         }
