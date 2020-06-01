@@ -31,7 +31,6 @@ public class CastleStarter : BuildingBehaviour
     {
         base.Start();
 
-        AssignPlayer(PlayerType.Player);
         AssignStats(GameController.Instance.Collection.BuildingsDictionary[BuildingType.CASTLE].BuildingStatsCopy);
 
         // Set this castel as reference in the bh tree.
@@ -40,7 +39,7 @@ public class CastleStarter : BuildingBehaviour
         if (m_towerSpawnPoints == null) return;
         foreach (Transform t in m_towerSpawnPoints)
         {
-            GameController.Instance.CreateNewBuilding(BuildingType.TOWER, PlayerType.Player, t.transform.position.SnapLocation());
+            GameController.Instance.CreateNewBuilding(BuildingType.TOWER, t.transform.position.SnapLocation());
         }
     }
 
@@ -50,7 +49,7 @@ public class CastleStarter : BuildingBehaviour
         {
             if (m_unitSpawnPoint == null) return;
 
-            GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
+            GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation(), false);
         }
     }
 
@@ -86,7 +85,7 @@ public class CastleStarter : BuildingBehaviour
 
             if (timer >= stats.RespawnTime)
             {
-                GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation());
+                GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation(), true);
                 go = false;
             }
             yield return new WaitForEndOfFrame();

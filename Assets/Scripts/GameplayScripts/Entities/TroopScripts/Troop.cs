@@ -6,6 +6,7 @@ using BehaviorDesigner.Runtime;
 using UnityEngine.AI;
 using DG.Tweening;
 using System.Linq;
+using UnityEditor;
 
 public enum TroopStates
 {
@@ -41,7 +42,7 @@ public class Troop : EntityBehavior, ICanMove
     private TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
 
-    public List<Unit> m_unitList;
+    [SerializeField] private List<Unit> m_unitList;
     public List<Unit> UnitList
     {
         get { return m_unitList; }
@@ -98,7 +99,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_troopStats = inStats as UnitsStatsSO;
 
-        CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity);
+        CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity, true);
 
         var troopRef = (SharedTroop)m_behaviorTree.GetVariable("TroopRef");
         troopRef.Value = this;
@@ -110,7 +111,7 @@ public class Troop : EntityBehavior, ICanMove
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
 
-        Agent.enabled = true;
+        //Agent.enabled = true;
 
         m_behaviorTree.enabled = true;
     }
@@ -157,55 +158,41 @@ public class Troop : EntityBehavior, ICanMove
 
     #region Units
 
-    public void CreateUnits(UnitType inType, int inValue)
+    public void CreateUnits(UnitType inType, int inValue, bool withResetForm)
     {
-        UnitList = new List<Unit>(inValue);
-
-        for (int i = 0; i < inValue; i++)
+        for (int i = 0; i < UnitList.Count; i++)
         {
-            GameObject tempUnit = ObjectPooler.Instance.GetUnitObject(inType);
-
-            Unit tempRef = tempUnit.GetComponent<Unit>();
-
-            if (tempRef == null)
+            if (UnitList[i].visualObj != null)
             {
-                Debug.Log(inType + "didn't have UnitBehavior script, pls add next time");
-                return;
+                UnitList[i].visualObj.SetActive(false);
+                UnitList[i].visualObj.transform.parent = null;
+                UnitList[i].visualObj = null;
             }
-            AssignUnitInTroop(tempRef);
+
+            if (i <= inValue)
+            {
+                GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(inType);
+                UnitList[i].visualObj = visualUnit;
+                UnitList[i].visualObj.transform.parent = UnitList[i].transform;
+                UnitList[i].visualObj.transform.localPosition = Vector3.zero;
+                UnitList[i].visualObj.SetActive(true);
+
+                UnitList[i].RefreshHp();
+
+                UnitList[i].transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
+            }
         }
+
+        if(withResetForm)
         SetFormationPositions(m_formationRadius);
-    }
-
-    public void AssignUnitInTroop(Unit inUnit)
-    {
-        UnitList.Add(inUnit);
-        inUnit.StopTree(true);
-
-        inUnit.transform.localScale = Vector3.zero;
-
-        inUnit.gameObject.transform.parent = this.transform;
-        inUnit.gameObject.layer = gameObject.layer;
-
-        inUnit.UnitAgent.enabled = true;
-        inUnit.UnitAgent.Warp(transform.position);
-        inUnit.gameObject.SetActive(true);
-
-        inUnit.AssignUnitInTroop(this);
-        
-        inUnit.RefreshHp();
-
-        inUnit.transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
     }
 
     public void DismissUnitInTroop(Unit inUnit)
     {
-        inUnit.StopTree(true);
+        inUnit.visualObj.SetActive(false);
+        inUnit.visualObj.transform.parent = null;
+        inUnit.visualObj = null;
 
-        UnitList.Remove(inUnit);
-        inUnit.AssignUnitInTroop(null);
-
-        inUnit.gameObject.transform.parent = null;
         inUnit.gameObject.SetActive(false);
     }
 
@@ -304,23 +291,15 @@ public class Troop : EntityBehavior, ICanMove
             m_currentBattle.FinishFight();
         }
 
-        m_behaviorTree.enabled = false;
-
         Agent.Warp(transform.position);
 
         m_focusEntity = null;
-        //var focusEntity = (SharedGameObject)m_behaviorTree.GetVariable("FocusObject");
-        //focusEntity.Value = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
 
         m_destination = endPosition;
-        //var destination = (SharedVector3)m_behaviorTree.GetVariable("Destination");
-        //destination.Value = m_destination;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
 
         SetNewTroopState(TroopStates.GoToDestination);
-
-        m_behaviorTree.enabled = true;
     }
 
     public void AssignGameObjectEntity(GameObject inObj)
@@ -339,7 +318,7 @@ public class Troop : EntityBehavior, ICanMove
             return;
         }
 
-        m_behaviorTree.enabled = false;
+        //m_behaviorTree.enabled = false;
 
         if (m_currentBattle != null)
         {
@@ -398,7 +377,7 @@ public class Troop : EntityBehavior, ICanMove
         {
             SetIdleState();
         }
-        m_behaviorTree.enabled = true;
+        //m_behaviorTree.enabled = true;
     }
 
     //Custom commands for troop/entity
@@ -445,8 +424,6 @@ public class Troop : EntityBehavior, ICanMove
         {
             DismissUnitInTroop(unit);
         }
-        UnitList.Clear();
-        UnitList = null;
 
         m_troopStats = null;
 
@@ -458,8 +435,6 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (FocusEntity != null)
         {
-            StopTree(true);
-
             BuildingHandled = FocusEntity as BuildingBehaviour;
 
             BuildingHandled.transform.parent = this.transform;

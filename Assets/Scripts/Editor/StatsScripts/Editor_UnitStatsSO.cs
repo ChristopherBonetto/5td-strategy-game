@@ -48,18 +48,12 @@ public class Editor_UnitStatsSO : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Captain");
-        unit.BehaviorHandler = (GameObject)EditorGUILayout.ObjectField(unit.BehaviorHandler, typeof(GameObject), false);
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Unit Prefab");
         unit.VisualPrefab = (GameObject)EditorGUILayout.ObjectField(unit.VisualPrefab, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        if (unit.VisualPrefab == null || unit.BehaviorHandler == null)
+        if (unit.VisualPrefab == null)
         {
             EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
         }

@@ -96,7 +96,7 @@ public class GameController : Singleton<GameController>
 
     #region Unit methods
 
-    public Troop CreateNewTroop(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition)
+    public Troop CreateNewTroop(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition, bool inGratis)
     {
         if (!Collection.UnitsDictionary.ContainsKey(inUnitType))
         {
@@ -106,7 +106,7 @@ public class GameController : Singleton<GameController>
 
         Vector3? closestPoint = RandomPoint(inPosition, 1);
 
-        if(closestPoint != null)
+        if (closestPoint != null)
         {
             inPosition = closestPoint.Value;
         }
@@ -115,9 +115,9 @@ public class GameController : Singleton<GameController>
             Debug.Log("Not finded a point");
             return null;
         }
+        
 
-
-        if (inPlayerType == PlayerType.Player)
+        if (!inGratis)
         {
             int cost = Collection.UnitsDictionary[inUnitType].UnitStatsCopy.Cost;
 
@@ -129,19 +129,33 @@ public class GameController : Singleton<GameController>
             AddResources(-cost);
         }
 
-        GameObject troopBrain = ObjectPooler.Instance.GetUnitBehaviorHandler(inUnitType);
-        Troop troopRef = troopBrain.GetComponent<Troop>();
+        GameObject troop;
+        Troop troopRef;
 
-        if (troopBrain == null || troopRef == null)
+        if (inPlayerType == PlayerType.Player)
+        {
+            troop = ObjectPooler.Instance.GetPooledObject("AllyTroop");
+            troop.gameObject.layer = m_playerLayer;
+            
+        }
+        else
+        {
+            troop = ObjectPooler.Instance.GetPooledObject("EnemyTroop");
+            troop.gameObject.layer = m_aiLayer;
+        }
+
+        troopRef = troop.GetComponent<Troop>();
+
+
+        if (troop == null || troopRef == null)
         {
             Debug.Log(inUnitType + " can't be taken from pool. Pls check Collection or add Troop script to Captain");
             return null;
         }
 
         troopRef.Agent.Warp(inPosition);
-        troopBrain.SetActive(true);
+        troop.SetActive(true);
 
-        troopRef.AssignPlayer(inPlayerType);
         troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
 
         return troopRef;
@@ -162,7 +176,7 @@ public class GameController : Singleton<GameController>
 
     #region Building Methods
 
-    public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, PlayerType inPlayerType, Vector3 inPosition)
+    public BuildingBehaviour CreateNewBuilding(BuildingType inBuildingType, Vector3 inPosition)
     {
         if (!Collection.BuildingsDictionary.ContainsKey(inBuildingType))
         {
@@ -170,39 +184,20 @@ public class GameController : Singleton<GameController>
             return null;
         }
 
-        if (inPlayerType == PlayerType.Player)
-        {
-            int cost = Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost;
+        GameObject building = ObjectPooler.Instance.GetPooledObject("Building");
+        BuildingBehaviour buildingRef = building.GetComponent<BuildingBehaviour>();
 
-            if (!CheckResourcesAvailability(cost))
-            {
-                Debug.LogWarning("U don't have resources to create " + inBuildingType);
-                return null;
-            }
-            AddResources(-cost);
-        }
-
-        //CheckFreeSpace(inPosition, 1);
-
-        GameObject buildingBrain = ObjectPooler.Instance.GetBuildingBehaviorHandler(inBuildingType);
-        BuildingBehaviour buildingRef = buildingBrain.GetComponent<BuildingBehaviour>();
-
-        if (buildingBrain == null || buildingRef == null)
+        if (building == null || buildingRef == null)
         {
             Debug.Log(inBuildingType + " can't be taken from pool. Pls check Collection or add Troop script to Captain");
             return null;
         }
 
-        buildingBrain.transform.position = inPosition;
-        buildingBrain.SetActive(true);
-
-        buildingRef.AssignPlayer(inPlayerType);
+        building.transform.position = inPosition;
+        building.SetActive(true);
+        building.gameObject.layer = m_playerLayer;
+        
         buildingRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
-
-        if(inBuildingType == BuildingType.CASTLE)
-        {
-            GlobalVariables.Instance.SetVariableValue("Castle",buildingRef.gameObject);
-        }
 
         return buildingRef;
     }
@@ -275,15 +270,4 @@ public class GameController : Singleton<GameController>
         return Collection.BuildingsDictionary[unitType].OriginalBuildingStats.Icon;
     }
 
-    public void RespawnAllyTroopCall(UnitType type, PlayerType pType, Vector3 position, float waitTime)
-    {
-        StartCoroutine(RespawnAllyTroop(type, pType, position, waitTime));
-    }
-
-    public IEnumerator RespawnAllyTroop(UnitType type, PlayerType pType, Vector3 position, float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-        CreateNewTroop(type, pType, position);
-        yield return null;
-    }
 }

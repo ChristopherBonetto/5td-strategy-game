@@ -209,18 +209,12 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Captain");
-        unit.BehaviorHandler = (GameObject)EditorGUILayout.ObjectField(unit.BehaviorHandler, typeof(GameObject), false);
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Unit Prefab");
         unit.VisualPrefab = (GameObject)EditorGUILayout.ObjectField(unit.VisualPrefab, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        if (unit.VisualPrefab == null || unit.BehaviorHandler == null)
+        if (unit.VisualPrefab == null)
         {
             tempValue = false;
             EditorGUILayout.HelpBox("This entity need a prefab", MessageType.Warning);
@@ -387,12 +381,6 @@ public class GeneralSettings : EditorWindow
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Name");
         building.Name = EditorGUILayout.TextField(building.Name);
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        GUILayout.Label("Behavior Handler");
-        building.BehaviorHandler = (GameObject)EditorGUILayout.ObjectField(building.BehaviorHandler, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 

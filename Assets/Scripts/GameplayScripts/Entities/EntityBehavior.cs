@@ -49,15 +49,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         set
         {
             m_isBusy = value;
-
-            if(m_isBusy == true)
-            {
-                transform.tag = "IsBusy";
-            }
-            else
-            {
-                transform.tag = "NoBusy";
-            }
         }
     }
 
@@ -93,19 +84,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     #region Generic Methods for entity
 
-    public virtual void AssignPlayer(PlayerType inPlayerType)
-    {
-        m_entityPlayerType = inPlayerType;
-
-        if (EntityPlayerType == PlayerType.Player)
-        {
-            gameObject.layer = GameController.Instance.m_playerLayer;
-        }
-        else if (EntityPlayerType == PlayerType.AI)
-        {
-            gameObject.layer = GameController.Instance.m_aiLayer;
-        }
-    }
 
     public virtual void AssignStats(EntityStatsSO inStats)
     {
@@ -256,7 +234,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     #region Specialization
     public virtual void Specialization(UnitType type)
     {
-        if (GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position) != null)
+        if (GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position,true) != null)
         {
             HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
             HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
@@ -265,7 +243,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Specialization(BuildingType type)
     {
-        if (GameController.Instance.CreateNewBuilding(type, PlayerType.Player, this.transform.position) != null)
+        if (GameController.Instance.CreateNewBuilding(type, this.transform.position) != null)
         {
             HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
             HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);

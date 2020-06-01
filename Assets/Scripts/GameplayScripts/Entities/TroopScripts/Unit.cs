@@ -14,7 +14,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     private BehaviorTree m_unitTree;
     public BehaviorTree UnitTree { get => m_unitTree; }
 
-    private Troop m_troopRef;
+    [SerializeField] private Troop m_troopRef;
     public Troop TroopRef { get => m_troopRef; }
 
     private UnitsStatsSO m_unitStats;
@@ -26,6 +26,8 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public Unit m_focusUnit;
     public BuildingBehaviour m_focusBuilding;
+
+    public GameObject visualObj;
 
 
     private void OnEnable()
@@ -55,14 +57,14 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
         else if (inState == GameStates.Pause)
         {
-            if(TroopRef.m_currentBattle != null)
+            if(m_troopRef.m_currentBattle != null)
             {
                 StopTree(true);
             }
         }
         else if (inState == GameStates.PlayingLevel)
         {
-            if (TroopRef.m_currentBattle != null)
+            if (m_troopRef.m_currentBattle != null)
             {
                 StopTree(false);
             }
@@ -87,24 +89,6 @@ public class Unit : MonoBehaviour, ITakeDamage
     #endregion
 
     #region Assignments
-
-    public void AssignUnitInTroop(Troop inValue)
-    {
-        if(inValue != null)
-        {
-            m_troopRef = inValue;
-            m_unitStats = m_troopRef.GetStats();
-            AssignValuesToTree(m_troopRef, 2, m_unitStats.UnitSpeed, m_unitStats.AttackSpeed);
-        }
-        else
-        {
-            m_troopRef = null;
-            m_unitStats = null;
-            AssignFocusBuilding(null);
-            AssignFocusUnit(null);
-            AssignValuesToTree(null, 2, 2, 2);
-        }
-    }
 
     public void AssignFocusUnit(Unit inUnit)
     {
@@ -177,23 +161,23 @@ public class Unit : MonoBehaviour, ITakeDamage
     {
         if (m_focusUnit)
         {
-            if (TroopRef.GetStats().AttackType == AttackType.MELEE)
+            if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
                 m_unitAttackType.SingleAttack(m_focusUnit, m_unitStats.Damage);
             }
-            else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
+            else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
                 m_unitAttackType.SingleAttack(m_focusUnit, m_unitStats.Damage);
             }
         }
         else if (m_focusBuilding)
         {
-            if (TroopRef.GetStats().AttackType == AttackType.MELEE)
+            if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
                 m_unitAttackType.SingleAttack(m_focusBuilding, m_unitStats.Damage);
                 Debug.Log($"Damagin castle: {m_focusBuilding.CurrentHp}");
             }
-            else if (TroopRef.GetStats().AttackType == AttackType.RANGED)
+            else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
                 m_unitAttackType.SingleAttack(m_focusBuilding, m_unitStats.Damage);
             }
@@ -202,9 +186,9 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void CheckAnotherTarget()
     {
-        if (TroopRef.m_currentBattle != null)
+        if (m_troopRef.m_currentBattle != null)
         {
-            TroopRef.m_currentBattle.TakeOtherTarget(this);
+            m_troopRef.m_currentBattle.TakeOtherTarget(this);
         }
     }
 
@@ -214,7 +198,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void RefreshHp()
     {
-        m_unitHp = TroopRef.GetStats().MaxHp;
+        m_unitHp = m_troopRef.GetStats().MaxHp;
     }
 
     public bool TakeDamage(int Damage)
@@ -244,14 +228,14 @@ public class Unit : MonoBehaviour, ITakeDamage
         AssignFocusUnit(null);
         AssignFocusBuilding(null);
 
-        if(TroopRef.EntityPlayerType == PlayerType.AI)
+        if(m_troopRef.EntityPlayerType == PlayerType.AI)
         {
             GameObject gem = ObjectPooler.Instance.GetPooledObject("Gem");
             gem.transform.position = this.transform.position;
             gem.SetActive(true);
         }
 
-        TroopRef.TroopTakeDamage(this);
+        m_troopRef.TroopTakeDamage(this);
     }
 
 

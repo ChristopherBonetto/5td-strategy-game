@@ -13,7 +13,6 @@ public class EntityStatsSO : ScriptableObject
 
     public Sprite Icon;
 
-    public GameObject BehaviorHandler;
     public GameObject VisualPrefab;
     
     [Header("Defensive Stats")]
