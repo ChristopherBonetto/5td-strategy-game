@@ -80,15 +80,19 @@ public class TileHighlight : MonoBehaviour
             if (Input.GetMouseButtonDown(1))
             {
                 transform.DOScale(1.5f, 0.3f);
-                SpRender.DOColor(selectedColor, 0.2f).SetLoops(2, LoopType.Yoyo);
+                SpRender.DOColor(selectedColor, 0.2f);
             }
-            else if (Input.GetMouseButtonUp(1))
-            {
-                transform.DOScale(1f, 0.3f);
-            }
+
         }
-     
+ 
+
+}
+    public void OnMouseExit()
+    {
+        transform.DOScale(1f, 0.3f);
+        SpRender.DOColor(startColor, 0.2f);
     }
+
 
 
 
