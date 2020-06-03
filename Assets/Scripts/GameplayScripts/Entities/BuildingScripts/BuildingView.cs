@@ -71,12 +71,13 @@ namespace HF.Unit
         {
             NavMeshObstacle.enabled = true;
             Collider.enabled = true;
+            drop.Play();
         }
 
         public void SpawnBullet()
         {
             anim.SetTrigger("isShooting");
-            drop.Play();
+        
 
             // Get bullet from pool.
             GameObject go = HFPoolManager.Instance.GetPooledObject(m_BulletID.ID);
