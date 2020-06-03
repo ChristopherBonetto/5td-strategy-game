@@ -91,6 +91,20 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         Debug.Log(m_entityStats);
     }
 
+    public virtual void AssignPlayer(PlayerType inPlayerType)
+    {
+        m_entityPlayerType = inPlayerType;
+
+        if(EntityPlayerType == PlayerType.Player)
+        {
+            gameObject.layer = GameController.Instance.m_playerLayer;
+        }
+        else if(EntityPlayerType == PlayerType.AI)
+        {
+            gameObject.layer = GameController.Instance.m_aiLayer;
+        }
+    }
+
     public EntityStatsSO GetStats()
     {
         return m_entityStats;

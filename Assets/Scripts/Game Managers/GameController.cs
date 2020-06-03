@@ -131,13 +131,10 @@ public class GameController : Singleton<GameController>
         if (inPlayerType == PlayerType.Player)
         {
             troop = ObjectPooler.Instance.GetPooledObject("AllyTroop");
-            troop.gameObject.layer = m_playerLayer;
-            
         }
         else
         {
             troop = ObjectPooler.Instance.GetPooledObject("EnemyTroop");
-            troop.gameObject.layer = m_aiLayer;
         }
 
         troopRef = troop.GetComponent<Troop>();
@@ -153,6 +150,7 @@ public class GameController : Singleton<GameController>
         troop.SetActive(true);
 
         troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
+        troopRef.AssignPlayer(inPlayerType);
 
         return troopRef;
     }
