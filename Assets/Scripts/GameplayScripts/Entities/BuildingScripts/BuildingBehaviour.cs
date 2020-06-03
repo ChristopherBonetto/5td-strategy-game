@@ -43,7 +43,10 @@ public class BuildingBehaviour : EntityBehavior
     {
         m_currentHp -= Damage;
 
-        if (m_currentHp <= 0) return true;
+        if (m_currentHp <= 0) {
+            Death();
+            return true;
+        }
         return false;
     }
 
