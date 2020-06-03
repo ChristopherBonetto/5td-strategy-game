@@ -58,11 +58,11 @@ namespace HF.Refactoring
             FadeBackground.gameObject.SetActive(false);
             FadeBackground.color = Color.clear;
 
-            //RestartLevelButton.gameObject.SetActive(false);
-            //RestartLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene;
+            RestartLevelButton.gameObject.SetActive(false);
+            RestartLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene;
 
-            //NextLevelButton.gameObject.SetActive(false);
-            //NextLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene + 1;    // How can I control if is it null?
+            NextLevelButton.gameObject.SetActive(false);
+            NextLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene + 1;    // How can I control if is it null?
 
             ReturnToMainMenuButton.gameObject.SetActive(false);
 

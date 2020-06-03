@@ -44,9 +44,14 @@ namespace HF
 			m_rigidbody = GetComponent<Rigidbody>();
 		}
 
-		void Start()
+		void OnEnable()
 		{
 			m_rigidbody.AddRelativeForce(0f, 0f, m_parameters.Speed, ForceMode.VelocityChange);
+		}
+
+		private void OnDisable()
+		{
+			m_rigidbody.velocity = Vector3.zero;
 		}
 
 		private void OnTriggerEnter(Collider other)

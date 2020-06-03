@@ -103,9 +103,10 @@ public class BuildingBehaviour : EntityBehavior
     {
         if (m_focusEntity != null)
         {
+            m_view.TrackOstile(m_focusEntity.transform);
+
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {
-                m_view.SpawnPoint.forward = (m_focusEntity.transform.position - m_view.SpawnPoint.position).normalized;
                 m_view.SpawnBullet();
                 StartCoroutine(DealDamge(m_focusEntity));
                 m_attackDelayElapsed = 0;

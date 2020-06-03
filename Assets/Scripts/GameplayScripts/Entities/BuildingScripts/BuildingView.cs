@@ -9,6 +9,13 @@ namespace HF.Unit
     public class BuildingView : MonoBehaviour
     {
         [SerializeField]
+        private Transform m_objectToRotateOnY;
+        [SerializeField]
+        private Transform m_objectToRotateOnX;
+        [SerializeField]
+        private bool m_lockSpawnBulletPoint;
+
+        [SerializeField]
         private Transform m_SpawnPoint;
         public Transform SpawnPoint => m_SpawnPoint;
 
@@ -75,12 +82,28 @@ namespace HF.Unit
                 bullet.SetParameters(new HFBulletParameters(null, 0, 0, m_BulletSpeed));
                 bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
             }
-            // Add force to it.
         }
 
-        //public void TrackOstile(Entity ostile)
-        //{
-        //    m_weapon.LookAt(ostile.transform);
-        //}
+        public void TrackOstile(Transform ostile)
+        {
+            float angleOnX = 0;
+            float angleOnY = 0;
+
+            if (m_objectToRotateOnY != null)
+            {
+                Vector3 direction = ostile.transform.position - m_objectToRotateOnY.position;
+                angleOnY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            }
+
+            if (m_objectToRotateOnX != null)
+                angleOnX = m_objectToRotateOnX.position.y - ostile.position.y;
+
+            m_objectToRotateOnY.rotation = Quaternion.Euler(angleOnX, angleOnY, 0);
+
+            if (!m_lockSpawnBulletPoint)
+            {
+                m_SpawnPoint.forward = ostile.position - m_SpawnPoint.position;
+            }
+        }
     }
 }
