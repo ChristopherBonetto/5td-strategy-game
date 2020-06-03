@@ -176,7 +176,7 @@ public class BuildingBehaviour : EntityBehavior
 
     public override void Death()
     {
-        HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath, this);
+        HFEventManager.TriggerEvent<bool>(HFEventID.OnEndLevel, false);
         StopAllCoroutines();
         ResetEntity();
     }
