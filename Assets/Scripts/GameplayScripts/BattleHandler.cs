@@ -29,9 +29,13 @@ public struct Fight
             battleScript.StartFight(Attacker, Defender);
         }
 
-        Vector3 objectLine = (Defender.transform.position - Attacker.transform.position);
+        Vector3 objectLine = (Defender.transform.position - Attacker.transform.position); // This operation doesn't give you the midlle point between attacker and defender. 
+        // If you want to position the Battle handler in the midlle of the fight just do the follow operations:
+        // (V1 + V2) / 2.   (or in this case --> (attacker.position + defender.positon) / 2)
+        // This change also the Y axis, give some offset if you wish.
+
         float distance = objectLine.magnitude;
-        objectLine = objectLine.normalized;
+        objectLine = objectLine.normalized; // Why normalize? Do you want to spawn it in 0,0,0 + some distance?
         battleHandler.gameObject.SetActive(true);
         battleHandler.transform.position = objectLine;
     }
@@ -70,10 +74,9 @@ public class BattleHandler : MonoBehaviour
 
             for (int i = 0; i < attacker.UnitList.Count; i++)
             {
-                if (defenderT.UnitList.Count == 0)
-                {
+                if (defenderT.UnitList.Count == 0) {
                     FinishFight();
-                    goto end;
+                    goto end;   // make sure to exit from the loop
                 }
 
                 enemyIndex = Mathf.Max(0, enemyIndex);
@@ -84,10 +87,9 @@ public class BattleHandler : MonoBehaviour
             }
             for (int i = 0; i < defenderT.UnitList.Count; i++)
             {
-                if (attacker.UnitList.Count == 0)
-                {
+                if (attacker.UnitList.Count == 0) {
                     FinishFight();
-                    goto end;
+                    goto end;   // make sure to exit from the loop
                 }
 
                 playerIndex = Mathf.Max(0, playerIndex);
@@ -109,7 +111,7 @@ public class BattleHandler : MonoBehaviour
                 attacker.UnitList[i].StopTree(false);
             }
         }
-    end:;
+    end:; // The goal of the "goto" keyword.
     }
 
     public void TakeOtherTarget(Unit inUnit)
