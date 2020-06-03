@@ -22,6 +22,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
             if (troopRef.Value.m_currentBattle == null)
             {
+                Debug.Log(gameObject.transform.name + " captain no in combat");
                 return TaskStatus.Failure;
             }
 
@@ -30,7 +31,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnReset()
         {
-            troopRef = null;
+            //troopRef = null;
         }
     }
 }

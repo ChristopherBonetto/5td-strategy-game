@@ -291,8 +291,6 @@ public class Troop : EntityBehavior, ICanMove
             m_currentBattle.FinishFight();
         }
 
-        Agent.Warp(transform.position);
-
         m_focusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
 
@@ -317,8 +315,6 @@ public class Troop : EntityBehavior, ICanMove
             //m_buildingHandled.Drop(this.transform.position);
             return;
         }
-
-        //m_behaviorTree.enabled = false;
 
         if (m_currentBattle != null)
         {
@@ -377,7 +373,6 @@ public class Troop : EntityBehavior, ICanMove
         {
             SetIdleState();
         }
-        //m_behaviorTree.enabled = true;
     }
 
     //Custom commands for troop/entity
@@ -395,8 +390,6 @@ public class Troop : EntityBehavior, ICanMove
 
     public void SetIdleState()
     {
-        m_behaviorTree.enabled = false;
-
         SetNewTroopState(TroopStates.Idle);
         m_focusEntity = null;
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");

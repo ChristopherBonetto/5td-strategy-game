@@ -29,7 +29,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public GameObject visualObj;
 
-
+    #region Events
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, FreezeMode);
@@ -40,6 +40,8 @@ public class Unit : MonoBehaviour, ITakeDamage
         HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, FreezeMode);
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
     }
+    #endregion
+
     private void Awake()
     {
         Initialize();
@@ -92,7 +94,6 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void AssignFocusUnit(Unit inUnit)
     {
-        StopTree(true);
         m_focusBuilding = null;
 
         if(inUnit != null)
@@ -107,13 +108,10 @@ public class Unit : MonoBehaviour, ITakeDamage
             var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
             focusObj.Value = null;
         }
-
-        StopTree(false);
     }
 
     public void AssignFocusBuilding(BuildingBehaviour building)
     {
-        StopTree(true);
         m_focusBuilding = null;
 
         if (building != null)
@@ -128,8 +126,6 @@ public class Unit : MonoBehaviour, ITakeDamage
             var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
             focusObj.Value = null;
         }
-
-        StopTree(false);
     }
 
     private void AssignValuesToTree(Troop inTroop, float inAttackRange, float inMovSpeed, float inAttackSpeed)
