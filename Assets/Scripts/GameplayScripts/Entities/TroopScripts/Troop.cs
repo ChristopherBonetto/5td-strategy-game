@@ -81,13 +81,12 @@ public class Troop : EntityBehavior, ICanMove
     {
         m_troopStats = inStats as UnitsStatsSO;
 
-        RefreshUnitsVisual(m_troopStats.UnitType, m_troopStats.UnitQuantity, true);
+        RefreshUnitsVisual(m_troopStats.UnitType, m_troopStats.UnitQuantity);
 
         var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
         engageRange.Value = m_troopStats.EngageRange;
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
         attackRange.Value = m_troopStats.AttackRange;
-        
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
     }
@@ -134,7 +133,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #region Units
 
-    public void RefreshUnitsVisual(UnitType inType, int inValue, bool withResetForm)
+    public void RefreshUnitsVisual(UnitType inType, int inValue)
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
@@ -147,19 +146,24 @@ public class Troop : EntityBehavior, ICanMove
 
             if (i < inValue)
             {
+                UnitList[i].gameObject.SetActive(true);
                 GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(inType);
                 UnitList[i].visualObj = visualUnit;
                 UnitList[i].visualObj.transform.parent = UnitList[i].transform;
                 UnitList[i].visualObj.transform.localPosition = Vector3.zero;
+                UnitList[i].visualObj.transform.rotation = UnitList[i].UnitAgent.transform.rotation;
                 UnitList[i].visualObj.SetActive(true);
 
                 UnitList[i].RefreshHp();
 
                 UnitList[i].transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
             }
+            else
+            {
+                UnitList[i].gameObject.SetActive(false);
+            }
         }
 
-        if(withResetForm)
         SetFormationPositions(m_formationRadius);
     }
 
@@ -234,6 +238,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
+            if(UnitList[i].UnitAgent.isActiveAndEnabled)
             UnitList[i].UnitAgent.SetDestination(transform.position + inPos[i]);
         }
     }

@@ -82,11 +82,11 @@ namespace HF.Refactoring
 
             if (entity.gameObject.layer == GameController.Instance.m_playerLayer)
             {
-                if (entity.IsBusy)
-                {
-                    UnitSelectedContainer.SetActive(false);
-                    return;
-                }
+                //if (entity.IsBusy)
+                //{
+                //    UnitSelectedContainer.SetActive(false);
+                //    return;
+                //}
 
                 SetUpSpecializationButton(entity);
                 UnitSelectedContainer.SetActive(true);
