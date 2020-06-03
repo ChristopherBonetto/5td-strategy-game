@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Types;
 using UnityEngine.AI;
-using BehaviorDesigner.Runtime;
-using UnityEngine.XR.WSA.Input;
 
 public class GameController : Singleton<GameController>
 {
