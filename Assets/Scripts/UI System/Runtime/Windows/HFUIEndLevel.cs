@@ -32,7 +32,7 @@ namespace HF.Refactoring
                 .AppendCallback(() => SetActiveElements(true, FadeBackground.gameObject, VictoryBanner.gameObject))
                 .Append(FadeBackground.DOColor(Color.black, 1f))
                 .Append(VictoryBanner.transform.DOScale(1f, 1f))
-                .AppendCallback(() => SetActiveElements(true, RestartLevelButton.gameObject, NextLevelButton.gameObject, ReturnToMainMenuButton.gameObject))
+                .AppendCallback(() => SetActiveElements(true, /*RestartLevelButton.gameObject, NextLevelButton.gameObject,*/ ReturnToMainMenuButton.gameObject))
                 .AppendCallback(() => HFUIManager.Instance.TryGetWindow(HFUIWindowID.LEVEL_ENDING))
                 .Pause();
             m_victorySequence.SetAutoKill(false);
@@ -41,7 +41,7 @@ namespace HF.Refactoring
                 .AppendCallback(() => SetActiveElements(true, FadeBackground.gameObject, DefeatBanner.gameObject))
                 .Append(FadeBackground.DOColor(Color.black, 1f))
                 .Append(DefeatBanner.transform.DOScale(1f, 1f))
-                .AppendCallback(() => SetActiveElements(true, RestartLevelButton.gameObject, ReturnToMainMenuButton.gameObject))
+                .AppendCallback(() => SetActiveElements(true, /*RestartLevelButton.gameObject,*/ ReturnToMainMenuButton.gameObject))
                 .AppendCallback(() => HFUIManager.Instance.TryGetWindow(HFUIWindowID.LEVEL_ENDING))
                 .Pause();
             m_defeatSequence.SetAutoKill(false);
@@ -58,11 +58,11 @@ namespace HF.Refactoring
             FadeBackground.gameObject.SetActive(false);
             FadeBackground.color = Color.clear;
 
-            RestartLevelButton.gameObject.SetActive(false);
-            RestartLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene;
+            //RestartLevelButton.gameObject.SetActive(false);
+            //RestartLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene;
 
-            NextLevelButton.gameObject.SetActive(false);
-            NextLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene + 1;    // How can I control if is it null?
+            //NextLevelButton.gameObject.SetActive(false);
+            //NextLevelButton.Sceneindex = HFScenesManager.Instance.IndexCurrentScene + 1;    // How can I control if is it null?
 
             ReturnToMainMenuButton.gameObject.SetActive(false);
 
