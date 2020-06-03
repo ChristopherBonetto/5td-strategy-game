@@ -74,7 +74,8 @@ public class TileHighlight : MonoBehaviour
     
         if(isActive==true)
         {
-            transform.DOScale(1.5f, 0.3f);
+            transform.DOScale(1.25f, 0.3f);
+            SpRender.DOFade(0.6f, 0.3f);
            
 
             if (Input.GetMouseButtonDown(1))
