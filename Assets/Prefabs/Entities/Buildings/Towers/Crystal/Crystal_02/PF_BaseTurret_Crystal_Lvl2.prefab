@@ -66,9 +66,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b2c6b127f9ecf41a73b6c432575181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_objectToRotateOnY: {fileID: 1945286260491709935}
+  m_objectToRotateOnX: {fileID: 1945286260491709935}
+  m_lockSpawnBulletPoint: 1
   m_SpawnPoint: {fileID: 6688100454551920319}
   m_BulletID: {fileID: 11400000, guid: b272f9bcacd29734bad36d5ea8f88b22, type: 2}
-  m_BulletSpeed: 5
+  m_BulletSpeed: 20
   anim: {fileID: 6753562245568349685}
   drop: {fileID: 208464822348567259}
 --- !u!65 &5966896033993141498
@@ -274,6 +277,12 @@ Transform:
 --- !u!95 &6753562245568349685 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7551054057635532500, guid: e1e6d2e28c9fee9449f92d195c900eb9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3851636219422444321}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1945286260491709935 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3426334624680928974, guid: e1e6d2e28c9fee9449f92d195c900eb9,
     type: 3}
   m_PrefabInstance: {fileID: 3851636219422444321}
   m_PrefabAsset: {fileID: 0}

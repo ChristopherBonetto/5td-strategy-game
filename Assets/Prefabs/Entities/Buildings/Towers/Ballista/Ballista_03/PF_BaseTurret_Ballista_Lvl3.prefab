@@ -146,9 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b2c6b127f9ecf41a73b6c432575181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SpawnPoint: {fileID: 0}
+  m_objectToRotateOnY: {fileID: 6662267857514408343}
+  m_objectToRotateOnX: {fileID: 6662267857514408343}
+  m_lockSpawnBulletPoint: 1
+  m_SpawnPoint: {fileID: 7690806655298060494}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
-  m_BulletSpeed: 5
+  m_BulletSpeed: 30
   anim: {fileID: 556419600170074570}
   drop: {fileID: 520198785400830150}
 --- !u!65 &2021366632546382013
@@ -193,6 +196,36 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5289815534923348305}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8036106656153224853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7690806655298060494}
+  m_Layer: 0
+  m_Name: BulletSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7690806655298060494
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8036106656153224853}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.75, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1207796291841039653}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1180093324545584147
 PrefabInstance:
@@ -347,6 +380,12 @@ Transform:
 --- !u!95 &556419600170074570 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 3562430767158655316, guid: 235eadfa1fbc0844b89de6346aa4548a,
+    type: 3}
+  m_PrefabInstance: {fileID: 3947553807492855966}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6662267857514408343 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7691486346383986953, guid: 235eadfa1fbc0844b89de6346aa4548a,
     type: 3}
   m_PrefabInstance: {fileID: 3947553807492855966}
   m_PrefabAsset: {fileID: 0}

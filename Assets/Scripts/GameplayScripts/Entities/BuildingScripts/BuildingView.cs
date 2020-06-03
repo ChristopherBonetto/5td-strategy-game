@@ -27,6 +27,9 @@ namespace HF.Unit
         private float m_BulletSpeed;
         public float BulletSpeed => m_BulletSpeed;
 
+        public Animator anim;
+        public ParticleSystem drop;
+
         /*
         * The obstacle is set to the view because we can
         * adapt the size when modify prefab.
@@ -53,6 +56,11 @@ namespace HF.Unit
             }
         }
 
+        private void OnEnable()
+        {
+            drop.Stop();
+        }
+
         public void CarryBuilding()
         {
             NavMeshObstacle.enabled = false;
@@ -67,6 +75,9 @@ namespace HF.Unit
 
         public void SpawnBullet()
         {
+            anim.SetTrigger("isShooting");
+            drop.Play();
+
             // Get bullet from pool.
             GameObject go = HFPoolManager.Instance.GetPooledObject(m_BulletID.ID);
 
