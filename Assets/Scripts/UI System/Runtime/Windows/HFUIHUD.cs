@@ -98,7 +98,7 @@ namespace HF.Refactoring
 
         private void OnUnitSpecialized(EntityBehavior entity, int team)
         {
-            UnitSelectedContainer.SetActive(false);
+            OnUnitSelected(entity, 0);
         }
 
         private void OnUnitFight(EntityBehavior entity)
