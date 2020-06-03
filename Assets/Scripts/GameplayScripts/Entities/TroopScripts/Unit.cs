@@ -17,8 +17,6 @@ public class Unit : MonoBehaviour, ITakeDamage
     [SerializeField] private Troop m_troopRef;
     public Troop TroopRef { get => m_troopRef; }
 
-    private UnitsStatsSO m_unitStats;
-
     private int m_unitHp;
     public int UnitHp { get => m_unitHp; }
 
@@ -159,23 +157,23 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleAttack(m_focusUnit, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_unitAttackType.SingleAttack(m_focusUnit, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
         }
         else if (m_focusBuilding)
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleAttack(m_focusBuilding, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusBuilding, TroopRef.GetStats().Damage);
                 Debug.Log($"Damagin castle: {m_focusBuilding.CurrentHp}");
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_unitAttackType.SingleAttack(m_focusBuilding, m_unitStats.Damage);
+                m_unitAttackType.SingleAttack(m_focusBuilding, TroopRef.GetStats().Damage);
             }
         }
     }

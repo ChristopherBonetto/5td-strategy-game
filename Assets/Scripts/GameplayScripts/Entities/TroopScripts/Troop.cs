@@ -52,27 +52,11 @@ public class Troop : EntityBehavior, ICanMove
     public Vector3[] m_formationPosition { get; private set; } = new Vector3[4];
 
     private Vector3 m_destination;
-    private Vector3 m_startingPos;
 
     public BattleHandler m_currentBattle = null;
 
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
-
-    protected override void OnEnable()
-    {
-        m_startingPos = transform.position;
-
-        base.OnEnable();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            Death();
-        }
-    }
 
     /// <summary>
     /// This will be called after the troop is instantiated by the wave controller.
@@ -95,14 +79,10 @@ public class Troop : EntityBehavior, ICanMove
 
     public override void AssignStats(EntityStatsSO inStats)
     {
-        m_behaviorTree.enabled = false;
-
         m_troopStats = inStats as UnitsStatsSO;
 
-        CreateUnits(m_troopStats.UnitType, m_troopStats.UnitQuantity, true);
+        RefreshUnitsVisual(m_troopStats.UnitType, m_troopStats.UnitQuantity, true);
 
-        var troopRef = (SharedTroop)m_behaviorTree.GetVariable("TroopRef");
-        troopRef.Value = this;
         var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
         engageRange.Value = m_troopStats.EngageRange;
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
@@ -110,10 +90,6 @@ public class Troop : EntityBehavior, ICanMove
         
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
-
-        //Agent.enabled = true;
-
-        m_behaviorTree.enabled = true;
     }
 
     public UnitsStatsSO GetStats()
@@ -158,7 +134,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #region Units
 
-    public void CreateUnits(UnitType inType, int inValue, bool withResetForm)
+    public void RefreshUnitsVisual(UnitType inType, int inValue, bool withResetForm)
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
@@ -169,7 +145,7 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].visualObj = null;
             }
 
-            if (i <= inValue)
+            if (i < inValue)
             {
                 GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(inType);
                 UnitList[i].visualObj = visualUnit;
@@ -505,7 +481,8 @@ public class Troop : EntityBehavior, ICanMove
 
     public override void Specialization(UnitType type)
     {
-        ResetEntity();
+        //ResetEntity();
+        AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
         base.Specialization(type);
     }
 }

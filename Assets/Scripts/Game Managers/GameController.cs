@@ -151,6 +151,7 @@ public class GameController : Singleton<GameController>
 
         troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
         troopRef.AssignPlayer(inPlayerType);
+        troopRef.StopTree(false);
 
         return troopRef;
     }
@@ -163,8 +164,6 @@ public class GameController : Singleton<GameController>
         }
         return null;
     }
-
-
 
     #endregion
 
@@ -192,6 +191,7 @@ public class GameController : Singleton<GameController>
         building.gameObject.layer = m_playerLayer;
         
         buildingRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+        buildingRef.StopTree(false);
 
         return buildingRef;
     }

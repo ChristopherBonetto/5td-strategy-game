@@ -248,11 +248,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     #region Specialization
     public virtual void Specialization(UnitType type)
     {
-        if (GameController.Instance.CreateNewTroop(type, PlayerType.Player, this.transform.position,true) != null)
-        {
-            HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
-            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
-        }
+        HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }
 
     public virtual void Specialization(BuildingType type)
