@@ -140,13 +140,14 @@ namespace HF.Refactoring
 
         private void OnEndLevel(HFLevelInfoSO level, bool isVictory) 
         {
-            ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
             HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
 
             if (isVictory)
                 endLevel.m_victorySequence.Restart();
             else
                 endLevel.m_defeatSequence.Restart();
+
+            ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
         }
         #endregion
 
@@ -278,7 +279,7 @@ namespace HF.Refactoring
             }
         }
 
-        private void TryGetWindow(HFUIWindowID id)
+        public void TryGetWindow(HFUIWindowID id)
         {
             if (m_WindowCollection.TryGetValue(id, out HFUIWindow window))
             {

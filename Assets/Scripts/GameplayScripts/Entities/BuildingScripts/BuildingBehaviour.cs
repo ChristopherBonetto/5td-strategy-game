@@ -163,9 +163,13 @@ public class BuildingBehaviour : EntityBehavior
         StopTree(true);
         StopAllCoroutines();
         m_buildingStats = null;
-        m__viewObj.gameObject.SetActive(false);
-        m__viewObj.gameObject.transform.parent = null;
-        m__viewObj = null;
+
+        if (m__viewObj)
+        {
+            m__viewObj.gameObject.SetActive(false);
+            m__viewObj.gameObject.transform.parent = null;
+            m__viewObj = null;
+        }
         this.gameObject.SetActive(false);
     }
 
@@ -179,7 +183,7 @@ public class BuildingBehaviour : EntityBehavior
 
     public override void Death()
     {
-        HFEventManager.TriggerEvent<bool>(HFEventID.OnEndLevel, false);
+        HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, HFScenesManager.Instance.CurrentLevelSelected, false);
         StopAllCoroutines();
         ResetEntity();
     }

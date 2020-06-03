@@ -10,7 +10,7 @@ namespace HF.Refactoring
 
         public void LoadScene()
         {
-            if (m_isMatchingWindowID)
+            if (m_isListeningInput)
             {
                 HFScenesManager.Instance.LoadSceneFromIndex(Sceneindex);
             }
@@ -18,8 +18,9 @@ namespace HF.Refactoring
 
         public void LoadSceneWithLoading()
         {
-            if (m_isMatchingWindowID)
+            if (m_isListeningInput)
             {
+                HFGameManager.Instance.ChangeGMState(GameStates.Pause); // Change the state when the level end.
                 Debug.Log("Pressing...");
                 HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(Sceneindex, false);
             }
