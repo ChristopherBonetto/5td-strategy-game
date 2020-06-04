@@ -15,7 +15,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // The agents will always be following the leader so always return running
         public override TaskStatus OnUpdate()
         {
-            for (int i = 0; i < navMeshAgents.Length; ++i)
+            for (int i = 0; i < navMeshAgents.Count; ++i)
             {
                 if (Timer(m_delayFollowCommand))
                 {

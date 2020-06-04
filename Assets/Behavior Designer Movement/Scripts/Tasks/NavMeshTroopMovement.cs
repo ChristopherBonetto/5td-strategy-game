@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Boo.Lang;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
@@ -11,23 +12,47 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedFloat angularSpeed = 120;
 
         // A cache of the NavMeshAgents
-        protected NavMeshAgent[] navMeshAgents;
-        protected Transform[] transforms;
+        //protected NavMeshAgent[] navMeshAgents;
+        //protected Transform[] transforms;
+
+        protected List<NavMeshAgent> navMeshAgents;
+        protected List<Transform> transforms;
 
         public override void OnStart()
         {
-            navMeshAgents = new NavMeshAgent[troopRef.Value.UnitList.Count];
-            transforms = new Transform[troopRef.Value.UnitList.Count];
+            //navMeshAgents = new NavMeshAgent[troopRef.Value.UnitList.Count];
+            //transforms = new Transform[troopRef.Value.UnitList.Count];
+            //troopRef.Value.Agent.enabled = true;
+
+            //for (int i = 0; i < troopRef.Value.UnitList.Count; ++i)
+            //{
+            //    if (troopRef.Value.UnitList[i].gameObject.activeSelf)
+            //    {
+            //        transforms[i] = troopRef.Value.UnitList[i].transform;
+            //        navMeshAgents[i] = troopRef.Value.UnitList[i].GetComponent<NavMeshAgent>();
+            //        navMeshAgents[i].enabled = true;
+            //        navMeshAgents[i].speed = troopRef.Value.GetStats().UnitSpeed;
+            //        navMeshAgents[i].angularSpeed = angularSpeed.Value;
+            //        navMeshAgents[i].isStopped = false;
+            //    }
+            //}
+
+            navMeshAgents = new List<NavMeshAgent>();
+            transforms = new List<Transform>();
             troopRef.Value.Agent.enabled = true;
 
             for (int i = 0; i < troopRef.Value.UnitList.Count; ++i)
             {
-                transforms[i] = troopRef.Value.UnitList[i].transform;
-                navMeshAgents[i] = troopRef.Value.UnitList[i].GetComponent<NavMeshAgent>();
-                navMeshAgents[i].enabled = true;
-                navMeshAgents[i].speed = troopRef.Value.GetStats().UnitSpeed;
-                navMeshAgents[i].angularSpeed = angularSpeed.Value;
-                navMeshAgents[i].isStopped = false;
+                if (troopRef.Value.UnitList[i].gameObject.activeSelf)
+                {
+                    navMeshAgents.Add(troopRef.Value.UnitList[i].UnitAgent);
+                    transforms.Add(troopRef.Value.UnitList[i].transform);
+
+                    navMeshAgents[i].enabled = true;
+                    navMeshAgents[i].speed = troopRef.Value.GetStats().UnitSpeed;
+                    navMeshAgents[i].angularSpeed = angularSpeed.Value;
+                    navMeshAgents[i].isStopped = false;
+                }
             }
         }
 
@@ -53,7 +78,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnEnd()
         {
             // Disable the nav mesh
-            for (int i = 0; i < navMeshAgents.Length; ++i)
+            for (int i = 0; i < navMeshAgents.Count; ++i)
             {
                 if (navMeshAgents[i] != null)
                 {
