@@ -84,6 +84,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
     private void SelectDeselectOneObject()
     {
+        if(HFGameManager.Instance.CurrentGameState != GameStates.Pause)
         ClickEntity();
     }
 
@@ -156,7 +157,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
             }
             else
             {
-
                 if (tempLayer == LayerMask.NameToLayer("Terrain"))
                 {
                     TileHighlight tile = HitInfo.transform.GetComponentInChildren<TileHighlight>();

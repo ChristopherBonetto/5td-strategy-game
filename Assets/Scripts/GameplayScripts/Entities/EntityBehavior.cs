@@ -5,6 +5,7 @@ using Types;
 using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 using System.ComponentModel;
+using System;
 
 [RequireComponent(typeof(BehaviorTree))]
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
@@ -120,7 +121,13 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         this.gameObject.SetActive(false);
     }
 
+    //Ask to ale if there are differences with PauseEntity method.
     protected virtual void FreezeMode(bool inValue)
+    {
+        StopTree(inValue);
+    }
+
+    protected virtual void PauseEntity(bool inValue)
     {
         StopTree(inValue);
     }
@@ -129,18 +136,19 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
         {
-            Debug.Log(gameObject.name);
             ResetEntity();
         }
         else if (inState == GameStates.Pause)
         {
-            StopTree(true);
+            PauseEntity(true);
         }
         else if (inState == GameStates.PlayingLevel)
         {
-            StopTree(false);
+            PauseEntity(false);
         }
     }
+
+    
 
     #endregion
 
@@ -243,7 +251,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     }
 
     #endregion
-
 
     #region Specialization
     public virtual void Specialization(UnitType type)

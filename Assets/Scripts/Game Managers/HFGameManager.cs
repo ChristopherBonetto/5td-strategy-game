@@ -158,6 +158,7 @@ public class HFGameManager : Singleton<HFGameManager>
                 break;
 
             case GameStates.Pause:
+                InputReaderManager.Instance.CurrentEntity = null;
                 break;
 
             default:

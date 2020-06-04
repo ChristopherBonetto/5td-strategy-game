@@ -17,9 +17,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             for (int i = 0; i < navMeshAgents.Count; ++i)
             {
+                SetDestination(i, troopRef.Value.transform.position + troopRef.Value.m_formationPosition[i]);
                 if (Timer(m_delayFollowCommand))
                 {
-                    SetDestination(i, troopRef.Value.transform.position + troopRef.Value.m_formationPosition[i]);
+                    
                 }
             }
             return TaskStatus.Running;

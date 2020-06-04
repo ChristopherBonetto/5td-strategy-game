@@ -27,42 +27,9 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public GameObject visualObj;
 
-    #region Events
-    private void OnEnable()
-    {
-        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, FreezeMode);
-        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
-    }
-    private void OnDisable()
-    {
-        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, FreezeMode);
-        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
-    }
-    #endregion
-
     private void Awake()
     {
         Initialize();
-    }
-
-    protected virtual void FreezeMode(bool inValue)
-    {
-        StopTree(inValue);
-    }
-
-    protected virtual void GameStateChanged(GameStates inState)
-    {
-        if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
-        {
-        }
-        else if (inState == GameStates.Pause)
-        {
-            StopTree(true);
-        }
-        else if (inState == GameStates.PlayingLevel)
-        {
-            StopTree(false);
-        }
     }
 
     #region Initialize

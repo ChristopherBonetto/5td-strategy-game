@@ -467,6 +467,40 @@ public class Troop : EntityBehavior, ICanMove
         DismissTroop();
     }
 
+    protected override void PauseEntity(bool inValue)
+    {
+        base.PauseEntity(inValue);
+
+        if (m_currentBattle == null) return;
+
+        foreach (Unit unit in UnitList)
+        {
+            unit.StopTree(inValue);
+        }
+    }
+
+    protected override void FreezeMode(bool inValue)
+    {
+        base.FreezeMode(inValue);
+
+        if (m_currentBattle != null)
+        {
+            foreach (Unit unit in UnitList)
+            {
+                unit.StopTree(inValue);
+            }
+        }
+        else
+        {
+            if (Agent.pathEndPosition != m_destination)
+            {
+                var command = new MoveWithAgent(this, m_destination);
+                this.ExecuteCommand(command);
+            }
+        }
+    }
+    
+
     #endregion
 
     #region Troop Hp
