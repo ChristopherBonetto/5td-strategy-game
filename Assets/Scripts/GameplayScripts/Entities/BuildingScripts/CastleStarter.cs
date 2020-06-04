@@ -51,6 +51,11 @@ public class CastleStarter : BuildingBehaviour
 
             GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation(), false);
         }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Death();
+        }
     }
 
     public void CheckFreeze(bool inValue)
@@ -91,5 +96,11 @@ public class CastleStarter : BuildingBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+    }
+
+    public override void Death()
+    {
+        base.Death();
+        HFScenesManager.Instance.EndCurrentLevel(false);
     }
 }

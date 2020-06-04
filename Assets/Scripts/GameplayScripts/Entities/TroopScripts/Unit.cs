@@ -57,17 +57,11 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
         else if (inState == GameStates.Pause)
         {
-            if(m_troopRef.m_currentBattle != null)
-            {
-                StopTree(true);
-            }
+            StopTree(true);
         }
         else if (inState == GameStates.PlayingLevel)
         {
-            if (m_troopRef.m_currentBattle != null)
-            {
-                StopTree(false);
-            }
+            StopTree(false);
         }
     }
 

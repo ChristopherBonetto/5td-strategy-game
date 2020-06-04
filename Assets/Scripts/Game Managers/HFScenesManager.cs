@@ -66,6 +66,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
         set
         {
             m_currentLevelSelected = value;
+
+            if(m_currentLevelSelected != null)
             GameController.Instance.SetResources(m_currentLevelSelected.ResoucesQuantity);
         }
     }

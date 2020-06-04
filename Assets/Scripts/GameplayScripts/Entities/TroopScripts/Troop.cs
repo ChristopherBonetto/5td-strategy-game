@@ -169,9 +169,12 @@ public class Troop : EntityBehavior, ICanMove
 
     public void DismissUnitInTroop(Unit inUnit)
     {
-        inUnit.visualObj.SetActive(false);
-        inUnit.visualObj.transform.parent = null;
-        inUnit.visualObj = null;
+        if(inUnit.visualObj != null)
+        {
+            inUnit.visualObj.SetActive(false);
+            inUnit.visualObj.transform.parent = null;
+            inUnit.visualObj = null;
+        }
 
         inUnit.gameObject.SetActive(false);
     }
@@ -401,7 +404,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_troopStats = null;
 
-        gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
         //Return to the pool
     }
 
@@ -452,7 +455,15 @@ public class Troop : EntityBehavior, ICanMove
 
     protected override void ResetEntity()
     {
-        SetIdleState();
+        if(m_currentBattle != null)
+        {
+            m_currentBattle.FinishFight();
+        }
+        else
+        {
+            SetIdleState();
+        }
+
         DismissTroop();
     }
 
