@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 7991663509649709078}
   - component: {fileID: 1419497144335753760}
   - component: {fileID: 4652104386025856729}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CH_Defender_Lvl3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -500,6 +500,7 @@ Transform:
   - {fileID: 1040454374198551626}
   - {fileID: 2021583565957197359}
   - {fileID: 6047451499652725173}
+  - {fileID: 4123008619287408060}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -590,8 +591,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dc0e8575c1feee4ca7ac2dd614c2bd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_troopRef: {fileID: 0}
   m_focusUnit: {fileID: 0}
   m_focusBuilding: {fileID: 0}
+  visualObj: {fileID: 0}
 --- !u!1 &8386476127113145001
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,3 +673,93 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1001 &1056855031601773944
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 7544598201869741019}
+    m_Modifications:
+    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_VFX_Upgrade_Unit
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2051602082514097169, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2051602082514097169, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.g
+      value: 0.39607844
+      objectReference: {fileID: 0}
+    - target: {fileID: 2051602082514097169, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: InitialModule.startColor.maxColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0463acf05a16a9547928348591f22c3b, type: 3}
+--- !u!4 &4123008619287408060 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1056855031601773944}
+  m_PrefabAsset: {fileID: 0}
