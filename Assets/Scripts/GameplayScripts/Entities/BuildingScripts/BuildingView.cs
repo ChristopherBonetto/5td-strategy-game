@@ -82,7 +82,10 @@ namespace HF.Unit
 
         public void SpawnBullet()
         {
-            anim.SetTrigger("isShooting");
+            if(anim!=null)
+            {
+                anim.SetTrigger("isShooting");
+            }
         
 
             // Get bullet from pool.
