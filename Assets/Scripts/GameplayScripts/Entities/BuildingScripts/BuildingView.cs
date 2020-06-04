@@ -58,7 +58,10 @@ namespace HF.Unit
 
         private void OnEnable()
         {
-            drop.Stop();
+            if(drop!=null)
+            {
+                drop.Stop();
+            }
         }
 
         public void CarryBuilding()
@@ -71,7 +74,10 @@ namespace HF.Unit
         {
             NavMeshObstacle.enabled = true;
             Collider.enabled = true;
-            drop.Play();
+           if(drop!=null)
+            {
+                drop.Play();
+            }
         }
 
         public void SpawnBullet()
