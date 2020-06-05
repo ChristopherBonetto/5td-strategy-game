@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
@@ -15,8 +16,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
 
+        private NavMeshObstacle targetObstacle;
+
         public override void OnStart()
         {
+            targetObstacle = target.Value.GetComponent<NavMeshObstacle>();
+
             base.OnStart();
 
             SetDestination(Target());
@@ -31,7 +36,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
             }
 
-            SetDestination(Target());
+            //SetDestination(Target());
 
             return TaskStatus.Running;
         }
@@ -41,7 +46,9 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (target.Value != null)
             {
-                return target.Value.transform.position;
+                Vector3? destination = GameController.Instance.RandomPoint(target.Value.transform.position, targetObstacle.size.x + 1);
+                return destination.Value;
+                //return target.Value.transform.position;
             }
             return targetPosition.Value;
         }

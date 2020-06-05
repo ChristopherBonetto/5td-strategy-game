@@ -58,6 +58,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         if(inUnit != null)
         {
+            AssignValuesToTree();
             m_focusUnit = inUnit;
             var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
             focusObj.Value = inUnit.gameObject;
@@ -76,6 +77,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         if (building != null)
         {
+            AssignValuesToTree();
             m_focusBuilding = building;
             var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
             focusObj.Value = building.gameObject;
@@ -90,15 +92,6 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private void AssignValuesToTree()
     {
-        //var troopRef = (SharedTroop)UnitTree.GetVariable("TroopRef");
-        //troopRef.Value = inTroop;
-        //var movSpeed = (SharedFloat)UnitTree.GetVariable("MovSpeed");
-        //movSpeed.Value = inMovSpeed;
-        //var attackSpeed = (SharedFloat)UnitTree.GetVariable("AttackSpeed");
-        //attackSpeed.Value = inAttackSpeed;
-        //var attackRange = (SharedFloat)UnitTree.GetVariable("AttackRange");
-        //attackRange.Value = inAttackRange;
-
         UnitTree.SetVariableValue("UnitRef", this);
         UnitTree.SetVariableValue("TroopRef", m_troopRef);
         UnitTree.SetVariableValue("MovSpeed", m_troopRef.GetStats().UnitSpeed);
@@ -113,7 +106,6 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void StopTree(bool inValue)
     {
         m_unitTree.enabled = !inValue;
-        AssignValuesToTree();
     }
 
     #endregion
@@ -138,7 +130,6 @@ public class Unit : MonoBehaviour, ITakeDamage
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
                 m_unitAttackType.SingleAttack(m_focusBuilding, TroopRef.GetStats().Damage);
-                Debug.Log($"Damagin castle: {m_focusBuilding.CurrentHp}");
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {

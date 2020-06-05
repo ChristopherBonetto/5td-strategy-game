@@ -39,11 +39,6 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
-    private void Update()
-    {
-        Debug.Log(CurrentHp);
-    }
-
     private TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
 

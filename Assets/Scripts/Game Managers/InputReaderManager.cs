@@ -84,7 +84,8 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
     private void SelectDeselectOneObject()
     {
-        if(HFGameManager.Instance.CurrentGameState != GameStates.Pause)
+        if (HFGameManager.Instance.CurrentGameState == GameStates.Pause) return;
+
         ClickEntity();
     }
 
@@ -136,6 +137,8 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
     private void UnitAction()
     {
+        if (HFGameManager.Instance.CurrentGameState == GameStates.Pause) return;
+
         if (CurrentEntity != null)
             CommandBasedOnClicckedObject();
     }

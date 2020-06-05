@@ -86,8 +86,6 @@ public class CastleStarter : BuildingBehaviour
                 timer += Time.deltaTime;
             }
 
-            Debug.Log(timer + " " + stats.RespawnTime);
-
             if (timer >= stats.RespawnTime)
             {
                 GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation(), true);
