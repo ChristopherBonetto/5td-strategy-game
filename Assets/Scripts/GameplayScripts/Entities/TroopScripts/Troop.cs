@@ -281,6 +281,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
+        Agent.destination = endPosition;
 
         SetNewTroopState(TroopStates.GoToDestination);
     }
@@ -478,6 +479,7 @@ public class Troop : EntityBehavior, ICanMove
         foreach (Unit unit in UnitList)
         {
             unit.StopTree(inValue);
+            unit.UnitTree.ResetValuesOnRestart = !inValue;
         }
     }
 
@@ -490,14 +492,7 @@ public class Troop : EntityBehavior, ICanMove
             foreach (Unit unit in UnitList)
             {
                 unit.StopTree(inValue);
-            }
-        }
-        else
-        {
-            if (Agent.pathEndPosition != m_destination)
-            {
-                var command = new MoveWithAgent(this, m_destination);
-                this.ExecuteCommand(command);
+                unit.UnitTree.ResetValuesOnRestart = !inValue;
             }
         }
     }
