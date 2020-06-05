@@ -422,6 +422,7 @@ public class Troop : EntityBehavior, ICanMove
             {
                 UnitList[i].UnitAgent.enabled = false;
                 UnitList[i].transform.position = transform.position + m_formationPosition[i];
+                UnitList[i].transform.rotation = this.transform.rotation;
             }
 
             Agent.SetDestination(FocusEntity.transform.position);

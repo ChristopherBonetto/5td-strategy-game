@@ -125,11 +125,13 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected virtual void FreezeMode(bool inValue)
     {
         StopTree(inValue);
+        m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
 
     protected virtual void PauseEntity(bool inValue)
     {
         StopTree(inValue);
+        m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
 
     protected virtual void GameStateChanged(GameStates inState)
