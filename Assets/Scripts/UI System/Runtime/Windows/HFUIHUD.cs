@@ -118,6 +118,7 @@ namespace HF.Refactoring
 
         public void ReturnToLevelSelection()
         {
+            OnUnitSelected(null as EntityBehavior, 0);
             HFGameManager.Instance.ChangeGMState(GameStates.Pause);
             HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
             HFScenesManager.Instance.LoadSceneFromIndex(1);
