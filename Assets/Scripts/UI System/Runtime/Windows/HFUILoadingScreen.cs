@@ -15,7 +15,7 @@ namespace HF.Refactoring
         [Header("Fade")]
 
         [SerializeField]
-        private Image m_imageToFade;
+        private Image[] m_imageToFade;
         [SerializeField]
         private Text m_Text;
 
@@ -53,9 +53,10 @@ namespace HF.Refactoring
         /// </summary>
         IEnumerator FadeIn(int levelIndex, bool showLoadingText = true)
         {
-            while(m_imageToFade.color.a < 1f)
+            while(m_imageToFade[0].color.a < 1f)
             {
-                m_imageToFade.DOFade(1.1f, 0.6f);
+                m_imageToFade[0].DOFade(1.1f, 0.6f);
+                m_imageToFade[1].DOFade(1.1f, 0.6f);
                 yield return null;
             }
 
@@ -102,9 +103,10 @@ namespace HF.Refactoring
         {
             m_Text.gameObject.SetActive(false);
 
-            while (m_imageToFade.color.a > 0f)
+            while (m_imageToFade[0].color.a > 0f)
             {
-                DOTweenModuleUI.DOFade(m_imageToFade, -0.1f, 0.6f);
+                DOTweenModuleUI.DOFade(m_imageToFade[0], -0.1f, 0.6f);
+                DOTweenModuleUI.DOFade(m_imageToFade[1], -0.1f, 0.6f);
                 yield return null;
             }
 
