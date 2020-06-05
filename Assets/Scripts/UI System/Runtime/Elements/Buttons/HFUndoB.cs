@@ -10,7 +10,6 @@ namespace HF.Refactoring
         {
             if (m_isMatchingWindowID)
             {
-                HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
                 HFUIManager.Instance.Undo();
             }
         }
