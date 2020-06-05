@@ -91,7 +91,7 @@ public class Troop : EntityBehavior, ICanMove
         movimentSpeed.Value = m_troopStats.UnitSpeed;
     }
 
-    public UnitsStatsSO GetStats()
+    public new UnitsStatsSO GetStats()
     {
         return m_troopStats as UnitsStatsSO;
     }

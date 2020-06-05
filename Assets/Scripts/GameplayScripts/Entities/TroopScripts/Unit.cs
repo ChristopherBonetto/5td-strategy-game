@@ -39,12 +39,13 @@ public class Unit : MonoBehaviour, ITakeDamage
         m_unitAgent = gameObject.GetComponent<NavMeshAgent>();
 
         m_unitTree = gameObject.GetComponent<BehaviorTree>();
-        StopTree(true);
 
         m_unitAttackType = new AttackBehaviors();
 
         var unitRef = (SharedUnit)UnitTree.GetVariable("UnitRef");
         unitRef.Value = this;
+
+        StopTree(true);
     }
 
     #endregion
@@ -87,16 +88,22 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
     }
 
-    private void AssignValuesToTree(Troop inTroop, float inAttackRange, float inMovSpeed, float inAttackSpeed)
+    private void AssignValuesToTree()
     {
-        var troopRef = (SharedTroop)UnitTree.GetVariable("TroopRef");
-        troopRef.Value = inTroop;
-        var movSpeed = (SharedFloat)UnitTree.GetVariable("MovSpeed");
-        movSpeed.Value = inMovSpeed;
-        var attackSpeed = (SharedFloat)UnitTree.GetVariable("AttackSpeed");
-        attackSpeed.Value = inAttackSpeed;
-        var attackRange = (SharedFloat)UnitTree.GetVariable("AttackRange");
-        attackRange.Value = inAttackRange;
+        //var troopRef = (SharedTroop)UnitTree.GetVariable("TroopRef");
+        //troopRef.Value = inTroop;
+        //var movSpeed = (SharedFloat)UnitTree.GetVariable("MovSpeed");
+        //movSpeed.Value = inMovSpeed;
+        //var attackSpeed = (SharedFloat)UnitTree.GetVariable("AttackSpeed");
+        //attackSpeed.Value = inAttackSpeed;
+        //var attackRange = (SharedFloat)UnitTree.GetVariable("AttackRange");
+        //attackRange.Value = inAttackRange;
+
+        UnitTree.SetVariableValue("UnitRef", this);
+        UnitTree.SetVariableValue("TroopRef", m_troopRef);
+        UnitTree.SetVariableValue("MovSpeed", m_troopRef.GetStats().UnitSpeed);
+        UnitTree.SetVariableValue("AttackSpeed", m_troopRef.GetStats().AttackSpeed);
+        UnitTree.SetVariableValue("AttackRange", (float)m_troopRef.GetStats().AttackRange);
     }
 
     #endregion
@@ -106,6 +113,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void StopTree(bool inValue)
     {
         m_unitTree.enabled = !inValue;
+        AssignValuesToTree();
     }
 
     #endregion
