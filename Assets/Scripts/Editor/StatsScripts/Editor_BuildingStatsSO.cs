@@ -48,6 +48,18 @@ public class Editor_BuildingStatsSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Description");
+        building.Description = EditorGUILayout.TextArea(building.Description);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Default Description");
+        building.DefaultDescription = EditorGUILayout.TextArea(building.DefaultDescription);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
 
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Building Prefab");

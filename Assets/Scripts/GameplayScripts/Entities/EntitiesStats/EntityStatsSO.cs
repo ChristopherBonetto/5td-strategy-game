@@ -11,6 +11,11 @@ public class EntityStatsSO : ScriptableObject
     [Header("Name")]
     public string Name;
 
+    public string Description;
+    public string DefaultDescription = "I'm just a stupid unit";
+    public bool IsStringNull => string.IsNullOrEmpty(Description);
+    public string OutputStringDescription => IsStringNull ? DefaultDescription : Description;
+
     public Sprite Icon;
 
     public GameObject VisualPrefab;

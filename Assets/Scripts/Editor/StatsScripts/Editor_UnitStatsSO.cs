@@ -48,6 +48,18 @@ public class Editor_UnitStatsSO : Editor
         EditorGUILayout.Space();
 
         EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Description");
+        unit.Description = EditorGUILayout.TextArea(unit.Description);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Default Description");
+        unit.DefaultDescription = EditorGUILayout.TextArea(unit.DefaultDescription);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Unit Prefab");
         unit.VisualPrefab = (GameObject)EditorGUILayout.ObjectField(unit.VisualPrefab, typeof(GameObject), false);
         EditorGUILayout.EndHorizontal();

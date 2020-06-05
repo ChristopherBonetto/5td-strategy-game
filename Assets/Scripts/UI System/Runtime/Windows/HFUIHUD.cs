@@ -28,7 +28,12 @@ namespace HF.Refactoring
         [Tooltip("Those icons will be shown when a building is selected")]
         public Sprite[] BuildingIconsSpecializations;
 
+        [Header("ID Field")]
+        public Text TextDescription;
+
+
         public Image EntitySelectedIcon;
+
         public HFSpecializationB[] SpecializationButtons;
         public SlidingSpecializationBar SpecializationBar;
         public HFSpecializationB UpgradeButton;
@@ -275,8 +280,15 @@ namespace HF.Refactoring
 
             if (entity is Troop)
             {
+                // get typed entity
                 var typedEntity = entity as Troop;
+
+                // Set the icon on hud info
                 EntitySelectedIcon.sprite = typedEntity.m_troopStats.Icon;
+
+                // Set description, if the string is null then show a default one.
+                TextDescription.text = typedEntity.GetStats().OutputStringDescription;
+
                 if (typedEntity.m_troopStats.UnitType == Types.UnitType.STANDARD_ALLY)
                 {
                     for (int i = 0; i < SpecializationButtons.Length; i++)
@@ -310,6 +322,10 @@ namespace HF.Refactoring
             {
                 var typedEntity = entity as BuildingBehaviour;
                 EntitySelectedIcon.sprite = typedEntity.m_buildingStats.Icon;
+
+                // Set description, if the string is null then show a default one.
+                TextDescription.text = typedEntity.GetStats().OutputStringDescription;
+
                 if (typedEntity.m_buildingStats.BuildingType == Types.BuildingType.TOWER)
                 {
                     for (int i = 0; i < SpecializationButtons.Length; i++)
