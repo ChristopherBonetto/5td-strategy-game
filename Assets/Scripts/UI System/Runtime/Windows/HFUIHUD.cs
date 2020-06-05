@@ -301,6 +301,10 @@ namespace HF.Refactoring
                     SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
                     SpecializationButtons[1].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.LIFTER_LVL1));
                     SpecializationButtons[2].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.RUNNER_LVL1));
+
+                    SpecializationButtons[0].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Cost.ToString();
+                    SpecializationButtons[1].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].OriginalUnitStats.Cost.ToString();
+                    SpecializationButtons[2].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].OriginalUnitStats.Cost.ToString();
                 }
                 else
                 {
@@ -316,6 +320,8 @@ namespace HF.Refactoring
                         UpgradeButton.gameObject.SetActive(true);
                         UpgradeButton.Icon.sprite = GameController.Instance.GetIcon(typedEntity.m_troopStats.UnitType + 1);
                         UpgradeButton.ButtonComponent.onClick.AddListener(() => typedEntity.Specialization(typedEntity.m_troopStats.UnitType + 1));
+
+                        UpgradeButton.Cost.text = GameController.Instance.Collection.UnitsDictionary[typedEntity.m_troopStats.UnitType + 1].UnitStatsCopy.Cost.ToString();
                     }
                 }
             }
@@ -338,6 +344,10 @@ namespace HF.Refactoring
                     SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.BuildingType.BALLISTA_LVL1));
                     SpecializationButtons[1].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.BuildingType.CRYSTAL_LVL1));
                     SpecializationButtons[2].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.BuildingType.MORTAR_LVL1));
+
+                    SpecializationButtons[0].Cost.text = GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].OriginalBuildingStats.Cost.ToString();
+                    SpecializationButtons[1].Cost.text = GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].OriginalBuildingStats.Cost.ToString();
+                    SpecializationButtons[2].Cost.text = GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].OriginalBuildingStats.Cost.ToString();
                 }
                 else
                 {
@@ -353,6 +363,8 @@ namespace HF.Refactoring
                         UpgradeButton.gameObject.SetActive(true);
                         UpgradeButton.Icon.sprite = GameController.Instance.GetIcon(typedEntity.m_buildingStats.BuildingType + 1);
                         UpgradeButton.ButtonComponent.onClick.AddListener(() => typedEntity.Specialization(typedEntity.m_buildingStats.BuildingType + 1));
+
+                        UpgradeButton.Cost.text = GameController.Instance.Collection.BuildingsDictionary[typedEntity.m_buildingStats.BuildingType + 1].OriginalBuildingStats.Cost.ToString();
                     }
                 }
             }
