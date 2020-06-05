@@ -153,7 +153,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
             EntityBehavior entity = HitInfo.transform.GetComponentInParent<EntityBehavior>();
             LayerMask tempLayer = HitInfo.transform.gameObject.layer;
 
-            if(entity != null)
+            if(entity != null && CurrentEntity != entity)
             {
                 var command = new GoToInteract(CurrentEntity, entity);
                 CurrentEntity.ExecuteCommand(command);
