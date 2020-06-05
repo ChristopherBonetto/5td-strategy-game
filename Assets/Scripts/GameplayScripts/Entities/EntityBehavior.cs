@@ -116,7 +116,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         m_behaviorTree.enabled = !inValue;
     }
 
-    protected virtual void ResetEntity()
+    protected virtual void DisableEntity()
     {
         this.gameObject.SetActive(false);
     }
@@ -138,7 +138,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
         {
-            ResetEntity();
+            DisableEntity();
         }
         else if (inState == GameStates.Pause)
         {

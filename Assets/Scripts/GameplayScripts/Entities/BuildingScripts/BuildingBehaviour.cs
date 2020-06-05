@@ -159,7 +159,7 @@ public class BuildingBehaviour : EntityBehavior
         }
     }
 
-    protected override void ResetEntity()
+    protected override void DisableEntity()
     {
         StopTree(true);
         StopAllCoroutines();
@@ -186,6 +186,6 @@ public class BuildingBehaviour : EntityBehavior
     {
         //HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, HFScenesManager.Instance.CurrentLevelSelected, false);
         StopAllCoroutines();
-        ResetEntity();
+        DisableEntity();
     }
 }

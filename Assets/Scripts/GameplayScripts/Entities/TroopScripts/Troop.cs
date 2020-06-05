@@ -39,6 +39,11 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
+    private void Update()
+    {
+        Debug.Log(CurrentHp);
+    }
+
     private TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
 
@@ -100,14 +105,9 @@ public class Troop : EntityBehavior, ICanMove
     {
         int health = 0;
 
-        if (UnitList.Count == 0)
-        {
-            Debug.Log("This troop don't have units");
-            return health;
-        }
-
         for (int i = 0; i < UnitList.Count; i++)
         {
+            if(UnitList[i].gameObject.activeSelf)
             health += UnitList[i].UnitHp;
         }
 
@@ -395,21 +395,6 @@ public class Troop : EntityBehavior, ICanMove
         m_behaviorTree.enabled = true;
     }
 
-    public void DismissTroop()
-    {
-        m_behaviorTree.enabled = false;
-
-        foreach (Unit unit in UnitList.ToList())
-        {
-            DismissUnitInTroop(unit);
-        }
-
-        m_troopStats = null;
-
-        this.gameObject.SetActive(false);
-        //Return to the pool
-    }
-
     public void Lift()
     {
         if (FocusEntity != null)
@@ -456,18 +441,24 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
-    protected override void ResetEntity()
+    protected override void DisableEntity()
     {
-        if(m_currentBattle != null)
+        m_behaviorTree.enabled = false;
+
+        if (m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
         }
-        else
+
+        foreach (Unit unit in UnitList.ToList())
         {
-            SetIdleState();
+            DismissUnitInTroop(unit);
         }
 
-        DismissTroop();
+        m_troopStats = null;
+
+        this.gameObject.SetActive(false);
+        //Return to the pool
     }
 
     protected override void PauseEntity(bool inValue)
@@ -508,7 +499,7 @@ public class Troop : EntityBehavior, ICanMove
 
         if (CurrentHp == 0)
         {
-            if (m_currentBattle != null)
+            if(m_currentBattle != null)
             {
                 m_currentBattle.FinishFight();
             }
@@ -519,7 +510,7 @@ public class Troop : EntityBehavior, ICanMove
     public override void Death()
     {
         HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath,this);
-        ResetEntity();
+        DisableEntity();
     }
 
     
