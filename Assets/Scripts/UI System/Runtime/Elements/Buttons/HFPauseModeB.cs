@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.LWRP;
+using UnityEngine.UI;
+using DG.Tweening;
+//using UnityEngine.Rendering;
+//using UnityEngine.Rendering.LWRP;
 
 namespace HF.Refactoring
 {
@@ -14,33 +16,56 @@ namespace HF.Refactoring
         public GameEventData Events;
         public GameEventData Initialization;
 
+        public Image pauseHudMask;
+
         
-        public LightweightRenderPipelineAsset standard;
-        public LightweightRenderPipelineAsset pause;
+        //public LightweightRenderPipelineAsset standard;
+        //public LightweightRenderPipelineAsset pause;
 
 
         private void Awake()
         {
             Initialization.AddListener(this);
             Events.AddListener(this);
+
+           
         }
+
+        //private void Update()
+        //{
+        //    if (isPaused == true)
+        //    {
+        //        if (GraphicsSettings.renderPipelineAsset != pause)
+        //        {
+        //            GraphicsSettings.renderPipelineAsset = pause;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if(GraphicsSettings.renderPipelineAsset != standard)
+        //        {
+        //            GraphicsSettings.renderPipelineAsset = standard;
+        //        }
+        //    }
+        //}
 
         private void Update()
         {
-            if (isPaused == true)
+            if(isPaused==true)
             {
-                if (GraphicsSettings.renderPipelineAsset != pause)
+                if (pauseHudMask != null)
                 {
-                    GraphicsSettings.renderPipelineAsset = pause;
+                    pauseHudMask.DOFade(1, 0.5f);
                 }
             }
             else
             {
-                if(GraphicsSettings.renderPipelineAsset != standard)
+                if (pauseHudMask != null)
                 {
-                    GraphicsSettings.renderPipelineAsset = standard;
+                    pauseHudMask.DOFade(0, 0.5f);
                 }
             }
+
         }
 
 
