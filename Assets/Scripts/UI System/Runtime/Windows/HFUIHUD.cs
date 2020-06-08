@@ -333,6 +333,18 @@ namespace HF.Refactoring
                 // Set description, if the string is null then show a default one.
                 TextDescription.text = typedEntity.GetStats().OutputStringDescription;
 
+                if (typedEntity.m_buildingStats.BuildingType == Types.BuildingType.CASTLE)
+                {
+                    SpecializationButtons[0].Icon.sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Icon;
+                    SpecializationButtons[0].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Cost.ToString();
+                    SpecializationButtons[0].gameObject.SetActive(true);
+
+                    CastleStarter castle = typedEntity.GetComponent<CastleStarter>();
+                    SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => castle.SpawnTroop());
+                    SpecializationBar.gameObject.SetActive(true);
+                    return;
+                }
+
                 if (typedEntity.m_buildingStats.BuildingType == Types.BuildingType.TOWER)
                 {
                     for (int i = 0; i < SpecializationButtons.Length; i++)

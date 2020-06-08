@@ -12,6 +12,17 @@ public class CastleStarter : BuildingBehaviour
 
     public bool m_canSpawn = true;
 
+    [SerializeField]
+    private float m_maxSpawnDistance = 6;
+    private Collider m_collider;
+
+
+    public override void Awake()
+    {
+        base.Awake();
+        m_collider = GetComponent<Collider>();
+    }
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -45,17 +56,35 @@ public class CastleStarter : BuildingBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            if (m_unitSpawnPoint == null) return;
-
-            GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation(), false);
-        }
-
         if (Input.GetKeyDown(KeyCode.X))
         {
             Death();
         }
+    }
+
+    public void SpawnTroop()
+    {
+        // I saw you use a random point on game controller but if it goes on failure you don't recall the method 
+        // in recursive way.
+        // We need to find a way to make sure the success
+
+        Vector3 SpawnPoint = FreePoint(transform.position, m_maxSpawnDistance);
+
+        GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, SpawnPoint.SnapLocation(), false);
+    }
+
+    private Vector3 FreePoint(Vector3 center, float maxRadius)
+    {
+        Vector3 pos = center;
+
+        float ang = Random.value * 360;
+        float radius = Random.Range(3, maxRadius);
+
+        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
+        pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
+        pos.y = center.y;
+
+        return pos;
     }
 
     public void CheckFreeze(bool inValue)
