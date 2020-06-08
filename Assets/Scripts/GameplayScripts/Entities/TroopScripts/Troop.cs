@@ -483,6 +483,8 @@ public class Troop : EntityBehavior, ICanMove
     {
         base.FreezeMode(inValue);
 
+        Agent.isStopped = inValue;
+
         if (m_currentBattle != null)
         {
             foreach (Unit unit in UnitList)
