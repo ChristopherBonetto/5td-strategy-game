@@ -47,6 +47,11 @@ public class BattleHandler : MonoBehaviour
     private Troop attacker;
     private EntityBehavior defender;
 
+    private void OnDisable()
+    {
+        attacker = null;
+        defender = null;
+    }
     public void StartFight(Troop inAttacker, EntityBehavior inDefender)
     {
         attacker = inAttacker;

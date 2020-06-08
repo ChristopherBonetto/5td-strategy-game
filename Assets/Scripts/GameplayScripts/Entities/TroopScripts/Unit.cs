@@ -60,14 +60,12 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             AssignValuesToTree();
             m_focusUnit = inUnit;
-            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
-            focusObj.Value = inUnit.gameObject;
+            UnitTree.SetVariableValue("FocusObject", m_focusUnit.gameObject);
         }
         else
         {
             m_focusUnit = null;
-            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
-            focusObj.Value = null;
+            UnitTree.SetVariableValue("FocusObject", null);
         }
     }
 
