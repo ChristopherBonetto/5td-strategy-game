@@ -98,7 +98,7 @@ public class CastleStarter : BuildingBehaviour
 
     public override void Death()
     {
-        base.Death();
         HFScenesManager.Instance.EndCurrentLevel(false);
+        base.Death();
     }
 }

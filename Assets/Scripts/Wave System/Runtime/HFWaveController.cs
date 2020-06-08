@@ -55,7 +55,7 @@ namespace HF.Refactoring
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
-            HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, OnLevelEnd);
+            HFEventManager.SubscribeTo<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnLevelEnd);
         }
 
         private void OnDisable()
@@ -64,7 +64,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
-            HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnEndLevel, OnLevelEnd);
+            HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnLevelEnd);
         }
 
         private void Start()
@@ -211,7 +211,7 @@ namespace HF.Refactoring
             // if the level end, return to level selection.
             if (WaveIndex >= TotalWaves.Count)
             {
-                HFEventManager.TriggerEvent<bool>(HFEventID.OnEndLevel, true);
+                HFScenesManager.Instance.EndCurrentLevel(true);
 
                 return;
             }
@@ -241,7 +241,7 @@ namespace HF.Refactoring
             }
         }
 
-        private void OnLevelEnd(bool victory)
+        private void OnLevelEnd(HFLevelInfoSO level, bool victory)
         {
             m_behavioursToPerform.Clear();
         }

@@ -135,6 +135,8 @@ namespace HF.Refactoring
                     break;
                 case GameStates.PlayingLevel:
                     break;
+                default:
+                    break;
             }
         }
 
@@ -142,12 +144,12 @@ namespace HF.Refactoring
         {
             HFUIEndLevel endLevel = Getwindow<HFUIEndLevel>(HFUIWindowID.LEVEL_ENDING);
 
+            ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
+
             if (isVictory)
                 endLevel.m_victorySequence.Restart();
             else
                 endLevel.m_defeatSequence.Restart();
-
-            ShowAndClearHistory(HFUIWindowID.LEVEL_ENDING);
         }
         #endregion
 
