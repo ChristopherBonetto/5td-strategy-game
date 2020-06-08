@@ -13,14 +13,12 @@ public class CastleStarter : BuildingBehaviour
     public bool m_canSpawn = true;
 
     [SerializeField]
-    private float m_maxSpawnDistance = 6;
-    private Collider m_collider;
+    private float m_maxSpawnDistance = 30;
 
 
     public override void Awake()
     {
         base.Awake();
-        m_collider = GetComponent<Collider>();
     }
 
     protected override void OnEnable()
@@ -68,22 +66,24 @@ public class CastleStarter : BuildingBehaviour
         // in recursive way.
         // We need to find a way to make sure the success
 
-        Vector3 SpawnPoint = FreePoint(transform.position, m_maxSpawnDistance);
 
-        GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, SpawnPoint.SnapLocation(), false);
+        GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, GetPoint(transform.position, 6), false);
     }
 
-    private Vector3 FreePoint(Vector3 center, float maxRadius)
+    private Vector3 GetPoint(Vector3 center, float maxRadius)
     {
         Vector3 pos = center;
 
-        float ang = Random.value * 360;
-        float radius = Random.Range(3, maxRadius);
+        for (int i = 0; i < 8; i++)
+        {
+            float ang = 360 / 8 * i;
 
-        pos.x = center.x + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
-        pos.z = center.z + radius * Mathf.Cos(ang * Mathf.Deg2Rad);
-        pos.y = center.y;
+            pos.x = center.x + maxRadius * Mathf.Sin(ang * Mathf.Deg2Rad);
+            pos.z = center.z + maxRadius * Mathf.Cos(ang * Mathf.Deg2Rad);
+            pos.y = center.y;
 
+            if (!Physics.CheckSphere(pos, 6)) return pos;
+        }
         return pos;
     }
 

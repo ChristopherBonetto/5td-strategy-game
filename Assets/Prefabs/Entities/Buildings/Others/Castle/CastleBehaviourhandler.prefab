@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2815822867022338727}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TowerSpawnPoint_1
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -39,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1630314390740111818}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: UnitSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: -5487077368411116049, guid: 0000000000000000d000000000000000, type: 0}
@@ -69,7 +69,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2075773133919870326}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TowerSpawnPoint_2
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 2553596144200282985}
   - component: {fileID: 5383702923453053656}
   - component: {fileID: 6973121786058381255}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CastleBehaviourhandler
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
@@ -186,6 +186,7 @@ MonoBehaviour:
   - {fileID: 2075773133919870326}
   m_unitSpawnPoint: {fileID: 1630314390740111818}
   m_canSpawn: 1
+  m_maxSpawnDistance: 0
 --- !u!208 &6973121786058381255
 NavMeshObstacle:
   m_ObjectHideFlags: 0
@@ -211,7 +212,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 118687201693964036}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TowerSpawnPoints
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +245,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 678464399380064088}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TowerSpawnPoint_0
   m_TagString: Untagged
   m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
