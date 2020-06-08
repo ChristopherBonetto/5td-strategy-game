@@ -12,8 +12,8 @@ public class CastleStarter : BuildingBehaviour
 
     public bool m_canSpawn = true;
 
-    [SerializeField]
-    private float m_maxSpawnDistance = 30;
+    [SerializeField, Tooltip("Spawn point distance from castle")]
+    private float m_spawnDistance = 6;
 
 
     public override void Awake()
@@ -66,24 +66,29 @@ public class CastleStarter : BuildingBehaviour
         // in recursive way.
         // We need to find a way to make sure the success
 
+        for (int i = 0; i < 8; i++)
+        {
+            Vector3 pos = GetPoint(transform.position, m_spawnDistance, i);
 
-        GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, GetPoint(transform.position, 6), false);
+            if (!Physics.CheckSphere(pos + Vector3.up * 2.3f, 1))
+            {
+                GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, pos, false);
+                break;
+            }
+        }
+
+        // Debug : there aren0t any free slot.
     }
 
-    private Vector3 GetPoint(Vector3 center, float maxRadius)
+    private Vector3 GetPoint(Vector3 center, float maxRadius, int index)
     {
         Vector3 pos = center;
 
-        for (int i = 0; i < 8; i++)
-        {
-            float ang = 360 / 8 * i;
+        float ang = 360 / 8 * index;
 
-            pos.x = center.x + maxRadius * Mathf.Sin(ang * Mathf.Deg2Rad);
-            pos.z = center.z + maxRadius * Mathf.Cos(ang * Mathf.Deg2Rad);
-            pos.y = center.y;
-
-            if (!Physics.CheckSphere(pos, 6)) return pos;
-        }
+        pos.x = center.x + maxRadius * Mathf.Sin(ang * Mathf.Deg2Rad);
+        pos.z = center.z + maxRadius * Mathf.Cos(ang * Mathf.Deg2Rad);
+        pos.y = center.y;
         return pos;
     }
 
