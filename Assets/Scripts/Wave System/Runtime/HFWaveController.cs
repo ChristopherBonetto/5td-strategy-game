@@ -55,6 +55,7 @@ namespace HF.Refactoring
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
+            HFEventManager.SubscribeTo<bool>(HFEventID.OnEndLevel, OnLevelEnd);
         }
 
         private void OnDisable()
@@ -63,6 +64,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
             HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
+            HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnEndLevel, OnLevelEnd);
         }
 
         private void Start()
@@ -192,6 +194,10 @@ namespace HF.Refactoring
 
             // Update wave index in UI.
             HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, WaveIndex + 1, TotalWaves.Count);
+
+            // Notify that this is the last wave.
+            if (m_currentWave == TotalWaves[TotalWaves.Count - 1])
+                HFEventManager.TriggerEvent(HFEventID.OnWaveEnded);
         }
 
         /// <summary>
@@ -205,10 +211,7 @@ namespace HF.Refactoring
             // if the level end, return to level selection.
             if (WaveIndex >= TotalWaves.Count)
             {
-                // Win level.
-                HFScenesManager.Instance.EndCurrentLevel(true);
-                HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
-                HFScenesManager.Instance.LoadSceneFromIndex(1);
+                HFEventManager.TriggerEvent<bool>(HFEventID.OnEndLevel, true);
 
                 return;
             }
@@ -236,6 +239,11 @@ namespace HF.Refactoring
                     HFEventManager.TriggerEvent(HFEventID.OnWaveCleared);
                 }
             }
+        }
+
+        private void OnLevelEnd(bool victory)
+        {
+            m_behavioursToPerform.Clear();
         }
 
         private void OnPauseMode(bool freeze)
