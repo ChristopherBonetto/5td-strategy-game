@@ -269,6 +269,7 @@ public class Troop : EntityBehavior, ICanMove
         if(m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
+            StartCoroutine(IsBusyDelay(0.5f));
         }
 
         m_focusEntity = null;
@@ -279,6 +280,15 @@ public class Troop : EntityBehavior, ICanMove
         Agent.destination = endPosition;
 
         SetNewTroopState(TroopStates.GoToDestination);
+    }
+
+    IEnumerator IsBusyDelay(float inValue)
+    {
+        IsBusy = true;
+        Debug.Log(gameObject.name + IsBusy);
+        yield return new WaitForSeconds(inValue);
+        IsBusy = false;
+        Debug.Log(gameObject.name + IsBusy);
     }
 
     public void AssignGameObjectEntity(GameObject inObj)

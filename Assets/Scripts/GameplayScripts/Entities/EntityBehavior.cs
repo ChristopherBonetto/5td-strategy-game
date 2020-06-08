@@ -53,6 +53,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+
     #region Events
 
     protected virtual void OnEnable()

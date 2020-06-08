@@ -58,7 +58,11 @@ public class BattleHandler : MonoBehaviour
         attacker.StopTree(true);
         defender.StopTree(true);
 
-        attacker.IsBusy = true;
+        if(!defender is BuildingBehaviour)
+        {
+            attacker.IsBusy = true;
+        }
+        
         defender.IsBusy = true;
 
         inAttacker.m_currentBattle = this;
