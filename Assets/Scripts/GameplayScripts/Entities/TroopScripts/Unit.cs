@@ -17,6 +17,13 @@ public class Unit : MonoBehaviour, ITakeDamage
     [SerializeField] private Troop m_troopRef;
     public Troop TroopRef { get => m_troopRef; }
 
+    [Header("Ranged Field")]
+    [SerializeField] private Transform m_BulletSpawnPoint;
+    public Transform BulletSpawnPoint => m_BulletSpawnPoint;
+
+    [SerializeField] private HFPoolID m_BulletID;
+    public HFPoolID BulletID => m_BulletID;
+
     private int m_unitHp;
     public int UnitHp { get => m_unitHp; }
 
@@ -60,8 +67,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         m_unitAttackType = new AttackBehaviors();
 
-        var unitRef = (SharedUnit)UnitTree.GetVariable("UnitRef");
-        unitRef.Value = this;
+        AssignValuesToTree();
 
         StopTree(true);
     }
@@ -106,7 +112,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
     }
 
-    private void AssignValuesToTree()
+    public void AssignValuesToTree()
     {
         UnitTree.SetVariableValue("UnitRef", this);
         UnitTree.SetVariableValue("TroopRef", m_troopRef);
@@ -134,22 +140,38 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleAttack(m_focusUnit, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_unitAttackType.SingleAttack(m_focusUnit, TroopRef.GetStats().Damage);
+                m_BulletSpawnPoint.forward = (FocusUnit.transform.position - transform.position).normalized;
+                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(BulletID.ID).GetComponent<HF.HFBullet>();
+                bullet.transform.rotation = BulletSpawnPoint.rotation;
+                bullet.transform.position = BulletSpawnPoint.position;
+                bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
+                bullet.SetParameters(new HF.HFBulletParameters(null, 0, 0, 50));
+                bullet.gameObject.SetActive(true);
+
+                m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
         }
         else if (m_focusBuilding)
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleAttack(m_focusBuilding, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(m_focusBuilding, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_unitAttackType.SingleAttack(m_focusBuilding, TroopRef.GetStats().Damage);
+                m_BulletSpawnPoint.forward = (FocusUnit.transform.position - transform.position).normalized;
+                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(BulletID.ID).GetComponent<HF.HFBullet>();
+                bullet.transform.rotation = BulletSpawnPoint.rotation;
+                bullet.transform.position = BulletSpawnPoint.position;
+                bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
+                bullet.SetParameters(new HF.HFBulletParameters(null, 0, 0, 10));
+                bullet.gameObject.SetActive(true);
+
+                m_unitAttackType.SingleMeleeAttack(m_focusBuilding, TroopRef.GetStats().Damage);
             }
         }
     }

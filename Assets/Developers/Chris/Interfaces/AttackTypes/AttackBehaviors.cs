@@ -45,7 +45,7 @@ public class AttackBehaviors : IAttackTypes
 
     
 
-    public bool SingleAttack(ITakeDamage inObj, int inDamage)
+    public bool SingleMeleeAttack(ITakeDamage inObj, int inDamage)
     {
         if (inObj != null)
         {
@@ -56,8 +56,8 @@ public class AttackBehaviors : IAttackTypes
                 if (takeDamage.TakeDamage(inDamage))
                 {
                     return true;
-            }
                 }
+            }
         }
         
         m_lastAttack = Time.time;

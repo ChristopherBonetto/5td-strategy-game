@@ -81,31 +81,51 @@ public class BattleHandler : MonoBehaviour
             int enemyIndex = 0;
             int playerIndex = 0;
 
-            for (int i = 0; i < attacker.UnitList.Count; i++)
+            if (attacker.GetStats().AttackType == Types.AttackType.MELEE)
             {
-                if (defenderT.UnitList.Count == 0) {
-                    FinishFight();
-                    goto end;   // make sure to exit from the loop
+                for (int i = 0; i < attacker.UnitList.Count; i++)
+                {
+                    if (defenderT.UnitList.Count == 0) {
+                        FinishFight();
+                        goto end;   // make sure to exit from the loop
+                    }
+
+                    enemyIndex = Mathf.Max(0, enemyIndex);
+                    attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
+
+                    attacker.UnitList[i].StopTree(false);
+                    enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
                 }
+                for (int i = 0; i < defenderT.UnitList.Count; i++)
+                {
+                    if (attacker.UnitList.Count == 0) {
+                        FinishFight();
+                        goto end;   // make sure to exit from the loop
+                    }
 
-                enemyIndex = Mathf.Max(0, enemyIndex);
-                attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
+                    playerIndex = Mathf.Max(0, playerIndex);
+                    defenderT.UnitList[i].AssignFocusUnit(attacker.UnitList[playerIndex]);
 
-                attacker.UnitList[i].StopTree(false);
-                enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
+                    defenderT.UnitList[i].StopTree(false);
+                    playerIndex = (playerIndex + 1) % attacker.UnitList.Count;
+                }
             }
-            for (int i = 0; i < defenderT.UnitList.Count; i++)
+            else if (attacker.GetStats().AttackType == Types.AttackType.RANGED)
             {
-                if (attacker.UnitList.Count == 0) {
-                    FinishFight();
-                    goto end;   // make sure to exit from the loop
+                for (int i = 0; i < attacker.UnitList.Count; i++)
+                {
+                    if (defenderT.UnitList.Count == 0)
+                    {
+                        FinishFight();
+                        goto end;   // make sure to exit from the loop
+                    }
+
+                    enemyIndex = Mathf.Max(0, enemyIndex);
+                    attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
+
+                    attacker.UnitList[i].StopTree(false);
+                    enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
                 }
-
-                playerIndex = Mathf.Max(0, playerIndex);
-                defenderT.UnitList[i].AssignFocusUnit(attacker.UnitList[playerIndex]);
-
-                defenderT.UnitList[i].StopTree(false);
-                playerIndex = (playerIndex + 1) % attacker.UnitList.Count;
             }
         }
         // Case the defender is a building

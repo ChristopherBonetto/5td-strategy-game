@@ -540,5 +540,10 @@ public class Troop : EntityBehavior, ICanMove
         //ResetEntity();
         AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
         base.Specialization(type);
+
+        foreach (Unit unit in m_unitList)
+        {
+            unit.AssignValuesToTree();
+        }
     }
 }
