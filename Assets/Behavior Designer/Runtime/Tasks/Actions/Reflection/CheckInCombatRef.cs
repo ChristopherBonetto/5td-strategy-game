@@ -31,7 +31,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnReset()
         {
-            //troopRef = null;
+            troopRef = null;
         }
     }
 }

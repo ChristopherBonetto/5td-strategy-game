@@ -382,10 +382,10 @@ public class Troop : EntityBehavior, ICanMove
 
     public void SetIdleState()
     {
-        SetNewTroopState(TroopStates.Idle);
-        m_focusEntity = null;
+        StopTree(true);
+        
+        FocusEntity = null;
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-        focusEntity = null;
         IsBusy = false;
 
         foreach (Unit unit in UnitList)
@@ -398,7 +398,8 @@ public class Troop : EntityBehavior, ICanMove
 
         ResetFormation();
 
-        m_behaviorTree.enabled = true;
+        StopTree(false);
+        SetNewTroopState(TroopStates.Idle);
     }
 
     public void Lift()
@@ -456,6 +457,7 @@ public class Troop : EntityBehavior, ICanMove
 
         if (m_currentBattle != null)
         {
+            Debug.Log("BOOOH");
             m_currentBattle.FinishFight();
         }
 
@@ -467,6 +469,8 @@ public class Troop : EntityBehavior, ICanMove
         }
 
         m_troopStats = null;
+
+        Debug.Log("aaaaaa " + FocusEntity);
 
         this.gameObject.SetActive(false);
         //Return to the pool
