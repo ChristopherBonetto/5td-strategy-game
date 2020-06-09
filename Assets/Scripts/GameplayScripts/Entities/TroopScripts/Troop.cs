@@ -7,6 +7,7 @@ using UnityEngine.AI;
 using DG.Tweening;
 using System.Linq;
 using UnityEditor;
+using Unity.Collections.LowLevel.Unsafe;
 
 public enum TroopStates
 {
@@ -450,10 +451,15 @@ public class Troop : EntityBehavior, ICanMove
     {
         m_behaviorTree.enabled = false;
 
+        FocusEntity = null;
+        m_behaviorTree.SetVariableValue("FocusEntity", null);
+
         if (m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
         }
+
+        Drop();
 
         foreach (Unit unit in UnitList.ToList())
         {
@@ -517,6 +523,7 @@ public class Troop : EntityBehavior, ICanMove
     public override void Death()
     {
         HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath,this);
+        //Destroy(this.gameObject);
         DisableEntity();
     }
 
