@@ -98,8 +98,6 @@ public class HFCameraController : MonoBehaviour
     [SerializeField, Tooltip("Max angle value on x")]
     private float X_MAX_Angle = 50.0f;
 
-
-
     private void Start()
     {
         m_transform = transform;
@@ -112,6 +110,7 @@ public class HFCameraController : MonoBehaviour
         Rotate();
         MoveTarget();
         UpdateDistance();
+
     }
 
     private void LateUpdate()
@@ -125,13 +124,13 @@ public class HFCameraController : MonoBehaviour
     private void Rotate()
     {
         // GetMouseButton(2) = click on scroll wheel
-        if (Input.GetMouseButton(2))
+        if (Input.GetMouseButton(0))
         {
             m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
             m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
         }
         // GetMouseButton(2) = click on scroll wheel
-        else if (!Input.GetMouseButton(2))
+        else if (!Input.GetMouseButton(0))
         {
             if (m_actualMouseXValue != 0 || m_actualMouseYValue != 0)
             {
@@ -145,7 +144,26 @@ public class HFCameraController : MonoBehaviour
         m_currentAngleX += m_actualMouseYValue;
         m_currentAngleY += m_actualMouseXValue;
 
+        if(Input.GetKey(KeyCode.Q))
+        {
+            m_currentAngleY -= m_sensitivityOnYAngle;
+        }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            m_currentAngleY += m_sensitivityOnYAngle;
+        }
+
+
         m_currentAngleX = Mathf.Clamp(m_currentAngleX, X_MIN_Angle, X_MAX_Angle);
+
+        if(Input.GetKey(KeyCode.R))
+        {
+            m_currentAngleX = X_MIN_Angle;
+        }
+        else if (Input.GetKey(KeyCode.T))
+        {
+            m_currentAngleX = X_MAX_Angle;
+        }
     }
 
     private void UpdateDistance()
@@ -184,5 +202,10 @@ public class HFCameraController : MonoBehaviour
 
             HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Camera);
         }
+
+
     }
+
+
 }
+
