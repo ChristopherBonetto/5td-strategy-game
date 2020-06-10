@@ -375,7 +375,6 @@ public class Troop : EntityBehavior, ICanMove
         // Remember to get the focus entity or it will run a null reference.
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
         FocusEntity = focusEntity.Value;
-        Debug.Log($"''{gameObject.name}'' is attacking: {focusEntity.Value.gameObject.name}");
         new Fight(this, FocusEntity);
 
         if (gameObject.layer == LayerMask.GetMask("Player"))
@@ -388,6 +387,7 @@ public class Troop : EntityBehavior, ICanMove
         
         FocusEntity = null;
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
+        focusEntity.Value = FocusEntity;
         IsBusy = false;
 
         foreach (Unit unit in UnitList)

@@ -29,6 +29,8 @@ public struct Fight
             battleScript.StartFight(Attacker, Defender);
         }
 
+        Debug.Log(Defender);
+        Debug.Log(Attacker);
         Vector3 objectLine = (Defender.transform.position - Attacker.transform.position); // This operation doesn't give you the midlle point between attacker and defender. 
         // If you want to position the Battle handler in the midlle of the fight just do the follow operations:
         // (V1 + V2) / 2.   (or in this case --> (attacker.position + defender.positon) / 2)
@@ -58,23 +60,24 @@ public class BattleHandler : MonoBehaviour
         defender = inDefender;
 
         attacker.FocusEntity = defender;
-        defender.FocusEntity = attacker;
 
         attacker.StopTree(true);
-        defender.StopTree(true);
 
-        if(!defender is BuildingBehaviour)
+        if(!(defender is BuildingBehaviour))
         {
             attacker.IsBusy = true;
         }
         
-        defender.IsBusy = true;
 
         inAttacker.m_currentBattle = this;
 
         // Case the defender is a troop.
         if (inDefender is Troop)
         {
+            defender.FocusEntity = attacker;
+            defender.StopTree(true);
+            defender.IsBusy = true;
+            
             Troop defenderT = inDefender as Troop;
             defenderT.m_currentBattle = this;
 
@@ -132,6 +135,8 @@ public class BattleHandler : MonoBehaviour
         else if (inDefender is BuildingBehaviour)
         {
             BuildingBehaviour defenderB = inDefender as BuildingBehaviour;
+
+            Debug.Log($"I'm activating the battle handler to get the castle as target.");
 
             for (int i = 0; i < attacker.UnitList.Count; i++)
             {
