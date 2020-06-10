@@ -67,7 +67,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         m_unitAttackType = new AttackBehaviors();
 
-        AssignValuesToTree();
+        //AssignValuesToTree();
 
         StopTree(true);
     }
