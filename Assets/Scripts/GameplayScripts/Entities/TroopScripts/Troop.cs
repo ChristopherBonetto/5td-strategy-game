@@ -133,22 +133,22 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
-            if (UnitList[i].visualObj != null)
+            if (UnitList[i].VisualObj != null)
             {
-                UnitList[i].visualObj.SetActive(false);
-                UnitList[i].visualObj.transform.parent = null;
-                UnitList[i].visualObj = null;
+                UnitList[i].VisualObj.SetActive(false);
+                UnitList[i].VisualObj.transform.parent = null;
+                UnitList[i].VisualObj = null;
             }
 
             if (i < inValue)
             {
                 UnitList[i].gameObject.SetActive(true);
                 GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(inType);
-                UnitList[i].visualObj = visualUnit;
-                UnitList[i].visualObj.transform.parent = UnitList[i].transform;
-                UnitList[i].visualObj.transform.localPosition = Vector3.zero;
-                UnitList[i].visualObj.transform.rotation = UnitList[i].UnitAgent.transform.rotation;
-                UnitList[i].visualObj.SetActive(true);
+                UnitList[i].VisualObj = visualUnit;
+                UnitList[i].VisualObj.transform.parent = UnitList[i].transform;
+                UnitList[i].VisualObj.transform.localPosition = Vector3.zero;
+                UnitList[i].VisualObj.transform.rotation = UnitList[i].UnitAgent.transform.rotation;
+                UnitList[i].VisualObj.SetActive(true);
 
                 UnitList[i].RefreshHp();
 
@@ -165,12 +165,14 @@ public class Troop : EntityBehavior, ICanMove
 
     public void DismissUnitInTroop(Unit inUnit)
     {
-        if(inUnit.visualObj != null)
+        if(inUnit.VisualObj != null)
         {
-            inUnit.visualObj.SetActive(false);
-            inUnit.visualObj.transform.parent = null;
-            inUnit.visualObj = null;
+            inUnit.VisualObj.SetActive(false);
+            inUnit.VisualObj.transform.parent = null;
+            inUnit.VisualObj = null;
         }
+
+        inUnit.AssignFocusToUnit((BuildingBehaviour)null);
 
         inUnit.gameObject.SetActive(false);
     }
@@ -391,7 +393,7 @@ public class Troop : EntityBehavior, ICanMove
         foreach (Unit unit in UnitList)
         {
             unit.StopTree(true);
-            unit.AssignFocusUnit(null);
+            unit.AssignFocusToUnit((BuildingBehaviour)null);
         }
 
         m_currentBattle = null;
@@ -469,8 +471,6 @@ public class Troop : EntityBehavior, ICanMove
         }
 
         m_troopStats = null;
-
-        Debug.Log("aaaaaa " + FocusEntity);
 
         this.gameObject.SetActive(false);
         //Return to the pool

@@ -91,7 +91,7 @@ public class BattleHandler : MonoBehaviour
                     }
 
                     enemyIndex = Mathf.Max(0, enemyIndex);
-                    attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
+                    attacker.UnitList[i].AssignFocusToUnit(defenderT.UnitList[enemyIndex]);
 
                     attacker.UnitList[i].StopTree(false);
                     enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
@@ -104,7 +104,7 @@ public class BattleHandler : MonoBehaviour
                     }
 
                     playerIndex = Mathf.Max(0, playerIndex);
-                    defenderT.UnitList[i].AssignFocusUnit(attacker.UnitList[playerIndex]);
+                    defenderT.UnitList[i].AssignFocusToUnit(attacker.UnitList[playerIndex]);
 
                     defenderT.UnitList[i].StopTree(false);
                     playerIndex = (playerIndex + 1) % attacker.UnitList.Count;
@@ -121,7 +121,7 @@ public class BattleHandler : MonoBehaviour
                     }
 
                     enemyIndex = Mathf.Max(0, enemyIndex);
-                    attacker.UnitList[i].AssignFocusUnit(defenderT.UnitList[enemyIndex]);
+                    attacker.UnitList[i].AssignFocusToUnit(defenderT.UnitList[enemyIndex]);
 
                     attacker.UnitList[i].StopTree(false);
                     enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
@@ -135,7 +135,7 @@ public class BattleHandler : MonoBehaviour
 
             for (int i = 0; i < attacker.UnitList.Count; i++)
             {
-                attacker.UnitList[i].AssignFocusBuilding(defenderB);
+                attacker.UnitList[i].AssignFocusToUnit(defenderB);
 
                 attacker.UnitList[i].StopTree(false);
             }
@@ -151,11 +151,11 @@ public class BattleHandler : MonoBehaviour
 
         if (attacker.UnitList.Contains(inUnit))
         {
-            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, defenderT));
+            inUnit.AssignFocusToUnit(TakeAnotherTargerFromTroop(inUnit, defenderT));
         }
         else if (defenderT.UnitList.Contains(inUnit))
         {
-            inUnit.AssignFocusUnit(TakeAnotherTargerFromTroop(inUnit, attacker));
+            inUnit.AssignFocusToUnit(TakeAnotherTargerFromTroop(inUnit, attacker));
         }
         else
         {

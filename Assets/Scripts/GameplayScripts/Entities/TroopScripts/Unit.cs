@@ -29,7 +29,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private IAttackTypes m_unitAttackType;
 
-    public Unit m_focusUnit;
+    private Unit m_focusUnit;
     public Unit FocusUnit
     {
         get
@@ -39,18 +39,23 @@ public class Unit : MonoBehaviour, ITakeDamage
         set
         {
             m_focusUnit = value;
-
-            if(m_focusUnit != null)
-            {
-                Debug.Log(TroopRef.GetStats().UnitType);
-            }
-            
         }
     }
 
-    public BuildingBehaviour m_focusBuilding;
+    private BuildingBehaviour m_focusBuilding;
+    public BuildingBehaviour FocusBuilding
+    {
+        get
+        {
+            return m_focusBuilding;
+        }
+        set
+        {
+            m_focusBuilding = value;
+        }
+    }
 
-    public GameObject visualObj;
+    public GameObject VisualObj;
 
     private void Awake()
     {
@@ -76,40 +81,20 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     #region Assignments
 
-    public void AssignFocusUnit(Unit inUnit)
+    public void AssignFocusToUnit(Unit inUnit)
     {
-        m_focusBuilding = null;
+        FocusBuilding = null;
 
-        if(inUnit != null)
-        {
-            AssignValuesToTree();
-            FocusUnit = inUnit;
-            UnitTree.SetVariableValue("FocusObject", FocusUnit.gameObject);
-        }
-        else
-        {
-            FocusUnit = null;
-            UnitTree.SetVariableValue("FocusObject", null);
-        }
+        AssignValuesToTree();
+        FocusUnit = inUnit;
     }
 
-    public void AssignFocusBuilding(BuildingBehaviour building)
+    public void AssignFocusToUnit(BuildingBehaviour building)
     {
-        m_focusBuilding = null;
+        FocusUnit = null;
 
-        if (building != null)
-        {
-            AssignValuesToTree();
-            m_focusBuilding = building;
-            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
-            focusObj.Value = building.gameObject;
-        }
-        else
-        {
-            FocusUnit = null;
-            var focusObj = (SharedGameObject)UnitTree.GetVariable("FocusObject");
-            focusObj.Value = null;
-        }
+        AssignValuesToTree();
+        FocusBuilding = building;
     }
 
     public void AssignValuesToTree()
@@ -155,11 +140,11 @@ public class Unit : MonoBehaviour, ITakeDamage
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
         }
-        else if (m_focusBuilding)
+        else if (FocusBuilding)
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleMeleeAttack(m_focusBuilding, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
@@ -171,7 +156,7 @@ public class Unit : MonoBehaviour, ITakeDamage
                 bullet.SetParameters(new HF.HFBulletParameters(null, 0, 0, 10));
                 bullet.gameObject.SetActive(true);
 
-                m_unitAttackType.SingleMeleeAttack(m_focusBuilding, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
             }
         }
     }
@@ -213,12 +198,10 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void Death()
     {
-        if(FocusUnit != null)
+        if(FocusUnit != null || FocusBuilding != null)
         {
-            FocusUnit.AssignFocusUnit(null);
+            AssignFocusToUnit((Unit)null);
         }
-        AssignFocusUnit(null);
-        AssignFocusBuilding(null);
 
         if(m_troopRef.EntityPlayerType == PlayerType.AI)
         {
