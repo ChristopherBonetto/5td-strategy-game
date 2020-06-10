@@ -331,17 +331,17 @@ public class Troop : EntityBehavior, ICanMove
                 }
             }
 
-            //if (inEntity is BuildingBehaviour)
-            //{
-            //    BuildingBehaviour enemyBuilding = inEntity as BuildingBehaviour;
+            if (inEntity is BuildingBehaviour)
+            {
+                BuildingBehaviour enemyBuilding = inEntity as BuildingBehaviour;
 
-            //    if (enemyBuilding.GetStats().CanTakeDamage && m_troopStats.CanAttack)
-            //    {
-            //        m_focusEntity = enemyBuilding;
-            //        SetNewTroopState(TroopStates.GoToEnemy);
-            //        Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
-            //    }
-            //}
+                if (enemyBuilding.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+                {
+                    m_focusEntity = enemyBuilding;
+                    SetNewTroopState(TroopStates.GoToEnemy);
+                    Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
+                }
+            }
         }
         else
         {
@@ -375,6 +375,7 @@ public class Troop : EntityBehavior, ICanMove
         // Remember to get the focus entity or it will run a null reference.
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
         FocusEntity = focusEntity.Value;
+        Debug.Log(FocusEntity);
         new Fight(this, FocusEntity);
 
         if (gameObject.layer == LayerMask.GetMask("Player"))

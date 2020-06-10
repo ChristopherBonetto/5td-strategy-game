@@ -191,6 +191,7 @@ public class GameController : Singleton<GameController>
         building.gameObject.layer = m_playerLayer;
         
         buildingRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
+        AddResources(-Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
         buildingRef.StopTree(false);
 
         return buildingRef;
