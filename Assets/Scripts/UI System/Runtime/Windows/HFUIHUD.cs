@@ -31,12 +31,15 @@ namespace HF.Refactoring
         [Header("ID Field")]
         public Text TextDescription;
 
-
         public Image EntitySelectedIcon;
 
         public HFSpecializationB[] SpecializationButtons;
         public SlidingSpecializationBar SpecializationBar;
         public HFSpecializationB UpgradeButton;
+
+        [Header("Castle input field")]
+        public GameObject CastleCommandContainer;
+        public HFSpecializationB SpawnTroopButton;
 
         private void OnEnable()
         {
@@ -94,7 +97,6 @@ namespace HF.Refactoring
                 //}
 
                 SetUpSpecializationButton(entity);
-                UnitSelectedContainer.SetActive(true);
 
                 UnitSelectedContainer.transform.localScale = Vector3.zero;
                 UnitSelectedContainer.transform.DOScale(1, 0.2f);
@@ -139,11 +141,15 @@ namespace HF.Refactoring
                 SpecializationButtons[i].gameObject.SetActive(false);
             }
 
+            CastleCommandContainer.gameObject.SetActive(false);
             UpgradeButton.gameObject.SetActive(false);
             SpecializationBar.gameObject.SetActive(false);
+            UnitSelectedContainer.gameObject.SetActive(false);
 
             if (entity is Troop)
             {
+                UnitSelectedContainer.gameObject.SetActive(true);
+
                 // get typed entity
                 var typedEntity = entity as Troop;
 
@@ -198,18 +204,20 @@ namespace HF.Refactoring
 
                 if (typedEntity.m_buildingStats.BuildingType == Types.BuildingType.CASTLE)
                 {
-                    SpecializationButtons[0].Icon.sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Icon;
-                    SpecializationButtons[0].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Cost.ToString();
-                    SpecializationButtons[0].gameObject.SetActive(true);
+                    CastleCommandContainer.gameObject.SetActive(true);
+                    SpawnTroopButton.Icon.sprite = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Icon;
+                    SpawnTroopButton.Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Cost.ToString();
 
                     CastleStarter castle = typedEntity.GetComponent<CastleStarter>();
-                    SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => castle.SpawnTroop());
-                    SpecializationBar.gameObject.SetActive(true);
+                    SpawnTroopButton.ButtonComponent.onClick.AddListener(() => castle.SpawnTroop());
+                    //SpecializationBar.gameObject.SetActive(true);
                     return;
                 }
 
+                UnitSelectedContainer.gameObject.SetActive(true);
                 if (typedEntity.m_buildingStats.BuildingType == Types.BuildingType.TOWER)
                 {
+
                     for (int i = 0; i < SpecializationButtons.Length; i++)
                     {
                         SpecializationButtons[i].Icon.sprite = BuildingIconsSpecializations[i];
