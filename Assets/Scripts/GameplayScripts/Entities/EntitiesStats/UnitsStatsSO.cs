@@ -19,4 +19,8 @@ public class UnitsStatsSO : EntityStatsSO
     public int CarryCapacity;
 
     public float RespawnTime;
+
+    [FMODUnity.EventRef]
+    public string AttackSound, DeathSound, TakeDamageSound, HittedSound, LiftSound, DropSound;
+
 }

@@ -201,6 +201,45 @@ public class Editor_UnitStatsSO : Editor
         unit.Cost = EditorGUILayout.IntField(unit.Cost);
         EditorGUILayout.EndHorizontal();
 
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("SOUNDS EFFECTS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        
+        EditorGUILayout.BeginHorizontal();
+        unit.DeathSound = EditorGUILayout.PropertyField(serializedObject.FindProperty("AttackSound")).ToString();
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        unit.AttackSound = EditorGUILayout.PropertyField(serializedObject.FindProperty("DeathSound")).ToString();
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        unit.DeathSound = EditorGUILayout.PropertyField(serializedObject.FindProperty("TakeDamageSound")).ToString();
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        unit.DeathSound = EditorGUILayout.PropertyField(serializedObject.FindProperty("HittedSound")).ToString();
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        unit.DeathSound = EditorGUILayout.PropertyField(serializedObject.FindProperty("LiftSound")).ToString();
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        unit.DeathSound = EditorGUILayout.PropertyField(serializedObject.FindProperty("DropSound")).ToString();
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
         serializedObject.ApplyModifiedProperties();
     }
 }
