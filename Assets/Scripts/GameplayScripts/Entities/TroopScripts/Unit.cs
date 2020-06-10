@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 using Types;
 using BehaviorDesigner.Runtime.Tasks;
+using System.Xml.Schema;
 
 public class Unit : MonoBehaviour, ITakeDamage
 {
@@ -55,7 +56,26 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
     }
 
-    public GameObject VisualObj;
+    private GameObject m_visualObj;
+    public GameObject VisualObj
+    {
+        get { return m_visualObj; }
+        set
+        {
+            m_visualObj = value;
+
+            if(m_visualObj != null)
+            {
+                m_visualScript = m_visualObj.GetComponent<UnitVisual>();
+            }
+            else
+            {
+                m_visualScript = null;
+            }
+        }
+    }
+
+    private UnitVisual m_visualScript;
 
     private void Awake()
     {
@@ -192,6 +212,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         else
         {
             m_unitHp -= Damage;
+            m_visualScript.PlayParticle(m_visualScript.TakeDamageEffect);
             return false;
         }
     }
