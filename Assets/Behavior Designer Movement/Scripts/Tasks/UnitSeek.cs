@@ -41,6 +41,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 return unitRef.Value.FocusUnit.transform.position;
             }
+            else if (unitRef.Value.FocusBuilding != null)
+            {
+                return unitRef.Value.FocusBuilding.transform.position;
+            }
             return targetPosition.Value;
         }
 
