@@ -51,6 +51,8 @@ public class HFSpecializationB : HFButton
     {
         HFEventManager.UnsubscribeFrom<int>(HFEventID.OnRewardGained, OnGainReward);
         HFEventManager.UnsubscribeFrom<int>(HFEventID.OnPurchrased, OnPurchrased);
+
+        OnCursorExit();
     }
 
     public void AddListener(Action callback)
