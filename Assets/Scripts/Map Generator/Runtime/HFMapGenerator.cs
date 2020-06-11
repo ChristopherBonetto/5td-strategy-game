@@ -17,6 +17,18 @@ namespace HF.Refactoring
         [HideInInspector]
         public Grid MapGrid;
 
+        [SerializeField]
+        private int m_DepthLevel = 1;
+        public int DepthLevel
+        {
+            get
+            {
+                if (m_DepthLevel >= m_tilemapHandlers.Length)
+                    m_DepthLevel = m_tilemapHandlers.Length;
+                return m_DepthLevel;
+            }
+        }
+
         public string StoreTileMapAtPath = "Prefabs/Tilemap Created/";
         public string StoreMapAtPath = "Prefabs/Map Generated/"; 
 
@@ -131,7 +143,7 @@ namespace HF.Refactoring
             Dictionary<HFTileMapHandler, List<Vector3Int>> positionToRemove = new Dictionary<HFTileMapHandler, List<Vector3Int>>();
 
             // Iterate from the 2 elemnt
-            for (int i = 1; i < m_orderedLayers.Count; i++)
+            for (int i = DepthLevel; i < m_orderedLayers.Count; i++)
             {
                 // create a list to store keys to remove
                 List<Vector3Int> positionToDelete = new List<Vector3Int>();
@@ -159,7 +171,7 @@ namespace HF.Refactoring
                     if (isPositionFull)
                     {
                         // Check the topper tilemap
-                        bool topIsFull = m_orderedLayers[i - 1].Tiles.ContainsKey(position);
+                        bool topIsFull = m_orderedLayers[i - DepthLevel].Tiles.ContainsKey(position);
 
                         // If it is then add it the list to remove.
                         if (topIsFull)
