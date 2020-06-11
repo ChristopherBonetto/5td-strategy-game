@@ -140,6 +140,7 @@ namespace HF.Refactoring
                 SpecializationButtons[i].RemoveAllListeners();
                 SpecializationButtons[i].gameObject.SetActive(false);
             }
+            SpawnTroopButton.ButtonComponent.onClick.RemoveAllListeners();
 
             CastleCommandContainer.gameObject.SetActive(false);
             UpgradeButton.gameObject.SetActive(false);
