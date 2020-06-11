@@ -59,6 +59,12 @@ public class Troop : EntityBehavior, ICanMove
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
 
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        Deselected();
+    }
     /// <summary>
     /// This will be called after the troop is instantiated by the wave controller.
     /// </summary>
@@ -540,7 +546,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost))
             return;
-
+        Deselected();
         GameController.Instance.AddResources(-GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost);
         AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
 
@@ -548,8 +554,26 @@ public class Troop : EntityBehavior, ICanMove
 
         foreach (Unit unit in m_unitList)
         {
-            unit.AssignValuesToTree();
-            unit.RefreshHp();
+            unit?.AssignValuesToTree();
+            unit?.RefreshHp();
+            unit?.UpdateUnitVisualState(true);
+        }
+    }
+
+    public override void Click()
+    {
+        base.Click();
+        foreach(Unit unit in UnitList)
+        {
+            unit?.UpdateUnitVisualState(true);
+        }
+    }
+    public override void Deselected()
+    {
+        base.Deselected();
+        foreach (Unit unit in UnitList)
+        {
+            unit?.UpdateUnitVisualState(false);
         }
     }
 }

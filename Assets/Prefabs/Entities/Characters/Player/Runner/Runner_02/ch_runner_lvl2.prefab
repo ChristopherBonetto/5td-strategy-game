@@ -50,12 +50,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_takeDamageEffect: {fileID: 989466211384216292}
-  _HPOpacity: 1
-  _BGOpacity: 1
+  HPOpacity: 1
+  BGOpacity: 1
   VerticalOffset: 2.25
-  _Length: 60
+  Length: 0
   ScaleWithMAXHP: 1
-  _color: {r: 0, g: 1, b: 0, a: 1}
+  color: {r: 0, g: 1, b: 0, a: 1}
+  SelectionCircle: {fileID: 6481751671475503611}
 --- !u!1 &7873991245351162629
 GameObject:
   m_ObjectHideFlags: 0
@@ -110,6 +111,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Unit_SelectionCircle_Runner Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 5865285323254493634, guid: a9625a7e126732e4e9046a16ba803a0d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7583413950708902882, guid: a9625a7e126732e4e9046a16ba803a0d,
         type: 3}
@@ -168,6 +174,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9625a7e126732e4e9046a16ba803a0d, type: 3}
+--- !u!1 &6481751671475503611 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5865285323254493634, guid: a9625a7e126732e4e9046a16ba803a0d,
+    type: 3}
+  m_PrefabInstance: {fileID: 618790990759784505}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7037949669653879771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7583413950708902882, guid: a9625a7e126732e4e9046a16ba803a0d,
@@ -256,6 +268,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 6677551863677426059, guid: 3da6e3359a1ec0c43a2ec9bdee14069e,
+        type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3da6e3359a1ec0c43a2ec9bdee14069e, type: 3}
 --- !u!4 &8727642877208354038 stripped
@@ -271,6 +288,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5864623009015380494}
     m_Modifications:
+    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_VFX_Upgrade_Unit
+      objectReference: {fileID: 0}
     - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -326,11 +348,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_VFX_Upgrade_Unit
-      objectReference: {fileID: 0}
     - target: {fileID: 2051602082514097169, guid: 0463acf05a16a9547928348591f22c3b,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
@@ -356,6 +373,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5864623009015380494}
     m_Modifications:
+    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
+        type: 3}
+      propertyPath: m_Name
+      value: Unit_Shadow
+      objectReference: {fileID: 0}
     - target: {fileID: 5555198181674805461, guid: 73e6ebc1dc1b0344e980fade3182b16e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -411,11 +433,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
-        type: 3}
-      propertyPath: m_Name
-      value: Unit_Shadow
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73e6ebc1dc1b0344e980fade3182b16e, type: 3}
 --- !u!4 &1070578070288179713 stripped
@@ -431,6 +448,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5864623009015380494}
     m_Modifications:
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -484,16 +511,6 @@ PrefabInstance:
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

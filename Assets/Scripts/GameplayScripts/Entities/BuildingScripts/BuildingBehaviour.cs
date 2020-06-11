@@ -19,6 +19,7 @@ public class BuildingBehaviour : EntityBehavior
         set { m_buildingStats = (BuildingsStatsSO)value; }
     }
     private float m_attackDelayElapsed = 0;
+	public GameObject RangeFeedback;
 
 
     protected override void OnEnable()
@@ -32,6 +33,11 @@ public class BuildingBehaviour : EntityBehavior
         }
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        Deselected();
+    }
     #region Stats
 
     public override void AssignStats(EntityStatsSO inStats)
@@ -205,7 +211,7 @@ public class BuildingBehaviour : EntityBehavior
     {
         if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.BuildingsDictionary[type].OriginalBuildingStats.Cost))
             return;
-
+        Deselected();
         m_view.transform.SetParent(null);
         m_view.gameObject.SetActive(false);
         gameObject.SetActive(false);
@@ -213,6 +219,7 @@ public class BuildingBehaviour : EntityBehavior
         if (GameController.Instance.CreateNewBuilding(type, this.transform.position) != null)
         {
             base.Specialization(type);
+            m_view?.UpdateTowerVisualState(true);
         }
     }
 
@@ -220,5 +227,19 @@ public class BuildingBehaviour : EntityBehavior
     {
         StopAllCoroutines();
         DisableEntity();
+    }
+public override void Click()
+    {
+        base.Click();
+ 
+            m_view?.UpdateTowerVisualState(true);
+        
+    }
+    public override void Deselected()
+    {
+        base.Deselected();
+
+        m_view?.UpdateTowerVisualState(false);
+        
     }
 }

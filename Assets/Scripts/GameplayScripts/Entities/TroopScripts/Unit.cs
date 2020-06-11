@@ -30,6 +30,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private IAttackTypes m_unitAttackType;
 
+
     private Unit m_focusUnit;
     public Unit FocusUnit
     {
@@ -242,5 +243,30 @@ public class Unit : MonoBehaviour, ITakeDamage
 
 
     #endregion
-       
+
+    #region Visual Controls
+    public void UpdateUnitVisualState(bool state)
+    {
+        if (m_visualScript == null) { return; }
+        Debug.Log(state);
+
+        if (state == true)
+        {
+            Debug.Log("Activating visual feedback");
+            //Lerp BG and FG alpha of healthbar and Selectioncircle from 0 to 1 with a preferred ease, 
+            m_visualScript.HPOpacity = 1f;
+            m_visualScript.BGOpacity = 1f;
+            m_visualScript.SelectionCircle.SetActive(true);
+
+        }
+        else
+        {
+            Debug.Log("Deactivating visual feedback");
+            //disable
+            m_visualScript.HPOpacity = 0f;
+            m_visualScript.BGOpacity = 0f;
+            m_visualScript.SelectionCircle.SetActive(false);
+        }
+    }
+    #endregion
 }
