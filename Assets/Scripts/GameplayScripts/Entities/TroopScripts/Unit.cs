@@ -196,6 +196,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void RefreshHp()
     {
         m_unitHp = m_troopRef.GetStats().MaxHp;
+        m_visualScript.RefreshHealthbarSize();
     }
 
     public bool TakeDamage(int Damage)

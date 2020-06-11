@@ -545,6 +545,7 @@ public class Troop : EntityBehavior, ICanMove
         foreach (Unit unit in m_unitList)
         {
             unit.AssignValuesToTree();
+            unit.RefreshHp();
         }
     }
 }

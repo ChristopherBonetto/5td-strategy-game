@@ -77,10 +77,6 @@ public class UnitVisual : MonoBehaviour
     void OnEnable()
     {
         _healthPercentage = 1f; //Reset Healthbar value to its maximuml
-        if (ScaleWithMAXHP)
-        {
-            _Length = GetComponentInParent<Unit>().TroopRef.GetStats().MaxHp*2;
-        }
         Active.Add(this);
     }
     void OnDisable()
@@ -90,5 +86,12 @@ public class UnitVisual : MonoBehaviour
     public void SetHealthbar(float percentage)
     {
         _healthPercentage = percentage;
+    }
+    public void RefreshHealthbarSize()
+    {
+        if (ScaleWithMAXHP)
+        {
+            _Length = GetComponentInParent<Unit>().TroopRef.GetStats().MaxHp * 2;
+        }
     }
 }
