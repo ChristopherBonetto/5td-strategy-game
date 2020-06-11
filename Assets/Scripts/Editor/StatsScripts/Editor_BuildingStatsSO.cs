@@ -10,9 +10,16 @@ public class Editor_BuildingStatsSO : Editor
 {
     BuildingsStatsSO building;
 
+    SerializedProperty m_attackSound, m_deathSound, m_takeDamageSound, m_hittedSound;
+
     private void OnEnable()
     {
         building = (BuildingsStatsSO)target;
+
+        m_attackSound = serializedObject.FindProperty("AttackSound");
+        m_deathSound = serializedObject.FindProperty("DeathSound");
+        m_takeDamageSound = serializedObject.FindProperty("TakeDamageSound");
+        m_hittedSound = serializedObject.FindProperty("HittedSound");
     }
     private void OnDisable()
     {
@@ -161,6 +168,34 @@ public class Editor_BuildingStatsSO : Editor
         EditorGUILayout.BeginHorizontal();
         building.Cost = EditorGUILayout.IntField(building.Cost);
         EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        GUILayout.Label("SOUNDS EFFECTS");
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(m_attackSound, new GUIContent("Attack Sound"), true);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(m_deathSound, new GUIContent("Death Sound"), true);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(m_takeDamageSound, new GUIContent("Take Damage Sound"), true);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(m_hittedSound, new GUIContent("Hitted Sound"), true);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
 
         serializedObject.ApplyModifiedProperties();
     }

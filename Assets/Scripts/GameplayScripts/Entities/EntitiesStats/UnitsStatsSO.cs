@@ -21,6 +21,5 @@ public class UnitsStatsSO : EntityStatsSO
     public float RespawnTime;
 
     [FMODUnity.EventRef]
-    public string AttackSound, DeathSound, TakeDamageSound, HittedSound, LiftSound, DropSound;
-
+    public string LiftSound, DropSound;
 }
