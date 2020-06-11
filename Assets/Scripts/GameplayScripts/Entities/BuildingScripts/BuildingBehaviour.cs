@@ -114,7 +114,11 @@ public class BuildingBehaviour : EntityBehavior
     {
         if (m_focusEntity != null)
         {
-            m_view.TrackOstile(m_focusEntity.transform);
+            Troop troop = m_focusEntity as Troop;
+            Unit unit = troop.UnitList[UnityEngine.Random.Range(0, troop.UnitList.Count)];
+            Vector3 destinationPrediction = unit.transform.position + (unit.transform.forward * troop.GetStats().UnitSpeed);
+
+            m_view.TrackOstile(destinationPrediction);
 
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {

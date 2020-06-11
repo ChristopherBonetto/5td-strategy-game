@@ -105,7 +105,7 @@ namespace HF.Unit
             }
         }
 
-        public void TrackOstile(Transform ostile)
+        public void TrackOstile(Vector3 ostile)
         {
             float angleOnX = 0;
             float angleOnY = 0;
@@ -113,14 +113,14 @@ namespace HF.Unit
 
             if (m_objectToRotateOnX != null)
             {
-                float angle = Vector3.Angle(ostile.position - m_objectToRotateOnX.position, m_objectToRotateOnX.up);
+                float angle = Vector3.Angle(ostile - m_objectToRotateOnX.position, m_objectToRotateOnX.up);
                 angleOnX = angle;
                 m_objectToRotateOnX.rotation = Quaternion.Euler(angleOnX, 0, 0);
             }
 
             if (m_objectToRotateOnY != null)
             {
-                Vector3 direction = ostile.transform.position - m_objectToRotateOnY.position;
+                Vector3 direction = ostile - m_objectToRotateOnY.position;
                 angleOnY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
                 m_objectToRotateOnY.rotation = Quaternion.Euler(0, angleOnY, 0);
             }
@@ -132,7 +132,7 @@ namespace HF.Unit
 
             if (!m_lockSpawnBulletPoint)
             {
-                m_SpawnPoint.forward = ostile.position - m_SpawnPoint.position;
+                m_SpawnPoint.forward = ostile - m_SpawnPoint.position;
             }
         }
     }
