@@ -11,7 +11,8 @@ public class HFIAttachPlay3D : HFIEvent3D
         if(tempRb != null)
         {
             FMODUnity.RuntimeManager.AttachInstanceToGameObject(inEvent.EventIstance, inObj.transform, tempRb);
-            inEvent.Play();
+            FMODUnity.RuntimeManager.PlayOneShotAttached(inEvent.EventPath, inObj);
+            //inEvent.Play();
         }
     }
 }
