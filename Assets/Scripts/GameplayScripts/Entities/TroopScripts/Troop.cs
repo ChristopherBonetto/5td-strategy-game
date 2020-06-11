@@ -88,7 +88,7 @@ public class Troop : EntityBehavior, ICanMove
         engageRange.Value = m_troopStats.EngageRange;
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
         attackRange.Value = m_troopStats.AttackRange;
-        var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
+        var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovementSpeed");
         movimentSpeed.Value = m_troopStats.UnitSpeed;
     }
 

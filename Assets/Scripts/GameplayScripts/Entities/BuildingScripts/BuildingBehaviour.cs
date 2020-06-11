@@ -21,6 +21,17 @@ public class BuildingBehaviour : EntityBehavior
     private float m_attackDelayElapsed = 0;
 
 
+    protected override void OnEnable()
+    {
+        base.Start();
+
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up * 2, Vector3.down, out hit, 20, LayerMask.GetMask("Terrain")))
+        {
+            transform.position = hit.point.SnapLocation();
+        }
+    }
+
     #region Stats
 
     public override void AssignStats(EntityStatsSO inStats)
