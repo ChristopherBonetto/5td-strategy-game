@@ -116,7 +116,7 @@ public class BuildingBehaviour : EntityBehavior
         {
             Troop troop = m_focusEntity as Troop;
             Unit unit = troop.UnitList[UnityEngine.Random.Range(0, troop.UnitList.Count)];
-            Vector3 destinationPrediction = unit.transform.position + (unit.transform.forward * troop.GetStats().UnitSpeed);
+            Vector3 destinationPrediction = unit.transform.position + (unit.transform.forward * 1.5f);
 
             m_view.TrackOstile(destinationPrediction);
 
@@ -153,21 +153,33 @@ public class BuildingBehaviour : EntityBehavior
 
         if (target == null || entity == null || target.UnitList == null) yield return null;
 
+        int count = target.UnitList.Count;
+
         if ((bool)m_behaviorTree.GetVariable("DamageMultipleTargets").GetValue())
         {
-            int count = target.UnitList.Count;
             for (int i = 0; i < count; i++)
             {
                 if (target.UnitList != null && target.UnitList[i].TakeDamage(m_buildingStats.Damage))
                 {
                     m_behaviorTree.SetVariableValue("FocusEntity", null);
                 }
-                yield return null;
             }
         }
         else
         {
-            if (target.UnitList != null && target.UnitList[0].TakeDamage(m_buildingStats.Damage))
+            Unit unit = null;
+
+            for (int i = 0; i < count; i++)
+            {
+                if (target.UnitList != null && target.UnitList[i].UnitHp > 0)
+                {
+                    unit = target.UnitList[i];
+                    Debug.Log(i);
+                    break;
+                }
+            }
+
+            if (unit.TakeDamage(m_buildingStats.Damage))
             {
                 m_behaviorTree.SetVariableValue("FocusEntity", null);
             }

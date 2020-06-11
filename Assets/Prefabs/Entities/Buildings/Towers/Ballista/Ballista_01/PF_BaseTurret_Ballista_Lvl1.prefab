@@ -146,12 +146,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99b2c6b127f9ecf41a73b6c432575181, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_objectToRotateOnY: {fileID: 8179181572241461250}
+  m_objectToRotateOnY: {fileID: 4523685051761748969}
   m_objectToRotateOnX: {fileID: 0}
   m_lockSpawnBulletPoint: 0
   m_SpawnPoint: {fileID: 4840694363284278179}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
-  m_BulletSpeed: 30
+  m_BulletSpeed: 50
   anim: {fileID: 5786378230752888467}
   drop: {fileID: 1610414165068327662}
 --- !u!65 &5120596639475591489
@@ -319,6 +319,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Balista_Lvl1
       objectReference: {fileID: 0}
+    - target: {fileID: 640140330587015962, guid: e2aacf4d47144004ca5ba9490d8f92e6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8433269901078113104, guid: e2aacf4d47144004ca5ba9490d8f92e6,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -403,15 +408,15 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3901638638354211059}
   m_PrefabAsset: {fileID: 0}
---- !u!95 &5786378230752888467 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 7379218343646914144, guid: e2aacf4d47144004ca5ba9490d8f92e6,
+--- !u!4 &4523685051761748969 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 640140330587015962, guid: e2aacf4d47144004ca5ba9490d8f92e6,
     type: 3}
   m_PrefabInstance: {fileID: 3901638638354211059}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &8179181572241461250 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5163145961519001841, guid: e2aacf4d47144004ca5ba9490d8f92e6,
+--- !u!95 &5786378230752888467 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7379218343646914144, guid: e2aacf4d47144004ca5ba9490d8f92e6,
     type: 3}
   m_PrefabInstance: {fileID: 3901638638354211059}
   m_PrefabAsset: {fileID: 0}

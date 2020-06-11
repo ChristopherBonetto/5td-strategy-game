@@ -222,6 +222,8 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void Death()
     {
+        m_unitHp = 0;
+
         if(FocusUnit != null || FocusBuilding != null)
         {
             AssignFocusToUnit((Unit)null);

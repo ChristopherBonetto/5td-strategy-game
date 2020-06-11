@@ -97,11 +97,11 @@ namespace HF.Unit
             {
                 go.transform.position = m_SpawnPoint.position;
                 go.transform.rotation = m_SpawnPoint.rotation;
-                go.SetActive(true);
 
                 HFBullet bullet = go.GetComponent<HFBullet>();
                 bullet.SetParameters(new HFBulletParameters(null, 0, 0, m_BulletSpeed));
                 bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
+                go.SetActive(true);
             }
         }
 
@@ -132,7 +132,7 @@ namespace HF.Unit
 
             if (!m_lockSpawnBulletPoint)
             {
-                m_SpawnPoint.forward = ostile - m_SpawnPoint.position;
+                m_SpawnPoint.forward = ostile - m_SpawnPoint.position + Vector3.up * 2;
             }
         }
     }
