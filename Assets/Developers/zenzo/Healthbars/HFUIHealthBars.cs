@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHealthBars : MaskableGraphic, ILayoutElement {
+public class HFUIHealthBars : MaskableGraphic, ILayoutElement {
   Int32 ILayoutElement.layoutPriority { get { return 0; } }
   Single ILayoutElement.flexibleHeight { get { return -1; } }
   Single ILayoutElement.flexibleWidth { get { return -1; } }
@@ -46,27 +46,27 @@ public class UIHealthBars : MaskableGraphic, ILayoutElement {
     var index = 0;
     var camera = Camera.main;
 
-    foreach (var hb in HealthBar.Active) {
+    foreach (var hb in UnitVisual.Active) {
       var pos = hb.transform.position + new Vector3(0, hb.HealthBarYOffset, 0);
 
-      DrawHealthBarWorld(vh, camera, canvasRect, index, pos, hb.HealthPercentage, hb.HealthBarWidth, hb.HealthBarColor, hb.HealthBarAlpha);
+      DrawHealthBarWorld(vh, camera, canvasRect, index, pos, hb.HealthPercentage, hb.HealthBarWidth, hb.HealthBarColor, hb.HealthBarHPAlpha,hb.HealthBarBGAlpha);
 
       ++index;
     }
   }
 
-  void DrawHealthBarWorld(VertexHelper vh, Camera camera, Rect r, Int32 index, Vector3 world, Single fill, Single width, Color friendly, Single alpha) {
-    DrawHealthBarScreen(vh, r, index, camera.WorldToViewportPoint(world), fill, width, friendly, alpha);
+  void DrawHealthBarWorld(VertexHelper vh, Camera camera, Rect r, Int32 index, Vector3 world, Single fill, Single width, Color friendly, Single FGalpha, Single BGAlpha) {
+    DrawHealthBarScreen(vh, r, index, camera.WorldToViewportPoint(world), fill, width, friendly, FGalpha,BGAlpha);
   }
 
-  void DrawHealthBarScreen(VertexHelper vh, Rect r, Int32 index, Vector2 screen, Single fill, Single width, Color color, Single alpha) {
+  void DrawHealthBarScreen(VertexHelper vh, Rect r, Int32 index, Vector2 screen, Single fill, Single width, Color color, Single FGalpha,Single BGalpha) {
     Color bg;
     bg = Background;
-    bg.a = alpha;
+    bg.a = BGalpha;
 
     Color fg;
     fg = color;
-    fg.a = alpha;
+    fg.a = FGalpha;
 
     const int BOT_LEFT = 0;
     const int BOT_RIGHT = 1;
@@ -119,8 +119,8 @@ public class UIHealthBars : MaskableGraphic, ILayoutElement {
   }
 
   void InitArrays() {
-    if (_quads_bg == null || _quads_fg == null || _quads_bg.Length < HealthBar.Active.Count) {
-      _quads_bg = new UIVertex[Math.Max(64, HealthBar.Active.Count)][];
+    if (_quads_bg == null || _quads_fg == null || _quads_bg.Length < UnitVisual.Active.Count) {
+      _quads_bg = new UIVertex[Math.Max(64, UnitVisual.Active.Count)][];
       _quads_fg = new UIVertex[_quads_bg.Length][];
 
       for (Int32 i = 0; i < _quads_bg.Length; ++i) {

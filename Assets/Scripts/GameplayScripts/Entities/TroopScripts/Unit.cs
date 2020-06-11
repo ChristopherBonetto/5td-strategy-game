@@ -213,6 +213,8 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_unitHp -= Damage;
             m_visualScript.PlayParticle(m_visualScript.TakeDamageEffect);
+            float HPperc = ((float)m_unitHp / (float)TroopRef.GetStats().MaxHp);
+            m_visualScript.SetHealthbar(HPperc);
             return false;
         }
     }

@@ -50,6 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_takeDamageEffect: {fileID: 6192683175360286446}
+  _HPOpacity: 1
+  _BGOpacity: 1
+  VerticalOffset: 2.25
+  _Length: 60
+  ScaleWithMAXHP: 1
+  _color: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &8473306790914070056
 GameObject:
   m_ObjectHideFlags: 0
@@ -100,11 +106,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4575405105584681234}
     m_Modifications:
-    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_VFX_Upgrade_Unit
-      objectReference: {fileID: 0}
     - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -160,6 +161,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_VFX_Upgrade_Unit
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0463acf05a16a9547928348591f22c3b, type: 3}
 --- !u!4 &3944895919201458177 stripped
@@ -175,16 +181,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4575405105584681234}
     m_Modifications:
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -240,6 +236,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0676463e3a899fc4c860874a08536d9d, type: 3}
 --- !u!4 &6192683175360286445 stripped
@@ -261,11 +267,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4575405105584681234}
     m_Modifications:
-    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
-        type: 3}
-      propertyPath: m_Name
-      value: Unit_Shadow
-      objectReference: {fileID: 0}
     - target: {fileID: 5555198181674805461, guid: 73e6ebc1dc1b0344e980fade3182b16e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -320,6 +321,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
+        type: 3}
+      propertyPath: m_Name
+      value: Unit_Shadow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73e6ebc1dc1b0344e980fade3182b16e, type: 3}
@@ -411,11 +417,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4575405105584681234}
     m_Modifications:
-    - target: {fileID: 6117840451772190191, guid: 65699580f2ab71746888ae1961caa4d3,
-        type: 3}
-      propertyPath: m_Name
-      value: Unit_SelectionCircle_Lifter Variant
-      objectReference: {fileID: 0}
     - target: {fileID: 7835964662725089231, guid: 65699580f2ab71746888ae1961caa4d3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -470,6 +471,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6117840451772190191, guid: 65699580f2ab71746888ae1961caa4d3,
+        type: 3}
+      propertyPath: m_Name
+      value: Unit_SelectionCircle_Lifter Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65699580f2ab71746888ae1961caa4d3, type: 3}

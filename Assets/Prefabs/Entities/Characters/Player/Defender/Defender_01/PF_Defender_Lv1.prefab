@@ -50,6 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_takeDamageEffect: {fileID: 1607205463745683421}
+  _HPOpacity: 1
+  _BGOpacity: 1
+  VerticalOffset: 2.25
+  _Length: 60
+  ScaleWithMAXHP: 1
+  _color: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &5653967074499465782
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,11 +242,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_VFX_Upgrade_Unit
       objectReference: {fileID: 0}
-    - target: {fileID: 2665757719710443446, guid: 0463acf05a16a9547928348591f22c3b,
-        type: 3}
-      propertyPath: useRigidbodyForVelocity
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2051602082514097169, guid: 0463acf05a16a9547928348591f22c3b,
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
@@ -255,6 +256,11 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.maxColor.b
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2665757719710443446, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: useRigidbodyForVelocity
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0463acf05a16a9547928348591f22c3b, type: 3}
@@ -346,15 +352,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4258413389711678193}
     m_Modifications:
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+    - target: {fileID: 4753382386900767433, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: playOnAwake
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
@@ -411,10 +412,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767433, guid: 0676463e3a899fc4c860874a08536d9d,
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
-      propertyPath: playOnAwake
-      value: 1
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4753382387154898984, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
@@ -442,11 +448,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4258413389711678193}
     m_Modifications:
-    - target: {fileID: 4793061505759232967, guid: c9c85c7788317774497b7b47ea87a562,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_Defender_Lv1
-      objectReference: {fileID: 0}
     - target: {fileID: 8102726810719667551, guid: c9c85c7788317774497b7b47ea87a562,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -516,6 +517,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4793061505759232967, guid: c9c85c7788317774497b7b47ea87a562,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_Defender_Lv1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9c85c7788317774497b7b47ea87a562, type: 3}

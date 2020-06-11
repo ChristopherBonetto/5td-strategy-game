@@ -329,6 +329,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_takeDamageEffect: {fileID: 7476607744994324985}
+  _HPOpacity: 1
+  _BGOpacity: 1
+  VerticalOffset: 2.25
+  _Length: 60
+  ScaleWithMAXHP: 1
+  _color: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1001 &1056855031601773944
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -336,11 +342,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7544598201869741019}
     m_Modifications:
-    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_VFX_Upgrade_Unit
-      objectReference: {fileID: 0}
     - target: {fileID: 4007476289338003652, guid: 0463acf05a16a9547928348591f22c3b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -395,6 +396,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543894072672611771, guid: 0463acf05a16a9547928348591f22c3b,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_VFX_Upgrade_Unit
       objectReference: {fileID: 0}
     - target: {fileID: 2051602082514097169, guid: 0463acf05a16a9547928348591f22c3b,
         type: 3}
@@ -501,16 +507,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7544598201869741019}
     m_Modifications:
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -566,6 +562,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0676463e3a899fc4c860874a08536d9d, type: 3}
 --- !u!4 &7476607744994324986 stripped
@@ -587,11 +593,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7544598201869741019}
     m_Modifications:
-    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
-        type: 3}
-      propertyPath: m_Name
-      value: Unit_Shadow
-      objectReference: {fileID: 0}
     - target: {fileID: 5555198181674805461, guid: 73e6ebc1dc1b0344e980fade3182b16e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -646,6 +647,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
+        type: 3}
+      propertyPath: m_Name
+      value: Unit_Shadow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73e6ebc1dc1b0344e980fade3182b16e, type: 3}
