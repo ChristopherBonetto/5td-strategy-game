@@ -203,10 +203,17 @@ public class BuildingBehaviour : EntityBehavior
 
     public override void Specialization(BuildingType type)
     {
+        if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.BuildingsDictionary[type].OriginalBuildingStats.Cost))
+            return;
+
         m_view.transform.SetParent(null);
         m_view.gameObject.SetActive(false);
         gameObject.SetActive(false);
-        base.Specialization(type);
+
+        if (GameController.Instance.CreateNewBuilding(type, this.transform.position) != null)
+        {
+            base.Specialization(type);
+        }
     }
 
     public override void Death()

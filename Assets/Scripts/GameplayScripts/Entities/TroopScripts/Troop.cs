@@ -538,8 +538,12 @@ public class Troop : EntityBehavior, ICanMove
 
     public override void Specialization(UnitType type)
     {
-        //ResetEntity();
+        if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost))
+            return;
+
+        GameController.Instance.AddResources(-GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost);
         AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
+
         base.Specialization(type);
 
         foreach (Unit unit in m_unitList)

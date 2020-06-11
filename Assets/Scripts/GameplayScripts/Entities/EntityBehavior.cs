@@ -264,11 +264,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Specialization(BuildingType type)
     {
-        if (GameController.Instance.CreateNewBuilding(type, this.transform.position) != null)
-        {
-            HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
-            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
-        }
+        HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
+        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }
     #endregion
 }

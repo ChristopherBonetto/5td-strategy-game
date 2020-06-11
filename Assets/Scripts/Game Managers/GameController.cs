@@ -177,6 +177,14 @@ public class GameController : Singleton<GameController>
             return null;
         }
 
+        int cost = Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost;
+        if (!CheckResourcesAvailability(cost))
+        {
+            Debug.LogWarning("U don't have resources to create " + inBuildingType);
+            return null;
+        }
+        AddResources(-cost);
+
         GameObject building = ObjectPooler.Instance.GetPooledObject("Building");
         BuildingBehaviour buildingRef = building.GetComponent<BuildingBehaviour>();
 
@@ -191,7 +199,7 @@ public class GameController : Singleton<GameController>
         building.gameObject.layer = m_playerLayer;
         
         buildingRef.AssignStats(Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy);
-        AddResources(-Collection.BuildingsDictionary[inBuildingType].BuildingStatsCopy.Cost);
+
         buildingRef.StopTree(false);
 
         return buildingRef;
