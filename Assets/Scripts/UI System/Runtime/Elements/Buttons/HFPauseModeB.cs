@@ -55,7 +55,7 @@ namespace HF.Refactoring
             {
                 if (pauseHudMask != null)
                 {
-                    pauseHudMask.DOFade(1, 0.5f);
+                    pauseHudMask.DOFade(.8f, 0.5f);
                 }
             }
             else
