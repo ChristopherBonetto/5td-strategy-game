@@ -430,6 +430,10 @@ public class Troop : EntityBehavior, ICanMove
             Agent.SetDestination(FocusEntity.transform.position);
 
             //HFEventManager.TriggerEvent(HFEventID.OnUnitLift);
+
+            HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(m_troopStats.LiftSound);
+            m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
+
             HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Carry_Turret);
         }
     }
