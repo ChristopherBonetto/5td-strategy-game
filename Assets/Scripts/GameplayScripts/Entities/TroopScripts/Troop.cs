@@ -49,6 +49,24 @@ public class Troop : EntityBehavior, ICanMove
         get { return m_unitList; }
         set { m_unitList = value; }
     }
+
+    public Unit AliveUnit
+    {
+        get
+        {
+            Unit unit = null;
+            foreach (Unit unit1 in UnitList)
+            {
+                if (unit1.UnitHp > 0)
+                {
+                    unit = unit1;
+                    break;
+                }
+            }
+            return unit;
+        }
+    }
+
     [SerializeField] private float m_formationRadius;
     public Vector3[] m_formationPosition { get; private set; } = new Vector3[4];
 

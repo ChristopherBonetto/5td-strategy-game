@@ -119,19 +119,19 @@ namespace HF.Unit
             {
                 float angle = Vector3.Angle(ostile - m_objectToRotateOnX.position, m_objectToRotateOnX.up);
                 angleOnX = angle;
-                m_objectToRotateOnX.rotation = Quaternion.Euler(angleOnX, 0, 0);
+                m_objectToRotateOnX.localRotation = Quaternion.Euler(angleOnX, angleOnY, 0);
             }
 
             if (m_objectToRotateOnY != null)
             {
                 Vector3 direction = ostile - m_objectToRotateOnY.position;
                 angleOnY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                m_objectToRotateOnY.rotation = Quaternion.Euler(0, angleOnY, 0);
+                m_objectToRotateOnY.localRotation = Quaternion.Euler(angleOnX, angleOnY, 0);
             }
 
             if (m_objectToRotateOnY != null && m_objectToRotateOnX != null && m_objectToRotateOnX == m_objectToRotateOnY)
             {
-                m_objectToRotateOnY.rotation = Quaternion.Euler(angleOnX, angleOnY, 0);
+                m_objectToRotateOnY.localRotation = Quaternion.Euler(angleOnX, angleOnY, 0);
             }
 
             if (!m_lockSpawnBulletPoint)

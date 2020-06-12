@@ -121,10 +121,14 @@ public class BuildingBehaviour : EntityBehavior
         if (m_focusEntity != null)
         {
             Troop troop = m_focusEntity as Troop;
-            Unit unit = troop.UnitList[UnityEngine.Random.Range(0, troop.UnitList.Count)];
-            Vector3 destinationPrediction = unit.transform.position + (unit.transform.forward * 1.5f);
+            Unit unit = troop.AliveUnit;
 
-            m_view.TrackOstile(destinationPrediction);
+            if (unit != null)
+            {
+                Vector3 destinationPrediction = unit.transform.position + (unit.transform.forward * 1.5f);
+                m_view.TrackOstile(destinationPrediction);
+            }
+
 
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {
@@ -180,7 +184,6 @@ public class BuildingBehaviour : EntityBehavior
                 if (target.UnitList != null && target.UnitList[i].UnitHp > 0)
                 {
                     unit = target.UnitList[i];
-                    Debug.Log(i);
                     break;
                 }
             }

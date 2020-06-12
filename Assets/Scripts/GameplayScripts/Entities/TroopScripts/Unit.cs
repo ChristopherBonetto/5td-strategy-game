@@ -118,8 +118,6 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void AssignValuesToTree()
     {
-        Debug.Log(m_troopRef.GetStats());
-
         UnitTree.SetVariableValue("UnitRef", this);
         UnitTree.SetVariableValue("TroopRef", m_troopRef);
         UnitTree.SetVariableValue("MovSpeed", m_troopRef.GetStats().UnitSpeed);
