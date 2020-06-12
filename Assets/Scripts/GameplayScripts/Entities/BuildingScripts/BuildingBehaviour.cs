@@ -210,7 +210,11 @@ public class BuildingBehaviour : EntityBehavior
     public override void Specialization(BuildingType type)
     {
         if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.BuildingsDictionary[type].OriginalBuildingStats.Cost))
+        {
+            HFEventManager.TriggerEvent(HFEventID.OnError, "You don't have enough resources");
             return;
+        }
+
         Deselected();
         m_view.transform.SetParent(null);
         m_view.gameObject.SetActive(false);

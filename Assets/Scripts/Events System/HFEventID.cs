@@ -143,4 +143,9 @@
 	/// <see cref="TutorialID"/> id.
 	/// </summary>
 	OnTutorialQuestOn,
+
+	/// <summary>
+	/// <see cref="string"/> message
+	/// </summary>
+	OnError,
 }

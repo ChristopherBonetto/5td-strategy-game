@@ -545,7 +545,11 @@ public class Troop : EntityBehavior, ICanMove
     public override void Specialization(UnitType type)
     {
         if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost))
+        {
+            HFEventManager.TriggerEvent(HFEventID.OnError, "You don't have enough resources");
             return;
+        }
+
         Deselected();
         GameController.Instance.AddResources(-GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost);
         AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);

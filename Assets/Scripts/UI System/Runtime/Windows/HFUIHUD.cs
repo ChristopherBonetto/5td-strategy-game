@@ -41,6 +41,9 @@ namespace HF.Refactoring
         public GameObject CastleCommandContainer;
         public HFSpecializationB SpawnTroopButton;
 
+        [Header("Error Messafe")]
+        public HFUIMessage Message;
+
         private void OnEnable()
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
@@ -48,6 +51,7 @@ namespace HF.Refactoring
             HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSelected, OnUnitSelected);
             HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
             HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
+            HFEventManager.SubscribeTo<string>(HFEventID.OnError, SetMessage);
 
             ButtonCallNextWave.gameObject.SetActive(true);
         }
@@ -59,6 +63,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSelected, OnUnitSelected);
             HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
             HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
+            HFEventManager.UnsubscribeFrom<string>(HFEventID.OnError, SetMessage);
 
             Popup.gameObject.SetActive(false);
         }
@@ -114,6 +119,11 @@ namespace HF.Refactoring
             {
                 UnitSelectedContainer.SetActive(false);
             }
+        }
+
+        private void SetMessage(string message)
+        {
+            Message.SetMessage(message);
         }
 
         #endregion
