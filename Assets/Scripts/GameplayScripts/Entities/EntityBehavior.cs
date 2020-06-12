@@ -199,12 +199,7 @@ Deselected();
 
     public virtual void Click()
     {
-        //Debug.Log("selected " + EntityPlayerType + " " + gameObject.name);
-
-        if(EntityPlayerType == PlayerType.Player)
-        {
-            InputReaderManager.Instance.CurrentEntity = this;
-        }
+        InputReaderManager.Instance.CurrentEntity = this;
     }
     public virtual void Deselected()
     {

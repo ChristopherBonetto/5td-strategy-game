@@ -51,7 +51,7 @@ public class TileHighlight : MonoBehaviour
     public void Start()
     {
         isActive = false;
-        HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSelected, EnableTiles);
+        HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnEntitySelected, EnableTiles);
         Color tmp = SpRender.color;
         tmp.a = 0f;
         SpRender.color = tmp;
@@ -65,7 +65,7 @@ public class TileHighlight : MonoBehaviour
     }
     private void OnDestroy()
     {
-        HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSelected, EnableTiles);
+        HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnEntitySelected, EnableTiles);
     }
 
    

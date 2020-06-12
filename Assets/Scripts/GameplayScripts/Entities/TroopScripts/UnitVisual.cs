@@ -64,8 +64,7 @@ public class UnitVisual : MonoBehaviour
 
     private void Awake()
     {
-       HPOpacity = 0f;
-       BGOpacity = 0f;
+       SetHealthBarAlpha(0);
        SelectionCircle.SetActive(false);
     }
 
@@ -82,23 +81,37 @@ public class UnitVisual : MonoBehaviour
     {
         healthPercentage = percentage;
     }
-    public void RefreshHealthbarSize()
+    public void RefreshHealthbarSize(int inValue)
     {
         if (ScaleWithMAXHP)
         {
-            Length = GetComponentInParent<Unit>().TroopRef.GetStats().MaxHp * 2;
+            Length = inValue * 2;
         }
     }
+
+    public void SetHealthBarAlpha(float inValue)
+    {
+        HPOpacity = inValue;
+        BGOpacity = inValue;
+    }
+
     #region Particle Methods
     public void PlayParticle(ParticleSystem inPart)
     {
-        inPart.gameObject.SetActive(true);
-        inPart.Play();
+        if(inPart != null)
+        {
+            inPart.gameObject.SetActive(true);
+            inPart.Play();
+        }
     }
     public void StopParticle(ParticleSystem inPart)
     {
-        inPart.Stop();
-        inPart.gameObject.SetActive(false);
+        if (inPart != null)
+        {
+            inPart.Stop();
+            inPart.gameObject.SetActive(false);
+        }
+        
     }
     #endregion
 }

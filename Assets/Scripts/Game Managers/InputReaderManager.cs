@@ -74,7 +74,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
         else if (Input.GetButtonDown("Command"))
         {
-            UnitAction();
+            TroopAction();
         }
     }
 
@@ -106,7 +106,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
                     CurrentEntity?.Deselected();
                     ClearSelection();
-                    HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, (EntityBehavior)canBeSelected, 0);
+                    HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)canBeSelected, 0);
                     HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
                     canBeSelected?.Click();
                 }
@@ -118,7 +118,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                 ClearSelection();
                 CurrentEntity?.Deselected();
 
-                HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
+                HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, null as EntityBehavior, 0);
             }
         }
         else
@@ -128,7 +128,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
                 CurrentEntity?.Deselected();
                 ClearSelection();
                 
-                HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
+                HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, null as EntityBehavior, 0);
             }
         }
 
@@ -143,11 +143,11 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
     #region Command to current entity
 
-    private void UnitAction()
+    private void TroopAction()
     {
         if (HFGameManager.Instance.CurrentGameState == GameStates.Pause) return;
 
-        if (CurrentEntity != null)
+        if (CurrentEntity != null && CurrentEntity.EntityPlayerType == PlayerType.Player)
             CommandBasedOnClicckedObject();
     }
 

@@ -48,7 +48,7 @@ namespace HF.Refactoring
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
-            HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSelected, OnUnitSelected);
+            HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnEntitySelected, OnUnitSelected);
             HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
             HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
             HFEventManager.SubscribeTo<string>(HFEventID.OnError, SetMessage);
@@ -60,7 +60,7 @@ namespace HF.Refactoring
         {
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnNewWaveBegin);
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
-            HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSelected, OnUnitSelected);
+            HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnEntitySelected, OnUnitSelected);
             HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
             HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
             HFEventManager.UnsubscribeFrom<string>(HFEventID.OnError, SetMessage);

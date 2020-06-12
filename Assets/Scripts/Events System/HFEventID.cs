@@ -63,7 +63,7 @@
 	/// <see cref="EntityBehavior"/> unit.
 	/// <see cref="int"/> team.
 	/// </summary>
-	OnUnitSelected,
+	OnEntitySelected,
 
 	/// <summary>
 	/// <see cref="EntityBehavior"/> unit.
