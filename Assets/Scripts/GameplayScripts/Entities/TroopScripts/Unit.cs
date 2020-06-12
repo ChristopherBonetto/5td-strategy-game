@@ -195,7 +195,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void RefreshHp()
     {
         m_unitHp = m_troopRef.GetStats().MaxHp;
-        m_visualScript.RefreshHealthbarSize();
+        m_visualScript.RefreshHealthbarSize(TroopRef.GetStats().MaxHp);
     }
 
     public bool TakeDamage(int Damage)
@@ -252,8 +252,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             Debug.Log("Activating visual feedback");
             //Lerp BG and FG alpha of healthbar and Selectioncircle from 0 to 1 with a preferred ease, 
-            m_visualScript.HPOpacity = 1f;
-            m_visualScript.BGOpacity = 1f;
+            m_visualScript.SetHealthBarAlpha(1f);
             m_visualScript.SelectionCircle.SetActive(true);
 
         }
@@ -261,8 +260,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             Debug.Log("Deactivating visual feedback");
             //disable
-            m_visualScript.HPOpacity = 0f;
-            m_visualScript.BGOpacity = 0f;
+            m_visualScript.SetHealthBarAlpha(0f);
             m_visualScript.SelectionCircle.SetActive(false);
         }
     }
