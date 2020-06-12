@@ -19,7 +19,6 @@ public class Editor_BuildingStatsSO : Editor
         m_attackSound = serializedObject.FindProperty("AttackSound");
         m_deathSound = serializedObject.FindProperty("DeathSound");
         m_takeDamageSound = serializedObject.FindProperty("TakeDamageSound");
-        m_hittedSound = serializedObject.FindProperty("HittedSound");
     }
     private void OnDisable()
     {
@@ -189,11 +188,6 @@ public class Editor_BuildingStatsSO : Editor
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(m_takeDamageSound, new GUIContent("Take Damage Sound"), true);
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PropertyField(m_hittedSound, new GUIContent("Hitted Sound"), true);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 

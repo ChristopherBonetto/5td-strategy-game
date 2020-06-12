@@ -19,7 +19,6 @@ public class Editor_UnitStatsSO : Editor
         m_attackSound = serializedObject.FindProperty("AttackSound");
         m_deathSound = serializedObject.FindProperty("DeathSound");
         m_takeDamageSound = serializedObject.FindProperty("TakeDamageSound");
-        m_hittedSound = serializedObject.FindProperty("HittedSound");
         m_liftSound = serializedObject.FindProperty("LiftSound");
         m_dropSound = serializedObject.FindProperty("DropSound");
     }
@@ -230,11 +229,6 @@ public class Editor_UnitStatsSO : Editor
 
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.PropertyField(m_takeDamageSound, new GUIContent ("Take Damage Sound"), true);
-        EditorGUILayout.EndHorizontal();
-        EditorGUILayout.Space();
-
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PropertyField(m_hittedSound, new GUIContent ("Hitted Sound"), true);
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 

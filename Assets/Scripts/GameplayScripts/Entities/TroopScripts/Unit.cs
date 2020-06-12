@@ -179,6 +179,8 @@ public class Unit : MonoBehaviour, ITakeDamage
                 m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
             }
         }
+
+        TroopRef.AttachAndPlaySound(TroopRef.GetStats().AttackSound);
     }
 
     public void CheckAnotherTarget()
@@ -220,6 +222,8 @@ public class Unit : MonoBehaviour, ITakeDamage
                 StartCoroutine(ShowHealthBar(1f));
             }
 
+            TroopRef.AttachAndPlaySound(TroopRef.GetStats().TakeDamageSound);
+
             float HPperc = ((float)m_unitHp / (float)TroopRef.GetStats().MaxHp);
             m_visualScript.SetHealthbar(HPperc);
             return false;
@@ -243,6 +247,8 @@ public class Unit : MonoBehaviour, ITakeDamage
             gem.transform.position = this.transform.position;
             gem.SetActive(true);
         }
+
+        TroopRef.AttachAndPlaySound(TroopRef.GetStats().DeathSound);
 
         m_troopRef.TroopTakeDamage(this);
     }

@@ -274,4 +274,14 @@ Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }
     #endregion
-}
+
+    #region Sounds method
+
+    public void AttachAndPlaySound(string eventPath)
+    {
+        HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(eventPath);
+        m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
+    }
+
+    #endregion
+    }

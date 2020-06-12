@@ -449,8 +449,7 @@ public class Troop : EntityBehavior, ICanMove
 
             //HFEventManager.TriggerEvent(HFEventID.OnUnitLift);
 
-            HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(m_troopStats.LiftSound);
-            m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
+            AttachAndPlaySound(m_troopStats.LiftSound);
 
             HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Carry_Turret);
         }
