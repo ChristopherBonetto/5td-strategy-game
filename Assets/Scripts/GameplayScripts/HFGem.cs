@@ -19,7 +19,7 @@ public class HFGem : MonoBehaviour
 
     public void GameChangedState(GameStates inState)
     {
-        if(inState == GameStates.EndLevel)
+        if(inState == GameStates.EndLevel || inState == GameStates.WarRoom)
         {
             this.gameObject.SetActive(false);
         }
