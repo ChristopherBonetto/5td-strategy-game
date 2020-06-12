@@ -139,6 +139,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
         {
+Deselected();
             DisableEntity();
         }
         else if (inState == GameStates.Pause)
@@ -201,6 +202,10 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             InputReaderManager.Instance.CurrentEntity = this;
         }
     }
+    public virtual void Deselected()
+    {
+
+    }
 
     #endregion
 
@@ -258,12 +263,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     #region Specialization
     public virtual void Specialization(UnitType type)
     {
+        Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }
 
     public virtual void Specialization(BuildingType type)
     {
+        Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }

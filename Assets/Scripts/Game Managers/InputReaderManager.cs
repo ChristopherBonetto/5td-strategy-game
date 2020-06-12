@@ -102,16 +102,22 @@ public class InputReaderManager : Singleton<InputReaderManager>
             {
                 if ((EntityBehavior)canBeSelected != CurrentEntity)
                 {
+                    Debug.Log("Select");
+
+                    CurrentEntity?.Deselected();
                     ClearSelection();
                     HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, (EntityBehavior)canBeSelected, 0);
                     HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
+                    canBeSelected?.Click();
                 }
 
-                canBeSelected.Click();
+                
             }
             else
             {
                 ClearSelection();
+                CurrentEntity?.Deselected();
+
                 HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
             }
         }
@@ -119,7 +125,9 @@ public class InputReaderManager : Singleton<InputReaderManager>
         {
            if(HFUIManager.IsPointerOverUIElement()==false)
             {
+                CurrentEntity?.Deselected();
                 ClearSelection();
+                
                 HFEventManager.TriggerEvent(HFEventID.OnUnitSelected, null as EntityBehavior, 0);
             }
         }

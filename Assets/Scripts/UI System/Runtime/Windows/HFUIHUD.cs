@@ -97,7 +97,7 @@ namespace HF.Refactoring
                 //}
 
                 SetUpSpecializationButton(entity);
-
+               
                 UnitSelectedContainer.transform.localScale = Vector3.zero;
                 UnitSelectedContainer.transform.DOScale(1, 0.2f);
             }

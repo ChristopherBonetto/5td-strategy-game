@@ -29,6 +29,7 @@ namespace HF.Unit
 
         public Animator anim;
         public ParticleSystem drop;
+        public GameObject RangeFeedback;
 
         /*
         * The obstacle is set to the view because we can
@@ -55,7 +56,10 @@ namespace HF.Unit
                 return m_Collider;
             }
         }
-
+        private void Awake()
+        {
+            RangeFeedback.SetActive(false);
+        }
         private void OnEnable()
         {
             if(drop!=null)
@@ -135,5 +139,19 @@ namespace HF.Unit
                 m_SpawnPoint.forward = ostile - m_SpawnPoint.position + Vector3.up * 2;
             }
         }
+        public void UpdateTowerVisualState(bool state)
+        {
+            if (state == true)
+            {
+                Debug.Log("Activating visuals");
+                RangeFeedback.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("Deactivating visuals");
+                RangeFeedback.SetActive(false);
+            }
+        }
     }
+
 }

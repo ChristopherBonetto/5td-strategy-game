@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 217389418186524172}
   - component: {fileID: 5198020953290088026}
   m_Layer: 0
-  m_Name: PH_StandardAllly
+  m_Name: PH_StandardAlly
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,12 +63,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_takeDamageEffect: {fileID: 0}
-  _HPOpacity: 1
-  _BGOpacity: 1
+  HPOpacity: 1
+  BGOpacity: 1
   VerticalOffset: 2.25
-  _Length: 60
+  Length: 0
   ScaleWithMAXHP: 1
-  _color: {r: 0, g: 1, b: 0, a: 1}
+  color: {r: 0, g: 1, b: 0, a: 1}
+  SelectionCircle: {fileID: 5617310935883118115}
 --- !u!1 &5867388127194325737
 GameObject:
   m_ObjectHideFlags: 0
@@ -154,6 +155,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Unit_SelectionCircle_Defender
       objectReference: {fileID: 0}
+    - target: {fileID: 5314603472680260379, guid: 420109324cb55d841a788e4d7b6f16d0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8185675577532975419, guid: 420109324cb55d841a788e4d7b6f16d0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -211,6 +217,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 420109324cb55d841a788e4d7b6f16d0, type: 3}
+--- !u!1 &5617310935883118115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5314603472680260379, guid: 420109324cb55d841a788e4d7b6f16d0,
+    type: 3}
+  m_PrefabInstance: {fileID: 303413787788109112}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8479343148187872259 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8185675577532975419, guid: 420109324cb55d841a788e4d7b6f16d0,
@@ -224,6 +236,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1132058284828057975}
     m_Modifications:
+    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
+        type: 3}
+      propertyPath: m_Name
+      value: Unit_Shadow
+      objectReference: {fileID: 0}
     - target: {fileID: 5555198181674805461, guid: 73e6ebc1dc1b0344e980fade3182b16e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -278,11 +295,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7902651727520802575, guid: 73e6ebc1dc1b0344e980fade3182b16e,
-        type: 3}
-      propertyPath: m_Name
-      value: Unit_Shadow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 73e6ebc1dc1b0344e980fade3182b16e, type: 3}
@@ -358,21 +370,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3998348732631241668, guid: 7cf59f52f877da04f9fc489f384f986d,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3998348732631241668, guid: 7cf59f52f877da04f9fc489f384f986d,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3998348732631241668, guid: 7cf59f52f877da04f9fc489f384f986d,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7cf59f52f877da04f9fc489f384f986d, type: 3}

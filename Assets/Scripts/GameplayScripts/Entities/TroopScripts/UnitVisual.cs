@@ -14,21 +14,21 @@ public class UnitVisual : MonoBehaviour
 
     public float HealthPercentage
     {
-        get { return _healthPercentage; }
+        get { return healthPercentage; }
     }
 
     public float HealthBarWidth
     {
-        get { return _Length; }
+        get { return Length; }
     }
 
     public float HealthBarHPAlpha
     {
-        get { return _HPOpacity; }
+        get { return HPOpacity; }
     }
     public float HealthBarBGAlpha
     {
-        get { return _BGOpacity; }
+        get { return BGOpacity; }
     }
 
     public float HealthBarYOffset
@@ -38,29 +38,57 @@ public class UnitVisual : MonoBehaviour
 
     public Color HealthBarColor
     {
-        get { return _color; }
+        get { return color; }
     }
 
     [Range(0f, 1f)]
     [SerializeField]
-    float _HPOpacity = 1f;
+    public float HPOpacity = 1f;
     [Range(0f, 1f)]
     [SerializeField]
-    float _BGOpacity = 1f;
+    public float BGOpacity = 1f;
     [SerializeField]
     private float VerticalOffset = 2.25f;
     [SerializeField]
-    float _Length;
+    float Length;
     [SerializeField]
     bool ScaleWithMAXHP;
+    [SerializeField]
+    Color color = Color.green;
+    float healthPercentage;
 
     [SerializeField]
-    Color _color = Color.green;
-
-    float _healthPercentage;
+    public GameObject SelectionCircle;
 
     #endregion
 
+    private void Awake()
+    {
+       HPOpacity = 0f;
+       BGOpacity = 0f;
+       SelectionCircle.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        healthPercentage = 1f; //Reset Healthbar value to its maximuml
+        Active.Add(this);
+    }
+    void OnDisable()
+    {
+        Active.Remove(this);
+    }
+    public void SetHealthbar(float percentage)
+    {
+        healthPercentage = percentage;
+    }
+    public void RefreshHealthbarSize()
+    {
+        if (ScaleWithMAXHP)
+        {
+            Length = GetComponentInParent<Unit>().TroopRef.GetStats().MaxHp * 2;
+        }
+    }
     #region Particle Methods
     public void PlayParticle(ParticleSystem inPart)
     {
@@ -73,25 +101,4 @@ public class UnitVisual : MonoBehaviour
         inPart.gameObject.SetActive(false);
     }
     #endregion
-
-    void OnEnable()
-    {
-        _healthPercentage = 1f; //Reset Healthbar value to its maximuml
-        Active.Add(this);
-    }
-    void OnDisable()
-    {
-        Active.Remove(this);
-    }
-    public void SetHealthbar(float percentage)
-    {
-        _healthPercentage = percentage;
-    }
-    public void RefreshHealthbarSize()
-    {
-        if (ScaleWithMAXHP)
-        {
-            _Length = GetComponentInParent<Unit>().TroopRef.GetStats().MaxHp * 2;
-        }
-    }
 }
