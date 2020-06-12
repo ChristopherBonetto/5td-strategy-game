@@ -74,6 +74,9 @@ public class HFCameraController : MonoBehaviour
     [SerializeField, Range(0.05f, 1)]
     private float m_angularFriction = 0.1f;
 
+    [SerializeField]
+    private float panBorderThickness = 20f;
+
 
     //------------------------------------------------
     // In order to update the camera angle we need some 
@@ -124,13 +127,13 @@ public class HFCameraController : MonoBehaviour
     private void Rotate()
     {
         // GetMouseButton(2) = click on scroll wheel
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0)|| Input.GetMouseButton(2))
         {
             m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
             m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
         }
         // GetMouseButton(2) = click on scroll wheel
-        else if (!Input.GetMouseButton(0))
+        else if (!Input.GetMouseButton(0) || Input.GetMouseButton(2))
         {
             if (m_actualMouseXValue != 0 || m_actualMouseYValue != 0)
             {
@@ -144,11 +147,11 @@ public class HFCameraController : MonoBehaviour
         m_currentAngleX += m_actualMouseYValue;
         m_currentAngleY += m_actualMouseXValue;
 
-        if(Input.GetKey(KeyCode.Q))
+        if(Input.GetKey(KeyCode.E))
         {
             m_currentAngleY -= m_sensitivityOnYAngle;
         }
-        else if (Input.GetKey(KeyCode.E))
+        else if (Input.GetKey(KeyCode.Q))
         {
             m_currentAngleY += m_sensitivityOnYAngle;
         }
@@ -158,11 +161,11 @@ public class HFCameraController : MonoBehaviour
 
         if(Input.GetKey(KeyCode.R))
         {
-            m_currentAngleX = X_MIN_Angle;
+            m_currentAngleX = Mathf.Lerp(m_currentAngleX,X_MIN_Angle, m_sensitivityOnXAngle * m_angularFriction);
         }
         else if (Input.GetKey(KeyCode.T))
         {
-            m_currentAngleX = X_MAX_Angle;
+            m_currentAngleX = Mathf.Lerp(m_currentAngleX,X_MAX_Angle,m_sensitivityOnXAngle*m_angularFriction);
         }
     }
 
@@ -202,6 +205,33 @@ public class HFCameraController : MonoBehaviour
 
             HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Camera);
         }
+
+        //Vector3 pos = m_target.transform.localPosition;
+
+        //if (Input.mousePosition.y >= Screen.height - panBorderThickness)
+        //{
+        //    pos.z += m_cameraMovementSpeed * Time.deltaTime;
+        //}
+        //if (Input.mousePosition.y <= panBorderThickness)
+        //{
+        //    pos.z -= m_cameraMovementSpeed * Time.deltaTime;
+        //}
+        //if (Input.mousePosition.x >= Screen.width - panBorderThickness)
+        //{
+        //    pos.x += m_cameraMovementSpeed * Time.deltaTime;
+        //}
+        //if (Input.mousePosition.x <= panBorderThickness)
+        //{
+        //    pos.x -= m_cameraMovementSpeed * Time.deltaTime;
+        //}
+
+        ////pos.x = Mathf.Clamp(pos.x, -m_Bounds.bounds.extents.x, m_Bounds.bounds.extents.x);
+        ////pos.z = Mathf.Clamp(pos.z, -m_Bounds.bounds.extents.z, m_Bounds.bounds.extents.z);
+        //m_target.transform.localPosition = pos;
+
+
+
+
 
 
     }
