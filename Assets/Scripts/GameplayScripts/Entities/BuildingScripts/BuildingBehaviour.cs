@@ -21,6 +21,8 @@ public class BuildingBehaviour : EntityBehavior
     private float m_attackDelayElapsed = 0;
 	public GameObject RangeFeedback;
 
+    private bool m_isFreezeMode = false;
+
 
     protected override void OnEnable()
     {
@@ -31,13 +33,18 @@ public class BuildingBehaviour : EntityBehavior
         {
             transform.position = hit.point.SnapLocation();
         }
+
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPause);
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         Deselected();
+        
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPause);
     }
+
     #region Stats
 
     public override void AssignStats(EntityStatsSO inStats)
@@ -88,6 +95,11 @@ public class BuildingBehaviour : EntityBehavior
 
     #endregion
 
+    private void OnPause(bool freeze)
+    {
+        m_isFreezeMode = freeze;
+    }
+
     public bool Carry(Vector3 carryPosition)
     {
         IsBusy = true;
@@ -118,6 +130,8 @@ public class BuildingBehaviour : EntityBehavior
 
     public override void Attack()
     {
+        if (m_isFreezeMode) return;
+
         if (m_focusEntity != null)
         {
             Troop troop = m_focusEntity as Troop;
@@ -237,7 +251,8 @@ public class BuildingBehaviour : EntityBehavior
         StopAllCoroutines();
         DisableEntity();
     }
-public override void Click()
+
+    public override void Click()
     {
         base.Click();
  
