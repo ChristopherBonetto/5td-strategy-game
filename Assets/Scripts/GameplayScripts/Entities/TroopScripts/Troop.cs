@@ -488,7 +488,6 @@ public class Troop : EntityBehavior, ICanMove
 
         if (m_currentBattle != null)
         {
-            Debug.Log("BOOOH");
             m_currentBattle.FinishFight();
         }
 
@@ -560,7 +559,6 @@ public class Troop : EntityBehavior, ICanMove
         DisableEntity();
     }
 
-    
 
     #endregion
 

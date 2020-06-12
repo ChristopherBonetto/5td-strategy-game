@@ -27,6 +27,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private int m_unitHp;
     public int UnitHp { get => m_unitHp; }
+    private bool m_canShowHealthBar = true;
 
     private IAttackTypes m_unitAttackType;
 
@@ -213,6 +214,12 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_unitHp -= Damage;
             m_visualScript.PlayParticle(m_visualScript.TakeDamageEffect);
+
+            if (m_canShowHealthBar && InputReaderManager.Instance.CurrentEntity != TroopRef)
+            {
+                StartCoroutine(ShowHealthBar(1f));
+            }
+
             float HPperc = ((float)m_unitHp / (float)TroopRef.GetStats().MaxHp);
             m_visualScript.SetHealthbar(HPperc);
             return false;
@@ -221,6 +228,8 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void Death()
     {
+        StopAllCoroutines();
+
         m_unitHp = 0;
 
         if(FocusUnit != null || FocusBuilding != null)
@@ -243,6 +252,16 @@ public class Unit : MonoBehaviour, ITakeDamage
     #endregion
 
     #region Visual Controls
+
+    IEnumerator ShowHealthBar(float inDestinationTime)
+    {
+        m_canShowHealthBar = false;
+        UpdateUnitVisualState(true);
+        yield return new WaitForSeconds(inDestinationTime);
+        UpdateUnitVisualState(false);
+        m_canShowHealthBar = true;
+    }
+
     public void UpdateUnitVisualState(bool state)
     {
         if (m_visualScript == null) { return; }
