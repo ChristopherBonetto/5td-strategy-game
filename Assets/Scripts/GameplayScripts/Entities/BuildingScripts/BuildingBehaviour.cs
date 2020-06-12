@@ -188,6 +188,8 @@ public class BuildingBehaviour : EntityBehavior
                 }
             }
 
+            if (unit == null) yield return null;
+
             if (unit.TakeDamage(m_buildingStats.Damage))
             {
                 m_behaviorTree.SetVariableValue("FocusEntity", null);

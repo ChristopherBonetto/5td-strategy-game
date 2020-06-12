@@ -200,7 +200,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public bool TakeDamage(int Damage)
     {
-        if (m_troopRef == null) return true;
+        if (m_troopRef == null || m_troopRef.GetStats() == null) return true;
 
         Damage = Mathf.Clamp(Damage, 1, UnitHp + m_troopRef.GetStats().Armor);
 
