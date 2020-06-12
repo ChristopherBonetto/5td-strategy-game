@@ -6,6 +6,7 @@ using UnityEngine.AI;
 using BehaviorDesigner.Runtime;
 using System.ComponentModel;
 using System;
+using System.Xml.Schema;
 
 [RequireComponent(typeof(BehaviorTree))]
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
@@ -53,6 +54,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+    protected HFIEvent3D m_3DSoundInterface;
 
     #region Events
 
@@ -74,6 +76,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
         StopTree(true);
+        m_3DSoundInterface = new HFIAttachPlay3D();
+
     }
     public virtual void Start()
     {

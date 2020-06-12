@@ -121,6 +121,14 @@ public class HFCustomEvent
         m_eventIstance.start();
     }
 
+    public void PlayOneShootAttached(GameObject inObj)
+    {
+        if (!isPlaying())
+        {
+            RuntimeManager.PlayOneShotAttached(EventPath, inObj);
+        }
+    }
+
     
 
     public void Stop()

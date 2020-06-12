@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class adadd : MonoBehaviour
 {
-    [FMODUnity.EventRef]
-    public string ciao;
+    //[FMODUnity.EventRef]
+    //public string ciao;
 
-    public HFCustomEvent wow;
+    //public HFCustomEvent wow;
 
-    private HFIEvent3D lol;
+    //private HFIEvent3D lol;
 
 
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        lol = new HFIAttachPlay3D();
-    }
+    //// Start is called before the first frame update
+    //void Start()
+    //{
+    //    lol = new HFIAttachPlay3D();
+    //}
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            wow = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(ciao);
-            //wow.EventIstance.start();
-            lol.AttachAndPlay(this.gameObject, wow);
-        }
-    }
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.B))
+    //    {
+    //        wow = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(ciao);
+    //        //wow.EventIstance.start();
+    //        lol.AttachAndPlay(this.gameObject, wow);
+    //    }
+    //}
 }

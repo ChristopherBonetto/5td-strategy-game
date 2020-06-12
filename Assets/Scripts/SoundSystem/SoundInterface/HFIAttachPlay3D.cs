@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class HFIAttachPlay3D : HFIEvent3D
 {
-    public void AttachAndPlay(GameObject inObj, HFCustomEvent inEvent)
+    public void AttachAndPlay(HFCustomEvent inEvent, GameObject inObj)
     {
-        Rigidbody tempRb = inObj.GetComponent<Rigidbody>();
-
-        if(tempRb != null)
-        {
-            FMODUnity.RuntimeManager.AttachInstanceToGameObject(inEvent.EventIstance, inObj.transform, tempRb);
-            FMODUnity.RuntimeManager.PlayOneShotAttached(inEvent.EventPath, inObj);
-            //inEvent.Play();
-        }
+        inEvent.PlayOneShootAttached(inObj);
     }
 }

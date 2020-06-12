@@ -978,7 +978,16 @@ retry:
         public static void PlayOneShotAttached(Guid guid, GameObject gameObject)
         {
             var instance = CreateInstance(guid);
-            AttachInstanceToGameObject(instance, gameObject.transform, gameObject.GetComponent<Rigidbody>());
+
+            Rigidbody rb = gameObject.GetComponent<Rigidbody>();
+            if(rb == null)
+            {
+                rb = gameObject.AddComponent<Rigidbody>();
+                rb.useGravity = false;
+                rb.isKinematic = true;
+            }
+
+            AttachInstanceToGameObject(instance, gameObject.transform, rb);
             instance.start();
             instance.release();
         }

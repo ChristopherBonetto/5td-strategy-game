@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface HFIEvent3D
 {
-    void AttachAndPlay(GameObject inObj, HFCustomEvent inEvent);
+    void AttachAndPlay(HFCustomEvent inEvent, GameObject inObj);
 }

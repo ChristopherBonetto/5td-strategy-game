@@ -1432,7 +1432,7 @@ namespace HF
         {
             HFCustomEvent tempEvent;
             tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(inEvent);
-            m_interfaceSound3D.AttachAndPlay(this.gameObject, tempEvent);
+            //m_interfaceSound3D.AttachAndPlay(this.gameObject, tempEvent);
         }
 
 		#endregion
