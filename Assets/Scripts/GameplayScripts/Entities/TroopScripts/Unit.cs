@@ -209,6 +209,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         if (UnitHp <= Damage)
         {
+            m_visualScript.EnableCorpses(m_visualScript.GetCorpse);
             Death();
             return true;
         }
