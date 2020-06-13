@@ -62,10 +62,17 @@ public class UnitVisual : MonoBehaviour
 
     #endregion
 
+    #region Corpses Variables
+    [SerializeField] private GameObject m_corpse;
+    public GameObject GetCorpse { get => m_corpse; }
+    #endregion
+
+
     private void Awake()
     {
        SetHealthBarAlpha(0);
        SelectionCircle.SetActive(false);
+
     }
 
     void OnEnable()
@@ -111,7 +118,17 @@ public class UnitVisual : MonoBehaviour
             inPart.Stop();
             inPart.gameObject.SetActive(false);
         }
-        
+
+    }
+    #endregion
+
+    #region CorpsesMethods
+    public void EnableCorpses(GameObject inGameObject)
+    {
+       if(m_corpse!=null)
+        {
+            Instantiate(inGameObject, transform.position, transform.rotation);
+        }
     }
     #endregion
 }
