@@ -91,7 +91,6 @@ GameObject:
   - component: {fileID: 1411530876458327152}
   - component: {fileID: 2147772809658453391}
   - component: {fileID: 5120596639475591489}
-  - component: {fileID: 6778045643853368262}
   m_Layer: 0
   m_Name: PF_BaseTurret_Ballista_Lvl1
   m_TagString: Untagged
@@ -155,6 +154,7 @@ MonoBehaviour:
   anim: {fileID: 5786378230752888467}
   drop: {fileID: 1610414165068327662}
   RangeFeedback: {fileID: 8690329583350032031}
+  muzzleFlash: {fileID: 0}
 --- !u!65 &5120596639475591489
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -166,27 +166,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4, y: 4, z: 4}
+  m_Size: {x: 6, y: 4, z: 6}
   m_Center: {x: 0, y: 2, z: 0}
---- !u!95 &6778045643853368262
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1403958111344169974}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3655688891638047380
 GameObject:
   m_ObjectHideFlags: 0
@@ -326,20 +307,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_Balista_Lvl1
       objectReference: {fileID: 0}
-    - target: {fileID: 640140330587015962, guid: e2aacf4d47144004ca5ba9490d8f92e6,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8433269901078113104, guid: e2aacf4d47144004ca5ba9490d8f92e6,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.75
+      value: 0.724
       objectReference: {fileID: 0}
     - target: {fileID: 8433269901078113104, guid: e2aacf4d47144004ca5ba9490d8f92e6,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.5
+      value: 1.476
       objectReference: {fileID: 0}
     - target: {fileID: 7379218343646914144, guid: e2aacf4d47144004ca5ba9490d8f92e6,
         type: 3}
@@ -400,6 +376,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 640140330587015962, guid: e2aacf4d47144004ca5ba9490d8f92e6,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e2aacf4d47144004ca5ba9490d8f92e6, type: 3}
