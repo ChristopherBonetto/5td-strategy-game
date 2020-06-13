@@ -27,9 +27,12 @@ namespace HF.Unit
         private float m_BulletSpeed;
         public float BulletSpeed => m_BulletSpeed;
 
+        #region Visual Feedbacks
         public Animator anim;
         public ParticleSystem drop;
         public GameObject RangeFeedback;
+        public ParticleSystem muzzleFlash;
+        #endregion
 
         /*
         * The obstacle is set to the view because we can
@@ -66,6 +69,10 @@ namespace HF.Unit
             {
                 drop.Stop();
             }
+            if(muzzleFlash!=null)
+            {
+                muzzleFlash.Stop();
+            }
         }
 
         public void CarryBuilding()
@@ -90,7 +97,11 @@ namespace HF.Unit
             {
                 anim.SetTrigger("isShooting");
             }
-        
+            if (muzzleFlash != null)
+            {
+                muzzleFlash.Play();
+            }
+
 
             // Get bullet from pool.
             GameObject go = HFPoolManager.Instance.GetPooledObject(m_BulletID.ID);
