@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 namespace HF
 {
@@ -25,13 +26,14 @@ namespace HF
 		[SerializeField]
 		private Renderer m_mesh = null;
 
-		[SerializeField]
+        [SerializeField]
+        private ParticleSystem m_bulletParticle = null;
+
+        [SerializeField]
 		private ParticleSystem m_explosionHit = null;
 
-		[SerializeField]
-		private ParticleSystem m_explosionMissed = null;
 
-		private Transform m_transform;
+        private Transform m_transform;
 
 		private Rigidbody m_rigidbody;
 		private string m_layer;
@@ -47,6 +49,16 @@ namespace HF
 		void OnEnable()
 		{
 			m_rigidbody.AddRelativeForce(0f, 0f, m_parameters.Speed, ForceMode.VelocityChange);
+           
+            if(m_bulletParticle!=null)
+            {
+                m_bulletParticle.Play();
+            }
+
+            if(m_explosionHit!=null)
+            {
+                m_explosionHit.Stop();
+            }
 		}
 
 		private void OnDisable()
@@ -56,8 +68,9 @@ namespace HF
 
 		private void OnTriggerEnter(Collider other)
 		{
-			if (other.gameObject.layer != LayerMask.NameToLayer(m_layer))
-				gameObject.SetActive(false);
+            if (other.gameObject.layer != LayerMask.NameToLayer(m_layer))
+
+                StartCoroutine(DisableBullet());
 		}
 
 		/// <summary>
@@ -78,5 +91,26 @@ namespace HF
 		{
 			m_parameters = inParameters;
 		}
-	}
+
+        IEnumerator DisableBullet()
+        {
+            if (m_bulletParticle != null)
+            {
+                m_bulletParticle.Stop();
+            }
+            m_rigidbody.velocity = Vector3.zero;
+            if (m_explosionHit != null)
+            {
+
+                m_explosionHit.Play();
+            }
+            yield return new WaitForSeconds(.5f);
+            gameObject.SetActive(false);
+        }
+
+       
+
+        
+
+    }
 }
