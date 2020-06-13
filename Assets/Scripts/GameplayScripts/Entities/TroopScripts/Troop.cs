@@ -296,7 +296,6 @@ public class Troop : EntityBehavior, ICanMove
         if(m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
-            StartCoroutine(IsBusyDelay(0.5f));
         }
 
         m_focusEntity = null;

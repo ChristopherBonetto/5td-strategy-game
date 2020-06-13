@@ -26,7 +26,7 @@ public class BuildingBehaviour : EntityBehavior
 
     protected override void OnEnable()
     {
-        base.Start();
+        base.OnEnable();
 
         RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up * 2, Vector3.down, out hit, 20, LayerMask.GetMask("Terrain")))

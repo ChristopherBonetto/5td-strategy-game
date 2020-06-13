@@ -143,7 +143,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
         {
-Deselected();
+            Deselected();
             DisableEntity();
         }
         else if (inState == GameStates.Pause)
