@@ -44,6 +44,9 @@ namespace HF.Refactoring
         [Header("Error Messafe")]
         public HFUIMessage Message;
 
+        [Header("Carry capacity")]
+        public Slider carryCapacitySlider;
+
         private void OnEnable()
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
@@ -127,6 +130,24 @@ namespace HF.Refactoring
         }
 
         #endregion
+
+        public void SetCarryCapacity(Vector3 worldPosition, float carryCapacityRequired) 
+        {
+            Debug.Log("Showing carry capacity....");
+            // If there isn't an entity selecte or the current entity is not a troop,
+            // then return.
+            if (InputReaderManager.Instance.CurrentEntity == null || 
+                !(InputReaderManager.Instance.CurrentEntity is Troop)) 
+                return;
+
+            Vector2 screenPosition = RectTransformUtility.WorldToScreenPoint(Camera.main, worldPosition);
+            float actualFillAmount = (InputReaderManager.Instance.CurrentEntity as Troop).CurrentCarryCapacity / carryCapacityRequired;
+            actualFillAmount = Mathf.Clamp(actualFillAmount, 0, 1);
+
+            carryCapacitySlider.value = actualFillAmount;
+            carryCapacitySlider.transform.position = screenPosition;
+            carryCapacitySlider.gameObject.SetActive(true);
+        }
 
         public void ReturnToLevelSelection()
         {

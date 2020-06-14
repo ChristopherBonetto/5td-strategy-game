@@ -59,10 +59,13 @@ namespace HF.Unit
                 return m_Collider;
             }
         }
+
+
         private void Awake()
         {
             RangeFeedback.SetActive(false);
         }
+
         private void OnEnable()
         {
             if(drop!=null)
@@ -162,6 +165,21 @@ namespace HF.Unit
                 Debug.Log("Deactivating visuals");
                 RangeFeedback.SetActive(false);
             }
+        }
+
+
+        public void OnMouseExit()
+        {
+            Debug.Log("Show fill amount................");
+            HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
+            hud.carryCapacitySlider.gameObject.SetActive(false);
+        }
+
+        public void OnMouseEnter()
+        {
+            Debug.Log("Show fill amount................");
+            HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
+            hud.SetCarryCapacity(transform.position + Vector3.up * 3, GetComponentInParent<BuildingBehaviour>().m_buildingStats.Weight);
         }
     }
 
