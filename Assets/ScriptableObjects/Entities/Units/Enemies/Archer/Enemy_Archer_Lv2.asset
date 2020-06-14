@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d85d8878c2d0162499ca7af4c4a78c98, type: 3}
+  m_Name: Enemy_Archer_Lv2
+  m_EditorClassIdentifier: 
+  Name: Standard Enemy
+  Description: 
+  DefaultDescription: I'm just a stupid unit
+  Icon: {fileID: 21300000, guid: 9450c311abeb1bb4aa8d4399acc61d73, type: 3}
+  VisualPrefab: {fileID: 222360495255548029, guid: e8d2102e6ee5c714c978dc4019b7326a,
+    type: 3}
+  MaxHp: 20
+  Armor: 0
+  CanTakeDamage: 1
+  EngageRange: 5
+  AttackRange: 7
+  AttackSpeed: 0.4
+  Damage: 3
+  CanAttack: 1
+  Projectile: {fileID: 0}
+  Mesh: {fileID: 0}
+  Cost: 0
+  AttackSound: event:/GameSounds/Units/SwordSlash/unit_swordslash
+  DeathSound: event:/GameSounds/Units/Death/unit_death
+  TakeDamageSound: event:/GameSounds/Units/Hit/unit_hit
+  Icon: {fileID: 0}
+  UnitType: 21
+  AttackType: 0
+  UnitQuantity: 4
+  UnitSpeed: 8
+  CarryCapacity: 0
+  RespawnTime: 100
+  LiftSound: event:/GameSounds/Units/LiftTurret/unit_liftturret
+  DropSound: 
