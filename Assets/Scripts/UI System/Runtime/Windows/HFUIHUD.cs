@@ -133,7 +133,9 @@ namespace HF.Refactoring
 
         public void SetCarryCapacity(Vector3 worldPosition, float carryCapacityRequired) 
         {
-            Debug.Log("Showing carry capacity....");
+            carryCapacitySlider.value = 0;
+            carryCapacitySlider.transform.localScale = Vector3.one;
+
             // If there isn't an entity selecte or the current entity is not a troop,
             // then return.
             if (InputReaderManager.Instance.CurrentEntity == null || 
@@ -144,9 +146,10 @@ namespace HF.Refactoring
             float actualFillAmount = (InputReaderManager.Instance.CurrentEntity as Troop).CurrentCarryCapacity / carryCapacityRequired;
             actualFillAmount = Mathf.Clamp(actualFillAmount, 0, 1);
 
-            carryCapacitySlider.value = actualFillAmount;
             carryCapacitySlider.transform.position = screenPosition;
             carryCapacitySlider.gameObject.SetActive(true);
+            carryCapacitySlider.transform.DOPunchScale(Vector3.one, .2f).
+                OnComplete(() => carryCapacitySlider.DOValue(actualFillAmount, .7f, false));
         }
 
         public void ReturnToLevelSelection()

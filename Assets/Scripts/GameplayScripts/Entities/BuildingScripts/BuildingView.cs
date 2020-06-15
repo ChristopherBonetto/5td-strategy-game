@@ -175,6 +175,12 @@ namespace HF.Unit
             hud.carryCapacitySlider.gameObject.SetActive(false);
         }
 
+        public void OnMouseOver()
+        {
+            HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
+            hud.carryCapacitySlider.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main,transform.position + Vector3.up * 3);
+        }
+
         public void OnMouseEnter()
         {
             Debug.Log("Show fill amount................");
