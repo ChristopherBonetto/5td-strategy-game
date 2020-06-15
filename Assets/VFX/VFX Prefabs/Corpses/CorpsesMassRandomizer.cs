@@ -14,6 +14,6 @@ public class CorpsesMassRandomizer : MonoBehaviour
         m_rigidbody = GetComponent<Rigidbody>();
         mass = Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier);
         m_rigidbody.mass = mass;
-        m_rigidbody.AddForce(4f*Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier), 4f*Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier), 4f*Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier), ForceMode.Impulse);
+        m_rigidbody.AddForce(Random.Range(-4f * Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier), 4f * Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier)), 4f * Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier), Random.Range(-4f * Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier), 4f * Random.Range(m_rigidbody.mass * minMultiplier, m_rigidbody.mass * maxMultiplier)), ForceMode.Impulse);
     }
 }
