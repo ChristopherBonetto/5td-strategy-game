@@ -145,11 +145,12 @@ public class Unit : MonoBehaviour, ITakeDamage
         if (FocusUnit)
         {
 
-            m_visualScript.TriggerAttack(m_visualScript.TriggerAnimations);
+         
 
 
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
+
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
@@ -184,7 +185,7 @@ public class Unit : MonoBehaviour, ITakeDamage
                 m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
             }
         }
-
+        m_visualScript.TriggerAttack(m_visualScript.TriggerAnimations);
         TroopRef.AttachAndPlaySound(TroopRef.GetStats().AttackSound);
     }
 

@@ -70,7 +70,8 @@ public class UnitVisual : MonoBehaviour
 
     #region Animator Variables
     [SerializeField] private Animator m_animator;
-    private int runLayer; 
+    private int runLayer;
+    private int attackLayer;
     public Animator TriggerAnimations { get => m_animator; }
 
     #endregion
@@ -85,6 +86,8 @@ public class UnitVisual : MonoBehaviour
       if(m_animator!=null)
         {
             runLayer = m_animator.GetLayerIndex("Bottom Run");
+            attackLayer = m_animator.GetLayerIndex("Top");
+            m_animator.SetLayerWeight(attackLayer, 0);
         }
 
 
@@ -104,12 +107,14 @@ public class UnitVisual : MonoBehaviour
     private void Update()
     {
 
-        if(m_animator!=null)
+        if (m_animator != null)
         {
             m_animator.SetLayerWeight(runLayer, unit.UnitAgent.velocity.magnitude);
         }
-        
-        
+
+
+
+
     }
 
     public void SetHealthbar(float percentage)
@@ -131,22 +136,20 @@ public class UnitVisual : MonoBehaviour
     }
 
     #region Animator Methods
-    public void TriggerAttack(Animator inAnimator)
+    public void TriggerAttack(Animator animation)
     {
-        int randomizedNumber = Random.Range(0, 1);
 
         if (m_animator != null)
         {
-            if (randomizedNumber < .5f)
-            {
-                m_animator.SetTrigger("isAttcking01");
-            }
-            else if (randomizedNumber <= .5f)
-            {
-                m_animator.SetTrigger("isAttcking02");
-            }
+            m_animator.SetLayerWeight(attackLayer, 1);
+        }
+    }
+    public void StopAttackAnimation(Animator animation)
+    {
 
-
+        if (m_animator != null)
+        {
+            m_animator.SetLayerWeight(attackLayer, 0);
         }
     }
     #endregion
