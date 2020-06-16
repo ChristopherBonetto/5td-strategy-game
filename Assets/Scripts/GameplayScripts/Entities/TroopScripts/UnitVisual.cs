@@ -68,10 +68,27 @@ public class UnitVisual : MonoBehaviour
     #endregion
 
 
+    #region Animator Variables
+    [SerializeField] private Animator m_animator;
+    private int runLayer; 
+    public Animator TriggerAnimations { get => m_animator; }
+
+    #endregion
+
+    public Unit unit;
+
     private void Awake()
     {
        SetHealthBarAlpha(0);
        SelectionCircle.SetActive(false);
+
+      if(m_animator!=null)
+        {
+            runLayer = m_animator.GetLayerIndex("Bottom Run");
+        }
+
+
+
 
     }
 
@@ -84,6 +101,17 @@ public class UnitVisual : MonoBehaviour
     {
         Active.Remove(this);
     }
+    private void Update()
+    {
+
+        if(m_animator!=null)
+        {
+            m_animator.SetLayerWeight(runLayer, unit.UnitAgent.velocity.magnitude);
+        }
+        
+        
+    }
+
     public void SetHealthbar(float percentage)
     {
         healthPercentage = percentage;
@@ -101,6 +129,27 @@ public class UnitVisual : MonoBehaviour
         HPOpacity = inValue;
         BGOpacity = inValue;
     }
+
+    #region Animator Methods
+    public void TriggerAttack(Animator inAnimator)
+    {
+        int randomizedNumber = Random.Range(0, 1);
+
+        if (m_animator != null)
+        {
+            if (randomizedNumber < .5f)
+            {
+                m_animator.SetTrigger("isAttcking01");
+            }
+            else if (randomizedNumber <= .5f)
+            {
+                m_animator.SetTrigger("isAttcking02");
+            }
+
+
+        }
+    }
+    #endregion
 
     #region Particle Methods
     public void PlayParticle(ParticleSystem inPart)
@@ -131,4 +180,6 @@ public class UnitVisual : MonoBehaviour
         }
     }
     #endregion
+
+   
 }

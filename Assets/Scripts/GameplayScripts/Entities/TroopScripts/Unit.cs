@@ -69,6 +69,7 @@ public class Unit : MonoBehaviour, ITakeDamage
             if(m_visualObj != null)
             {
                 m_visualScript = m_visualObj.GetComponent<UnitVisual>();
+                m_visualScript.unit = this;
             }
             else
             {
@@ -143,6 +144,10 @@ public class Unit : MonoBehaviour, ITakeDamage
     {
         if (FocusUnit)
         {
+
+            m_visualScript.TriggerAttack(m_visualScript.TriggerAnimations);
+
+
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
