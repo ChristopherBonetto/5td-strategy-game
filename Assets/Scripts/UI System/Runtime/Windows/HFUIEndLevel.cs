@@ -17,6 +17,9 @@ namespace HF.Refactoring
         public HFLoadSceneB RestartLevelButton;
         public HFLoadSceneB NextLevelButton;
         public HFLoadSceneB ReturnToMainMenuButton;
+        public Color victoryBackgroundColor;
+        public Color defeatBackgroundColor;
+     
 
 
         public Sequence m_victorySequence;
@@ -30,7 +33,7 @@ namespace HF.Refactoring
 
             m_victorySequence
                 .AppendCallback(() => SetActiveElements(true, FadeBackground.gameObject, VictoryBanner.gameObject))
-                .Append(FadeBackground.DOColor(Color.black, 1f))
+                .Append(FadeBackground.DOColor(victoryBackgroundColor, 1f))
                 .Append(VictoryBanner.transform.DOScale(1f, 1f))
                 .AppendCallback(() => SetActiveElements(true, /*RestartLevelButton.gameObject, NextLevelButton.gameObject,*/ ReturnToMainMenuButton.gameObject))
                 .AppendCallback(() => HFUIManager.Instance.TryGetWindow(HFUIWindowID.LEVEL_ENDING))
@@ -39,7 +42,7 @@ namespace HF.Refactoring
 
             m_defeatSequence
                 .AppendCallback(() => SetActiveElements(true, FadeBackground.gameObject, DefeatBanner.gameObject))
-                .Append(FadeBackground.DOColor(Color.black, 1f))
+                .Append(FadeBackground.DOColor(defeatBackgroundColor, 1f))
                 .Append(DefeatBanner.transform.DOScale(1f, 1f))
                 .AppendCallback(() => SetActiveElements(true, /*RestartLevelButton.gameObject,*/ ReturnToMainMenuButton.gameObject))
                 .AppendCallback(() => HFUIManager.Instance.TryGetWindow(HFUIWindowID.LEVEL_ENDING))

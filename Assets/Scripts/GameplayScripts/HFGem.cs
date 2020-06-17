@@ -33,6 +33,14 @@ public class HFGem : MonoBehaviour
 
         if (unit.TroopRef.EntityPlayerType == PlayerType.Player)
         {
+            transform.DOMove(unit.transform.position, .5f);
+            StartCoroutine(PickUpGem());
+        }
+
+        IEnumerator PickUpGem()
+        {
+            transform.DOScale(.5f, .5f);
+            yield return new WaitForSeconds(.5f);
             GameController.Instance.AddResources(m_amount);
             this.gameObject.SetActive(false);
         }

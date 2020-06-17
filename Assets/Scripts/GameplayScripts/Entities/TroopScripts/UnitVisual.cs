@@ -178,7 +178,7 @@ public class UnitVisual : MonoBehaviour
        if(m_corpse!=null)
         {
             GameObject corpe = Instantiate(m_corpse, transform.position, transform.rotation);
-            Destroy(corpe, 3f);
+         
         }
     }
     #endregion

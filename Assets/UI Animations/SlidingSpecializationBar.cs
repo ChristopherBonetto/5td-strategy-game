@@ -13,15 +13,15 @@ public class SlidingSpecializationBar : MonoBehaviour
     public Image slidingBarImage;
     public Button upgradeButton;
 
-    public float onEnablePos = 50f;
-    public float onDisablePos = -120f;
+    public float onEnablePos = 0;
+    public float onDisablePos = -80f;
 
 
     private void OnEnable()
     {
         if (!upgradeButton.gameObject.activeSelf)
         {
-            slidingBar.DOScaleX(1f, .5f);
+            slidingBar.DOScaleX(.75f, .5f);
             slidingBar.DOShakeScale(.2f, new Vector3(.1f, 0, 0), 10, 50, true);
             slidingBar.DOAnchorPosX(onEnablePos, 0.5f);
         }
