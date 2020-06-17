@@ -67,7 +67,7 @@ public class HFGameManager : Singleton<HFGameManager>
                 m_currentGameState = value;
                 ActionAfterChangeGMState(value);
 
-                Debug.Log(m_currentGameState);
+                Debug.Log($"<color={Color.red}><b>[{this.GetType().Name}]</b></color> : {m_currentGameState}");
             }
         }
     }

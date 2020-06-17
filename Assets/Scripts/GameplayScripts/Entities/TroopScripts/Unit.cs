@@ -215,7 +215,6 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         if (UnitHp <= Damage)
         {
-            m_visualScript.EnableCorpses(m_visualScript.GetCorpse);
             Death();
             return true;
         }
@@ -240,9 +239,13 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void Death()
     {
         StopAllCoroutines();
-
         m_unitHp = 0;
 
+        if (m_visualScript != null)
+        {
+            m_visualScript.EnableCorpses(m_visualScript.GetCorpse);
+        }
+        
         if(FocusUnit != null || FocusBuilding != null)
         {
             AssignFocusToUnit((Unit)null);
@@ -278,11 +281,9 @@ public class Unit : MonoBehaviour, ITakeDamage
     public void UpdateUnitVisualState(bool state)
     {
         if (m_visualScript == null) { return; }
-        Debug.Log(state);
 
         if (state == true)
         {
-            Debug.Log("Activating visual feedback");
             //Lerp BG and FG alpha of healthbar and Selectioncircle from 0 to 1 with a preferred ease, 
             m_visualScript.SetHealthBarAlpha(1f);
             m_visualScript.SelectionCircle.SetActive(true);
@@ -290,7 +291,6 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
         else
         {
-            Debug.Log("Deactivating visual feedback");
             //disable
             m_visualScript.SetHealthBarAlpha(0f);
             m_visualScript.SelectionCircle.SetActive(false);

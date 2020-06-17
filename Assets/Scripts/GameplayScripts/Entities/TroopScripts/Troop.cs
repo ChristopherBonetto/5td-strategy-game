@@ -350,7 +350,7 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     m_focusEntity = enemyTroop;
                     SetNewTroopState(TroopStates.GoToEnemy);
-                    Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
+                    //Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
                 }
             }
 
@@ -362,7 +362,7 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     m_focusEntity = enemyBuilding;
                     SetNewTroopState(TroopStates.GoToEnemy);
-                    Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
+                    //Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
                 }
             }
         }
@@ -376,7 +376,7 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     m_focusEntity = inEntity;
                     SetNewTroopState(TroopStates.GoToAlly);
-                    Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
+                    //Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
                 }
             }
         }
@@ -398,7 +398,7 @@ public class Troop : EntityBehavior, ICanMove
         // Remember to get the focus entity or it will run a null reference.
         var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
         FocusEntity = focusEntity.Value;
-        Debug.Log(FocusEntity);
+
         new Fight(this, FocusEntity);
 
         if (gameObject.layer == LayerMask.GetMask("Player"))

@@ -29,8 +29,6 @@ public struct Fight
             battleScript.StartFight(Attacker, Defender);
         }
 
-        Debug.Log(Defender);
-        Debug.Log(Attacker);
         Vector3 objectLine = (Defender.transform.position - Attacker.transform.position); // This operation doesn't give you the midlle point between attacker and defender. 
         // If you want to position the Battle handler in the midlle of the fight just do the follow operations:
         // (V1 + V2) / 2.   (or in this case --> (attacker.position + defender.positon) / 2)

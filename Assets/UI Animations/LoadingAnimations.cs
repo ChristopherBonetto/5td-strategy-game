@@ -15,15 +15,12 @@ public class LoadingAnimations : MonoBehaviour
         dots[0].enabled = false;
         dots[1].enabled = false;
         dots[2].enabled = false;
-        Debug.Log("start");
     }
 
 
     void Update()
     {
         StartCoroutine(TypeDots());
-        Debug.Log("update");
-
     }
     IEnumerator TypeDots()
     {

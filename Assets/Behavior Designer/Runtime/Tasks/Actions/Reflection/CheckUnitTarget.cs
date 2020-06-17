@@ -16,7 +16,7 @@ namespace BehaviorDesigner.Runtime.Tasks
         {
             if (unitRef.Value.FocusUnit == null && unitRef.Value.FocusBuilding == null)
             {
-                Debug.Log("try to catch another");
+                //Debug.Log("try to catch another");
                 return TaskStatus.Failure;
             }
 

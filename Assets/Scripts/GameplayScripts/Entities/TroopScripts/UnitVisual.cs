@@ -89,10 +89,6 @@ public class UnitVisual : MonoBehaviour
             attackLayer = m_animator.GetLayerIndex("Top");
             m_animator.SetLayerWeight(attackLayer, 0);
         }
-
-
-
-
     }
 
     void OnEnable()
@@ -106,15 +102,10 @@ public class UnitVisual : MonoBehaviour
     }
     private void Update()
     {
-
         if (m_animator != null)
         {
             m_animator.SetLayerWeight(runLayer, unit.UnitAgent.velocity.magnitude);
         }
-
-
-
-
     }
 
     public void SetHealthbar(float percentage)

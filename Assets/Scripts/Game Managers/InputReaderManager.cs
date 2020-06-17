@@ -95,23 +95,18 @@ public class InputReaderManager : Singleton<InputReaderManager>
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
         if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity,(1<<8)+(1<<9)) && !HFUIManager.IsPointerOverUIElement())
         {
-            Debug.Log(HitInfo.transform.name);
             IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
 
             if(canBeSelected != null)
             {
                 if ((EntityBehavior)canBeSelected != CurrentEntity)
                 {
-                    Debug.Log("Select");
-
                     CurrentEntity?.Deselected();
                     ClearSelection();
                     HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)canBeSelected, 0);
                     HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
                     canBeSelected?.Click();
                 }
-
-                
             }
             else
             {
