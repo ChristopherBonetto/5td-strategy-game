@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UnitVisual : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class UnitVisual : MonoBehaviour
 
     #region Healthbar Variables
     public static List<UnitVisual> Active = new List<UnitVisual>();
+    public GameObject Healthbar;
+    private Slider HealthbarSlider;
+    private RectTransform HealthbarRect;
+    private CanvasGroup HealthbarCanvas;
 
     public float HealthPercentage
     {
@@ -79,8 +84,11 @@ public class UnitVisual : MonoBehaviour
 
     private void Awake()
     {
-       SetHealthBarAlpha(0);
-       SelectionCircle.SetActive(false);
+        HealthbarSlider = Healthbar.GetComponent<Slider>();
+        HealthbarRect = Healthbar.GetComponent<RectTransform>();
+        HealthbarCanvas = Healthbar.GetComponent<CanvasGroup>();
+        SetHealthBarAlpha(0);
+        SelectionCircle.SetActive(false);
 
       if(m_animator!=null)
         {
@@ -91,7 +99,7 @@ public class UnitVisual : MonoBehaviour
 
     void OnEnable()
     {
-        healthPercentage = 1f; //Reset Healthbar value to its maximuml
+        SetHealthbar(1f); //Reset Healthbar value to its maximum
         Active.Add(this);
 
         if (m_animator == null) return;
@@ -111,22 +119,25 @@ public class UnitVisual : MonoBehaviour
 
     #region HealthBar methods
 
-    public void SetHealthbar(float percentage)
+    public void SetHealthbar(float NormalizedPercentage) //Changes the fill of the healthbar based on a provided normalized value;
     {
-        healthPercentage = percentage;
+        //healthPercentage = percentage;
+        HealthbarSlider.value = NormalizedPercentage;
     }
-    public void RefreshHealthbarSize(int inValue)
+    public void RefreshHealthbarSize(int inValue) //Changes the WIDTH of the healthbar if the auto scaling is enabled.
     {
         if (ScaleWithMAXHP)
         {
-            Length = inValue * 2;
+            //Length = inValue * 2;
+            HealthbarRect.sizeDelta = new Vector2(inValue * 2.5f, HealthbarRect.sizeDelta.y);
         }
     }
 
-    public void SetHealthBarAlpha(float inValue)
+    public void SetHealthBarAlpha(float inValue)// Controls the alpha of the healthbar based on a normalized value;
     {
-        HPOpacity = inValue;
-        BGOpacity = inValue;
+        //HPOpacity = inValue;
+        //BGOpacity = inValue;
+        HealthbarCanvas.alpha = inValue;
     }
 
     #endregion
