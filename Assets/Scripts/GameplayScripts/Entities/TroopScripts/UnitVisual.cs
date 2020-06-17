@@ -64,7 +64,6 @@ public class UnitVisual : MonoBehaviour
 
     #region Corpses Variables
     [SerializeField] private GameObject m_corpse;
-    public GameObject GetCorpse { get => m_corpse; }
     #endregion
 
 
@@ -86,8 +85,7 @@ public class UnitVisual : MonoBehaviour
       if(m_animator!=null)
         {
             runLayer = m_animator.GetLayerIndex("Bottom Run");
-            attackLayer = m_animator.GetLayerIndex("Top");
-            m_animator.SetLayerWeight(attackLayer, 0);
+            //attackLayer = m_animator.GetLayerIndex("Top");
         }
     }
 
@@ -95,6 +93,9 @@ public class UnitVisual : MonoBehaviour
     {
         healthPercentage = 1f; //Reset Healthbar value to its maximuml
         Active.Add(this);
+
+        if (m_animator == null) return;
+        m_animator.SetLayerWeight(2, 1f);
     }
     void OnDisable()
     {
@@ -107,6 +108,8 @@ public class UnitVisual : MonoBehaviour
             m_animator.SetLayerWeight(runLayer, unit.UnitAgent.velocity.magnitude);
         }
     }
+
+    #region HealthBar methods
 
     public void SetHealthbar(float percentage)
     {
@@ -126,23 +129,16 @@ public class UnitVisual : MonoBehaviour
         BGOpacity = inValue;
     }
 
+    #endregion
+
     #region Animator Methods
-    public void TriggerAttack(Animator animation)
+    public void TriggerAnimation(string inValue)
     {
+        if (m_animator == null) return;
 
-        if (m_animator != null)
-        {
-            m_animator.SetLayerWeight(attackLayer, 1);
-        }
+        m_animator.SetTrigger(inValue);
     }
-    public void StopAttackAnimation(Animator animation)
-    {
 
-        if (m_animator != null)
-        {
-            m_animator.SetLayerWeight(attackLayer, 0);
-        }
-    }
     #endregion
 
     #region Particle Methods
@@ -166,11 +162,12 @@ public class UnitVisual : MonoBehaviour
     #endregion
 
     #region CorpsesMethods
-    public void EnableCorpses(GameObject inGameObject)
+    public void EnableCorpses()
     {
        if(m_corpse!=null)
         {
-            Instantiate(inGameObject, transform.position, transform.rotation);
+            GameObject corpe = Instantiate(m_corpse, transform.position, transform.rotation);
+            Destroy(corpe, 3f);
         }
     }
     #endregion
