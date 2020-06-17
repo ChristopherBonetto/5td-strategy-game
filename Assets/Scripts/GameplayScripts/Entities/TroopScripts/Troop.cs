@@ -296,7 +296,10 @@ public class Troop : EntityBehavior, ICanMove
         if(m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
+            StartCoroutine(IsBusyDelay(2f));
         }
+
+        //IsBusy = true;
 
         m_focusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
@@ -311,10 +314,10 @@ public class Troop : EntityBehavior, ICanMove
     IEnumerator IsBusyDelay(float inValue)
     {
         IsBusy = true;
-        Debug.Log(gameObject.name + IsBusy);
+
         yield return new WaitForSeconds(inValue);
+
         IsBusy = false;
-        Debug.Log(gameObject.name + IsBusy);
     }
 
     public void AssignGameObjectEntity(GameObject inObj)
@@ -417,6 +420,7 @@ public class Troop : EntityBehavior, ICanMove
         foreach (Unit unit in UnitList)
         {
             unit.StopTree(true);
+            unit.ResetVisual();
             unit.AssignFocusToUnit((BuildingBehaviour)null);
         }
 

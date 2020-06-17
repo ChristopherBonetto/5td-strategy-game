@@ -292,5 +292,12 @@ public class Unit : MonoBehaviour, ITakeDamage
             m_visualScript.SelectionCircle.SetActive(false);
         }
     }
+
+    public void ResetVisual()
+    {
+        if (m_visualScript == null) return;
+
+        VisualObj.transform.rotation = TroopRef.transform.rotation;
+    }
     #endregion
 }
