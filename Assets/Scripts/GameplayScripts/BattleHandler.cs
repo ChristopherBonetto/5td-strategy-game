@@ -72,18 +72,18 @@ public class BattleHandler : MonoBehaviour
         // Case the defender is a troop.
         if (inDefender is Troop)
         {
-            defender.FocusEntity = attacker;
-            defender.StopTree(true);
-            defender.IsBusy = true;
-            
-            Troop defenderT = inDefender as Troop;
-            defenderT.m_currentBattle = this;
-
             int enemyIndex = 0;
             int playerIndex = 0;
+            Troop defenderT = inDefender as Troop;
 
             if (attacker.GetStats().AttackType == Types.AttackType.MELEE)
             {
+                defenderT.m_currentBattle = this;
+
+                defender.FocusEntity = attacker;
+                defender.StopTree(true);
+                defender.IsBusy = true;
+
                 for (int i = 0; i < attacker.UnitList.Count; i++)
                 {
                     if (defenderT.UnitList.Count == 0) {
@@ -197,7 +197,9 @@ public class BattleHandler : MonoBehaviour
         Debug.Log("Fight completed");
         attacker.SetIdleState();
 
-        if (defender is Troop)
+        // The problem with range attack is here.
+        // When search for another alive target, is set idle the defender, cause them to stop going to castle.
+        if (defender.IsBusy && defender is Troop)
         {
             Troop defenderT = defender as Troop;
             defenderT.SetIdleState();
