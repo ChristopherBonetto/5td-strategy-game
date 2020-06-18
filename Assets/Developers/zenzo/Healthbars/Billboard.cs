@@ -25,7 +25,7 @@ public class Billboard : MonoBehaviour
             transform.rotation = Quaternion.Euler(BillboardX ? transform.rotation.eulerAngles.x : 0f, BillboardY ? transform.rotation.eulerAngles.y : 0f, BillboardZ ? transform.rotation.eulerAngles.z : 0f);
         if (DynamicResize) {
             float size = (Camera.main.transform.position - transform.position).magnitude;
-            transform.localScale = new Vector3(size,size,size) * DynamicMultiplier *10000;
+            transform.localScale = new Vector3(size,size,size) * DynamicMultiplier/10000;
         }
         transform.localPosition = localStartPosition;
         transform.position = transform.position + transform.rotation * Vector3.forward * OffsetToCamera;
