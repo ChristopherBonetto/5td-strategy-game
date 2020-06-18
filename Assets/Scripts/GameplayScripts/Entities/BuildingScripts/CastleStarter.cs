@@ -52,6 +52,12 @@ public class CastleStarter : BuildingBehaviour
         }
     }
 
+    public override void Click()
+    {
+        base.Click();
+        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Castle);
+    }
+
     public void SpawnTroop()
     {
         // I saw you use a random point on game controller but if it goes on failure you don't recall the method 

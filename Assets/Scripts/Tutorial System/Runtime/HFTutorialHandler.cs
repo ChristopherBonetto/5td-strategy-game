@@ -26,6 +26,8 @@ public enum TutorialID
     Upgrade_Unit,
     Pause_Mode,
     Call_wave,
+    Select_Castle,
+    Create_Ally,
     None,
 }
 

@@ -104,7 +104,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
                     CurrentEntity?.Deselected();
                     ClearSelection();
                     HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)canBeSelected, 0);
-                    HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
                     canBeSelected?.Click();
                 }
             }

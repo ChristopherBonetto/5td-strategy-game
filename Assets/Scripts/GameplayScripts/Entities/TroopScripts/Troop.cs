@@ -606,6 +606,8 @@ public class Troop : EntityBehavior, ICanMove
         {
             unit?.UpdateUnitVisualState(true);
         }
+
+        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Unit);
     }
     public override void Deselected()
     {

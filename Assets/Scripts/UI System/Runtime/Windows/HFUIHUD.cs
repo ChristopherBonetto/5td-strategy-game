@@ -6,13 +6,18 @@ using DG.Tweening;
 
 namespace HF.Refactoring
 {
-    public class HFUIHUD : HFUIWindow
+    public class HFUIHUD : HFUIWindow, IHFTutorial
     {
         public override HFUIWindowID ID => HFUIWindowID.HUD;
 
         [Header("Tutorial Field")]
         public HFTutorialPopUp Popup;
 
+        public GameEventData Initialization;
+        // Tutorial variables
+        public bool m_tutorialMatch { get; private set; } = true;
+
+        public TutorialID TutorialID { get; set; } = TutorialID.Upgrade_Unit;
 
         [Header("Generic buttons")]
         /// <summary>
@@ -199,12 +204,14 @@ namespace HF.Refactoring
                     for (int i = 0; i < SpecializationButtons.Length; i++)
                     {
                         SpecializationButtons[i].Icon.sprite = TroopIconsSpecializations[i];
-                        SpecializationButtons[i].gameObject.SetActive(true);
+
+                        if (m_tutorialMatch && i == 1)
+                            SpecializationButtons[i].gameObject.SetActive(true);
                     }
                     SpecializationBar.gameObject.SetActive(true);
-                    SpecializationButtons[0].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
-                    SpecializationButtons[1].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.LIFTER_LVL1));
-                    SpecializationButtons[2].ButtonComponent.onClick.AddListener(() => entity.Specialization(Types.UnitType.RUNNER_LVL1));
+                    SpecializationButtons[0].AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
+                    SpecializationButtons[1].AddListener(() => entity.Specialization(Types.UnitType.LIFTER_LVL1));
+                    SpecializationButtons[2].AddListener(() => entity.Specialization(Types.UnitType.RUNNER_LVL1));
 
                     SpecializationButtons[0].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Cost.ToString();
                     SpecializationButtons[1].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].OriginalUnitStats.Cost.ToString();
@@ -244,7 +251,8 @@ namespace HF.Refactoring
                     SpawnTroopButton.Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.STANDARD_ALLY].OriginalUnitStats.Cost.ToString();
 
                     CastleStarter castle = typedEntity.GetComponent<CastleStarter>();
-                    SpawnTroopButton.ButtonComponent.onClick.AddListener(() => castle.SpawnTroop());
+                    SpawnTroopButton.AddListener(() => castle.SpawnTroop());
+                    SpawnTroopButton.AddListener(() => HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Create_Ally));
                     //SpecializationBar.gameObject.SetActive(true);
                     return;
                 }
@@ -286,6 +294,20 @@ namespace HF.Refactoring
                     }
                 }
             }
+        }
+
+        public void OnGlobalInitialization()
+        {
+            m_tutorialMatch = false;
+        }
+
+        public void OnStepInitialization()
+        {
+            m_tutorialMatch = true;
+        }
+
+        public void OnStepCompleted()
+        {
         }
     }
 }
