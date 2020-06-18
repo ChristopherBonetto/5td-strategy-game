@@ -293,11 +293,13 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
     }
 
-    public void ResetVisual()
+    public void ResetUnitRotation()
     {
         if (m_visualScript == null) return;
 
-        VisualObj.transform.rotation = TroopRef.transform.rotation;
+        this.gameObject.transform.forward = TroopRef.transform.forward;
+        //m_unitAgent.transform.rotation = TroopRef.transform.rotation;
+        //VisualObj.transform.rotation = TroopRef.transform.rotation;
     }
     #endregion
 }

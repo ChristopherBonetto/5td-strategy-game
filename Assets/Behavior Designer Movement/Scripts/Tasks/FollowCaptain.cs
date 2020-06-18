@@ -15,9 +15,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             for (int i = 0; i < navMeshAgents.Count; ++i)
             {
-                navMeshAgents[i].ResetPath();
-                SetDestination(i, troopRef.Value.transform.position + troopRef.Value.m_formationPosition[i]);
-                //SetDestination(i, troopRef.Value.Agent.destination + troopRef.Value.m_formationPosition[i]);
+                if (navMeshAgents[i].gameObject.activeSelf)
+                {
+                    navMeshAgents[i].enabled = true;
+                    navMeshAgents[i].isStopped = false;
+                    navMeshAgents[i].ResetPath();
+                    SetDestination(i, troopRef.Value.transform.position + troopRef.Value.m_formationPosition[i]);
+                    //SetDestination(i, troopRef.Value.Agent.destination + troopRef.Value.m_formationPosition[i]);
+                }
             }
             return TaskStatus.Running;
         }

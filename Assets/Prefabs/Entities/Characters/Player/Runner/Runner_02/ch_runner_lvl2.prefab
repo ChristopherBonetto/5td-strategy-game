@@ -359,16 +359,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5864623009015380494}
     m_Modifications:
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -424,6 +414,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0676463e3a899fc4c860874a08536d9d, type: 3}
 --- !u!4 &989466211384216295 stripped
@@ -449,6 +449,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Healthbar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8157142063625013981, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
@@ -563,12 +568,12 @@ PrefabInstance:
     - target: {fileID: 3680629891227800301, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3680629891227800301, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 50201934f260aad4b9bba95cdeec9d4c, type: 3}
@@ -591,11 +596,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5864623009015380494}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: 7e5ace32ea3c4454c8b8c44197997154,
-        type: 3}
-      propertyPath: m_Name
-      value: CH_Runner_lvl2
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 7e5ace32ea3c4454c8b8c44197997154,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -671,6 +671,11 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 67567f27c005ed349889630b96dc7ad3, type: 2}
+    - target: {fileID: -927199367670048503, guid: 7e5ace32ea3c4454c8b8c44197997154,
+        type: 3}
+      propertyPath: m_Name
+      value: CH_Runner_lvl2
+      objectReference: {fileID: 0}
     - target: {fileID: -8539921167286046999, guid: 7e5ace32ea3c4454c8b8c44197997154,
         type: 3}
       propertyPath: m_Materials.Array.data[0]

@@ -73,6 +73,7 @@ public class Troop : EntityBehavior, ICanMove
     private Vector3 m_destination;
 
     public BattleHandler m_currentBattle = null;
+    private bool m_canEscape = true;
 
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
@@ -283,6 +284,24 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
+    public void ResetUnits()
+    {
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (UnitList[i].gameObject.activeSelf)
+            {
+                UnitList[i].StopTree(true);
+                //unit.ResetUnitRotation();
+                UnitList[i].AssignFocusToUnit((BuildingBehaviour)null);
+
+                UnitList[i].UnitAgent.enabled = true;
+                UnitList[i].UnitAgent.isStopped = false;
+                Vector3 destination = Agent.pathEndPosition + m_formationPosition[i];
+                UnitList[i].UnitAgent.SetDestination(destination);
+            }
+        }
+    }
+
     #endregion
 
 
@@ -296,10 +315,9 @@ public class Troop : EntityBehavior, ICanMove
         if(m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
-            StartCoroutine(IsBusyDelay(2f));
-        }
 
-        //IsBusy = true;
+            if (m_canEscape) { StartCoroutine(IsBusyDelay(2f)); }
+        }
 
         m_focusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
@@ -313,11 +331,13 @@ public class Troop : EntityBehavior, ICanMove
 
     IEnumerator IsBusyDelay(float inValue)
     {
+        m_canEscape = false;
         IsBusy = true;
 
         yield return new WaitForSeconds(inValue);
 
         IsBusy = false;
+        m_canEscape = true;
     }
 
     public void AssignGameObjectEntity(GameObject inObj)
@@ -417,16 +437,9 @@ public class Troop : EntityBehavior, ICanMove
         focusEntity.Value = FocusEntity;
         IsBusy = false;
 
-        foreach (Unit unit in UnitList)
-        {
-            unit.StopTree(true);
-            unit.ResetVisual();
-            unit.AssignFocusToUnit((BuildingBehaviour)null);
-        }
+        ResetUnits();
 
         m_currentBattle = null;
-
-        ResetFormation();
 
         StopTree(false);
         SetNewTroopState(TroopStates.Idle);

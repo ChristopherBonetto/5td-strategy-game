@@ -52,14 +52,6 @@ public class CastleStarter : BuildingBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            Death();
-        }
-    }
-
     public void SpawnTroop()
     {
         // I saw you use a random point on game controller but if it goes on failure you don't recall the method 
