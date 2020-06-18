@@ -148,14 +148,12 @@ public class Editor_UnitStatsSO : Editor
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
 
-            if (unit.AttackType == AttackType.MELEE)
-            {
-                EditorGUILayout.BeginHorizontal();
-                GUILayout.Label("Engage Range");
-                unit.EngageRange = EditorGUILayout.IntField(unit.EngageRange);
-                EditorGUILayout.EndHorizontal();
-            }
-            else if (unit.AttackType == AttackType.RANGED)
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("Engage Range");
+            unit.EngageRange = EditorGUILayout.IntField(unit.EngageRange);
+            EditorGUILayout.EndHorizontal();
+
+            if (unit.AttackType == AttackType.RANGED)
             {
                 unit.EngageRange = unit.AttackRange;
 

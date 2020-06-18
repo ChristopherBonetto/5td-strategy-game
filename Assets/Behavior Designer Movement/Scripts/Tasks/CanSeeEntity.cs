@@ -43,17 +43,22 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (go != null)
             {
-                returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
+                float distance = Vector3.Distance(go.transform.position + Vector3.up * 1.5f, transform.position + Vector3.up * 1.5f) - .1f;
 
-                if (!returnedObject.Value.IsBusy || canSeeBusyTroop.Value && returnedObject.Value.IsBusy)
+                if (!Physics.Raycast(transform.position, (go.transform.position - transform.position).normalized, distance, LayerMask.GetMask("Terrain")))
                 {
-                    if (returnedObject.Value is BuildingBehaviour && canSeeBuilding.Value)
+                    returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
+
+                    if (!returnedObject.Value.IsBusy || canSeeBusyTroop.Value && returnedObject.Value.IsBusy)
                     {
-                        return TaskStatus.Success;
-                    }
-                    else if (returnedObject.Value is Troop)
-                    {
-                        return TaskStatus.Success;
+                        if (returnedObject.Value is BuildingBehaviour && canSeeBuilding.Value)
+                        {
+                            return TaskStatus.Success;
+                        }
+                        else if (returnedObject.Value is Troop)
+                        {
+                            return TaskStatus.Success;
+                        }
                     }
                 }
             }
