@@ -15,6 +15,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedVector3 targetPosition;
 
         private Troop troopRef;
+        private Vector3? destination = null;
 
         public override void OnAwake()
         {
@@ -35,6 +36,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (HasArrived())
             {
+                destination = null;
                 return TaskStatus.Success;
             }
             SetDestination(Target());
@@ -47,11 +49,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (targetEntity.Value != null)
             {
-                NavMeshObstacle obstacle;
-                if(targetEntity.Value.TryGetComponent(out obstacle))
+                NavMeshObstacle obstacle = targetEntity.Value.GetComponentInChildren<NavMeshObstacle>();
+                if(obstacle != null)
                 {
-                    Vector3? destination = GameController.Instance.RandomPoint(targetEntity.Value.transform.position, obstacle.size.x + 1);
-                    if(destination != null)
+                    if(destination == null)
+                    {
+                        Debug.Log("Research point");
+                        destination = GameController.Instance.RandomPoint(targetEntity.Value.transform.position, obstacle.size.x);
+                        return destination.Value;
+                    }
+                    else
                     {
                         return destination.Value;
                     }
@@ -65,6 +72,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnReset();
             targetEntity = null;
+            destination = null;
             targetPosition = Vector3.zero;
         }
 
@@ -81,6 +89,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     if (unit.isActiveAndEnabled)
                     {
                         unit.speed = speed.Value;
+                        unit.angularSpeed = navMeshAgent.angularSpeed;
                         Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
                         unit.SetDestination(unitDestin);
                     }
@@ -88,6 +97,32 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return true;
             }
             return false;
+        }
+
+        protected override bool HasArrived()
+        {
+            // The path hasn't been computed yet if the path is pending.
+            float remainingDistance;
+            if (navMeshAgent.pathPending)
+            {
+                remainingDistance = float.PositiveInfinity;
+            }
+            else
+            {
+                remainingDistance = navMeshAgent.remainingDistance;
+            }
+
+            if(targetEntity.Value != null)
+            {
+                if (remainingDistance == 0)
+                {
+                    float dist = Vector3.Distance(navMeshAgent.transform.position, targetEntity.Value.transform.position);
+                    remainingDistance = float.PositiveInfinity;
+                }
+            }
+            
+
+            return remainingDistance <= arriveDistance.Value;
         }
     }
 }
