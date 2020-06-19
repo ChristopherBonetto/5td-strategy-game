@@ -83,7 +83,7 @@ public class Troop : EntityBehavior, ICanMove
 
     [Header("Regen")]
     [SerializeField]
-    private float m_waitTimeToStartRegen;
+    private float m_waitTimeToStartRegen = 10;
     private float m_lastTimeGetHit;
 
     protected override void OnDisable()

@@ -31,6 +31,12 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private IAttackTypes m_unitAttackType;
 
+    [Header("Regen")]
+    [SerializeField]
+    private float m_regenAmountPerFrame;
+    [SerializeField]
+    private float m_waitTimeToStartRegen = 10;
+    private float m_lastTimeGetHit;
 
     private Unit m_focusUnit;
     public Unit FocusUnit
@@ -83,6 +89,17 @@ public class Unit : MonoBehaviour, ITakeDamage
     private void Awake()
     {
         Initialize();
+    }
+
+    private void Update()
+    {
+        if (m_troopRef.EntityPlayerType == PlayerType.Player && !m_troopRef.IsBusy && Time.time > m_lastTimeGetHit + m_waitTimeToStartRegen)
+        {
+            if (m_unitHp < m_troopRef.GetStats().MaxHp)
+            {
+                m_unitHp += (int)Mathf.Max(1, m_regenAmountPerFrame);
+            }
+        }
     }
 
     #region Initialize
