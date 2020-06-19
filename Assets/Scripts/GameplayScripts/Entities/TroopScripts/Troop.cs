@@ -175,6 +175,7 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].VisualObj.transform.rotation = UnitList[i].UnitAgent.transform.rotation;
                 UnitList[i].VisualObj.SetActive(true);
 
+                UnitList[i].AssignValuesToTree();
                 UnitList[i].RefreshHp();
 
                 UnitList[i].transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
@@ -585,7 +586,6 @@ public class Troop : EntityBehavior, ICanMove
             return;
         }
 
-        Deselected();
         GameController.Instance.AddResources(-GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost);
         AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
 
@@ -593,8 +593,6 @@ public class Troop : EntityBehavior, ICanMove
 
         foreach (Unit unit in m_unitList)
         {
-            unit?.AssignValuesToTree();
-            unit?.RefreshHp();
             unit?.UpdateUnitVisualState(true);
         }
     }

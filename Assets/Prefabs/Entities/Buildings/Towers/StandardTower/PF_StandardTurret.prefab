@@ -49,7 +49,7 @@ NavMeshObstacle:
   m_Shape: 1
   m_Extents: {x: 2, y: 2, z: 2}
   m_MoveThreshold: 0.1
-  m_Carve: 0
+  m_Carve: 1
   m_CarveOnlyStationary: 1
   m_Center: {x: 0, y: 2, z: 0}
   m_TimeToStationary: 0.5
@@ -74,6 +74,7 @@ MonoBehaviour:
   anim: {fileID: 0}
   drop: {fileID: 1683171126244797084}
   RangeFeedback: {fileID: 1754014395742244815}
+  muzzleFlash: {fileID: 0}
 --- !u!65 &3253677878599430326
 BoxCollider:
   m_ObjectHideFlags: 0
