@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.AI;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
@@ -62,12 +63,18 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (base.SetDestination(destination))
             {
-                for(int i = 0; i < troopRef.UnitList.Count; i++)
+                navMeshAgent.speed = speed.Value;
+
+                for (int i = 0; i < troopRef.UnitList.Count; i++)
                 {
-                    navMeshAgent.speed = speed.Value;
-                    troopRef.UnitList[i].UnitAgent.speed = speed.Value;
-                    Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
-                    troopRef.UnitList[i].UnitAgent.SetDestination(unitDestin);
+                    NavMeshAgent unit = troopRef.UnitList[i].UnitAgent;
+
+                    if (unit.isActiveAndEnabled)
+                    {
+                        unit.speed = speed.Value;
+                        Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
+                        unit.SetDestination(unitDestin);
+                    }
                 }
                 return true;
             }
