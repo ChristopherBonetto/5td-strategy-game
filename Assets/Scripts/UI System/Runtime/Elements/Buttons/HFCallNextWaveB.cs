@@ -25,6 +25,12 @@ public class HFCallNextWaveB : HFButton, IHFTutorial
         Initialization.RemoveListener(this);
     }
 
+    protected override void OnDisable()
+    {
+        Reset();
+        base.OnDisable();
+    }
+
     public void CallNextWave()
     {
         if (m_isListeningInput && m_tutorialMatch)
@@ -50,5 +56,10 @@ public class HFCallNextWaveB : HFButton, IHFTutorial
     public void OnStepCompleted()
     {
         
+    }
+
+    public void Reset()
+    {
+        m_tutorialMatch = true;
     }
 }

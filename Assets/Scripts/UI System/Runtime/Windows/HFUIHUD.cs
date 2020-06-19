@@ -15,7 +15,7 @@ namespace HF.Refactoring
 
         public GameEventData Initialization;
         // Tutorial variables
-        public bool m_tutorialMatch { get; private set; } = true;
+        public bool m_isTutorial { get; private set; } = false;
 
         public TutorialID TutorialID { get; set; } = TutorialID.Upgrade_Unit;
 
@@ -74,6 +74,17 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom<string>(HFEventID.OnError, SetMessage);
 
             Popup.gameObject.SetActive(false);
+            Reset();
+        }
+
+        private void Awake()
+        {
+            Initialization.AddListener(this);
+        }
+
+        private void OnDestroy()
+        {
+            Initialization.RemoveListener(this);
         }
 
         #region Events
@@ -205,7 +216,7 @@ namespace HF.Refactoring
                     {
                         SpecializationButtons[i].Icon.sprite = TroopIconsSpecializations[i];
 
-                        if (m_tutorialMatch && i == 1)
+                        if (m_isTutorial && i == 1 || !m_isTutorial)
                             SpecializationButtons[i].gameObject.SetActive(true);
                     }
                     SpecializationBar.gameObject.SetActive(true);
@@ -298,16 +309,22 @@ namespace HF.Refactoring
 
         public void OnGlobalInitialization()
         {
-            m_tutorialMatch = false;
+            m_isTutorial = true;
         }
 
         public void OnStepInitialization()
         {
-            m_tutorialMatch = true;
+
         }
 
         public void OnStepCompleted()
         {
+            m_isTutorial = false;
+        }
+
+        public void Reset()
+        {
+            m_isTutorial = false;
         }
     }
 }

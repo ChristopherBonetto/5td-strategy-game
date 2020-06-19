@@ -13,6 +13,11 @@ public interface IHFTutorial
     TutorialID TutorialID { get; set; }
 
     /// <summary>
+    /// Reset all variables that trak the tutorial state.
+    /// </summary>
+    void Reset();
+
+    /// <summary>
     /// Called when the tutorial handler start.
     /// </summary>
     void OnGlobalInitialization();

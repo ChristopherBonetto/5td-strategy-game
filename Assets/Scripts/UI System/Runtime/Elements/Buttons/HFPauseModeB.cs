@@ -31,23 +31,11 @@ namespace HF.Refactoring
            
         }
 
-        //private void Update()
-        //{
-        //    if (isPaused == true)
-        //    {
-        //        if (GraphicsSettings.renderPipelineAsset != pause)
-        //        {
-        //            GraphicsSettings.renderPipelineAsset = pause;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if(GraphicsSettings.renderPipelineAsset != standard)
-        //        {
-        //            GraphicsSettings.renderPipelineAsset = standard;
-        //        }
-        //    }
-        //}
+        protected override void OnDisable()
+        {
+            Reset();
+            base.OnDisable();
+        }
 
         private void Update()
         {
@@ -100,10 +88,9 @@ namespace HF.Refactoring
             gameObject.SetActive(true);
         }
 
-      
-
-
-
-       
+        public void Reset()
+        {
+            gameObject.SetActive(true);
+        }
     }
 }
