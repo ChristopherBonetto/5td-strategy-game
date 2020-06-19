@@ -923,6 +923,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30c6fd743b051d44e8a1d9552f920daf, type: 3}
+--- !u!1 &515895403 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6040197150372273302, guid: 30c6fd743b051d44e8a1d9552f920daf,
+    type: 3}
+  m_PrefabInstance: {fileID: 515895402}
+  m_PrefabAsset: {fileID: 0}
+--- !u!108 &515895404 stripped
+Light:
+  m_CorrespondingSourceObject: {fileID: 6040197150372273301, guid: 30c6fd743b051d44e8a1d9552f920daf,
+    type: 3}
+  m_PrefabInstance: {fileID: 515895402}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &515895405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 515895403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c21f9444a78782b4e8248502793c55f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sunLight: {fileID: 515895404}
 --- !u!1001 &647828217
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1324,6 +1349,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3663481988930315805, guid: 08a65fd875e4c404b9c40092dfefa383,
+        type: 3}
+      propertyPath: sharedProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: bf8caeb6d981f724c96cf1517ab5ac0b,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 08a65fd875e4c404b9c40092dfefa383, type: 3}
 --- !u!1001 &878292460
@@ -1649,7 +1680,71 @@ MonoBehaviour:
   m_BeforeStackBundles:
   - assemblyQualifiedName: PostProcessOutline, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_AfterStackBundles: []
+  - assemblyQualifiedName: SCPE.CloudShadows, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.EdgeDetection, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Fog, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.LensFlares, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.LightStreaks, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Pixelize, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Posterize, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Sketch, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_AfterStackBundles:
+  - assemblyQualifiedName: SCPE.AmbientOcclusion2D, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.BlackBars, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Blur, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.ColorSplit, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Colorize, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Danger, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Dithering, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.DoubleVision, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Gradient, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.HueShift3D, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Kaleidoscope, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Kuwahara, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.LUT, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Mosaic, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Overlay, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.RadialBlur, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Refraction, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Ripples, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Scanlines, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Sharpen, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.SpeedLines, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Sunshafts, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.TiltShift, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.TubeDistortion, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &943380841
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2158,6 +2253,75 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0232f70a0b0e3ad45a382daf59b6b90c, type: 3}
+--- !u!1001 &1099887775
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1527287773}
+    m_Modifications:
+    - target: {fileID: 1899024776996695030, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_Name
+      value: PFM_Cave
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1798899001716986305, guid: 0232f70a0b0e3ad45a382daf59b6b90c,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0232f70a0b0e3ad45a382daf59b6b90c, type: 3}
 --- !u!1001 &1275381078
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2382,27 +2546,32 @@ PrefabInstance:
     - target: {fileID: 2815822867022338727, guid: b75ece3090411b04394ec9ce688fa821,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -18.04
+      value: -17.04
       objectReference: {fileID: 0}
     - target: {fileID: 2815822867022338727, guid: b75ece3090411b04394ec9ce688fa821,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.7
+      value: -6.7
       objectReference: {fileID: 0}
     - target: {fileID: 678464399380064088, guid: b75ece3090411b04394ec9ce688fa821,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 17.96
+      value: 18.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 678464399380064088, guid: b75ece3090411b04394ec9ce688fa821,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 2075773133919870326, guid: b75ece3090411b04394ec9ce688fa821,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.96
+      value: 6.96
       objectReference: {fileID: 0}
     - target: {fileID: 2075773133919870326, guid: b75ece3090411b04394ec9ce688fa821,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.87
+      value: 16.87
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b75ece3090411b04394ec9ce688fa821, type: 3}
@@ -2597,6 +2766,11 @@ PrefabInstance:
       propertyPath: TargetCastle
       value: 
       objectReference: {fileID: 1284543576}
+    - target: {fileID: 5119659774150530876, guid: 9b36fd5fe327d124baffb00cf35bcdab,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9b36fd5fe327d124baffb00cf35bcdab, type: 3}
 --- !u!4 &1527287773 stripped
