@@ -99,12 +99,19 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(canBeSelected != null)
             {
-                if ((EntityBehavior)canBeSelected != CurrentEntity)
+                if(canBeSelected is EntityBehavior)
                 {
-                    CurrentEntity?.Deselected();
-                    ClearSelection();
-                    HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)canBeSelected, 0);
-                    canBeSelected?.Click();
+                    if ((EntityBehavior)canBeSelected != CurrentEntity)
+                    {
+                        CurrentEntity?.Deselected();
+                        ClearSelection();
+                        HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)canBeSelected, 0);
+                        canBeSelected?.Click();
+                    }
+                }
+                else
+                {
+                    canBeSelected.Click();
                 }
             }
             else
