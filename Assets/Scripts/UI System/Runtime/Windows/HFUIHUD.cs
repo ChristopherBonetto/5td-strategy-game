@@ -222,6 +222,7 @@ namespace HF.Refactoring
                     SpecializationBar.gameObject.SetActive(true);
                     SpecializationButtons[0].AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
                     SpecializationButtons[1].AddListener(() => entity.Specialization(Types.UnitType.LIFTER_LVL1));
+                    SpecializationButtons[1].AddListener(() => Initialization.RaiseEvent(EventRaisedType.OnStepCompleted));
                     SpecializationButtons[2].AddListener(() => entity.Specialization(Types.UnitType.RUNNER_LVL1));
 
                     SpecializationButtons[0].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Cost.ToString();

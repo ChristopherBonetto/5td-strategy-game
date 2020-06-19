@@ -45,7 +45,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 float distance = Vector3.Distance(go.transform.position + Vector3.up * 1.5f, transform.position + Vector3.up * 1.5f) - .1f;
 
-                if (!Physics.Raycast(transform.position, (go.transform.position - transform.position).normalized, distance, LayerMask.GetMask("Terrain")))
+                if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, (go.transform.position - transform.position).normalized + Vector3.up * 1.5f, distance, LayerMask.GetMask("Terrain")))
                 {
                     returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
 
