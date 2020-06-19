@@ -50,6 +50,8 @@ public class Troop : EntityBehavior, ICanMove
         set { m_unitList = value; }
     }
 
+    public Queue<Unit> DeathUnit = new Queue<Unit>();
+
     public Unit AliveUnit
     {
         get
@@ -78,6 +80,11 @@ public class Troop : EntityBehavior, ICanMove
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
 
+
+    [Header("Regen")]
+    [SerializeField]
+    private float m_waitTimeToStartRegen = 10;
+    private float m_lastTimeGetHit;
 
     protected override void OnDisable()
     {
@@ -152,6 +159,25 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
+    private void Update()
+    {
+        if (EntityPlayerType == PlayerType.Player && !IsBusy && DeathUnit.Count > 0 && Time.time > m_lastTimeGetHit + m_waitTimeToStartRegen)
+        {
+            Unit unit = DeathUnit.Dequeue();
+            unit.RefreshHp();
+            unit.AssignValuesToTree();
+
+            GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(GetStats().UnitType);
+            unit.VisualObj = visualUnit;
+            unit.VisualObj.transform.parent = unit.transform;
+            unit.VisualObj.transform.localPosition = Vector3.zero;
+            unit.VisualObj.transform.rotation = unit.UnitAgent.transform.rotation;
+            unit.VisualObj.SetActive(true);
+            unit.gameObject.SetActive(true);
+            unit.transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
+        }
+    }
+
     #region Units
 
     public void RefreshUnitsVisual(UnitType inType, int inValue)
@@ -201,6 +227,7 @@ public class Troop : EntityBehavior, ICanMove
         inUnit.AssignFocusToUnit((BuildingBehaviour)null);
 
         inUnit.gameObject.SetActive(false);
+        if (!DeathUnit.Contains(inUnit)) DeathUnit.Enqueue(inUnit);
     }
 
     #region Units Formation
@@ -557,6 +584,7 @@ public class Troop : EntityBehavior, ICanMove
     public void TroopTakeDamage(Unit inUnit)
     {
         DismissUnitInTroop(inUnit);
+        m_lastTimeGetHit = Time.time;
 
         if (CurrentHp == 0)
         {
