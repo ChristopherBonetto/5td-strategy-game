@@ -181,7 +181,14 @@ public class Unit : MonoBehaviour, ITakeDamage
                 m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
             }
         }
-        m_visualScript.TriggerAnimation("isAttacking01");
+
+
+        //Tanto dovrà essere cambiato siccome il danno verrà messo all'animazione.
+        if(m_visualScript != null)
+        {
+            m_visualScript.TriggerAnimation("isAttacking01");
+        }
+        
         TroopRef.AttachAndPlaySound(TroopRef.GetStats().AttackSound);
     }
 
