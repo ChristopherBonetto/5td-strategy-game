@@ -14,7 +14,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedVector3 targetPosition;
 
         private Troop troopRef;
-        public bool wantToMoveUnits = true;
 
         public override void OnAwake()
         {
@@ -37,7 +36,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 return TaskStatus.Success;
             }
-
             SetDestination(Target());
 
             return TaskStatus.Running;
@@ -62,10 +60,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         protected override bool SetDestination(Vector3 destination)
         {
-            if (base.SetDestination(destination) && wantToMoveUnits)
+            if (base.SetDestination(destination))
             {
                 for(int i = 0; i < troopRef.UnitList.Count; i++)
                 {
+                    navMeshAgent.speed = speed.Value;
+                    troopRef.UnitList[i].UnitAgent.speed = speed.Value;
                     Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
                     troopRef.UnitList[i].UnitAgent.SetDestination(unitDestin);
                 }
