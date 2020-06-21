@@ -324,6 +324,7 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].UnitAgent.isStopped = false;
                 Vector3 destination = Agent.pathEndPosition + m_formationPosition[i];
                 UnitList[i].UnitAgent.SetDestination(destination);
+                UnitList[i].transform.forward = transform.forward;
             }
         }
     }

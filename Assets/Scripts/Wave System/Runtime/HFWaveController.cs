@@ -115,6 +115,7 @@ namespace HF.Refactoring
             m_currentEnemiesCount = 0;
 
             HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
+            HFEventManager.TriggerEvent<int, int>(HFEventID.OnWaveIndexUpdate, WaveIndex, TotalWaves.Count);
         }
 
         private void SetBehavioursToPerform()
