@@ -91,6 +91,17 @@ public class Troop : EntityBehavior, ICanMove
         base.OnDisable();
         Deselected();
     }
+
+    private void Update()
+    {
+        ResurrectDeathUnits();
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            AliveUnit.TakeDamage(10);
+        }
+    }
+
     /// <summary>
     /// This will be called after the troop is instantiated by the wave controller.
     /// </summary>
@@ -159,29 +170,11 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
-    private void Update()
-    {
-        if (EntityPlayerType == PlayerType.Player && !IsBusy && DeathUnit.Count > 0 && Time.time > m_lastTimeGetHit + m_waitTimeToStartRegen)
-        {
-            Unit unit = DeathUnit.Dequeue();
-            unit.RefreshHp();
-            unit.AssignValuesToTree();
-
-            GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(GetStats().UnitType);
-            unit.VisualObj = visualUnit;
-            unit.VisualObj.transform.parent = unit.transform;
-            unit.VisualObj.transform.localPosition = Vector3.zero;
-            unit.VisualObj.transform.rotation = unit.UnitAgent.transform.rotation;
-            unit.VisualObj.SetActive(true);
-            unit.gameObject.SetActive(true);
-            unit.transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
-        }
-    }
-
     #region Units
 
     public void RefreshUnitsVisual(UnitType inType, int inValue)
     {
+        
         for (int i = 0; i < UnitList.Count; i++)
         {
             if (UnitList[i].VisualObj != null)
@@ -205,6 +198,11 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].RefreshHp();
 
                 UnitList[i].transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
+
+                if (DeathUnit.Contains(UnitList[i]))
+                {
+                    UnitList[i].gameObject.SetActive(false);
+                }
             }
             else
             {
@@ -217,7 +215,7 @@ public class Troop : EntityBehavior, ICanMove
 
     public void DismissUnitInTroop(Unit inUnit)
     {
-        if(inUnit.VisualObj != null)
+        if (inUnit.VisualObj != null)
         {
             inUnit.VisualObj.SetActive(false);
             inUnit.VisualObj.transform.parent = null;
@@ -600,9 +598,32 @@ public class Troop : EntityBehavior, ICanMove
     {
         HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath,this);
         //Destroy(this.gameObject);
+        DeathUnit.Clear();
         DisableEntity();
     }
 
+    private void ResurrectDeathUnits()
+    {
+        if (EntityPlayerType == PlayerType.Player && !IsBusy && DeathUnit.Count > 0 && Time.time > m_lastTimeGetHit + m_waitTimeToStartRegen)
+        {
+            Unit unit = DeathUnit.Dequeue();
+
+            GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(GetStats().UnitType);
+            unit.VisualObj = visualUnit;
+            unit.VisualObj.transform.parent = unit.transform;
+            unit.VisualObj.transform.localPosition = Vector3.zero;
+            unit.VisualObj.transform.rotation = unit.UnitAgent.transform.rotation;
+            unit.VisualObj.SetActive(true);
+            unit.gameObject.SetActive(true);
+
+            unit.AssignValuesToTree();
+            unit.RefreshHp();
+
+            unit.UpdateUnitVisualState(InputReaderManager.Instance.CurrentEntity);
+
+            unit.transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
+        }
+    }
 
     #endregion
 
@@ -625,6 +646,8 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
+    #region Click Interface
+
     public override void Click()
     {
         base.Click();
@@ -643,4 +666,6 @@ public class Troop : EntityBehavior, ICanMove
             unit?.UpdateUnitVisualState(false);
         }
     }
+
+    #endregion
 }
