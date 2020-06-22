@@ -241,17 +241,22 @@ public class Unit : MonoBehaviour, ITakeDamage
         else
         {
             m_unitHp -= Damage;
-            m_visualScript.PlayParticle(m_visualScript.TakeDamageEffect);
-
-            if (m_canShowHealthBar && InputReaderManager.Instance.CurrentEntity != TroopRef)
-            {
-                StartCoroutine(ShowHealthBar(1f));
-            }
 
             TroopRef.AttachAndPlaySound(TroopRef.GetStats().TakeDamageSound);
 
-            float HPperc = ((float)m_unitHp / (float)TroopRef.GetStats().MaxHp);
-            m_visualScript.SetHealthbar(HPperc);
+            if (m_visualScript != null)
+            {
+                float HPperc = ((float)m_unitHp / (float)TroopRef.GetStats().MaxHp);
+                m_visualScript.SetHealthbar(HPperc);
+
+                m_visualScript.PlayParticle(m_visualScript.TakeDamageEffect);
+
+                if (m_canShowHealthBar && InputReaderManager.Instance.CurrentEntity != TroopRef)
+                {
+                    StartCoroutine(ShowHealthBar(1f));
+                }
+            }
+
             return false;
         }
     }

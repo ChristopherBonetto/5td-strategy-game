@@ -157,7 +157,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         int capacity = 0;
 
-        if (UnitList.Count == 0)
+        if (AliveUnit == null)
         {
             Debug.Log("This troop don't have units");
             return capacity;
@@ -542,6 +542,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_troopStats = null;
 
+        DeathUnit.Clear();
         this.gameObject.SetActive(false);
         //Return to the pool
     }
@@ -608,7 +609,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath,this);
         //Destroy(this.gameObject);
-        DeathUnit.Clear();
+        
         DisableEntity();
     }
 
