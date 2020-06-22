@@ -21,9 +21,6 @@ public class BuildingBehaviour : EntityBehavior
     private float m_attackDelayElapsed = 0;
 	public GameObject RangeFeedback;
 
-    private bool m_isFreezeMode = false;
-
-
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -97,7 +94,7 @@ public class BuildingBehaviour : EntityBehavior
 
     private void OnPause(bool freeze)
     {
-        m_isFreezeMode = freeze;
+        m_isFreezed = freeze;
     }
 
     public bool Carry(Vector3 carryPosition)
@@ -130,7 +127,7 @@ public class BuildingBehaviour : EntityBehavior
 
     public override void Attack()
     {
-        if (m_isFreezeMode) return;
+        if (m_isFreezed) return;
 
         if (m_focusEntity != null)
         {
@@ -202,9 +199,13 @@ public class BuildingBehaviour : EntityBehavior
                 }
             }
 
-            if (unit == null) yield return null;
-
-            if (unit.TakeDamage(m_buildingStats.Damage))
+            if (unit == null)
+            {
+                m_behaviorTree.SetVariableValue("FocusEntity", null);
+                StopCoroutine(this.DealDamge(null));
+                yield return null;
+            }
+            else if (unit.TakeDamage(m_buildingStats.Damage))
             {
                 m_behaviorTree.SetVariableValue("FocusEntity", null);
             }

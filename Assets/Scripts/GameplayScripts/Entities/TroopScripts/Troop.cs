@@ -576,8 +576,10 @@ public class Troop : EntityBehavior, ICanMove
 
         foreach(Unit unit in UnitList)
         {
-            unit.UnitAgent.isStopped = inValue;
-
+            if (unit.UnitAgent.isActiveAndEnabled)
+            {
+                unit.UnitAgent.isStopped = inValue;
+            }
             if(m_currentBattle != null)
             {
                 unit.StopTree(inValue);
