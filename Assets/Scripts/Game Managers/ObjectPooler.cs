@@ -270,7 +270,7 @@ public class ObjectPooler : Singleton<ObjectPooler>
     /// <summary>
     /// Initializes the objects pool.
     /// </summary>
-    private void InitPool()
+    public void InitPool()
     {
         if (!m_isInitialized)
         {

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using HF.Refactoring;
 
 public enum GameStates
 {
@@ -195,8 +197,20 @@ public class HFGameManager : Singleton<HFGameManager>
 
     private IEnumerator WaitAllLoadCompleted()
     {
-        Debug.Log("WAIT TO LOAD ALL GAME INFO");
+        HFUIManager.Instance.StartScreen.gameObject.SetActive(true);
+
         yield return new WaitUntil(() => HFFmodDatabase.Instance.EventDatabaseCompleted == true);
+
+        // Initialize all managers.
+        Queue<Action> executeInitializations = new Queue<Action>();
+        executeInitializations.Enqueue(() => HFUIManager.Instance.Initialization());
+        executeInitializations.Enqueue(() => ObjectPooler.Instance.InitPool());
+        executeInitializations.Enqueue(() => HFPoolManager.Instance.StartPooling());
+
+        while(executeInitializations.Count > 0) 
+        {
+            executeInitializations.Dequeue()?.Invoke();
+        }
 
         while(PlayerData == null)
         {
@@ -205,6 +219,8 @@ public class HFGameManager : Singleton<HFGameManager>
         }
 
         CurrentGameState = GameStates.StartGame;
+
+        HFUIManager.Instance.StartScreen.TurnOff();
     }
 
 }

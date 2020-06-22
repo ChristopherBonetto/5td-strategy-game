@@ -87,10 +87,6 @@ public class HFPoolManager : MonoBehaviour
 		DontDestroyOnLoad(gameObject);
 	}
 
-	private void Start() {
-		StartPooling();
-	}
-
 	public void StartPooling()
 	{
 		foreach (ObjectPoolItem item in m_poolItems)

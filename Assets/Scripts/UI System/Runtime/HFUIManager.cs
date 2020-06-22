@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
 using DG.Tweening;
+using UnityEngine.UI;
 
 namespace HF.Refactoring
 {
@@ -54,6 +55,9 @@ namespace HF.Refactoring
         public Dictionary<HFUIWindowID, HFUIWindow> WindowCollection => m_WindowCollection;
         private bool m_isInitialized;
 
+        // Start screen
+        public HFFadingImage StartScreen;
+
         #region Multiple active windows management
         //---------------------------------------------------------------------
         // To manage multiple active windows I decide to create a stack that
@@ -98,7 +102,7 @@ namespace HF.Refactoring
             OnGameStateChange(HFGameManager.Instance.CurrentGameState);
         }
 
-        private void Initialization()
+        public void Initialization()
         {
             if (!m_isInitialized)
             {
@@ -122,6 +126,10 @@ namespace HF.Refactoring
                 case GameStates.None:
                     break;
                 case GameStates.LoadStartingInfo:
+                    foreach (HFUIWindow window in WindowCollection.Values) 
+                    {
+                        window.gameObject.SetActive(false);
+                    }
                     break;
                 case GameStates.StartGame:
                     ShowAndClearHistory(HFUIWindowID.MAIN_MENU);
