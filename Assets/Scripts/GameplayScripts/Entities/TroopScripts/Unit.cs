@@ -86,6 +86,19 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private UnitVisual m_visualScript;
 
+    private Vector3 m_unitFormationPos = Vector3.zero;
+    public Vector3 UnitFormationPos
+    {
+        get
+        {
+            return m_unitFormationPos + TroopRef.Agent.transform.position;
+        }
+        set
+        {
+            m_unitFormationPos = value;
+        }
+    }
+
     private void Awake()
     {
         Initialize();

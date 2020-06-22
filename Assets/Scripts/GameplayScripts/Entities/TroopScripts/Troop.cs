@@ -290,6 +290,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
+            UnitList[i].UnitFormationPos = inPos[i];
             if (UnitList[i].UnitAgent.isActiveAndEnabled)
                 //UnitList[i].UnitAgent.SetDestination(transform.position + inPos[i]);
                 UnitList[i].UnitAgent.Warp(transform.position + inPos[i]);

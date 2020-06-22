@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 5267280152072973748}
   - component: {fileID: 8575423061205501125}
   m_Layer: 8
-  m_Name: Unit
+  m_Name: Unit_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -80,6 +80,8 @@ MonoBehaviour:
   m_troopRef: {fileID: -7282566969071459252}
   m_BulletSpawnPoint: {fileID: 1753702956692139633}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
+  m_regenAmountPerFrame: 0
+  m_waitTimeToStartRegen: 10
 --- !u!114 &4506613105723409392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,6 +449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf98cb1d41a71c445b7d8598dd0300f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_isFreezed: 0
   Agent: {fileID: -6201623553786095319}
   m_troopStats: {fileID: 0}
   m_unitList:
@@ -456,6 +459,7 @@ MonoBehaviour:
   - {fileID: 2026174975123639876}
   m_formationRadius: 1.3
   m_currentBattle: {fileID: 0}
+  m_waitTimeToStartRegen: 10
 --- !u!120 &7789314308866084740
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -600,7 +604,7 @@ GameObject:
   - component: {fileID: 4216717146760986612}
   - component: {fileID: 104773828361710514}
   m_Layer: 8
-  m_Name: Unit
+  m_Name: Unit_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -636,6 +640,8 @@ MonoBehaviour:
   m_troopRef: {fileID: -7282566969071459252}
   m_BulletSpawnPoint: {fileID: 975968382449719445}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
+  m_regenAmountPerFrame: 0
+  m_waitTimeToStartRegen: 10
 --- !u!114 &4526023701480036417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,7 +754,7 @@ GameObject:
   - component: {fileID: 9146779263679016648}
   - component: {fileID: 1416225729537401838}
   m_Layer: 8
-  m_Name: Unit
+  m_Name: Unit_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -784,6 +790,8 @@ MonoBehaviour:
   m_troopRef: {fileID: -7282566969071459252}
   m_BulletSpawnPoint: {fileID: 798218657421928594}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
+  m_regenAmountPerFrame: 0
+  m_waitTimeToStartRegen: 10
 --- !u!114 &772776385221641872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -926,7 +934,7 @@ GameObject:
   - component: {fileID: 3222295829647813312}
   - component: {fileID: 8553123592766142536}
   m_Layer: 8
-  m_Name: Unit
+  m_Name: Unit_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -962,6 +970,8 @@ MonoBehaviour:
   m_troopRef: {fileID: -7282566969071459252}
   m_BulletSpawnPoint: {fileID: 2477534781201521856}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
+  m_regenAmountPerFrame: 0
+  m_waitTimeToStartRegen: 10
 --- !u!114 &6972483951363226283
 MonoBehaviour:
   m_ObjectHideFlags: 0

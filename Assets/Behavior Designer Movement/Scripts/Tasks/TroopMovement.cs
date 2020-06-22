@@ -88,9 +88,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                     if (unit.isActiveAndEnabled)
                     {
-                        unit.speed = speed.Value;
+                        if(Vector3.Distance(navMeshAgent.transform.position, unit.transform.position) > 1)
+                        {
+                            unit.speed = speed.Value + 1;
+                        }
+                        else
+                        {
+                            unit.speed = speed.Value;
+                        }
                         unit.angularSpeed = navMeshAgent.angularSpeed;
-                        Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
+                        Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
                         unit.SetDestination(unitDestin);
                     }
                 }

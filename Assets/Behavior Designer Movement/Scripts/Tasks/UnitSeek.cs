@@ -13,9 +13,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
 
+        private float m_arriveDistStartValue;
+
         public override void OnStart()
         {
             base.OnStart();
+
+            m_arriveDistStartValue = arriveDistance.Value;
 
             SetDestination(Target());
         }
@@ -26,6 +30,17 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (HasArrived())
             {
+                arriveDistance = m_arriveDistStartValue;
+
+                if(unitRef.Value.FocusBuilding != null)
+                {
+                    unitRef.Value.transform.LookAt(unitRef.Value.FocusBuilding.transform.position);
+                }
+                else if (unitRef.Value.FocusUnit != null)
+                {
+                    unitRef.Value.transform.LookAt(unitRef.Value.FocusUnit.transform.position);
+                }
+
                 return TaskStatus.Success;
             }
 
@@ -43,7 +58,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             }
             else if (unitRef.Value.FocusBuilding != null)
             {
-                return unitRef.Value.FocusBuilding.transform.position;
+                arriveDistance = 0.1f;
+                return unitRef.Value.UnitFormationPos;
             }
             return targetPosition.Value;
         }
@@ -51,6 +67,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             base.OnReset();
+            arriveDistance = m_arriveDistStartValue;
             unitRef = null;
             targetPosition = Vector3.zero;
         }
