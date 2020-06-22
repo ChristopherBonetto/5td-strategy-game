@@ -103,6 +103,24 @@ public class ObjectPooler : Singleton<ObjectPooler>
 
     #region MonoBehaviour cycle
 
+    private void OnApplicationQuit()
+    {
+        RandomDictionaryKeyValue<UnitType>(m_unitPooled);
+        RandomDictionaryKeyValue<BuildingType>(m_buildingPooled);
+        RandomDictionaryKeyValue<string>(m_pooledObjects);
+    }
+
+    private void RandomDictionaryKeyValue<T>(Dictionary<T, List<GameObject>> dict)
+    {
+        foreach(T key in dict.Keys)
+        {
+            foreach(GameObject item in dict[key])
+            {
+                Destroy(item);
+            }
+        }
+    }
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -331,6 +349,8 @@ public class ObjectPooler : Singleton<ObjectPooler>
         DontDestroyOnLoad(obj);
         obj.SetActive(false);
         pooledList.Add(obj);
+
+        
 
         return obj;
     }
