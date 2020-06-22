@@ -548,14 +548,21 @@ public class Troop : EntityBehavior, ICanMove
 
     protected override void PauseEntity(bool inValue)
     {
+        if (m_isFreezed) return;
+
         base.PauseEntity(inValue);
 
-        if (m_currentBattle == null) return;
+        Agent.isStopped = inValue;
 
         foreach (Unit unit in UnitList)
         {
-            unit.StopTree(inValue);
-            unit.UnitTree.ResetValuesOnRestart = !inValue;
+            unit.UnitAgent.isStopped = inValue;
+
+            if (m_currentBattle != null)
+            {
+                unit.StopTree(inValue);
+                unit.UnitTree.ResetValuesOnRestart = !inValue;
+            }
         }
     }
 
@@ -565,9 +572,11 @@ public class Troop : EntityBehavior, ICanMove
 
         Agent.isStopped = inValue;
 
-        if (m_currentBattle != null)
+        foreach(Unit unit in UnitList)
         {
-            foreach (Unit unit in UnitList)
+            unit.UnitAgent.isStopped = inValue;
+
+            if(m_currentBattle != null)
             {
                 unit.StopTree(inValue);
                 unit.UnitTree.ResetValuesOnRestart = !inValue;

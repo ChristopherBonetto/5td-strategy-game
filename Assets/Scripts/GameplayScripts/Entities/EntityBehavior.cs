@@ -54,6 +54,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+    public bool m_isFreezed = false;
+
     protected HFIEvent3D m_3DSoundInterface;
 
     #region Events
@@ -126,15 +128,17 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         this.gameObject.SetActive(false);
     }
 
-    //Ask to ale if there are differences with PauseEntity method.
     protected virtual void FreezeMode(bool inValue)
     {
+        m_isFreezed = inValue;
         StopTree(inValue);
         m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
 
     protected virtual void PauseEntity(bool inValue)
     {
+        if (m_isFreezed) return;
+
         StopTree(inValue);
         m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
