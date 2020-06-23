@@ -90,7 +90,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
         else if (Input.GetButtonDown("SwitchTroop"))
         {
-            GameController.Instance.TakeEntityFromDictionary(typeof(Troop), 0);
+            GameController.Instance.TakeEntityFromDictionary(typeof(Troop));
         }
     }
 

@@ -54,7 +54,7 @@ public class GameController : Singleton<GameController>
     }
     public int m_currentPlayerResources;
 
-    public Dictionary<Type, List<EntityBehavior>> m_inGameAllyEntitiesDictionary = new Dictionary<Type, List<EntityBehavior>>();
+    private Dictionary<Type, List<EntityBehavior>> m_inGameAllyEntitiesDictionary = new Dictionary<Type, List<EntityBehavior>>();
 
     #region Behavior Cycle
 
@@ -252,6 +252,11 @@ public class GameController : Singleton<GameController>
     {
         Type entityType;
 
+        if(m_inGameAllyEntitiesDictionary == null)
+        {
+            m_inGameAllyEntitiesDictionary = new Dictionary<Type, List<EntityBehavior>>();
+        }
+
         if (entity is BuildingBehaviour)
         {
             entityType = typeof(BuildingBehaviour);
@@ -298,17 +303,48 @@ public class GameController : Singleton<GameController>
 
     public void ClearDictionary()
     {
-        m_inGameAllyEntitiesDictionary.Clear();
+        if(m_inGameAllyEntitiesDictionary != null)
+        {
+            m_inGameAllyEntitiesDictionary.Clear();
+        }
     }
 
     public EntityBehavior TakeEntityFromDictionary(Type key, int inIndex)
     {
-        if (!m_inGameAllyEntitiesDictionary.ContainsKey(key)) return null;
+        if (m_inGameAllyEntitiesDictionary == null || !m_inGameAllyEntitiesDictionary.ContainsKey(key)) return null;
 
         if (m_inGameAllyEntitiesDictionary[key].Count < inIndex) return null;
 
         EntityBehavior previousEntity = InputReaderManager.Instance.CurrentEntity;
         EntityBehavior wantedEntity = m_inGameAllyEntitiesDictionary[key][inIndex];
+
+        InputReaderManager.Instance.SelectEntity(wantedEntity);
+
+        return null;
+    }
+
+    public EntityBehavior TakeEntityFromDictionary(Type key)
+    {
+        if (m_inGameAllyEntitiesDictionary == null || !m_inGameAllyEntitiesDictionary.ContainsKey(key)) return null;
+
+        Debug.LogWarning(m_inGameAllyEntitiesDictionary[key].Count);
+
+        EntityBehavior previousEntity = InputReaderManager.Instance.CurrentEntity;
+        int index = 0;
+
+        if(previousEntity != null && previousEntity is Troop && previousEntity.EntityPlayerType == PlayerType.Player)
+        {
+            index = m_inGameAllyEntitiesDictionary[key].IndexOf(previousEntity) + 1;
+
+            if(index >= m_inGameAllyEntitiesDictionary[key].Count)
+            {
+                index = 0;
+            }
+
+            Debug.Log(index);
+        }
+
+        EntityBehavior wantedEntity = m_inGameAllyEntitiesDictionary[key][index];
 
         InputReaderManager.Instance.SelectEntity(wantedEntity);
 

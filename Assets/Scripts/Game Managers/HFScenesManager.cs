@@ -234,6 +234,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
         {
             Debug.Log("SCENA DI TEST");
         }
+        
     }
 
     
@@ -371,7 +372,7 @@ public class HFScenesManager : Singleton<HFScenesManager>
         {
             HFGameManager.Instance.CurrentGameState = GameStates.InitializeLevel;
         }
-                
+        GameController.Instance.ClearDictionary();
     }
 
     #endregion
