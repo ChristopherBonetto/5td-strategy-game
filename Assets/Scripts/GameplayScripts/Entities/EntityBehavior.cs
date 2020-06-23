@@ -128,7 +128,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         this.gameObject.SetActive(false);
     }
 
-    protected virtual void FreezeMode(bool inValue)
+    public virtual void FreezeMode(bool inValue)
     {
         m_isFreezed = inValue;
         StopTree(inValue);
