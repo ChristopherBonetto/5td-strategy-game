@@ -568,7 +568,7 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
-    protected override void FreezeMode(bool inValue)
+    public override void FreezeMode(bool inValue)
     {
         base.FreezeMode(inValue);
 

@@ -55,7 +55,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     if(destination == null)
                     {
                         Debug.Log("Research point");
-                        destination = GameController.Instance.RandomPoint(targetEntity.Value.transform.position, obstacle.size.x);
+                        destination = GameController.Instance.RandomPoint(targetEntity.Value.transform.position, obstacle.size.x, troopRef.transform.position);
                         return destination.Value;
                     }
                     else

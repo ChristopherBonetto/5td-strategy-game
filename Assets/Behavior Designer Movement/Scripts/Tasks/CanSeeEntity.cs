@@ -18,7 +18,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("The LayerMask of the objects that we are searching for")]
         public LayerMask objectLayerMask;
         [Tooltip("The LayerMask of the objects to ignore when performing the line of sight check")]
-        public LayerMask ignoreLayerMask = 1 << LayerMask.NameToLayer("Ignore Raycast");
+        public LayerMask ignoreLayerMask;
         [Tooltip("The distance that the agent can see")]
         public SharedFloat viewDistance = 1000;
         [Tooltip("The object that is within sight")]
@@ -45,7 +45,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 float distance = Vector3.Distance(go.transform.position + Vector3.up * 1.5f, transform.position + Vector3.up * 1.5f) - .1f;
 
-                if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, (go.transform.position - transform.position).normalized + Vector3.up * 1.5f, distance, LayerMask.GetMask("Terrain")))
+                if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, (go.transform.position - transform.position).normalized + Vector3.up * 1.5f, distance, ignoreLayerMask))
                 {
                     returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
 

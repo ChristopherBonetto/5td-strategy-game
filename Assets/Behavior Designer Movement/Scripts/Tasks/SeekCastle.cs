@@ -46,7 +46,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (target.Value != null)
             {
-                Vector3? destination = GameController.Instance.RandomPoint(target.Value.transform.position, targetObstacle.size.x + 1);
+                Vector3? destination = GameController.Instance.RandomPoint(target.Value.transform.position, targetObstacle.size.x + 1, target.Value.transform.position);
                 return destination.Value;
                 //return target.Value.transform.position;
             }

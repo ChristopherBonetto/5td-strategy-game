@@ -70,7 +70,13 @@ public class CastleStarter : BuildingBehaviour
 
             if (!Physics.CheckSphere(pos + Vector3.up * 2.3f, 1))
             {
-                GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, pos, false);
+                Troop troop = GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, pos, false);
+
+                if(troop != null && m_isFreezed)
+                {
+                    troop.FreezeMode(true);
+                }
+
                 break;
             }
         }
