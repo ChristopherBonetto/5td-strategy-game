@@ -490,7 +490,9 @@ public class Troop : EntityBehavior, ICanMove
                 
                 if (!DeathUnit.Contains(UnitList[i]))
                 {
-                    //UnitList[i].VisualScript. Call the animnation method
+                    
+                    UnitList[i].visualScript.TriggerAnimation("Lift");
+
                 }
             }
 
@@ -513,7 +515,11 @@ public class Troop : EntityBehavior, ICanMove
 
                 for (int i = 0; i < UnitList.Count; i++)
                     if (!DeathUnit.Contains(UnitList[i]))
-                        //UnitList[i].VisualScript. Call the animnation method
+                    {
+
+                        UnitList[i].visualScript.TriggerAnimation("Drop");
+                    }
+                   
 
                 BuildingHandled.transform.parent = null;
 

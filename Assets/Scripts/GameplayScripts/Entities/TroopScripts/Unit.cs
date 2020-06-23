@@ -85,6 +85,10 @@ public class Unit : MonoBehaviour, ITakeDamage
     }
 
     private UnitVisual m_visualScript;
+    public UnitVisual visualScript
+    {
+        get => m_visualScript;
+    }
 
     private Vector3 m_unitFormationPos = Vector3.zero;
     public Vector3 UnitFormationPos
@@ -216,7 +220,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         //Tanto dovrà essere cambiato siccome il danno verrà messo all'animazione.
         if(m_visualScript != null)
         {
-            m_visualScript.TriggerAnimation("isAttacking01");
+            m_visualScript.TriggerAttack("isAttacking01");
         }
         
         TroopRef.AttachAndPlaySound(TroopRef.GetStats().AttackSound);

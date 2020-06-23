@@ -118,7 +118,7 @@ public class BuildingBehaviour : EntityBehavior
         }
 
         m_view.DropBuilding();
-        transform.DOJump(dropPosition, 5, 1, 0.25f);
+        transform.DOJump(dropPosition, 5, 1, .3f);
         transform.up = fixedUpDirection;
         IsBusy = false;
         StopTree(false);
