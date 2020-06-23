@@ -313,13 +313,15 @@ public class GameController : Singleton<GameController>
     {
         if (m_inGameAllyEntitiesDictionary == null || !m_inGameAllyEntitiesDictionary.ContainsKey(key)) return null;
 
-        if (m_inGameAllyEntitiesDictionary[key].Count < inIndex) return null;
+        if (inIndex >= m_inGameAllyEntitiesDictionary[key].Count) return null;
 
-        EntityBehavior previousEntity = InputReaderManager.Instance.CurrentEntity;
         EntityBehavior wantedEntity = m_inGameAllyEntitiesDictionary[key][inIndex];
 
-        InputReaderManager.Instance.SelectEntity(wantedEntity);
-
+        if (wantedEntity != null)
+        {
+            InputReaderManager.Instance.SelectEntity(wantedEntity);
+            return wantedEntity;
+        }
         return null;
     }
 
