@@ -103,14 +103,16 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         m_entityPlayerType = inPlayerType;
 
-        if(EntityPlayerType == PlayerType.Player)
-        {
-            gameObject.layer = GameController.Instance.m_playerLayer;
-        }
-        else if(EntityPlayerType == PlayerType.AI)
-        {
-            gameObject.layer = GameController.Instance.m_aiLayer;
-        }
+        // By design the detection can only detect units and not anymore the troop.
+
+        //if (EntityPlayerType == PlayerType.Player)
+        //{
+        //    gameObject.layer = GameController.Instance.m_playerLayer;
+        //}
+        //else if (EntityPlayerType == PlayerType.AI)
+        //{
+        //    gameObject.layer = GameController.Instance.m_aiLayer;
+        //}
     }
 
     public EntityStatsSO GetStats()
