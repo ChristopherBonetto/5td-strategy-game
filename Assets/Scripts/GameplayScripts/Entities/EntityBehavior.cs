@@ -248,6 +248,12 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public virtual void Death()
     {
         m_focusEntity = null;
+
+        if(EntityPlayerType == PlayerType.Player)
+        {
+            GameController.Instance.RemoveFromDictionary(this);
+        }
+
         this.gameObject.SetActive(false);
 
         //HFEventManager.TriggerEvent(HFEventID.OnEntityDeath, this);

@@ -98,7 +98,7 @@ public class Troop : EntityBehavior, ICanMove
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            AliveUnit.TakeDamage(10);
+            Death();
         }
     }
 
@@ -612,7 +612,12 @@ public class Troop : EntityBehavior, ICanMove
     {
         HFEventManager.TriggerEvent<EntityBehavior>(HFEventID.OnEntityDeath,this);
         //Destroy(this.gameObject);
-        
+
+        if (EntityPlayerType == PlayerType.Player)
+        {
+            GameController.Instance.RemoveFromDictionary(this);
+        }
+
         DisableEntity();
     }
 

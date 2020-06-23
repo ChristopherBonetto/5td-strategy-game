@@ -68,11 +68,9 @@ public class InputReaderManager : Singleton<InputReaderManager>
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Select"))
-        {
-            SelectDeselectOneObject();
-        }
-        else if (Input.GetButtonDown("Command"))
+        SelectDeselectOneObject();
+        
+        if (Input.GetButtonUp("Command"))
         {
             TroopAction();
         }
@@ -86,7 +84,14 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         if (HFGameManager.Instance.CurrentGameState == GameStates.Pause) return;
 
-        ClickEntity();
+        if (Input.GetButtonUp("Select"))
+        {
+            ClickEntity();
+        }
+        else if (Input.GetButtonDown("SwitchTroop"))
+        {
+            GameController.Instance.TakeEntityFromDictionary(typeof(Troop), 0);
+        }
     }
 
     private void ClickEntity()
@@ -99,20 +104,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(canBeSelected != null)
             {
-                if(canBeSelected is EntityBehavior)
-                {
-                    if ((EntityBehavior)canBeSelected != CurrentEntity)
-                    {
-                        CurrentEntity?.Deselected();
-                        ClearSelection();
-                        HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)canBeSelected, 0);
-                        canBeSelected?.Click();
-                    }
-                }
-                else
-                {
-                    canBeSelected.Click();
-                }
+                SelectEntity(canBeSelected);
             }
             else
             {
@@ -133,6 +125,42 @@ public class InputReaderManager : Singleton<InputReaderManager>
             }
         }
 
+    }
+
+    public void SelectEntity(IClickable inClickable)
+    {
+        if (inClickable is EntityBehavior)
+        {
+            if ((EntityBehavior)inClickable != CurrentEntity)
+            {
+                CurrentEntity?.Deselected();
+                ClearSelection();
+                HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)inClickable, 0);
+                inClickable?.Click();
+            }
+        }
+        else
+        {
+            inClickable.Click();
+        }
+    }
+
+    public void SelectEntity(EntityBehavior inEntity)
+    {
+        if (inEntity is EntityBehavior)
+        {
+            if ((EntityBehavior)inEntity != CurrentEntity)
+            {
+                CurrentEntity?.Deselected();
+                ClearSelection();
+                HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, (EntityBehavior)inEntity, 0);
+                inEntity?.Click();
+            }
+        }
+        else
+        {
+            inEntity.Click();
+        }
     }
 
     public void ClearSelection()

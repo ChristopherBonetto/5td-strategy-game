@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Types;
 using UnityEngine.AI;
+using System.Collections.Generic;
+using System;
 
 public class GameController : Singleton<GameController>
 {
@@ -52,6 +54,8 @@ public class GameController : Singleton<GameController>
     }
     public int m_currentPlayerResources;
 
+    public Dictionary<Type, List<EntityBehavior>> m_inGameAllyEntitiesDictionary = new Dictionary<Type, List<EntityBehavior>>();
+
     #region Behavior Cycle
 
     private void Awake()
@@ -61,8 +65,9 @@ public class GameController : Singleton<GameController>
     void Start()
     {
         Initialize();
+
+        
     }
-   
 
     #endregion
 
@@ -90,7 +95,7 @@ public class GameController : Singleton<GameController>
 
     #region Find and create new entities
 
-    #region Unit methods
+    #region Troop methods
 
     public Troop CreateNewTroop(UnitType inUnitType, PlayerType inPlayerType, Vector3 inPosition, bool inGratis)
     {
@@ -153,6 +158,11 @@ public class GameController : Singleton<GameController>
         troopRef.AssignPlayer(inPlayerType);
         troopRef.StopTree(false);
 
+        if(inPlayerType == PlayerType.Player)
+        {
+            AddEntityToDictionary(troopRef);
+        }
+
         return troopRef;
     }
 
@@ -163,6 +173,14 @@ public class GameController : Singleton<GameController>
             return Collection.UnitsDictionary[inType];
         }
         return null;
+    }
+
+    /// <summary>
+    /// Get icon from unit stats type.
+    /// </summary>
+    public Sprite GetIcon(UnitType unitType)
+    {
+        return Collection.UnitsDictionary[unitType].OriginalUnitStats.Icon;
     }
 
     #endregion
@@ -202,6 +220,11 @@ public class GameController : Singleton<GameController>
 
         buildingRef.StopTree(false);
 
+        if(buildingRef.EntityPlayerType == PlayerType.Player)
+        {
+            AddEntityToDictionary(buildingRef);
+        }
+
         return buildingRef;
     }
 
@@ -215,7 +238,102 @@ public class GameController : Singleton<GameController>
 
     }
 
+    /// <summary>
+    /// Get icon from building stats type.
+    /// </summary>
+    public Sprite GetIcon(BuildingType unitType)
+    {
+        return Collection.BuildingsDictionary[unitType].OriginalBuildingStats.Icon;
+    }
+
     #endregion
+
+    public void AddEntityToDictionary(EntityBehavior entity)
+    {
+        Type entityType;
+
+        if (entity is BuildingBehaviour)
+        {
+            entityType = typeof(BuildingBehaviour);
+
+            if (!m_inGameAllyEntitiesDictionary.ContainsKey(entityType))
+            {
+                List<EntityBehavior> entityList = new List<EntityBehavior>();
+                entityList.Add(entity);
+                Debug.Log("Created new list for buildings " + entity.transform.name);
+                m_inGameAllyEntitiesDictionary.Add(entityType, entityList);
+            }
+            else
+            {
+                Debug.Log("Added new building " + entity.transform.name);
+                m_inGameAllyEntitiesDictionary[entityType].Add(entity);
+            }
+        }
+        else if(entity is Troop)
+        {
+            entityType = typeof(Troop);
+
+            if (!m_inGameAllyEntitiesDictionary.ContainsKey(entityType))
+            {
+                List<EntityBehavior> entityList = new List<EntityBehavior>();
+                entityList.Add(entity);
+                Debug.Log("Created new list for troops " + entity.transform.name);
+                m_inGameAllyEntitiesDictionary.Add(entityType, entityList);
+            }
+            else
+            {
+                Debug.Log("Added new troop " + entity.transform.name);
+                m_inGameAllyEntitiesDictionary[entityType].Add(entity);
+            }
+        }
+    }
+
+    public void DebugDictionary()
+    {
+        foreach(Type key in m_inGameAllyEntitiesDictionary.Keys)
+        {
+            Debug.Log(m_inGameAllyEntitiesDictionary[key].ToString() + " contains : " + m_inGameAllyEntitiesDictionary[key].Count);
+        }
+    }
+
+    public void ClearDictionary()
+    {
+        m_inGameAllyEntitiesDictionary.Clear();
+    }
+
+    public EntityBehavior TakeEntityFromDictionary(Type key, int inIndex)
+    {
+        if (!m_inGameAllyEntitiesDictionary.ContainsKey(key)) return null;
+
+        if (m_inGameAllyEntitiesDictionary[key].Count < inIndex) return null;
+
+        EntityBehavior previousEntity = InputReaderManager.Instance.CurrentEntity;
+        EntityBehavior wantedEntity = m_inGameAllyEntitiesDictionary[key][inIndex];
+
+        InputReaderManager.Instance.SelectEntity(wantedEntity);
+
+        return null;
+    }
+
+
+    public void RemoveFromDictionary(EntityBehavior entity)
+    {
+        Type entityType = null;
+
+        if(entity is Troop)
+        {
+            entityType = typeof(Troop);
+        }
+        else if(entity is BuildingBehaviour)
+        {
+            entityType = typeof(BuildingBehaviour);
+        }
+
+        if(entityType != null && m_inGameAllyEntitiesDictionary.ContainsKey(entityType))
+        {
+            m_inGameAllyEntitiesDictionary[entityType].Remove(entity);
+        }
+    }
 
     #endregion
 
@@ -227,7 +345,7 @@ public class GameController : Singleton<GameController>
         for (int i = 0; i < 10; i++)
         {
             NavMeshHit hit;
-            Vector3 randomPoint = center + Random.insideUnitSphere * range;
+            Vector3 randomPoint = center; //+ Random.insideUnitSphere * range;
 
             if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
             {
@@ -266,21 +384,5 @@ public class GameController : Singleton<GameController>
 
     #endregion
 
-
-    /// <summary>
-    /// Get icon from unit stats type.
-    /// </summary>
-    public Sprite GetIcon(UnitType unitType)
-    {
-        return Collection.UnitsDictionary[unitType].OriginalUnitStats.Icon;
-    }
-
-    /// <summary>
-    /// Get icon from building stats type.
-    /// </summary>
-    public Sprite GetIcon(BuildingType unitType)
-    {
-        return Collection.BuildingsDictionary[unitType].OriginalBuildingStats.Icon;
-    }
 
 }

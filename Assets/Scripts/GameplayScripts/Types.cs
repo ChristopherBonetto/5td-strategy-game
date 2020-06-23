@@ -94,4 +94,5 @@ namespace Types
         Player,
         AI
     }
+
 }
