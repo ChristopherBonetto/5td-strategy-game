@@ -487,6 +487,11 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].UnitAgent.enabled = false;
                 UnitList[i].transform.position = transform.position + m_formationPosition[i];
                 UnitList[i].transform.rotation = this.transform.rotation;
+                
+                if (!DeathUnit.Contains(UnitList[i]))
+                {
+                    //UnitList[i].VisualScript. Call the animnation method
+                }
             }
 
             Agent.SetDestination(FocusEntity.transform.position);
@@ -505,6 +510,10 @@ public class Troop : EntityBehavior, ICanMove
         {
             if (BuildingHandled.Drop(Agent.destination.SnapLocation()))
             {
+
+                for (int i = 0; i < UnitList.Count; i++)
+                    if (!DeathUnit.Contains(UnitList[i]))
+                        //UnitList[i].VisualScript. Call the animnation method
 
                 BuildingHandled.transform.parent = null;
 
