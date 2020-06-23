@@ -109,6 +109,7 @@ namespace HF.Refactoring
             if (entity == null)
             {
                 UnitSelectedContainer.SetActive(false);
+                CastleCommandContainer.SetActive(false);
                 return;
             }
 
