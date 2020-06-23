@@ -59,8 +59,7 @@ MonoBehaviour:
   ScaleWithMAXHP: 1
   color: {r: 0, g: 1, b: 0, a: 1}
   SelectionCircle: {fileID: 8583424573909134113}
-  m_corpse: {fileID: 9007152329042397766, guid: b91db9d1f279d27468b02e50dba7caef,
-    type: 3}
+  m_corpse: {fileID: 11400000, guid: 132845782bb2d2f489d60aebe3e9a4cd, type: 2}
   m_animator: {fileID: 8608330344617474345}
   unit: {fileID: 0}
 --- !u!1 &1430955733231454261
@@ -113,6 +112,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7086740548625456858}
     m_Modifications:
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -168,16 +177,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0676463e3a899fc4c860874a08536d9d, type: 3}
 --- !u!4 &5098141315369352257 stripped
@@ -199,6 +198,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7086740548625456858}
     m_Modifications:
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_Name
+      value: Healthbar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8157142063625013981, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -303,16 +312,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
-        type: 3}
-      propertyPath: m_Name
-      value: Healthbar
-      objectReference: {fileID: 0}
-    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7262655653815218489, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
@@ -586,6 +585,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7086740548625456858}
     m_Modifications:
+    - target: {fileID: 4708724859316155429, guid: 7429d25c92429934b92f3eeb62e5743f,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_CH_Lifter_Lvl3
+      objectReference: {fileID: 0}
     - target: {fileID: 7445099347567231797, guid: 7429d25c92429934b92f3eeb62e5743f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -640,11 +644,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4708724859316155429, guid: 7429d25c92429934b92f3eeb62e5743f,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_CH_Lifter_Lvl3
       objectReference: {fileID: 0}
     - target: {fileID: 76568169252462455, guid: 7429d25c92429934b92f3eeb62e5743f,
         type: 3}

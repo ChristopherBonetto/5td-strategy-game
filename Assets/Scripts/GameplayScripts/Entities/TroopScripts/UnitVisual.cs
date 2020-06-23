@@ -68,7 +68,7 @@ public class UnitVisual : MonoBehaviour
     #endregion
 
     #region Corpses Variables
-    [SerializeField] private GameObject m_corpse;
+    [SerializeField] private HFPoolID m_corpse;
     #endregion
 
 
@@ -180,8 +180,10 @@ public class UnitVisual : MonoBehaviour
     {
        if(m_corpse!=null)
         {
-            GameObject corpe = Instantiate(m_corpse, transform.position, transform.rotation);
-         
+            GameObject corpe = HFPoolManager.Instance.GetPooledObject(m_corpse.ID);
+            corpe.transform.position = transform.position;
+            corpe.transform.rotation = Quaternion.FromToRotation(transform.forward, transform.up);
+            corpe.SetActive(true);
         }
     }
     #endregion

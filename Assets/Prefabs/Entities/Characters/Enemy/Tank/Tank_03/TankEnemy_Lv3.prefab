@@ -57,8 +57,7 @@ MonoBehaviour:
   ScaleWithMAXHP: 1
   color: {r: 0, g: 1, b: 0, a: 1}
   SelectionCircle: {fileID: 425945841093503760}
-  m_corpse: {fileID: 2553496635497440474, guid: d591cb7c89e99ad42af053cbd5e7c950,
-    type: 3}
+  m_corpse: {fileID: 11400000, guid: b9bab6b4b523a614cbf79ce622603068, type: 2}
   m_animator: {fileID: 8155847005774738358}
   unit: {fileID: 0}
 --- !u!1001 &870129955050494983
@@ -68,6 +67,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7176526865006302739}
     m_Modifications:
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_Name
+      value: Healthbar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8157142063625013981, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -173,16 +182,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
-        type: 3}
-      propertyPath: m_Name
-      value: Healthbar
-      objectReference: {fileID: 0}
-    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7262655653815218489, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
       propertyPath: m_Value
@@ -219,6 +218,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7176526865006302739}
     m_Modifications:
+    - target: {fileID: 9057115714992118985, guid: a2172679bd41f164f87d2e7dc5058074,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Upgrade_Enemies
+      objectReference: {fileID: 0}
     - target: {fileID: 8321489929770865838, guid: a2172679bd41f164f87d2e7dc5058074,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -273,11 +277,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9057115714992118985, guid: a2172679bd41f164f87d2e7dc5058074,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Upgrade_Enemies
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2172679bd41f164f87d2e7dc5058074, type: 3}
@@ -466,6 +465,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7176526865006302739}
     m_Modifications:
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -519,16 +528,6 @@ PrefabInstance:
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

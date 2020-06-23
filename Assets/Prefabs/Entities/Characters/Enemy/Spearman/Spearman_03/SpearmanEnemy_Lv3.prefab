@@ -58,8 +58,7 @@ MonoBehaviour:
   ScaleWithMAXHP: 1
   color: {r: 0, g: 1, b: 0, a: 1}
   SelectionCircle: {fileID: 425945841093503760}
-  m_corpse: {fileID: 3959157262211967220, guid: b7a253567b8237942a9f02042e7e45b7,
-    type: 3}
+  m_corpse: {fileID: 11400000, guid: ee8cf4710226ad949bd97bedacbd5da2, type: 2}
   m_animator: {fileID: 605457436001064526}
   unit: {fileID: 0}
 --- !u!1001 &565258832529190000
@@ -374,11 +373,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EN_Spearman_Lvl3
       objectReference: {fileID: 0}
-    - target: {fileID: 7329873975029985147, guid: 6c2c86e7b001f844eb173a14102bef64,
+    - target: {fileID: -6057140222963153312, guid: 6c2c86e7b001f844eb173a14102bef64,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 2100000, guid: 7e79a52dafcd73c45802563a046e0522, type: 2}
+      objectReference: {fileID: 9100000, guid: 0272f05bf678fa8419843ad91fd8d14e, type: 2}
     - target: {fileID: -4216859302048453862, guid: 6c2c86e7b001f844eb173a14102bef64,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -449,11 +448,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.5
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 6c2c86e7b001f844eb173a14102bef64,
+    - target: {fileID: 7329873975029985147, guid: 6c2c86e7b001f844eb173a14102bef64,
         type: 3}
-      propertyPath: m_Controller
+      propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 9100000, guid: 0272f05bf678fa8419843ad91fd8d14e, type: 2}
+      objectReference: {fileID: 2100000, guid: 7e79a52dafcd73c45802563a046e0522, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c2c86e7b001f844eb173a14102bef64, type: 3}
 --- !u!4 &7416592498574949172 stripped

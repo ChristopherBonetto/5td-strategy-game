@@ -102,8 +102,7 @@ MonoBehaviour:
   ScaleWithMAXHP: 1
   color: {r: 0, g: 1, b: 0, a: 1}
   SelectionCircle: {fileID: 998499738868808270}
-  m_corpse: {fileID: 2368536116688591409, guid: bc9e9fc815e52ed47a48bc2c987e5770,
-    type: 3}
+  m_corpse: {fileID: 11400000, guid: 2b8aed3ec31c0b04ca9a822f28eaa442, type: 2}
   m_animator: {fileID: 8073233685746758902}
   unit: {fileID: 0}
 --- !u!1001 &635750188053943321
@@ -113,6 +112,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6526811912441776833}
     m_Modifications:
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Blood
+      objectReference: {fileID: 0}
+    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4753382386900767433, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: CollisionModule.collidesWith.m_Bits
@@ -171,16 +180,6 @@ PrefabInstance:
     - target: {fileID: 4753382386900767434, guid: 0676463e3a899fc4c860874a08536d9d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Blood
-      objectReference: {fileID: 0}
-    - target: {fileID: 4753382386900767031, guid: 0676463e3a899fc4c860874a08536d9d,
-        type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -364,6 +363,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 6526811912441776833}
     m_Modifications:
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_Name
+      value: Healthbar
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8157142063625013981, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -468,16 +477,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
-        type: 3}
-      propertyPath: m_Name
-      value: Healthbar
-      objectReference: {fileID: 0}
-    - target: {fileID: 4116116485515582207, guid: 50201934f260aad4b9bba95cdeec9d4c,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7262655653815218489, guid: 50201934f260aad4b9bba95cdeec9d4c,
         type: 3}
