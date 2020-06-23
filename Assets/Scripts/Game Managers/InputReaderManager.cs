@@ -243,11 +243,11 @@ public class InputReaderManager : Singleton<InputReaderManager>
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
 
-        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity))
+        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity,(1<<8)+(1<<9)+(1<<10)) && !HFUIManager.IsPointerOverUIElement())
         {
             EntityBehavior entity = HitInfo.transform.GetComponentInParent<EntityBehavior>();
             LayerMask tempLayer = HitInfo.transform.gameObject.layer;
-
+            
             if(entity != null && CurrentEntity != entity)
             {
                 var command = new GoToInteract(CurrentEntity, entity);

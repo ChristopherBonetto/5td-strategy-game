@@ -329,8 +329,6 @@ public class GameController : Singleton<GameController>
     {
         if (m_inGameAllyEntitiesDictionary == null || !m_inGameAllyEntitiesDictionary.ContainsKey(key)) return null;
 
-        Debug.LogWarning(m_inGameAllyEntitiesDictionary[key].Count);
-
         EntityBehavior previousEntity = InputReaderManager.Instance.CurrentEntity;
         int index = 0;
 
@@ -346,10 +344,16 @@ public class GameController : Singleton<GameController>
             Debug.Log(index);
         }
 
-        EntityBehavior wantedEntity = m_inGameAllyEntitiesDictionary[key][index];
+        if(m_inGameAllyEntitiesDictionary[key].Count > 0)
+        {
+            EntityBehavior wantedEntity = m_inGameAllyEntitiesDictionary[key][index];
 
-        InputReaderManager.Instance.SelectEntity(wantedEntity);
-
+            if (wantedEntity != null)
+            {
+                InputReaderManager.Instance.SelectEntity(wantedEntity);
+                return wantedEntity;
+            }
+        }
         return null;
     }
 
@@ -370,6 +374,7 @@ public class GameController : Singleton<GameController>
         if(entityType != null && m_inGameAllyEntitiesDictionary.ContainsKey(entityType))
         {
             m_inGameAllyEntitiesDictionary[entityType].Remove(entity);
+            Debug.Log(m_inGameAllyEntitiesDictionary[entityType].Count);
         }
     }
 
