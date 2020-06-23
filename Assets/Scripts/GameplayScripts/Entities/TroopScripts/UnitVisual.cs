@@ -124,13 +124,14 @@ public class UnitVisual : MonoBehaviour
         //healthPercentage = percentage;
         HealthbarSlider.value = NormalizedPercentage;
     }
-    public void RefreshHealthbarSize(int inValue) //Changes the WIDTH of the healthbar if the auto scaling is enabled.
+    public void RefreshHealthbarSize(float inValue) //Changes the WIDTH of the healthbar if the auto scaling is enabled.
     {
         if (ScaleWithMAXHP)
         {
-            float factor = 5* Mathf.Pow(inValue + 1, 2) / Mathf.Pow(inValue + 2, 2);
+            float factor = 25*Mathf.Log(inValue+(inValue/10)/10);
+            Debug.Log(inValue);
             //Length = inValue * 2;
-            HealthbarRect.sizeDelta = new Vector2(inValue * factor , HealthbarRect.sizeDelta.y);
+            HealthbarRect.sizeDelta = new Vector2(factor , HealthbarRect.sizeDelta.y);
             
         }
     }
