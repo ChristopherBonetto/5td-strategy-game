@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Types;
 using BehaviorDesigner.Runtime;
 
@@ -15,10 +16,71 @@ public class CastleStarter : BuildingBehaviour
     [SerializeField, Tooltip("Spawn point distance from castle")]
     private float m_spawnDistance = 6;
 
+    #region Healthbar Variables
+    public static List<UnitVisual> Active = new List<UnitVisual>();
+    public GameObject Healthbar;
+    private Slider HealthbarSlider;
+    private RectTransform HealthbarRect;
+    private CanvasGroup HealthbarCanvas;
+
+    public float HealthPercentage
+    {
+        get { return healthPercentage; }
+    }
+
+    public float HealthBarWidth
+    {
+        get { return Length; }
+    }
+
+    public float HealthBarHPAlpha
+    {
+        get { return HPOpacity; }
+    }
+    public float HealthBarBGAlpha
+    {
+        get { return BGOpacity; }
+    }
+
+    public float HealthBarYOffset
+    {
+        get { return VerticalOffset; }
+    }
+
+    public Color HealthBarColor
+    {
+        get { return color; }
+    }
+
+    [Range(0f, 1f)]
+    [SerializeField]
+    public float HPOpacity = 1f;
+    [Range(0f, 1f)]
+    [SerializeField]
+    public float BGOpacity = 1f;
+    [SerializeField]
+    private float VerticalOffset = 2.25f;
+    [SerializeField]
+    float Length;
+    [SerializeField]
+    bool ScaleWithMAXHP;
+    [SerializeField]
+    Color color = Color.green;
+    float healthPercentage;
+
+    [SerializeField]
+    public GameObject SelectionCircle;
+
+    #endregion
 
     public override void Awake()
     {
         base.Awake();
+
+        HealthbarSlider = Healthbar.GetComponent<Slider>();
+        HealthbarRect = Healthbar.GetComponent<RectTransform>();
+        HealthbarCanvas = Healthbar.GetComponent<CanvasGroup>();
+        SetHealthBarAlpha(1);
     }
 
     protected override void OnEnable()
@@ -26,6 +88,8 @@ public class CastleStarter : BuildingBehaviour
         base.OnEnable();
         HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, CheckEntityDead);
         HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, CheckFreeze);
+
+        SetHealthbar(1f); //Reset Healthbar value to its maximum
     }
 
     protected override void OnDisable()
@@ -50,6 +114,14 @@ public class CastleStarter : BuildingBehaviour
         {
             GameController.Instance.CreateNewBuilding(BuildingType.TOWER, t.transform.position.SnapLocation());
         }
+
+        RefreshHealthbarSize(m_buildingStats.MaxHp);
+    }
+
+    public override bool TakeDamage(int Damage)
+    {
+        SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
+        return base.TakeDamage(Damage);
     }
 
     public override void Click()
@@ -139,4 +211,32 @@ public class CastleStarter : BuildingBehaviour
         HFScenesManager.Instance.EndCurrentLevel(false);
         base.Death();
     }
+
+
+    #region HealthBar methods
+
+    public void SetHealthbar(float NormalizedPercentage) //Changes the fill of the healthbar based on a provided normalized value;
+    {
+        //healthPercentage = percentage;
+        HealthbarSlider.value = NormalizedPercentage;
+    }
+    public void RefreshHealthbarSize(int inValue) //Changes the WIDTH of the healthbar if the auto scaling is enabled.
+    {
+        if (ScaleWithMAXHP)
+        {
+            float factor = 5 * Mathf.Pow(inValue + 1, 2) / Mathf.Pow(inValue + 2, 2);
+            //Length = inValue * 2;
+            HealthbarRect.sizeDelta = new Vector2(inValue * factor, HealthbarRect.sizeDelta.y);
+
+        }
+    }
+
+    public void SetHealthBarAlpha(float inValue)// Controls the alpha of the healthbar based on a normalized value;
+    {
+        //HPOpacity = inValue;
+        //BGOpacity = inValue;
+        HealthbarCanvas.alpha = inValue;
+    }
+
+    #endregion
 }
