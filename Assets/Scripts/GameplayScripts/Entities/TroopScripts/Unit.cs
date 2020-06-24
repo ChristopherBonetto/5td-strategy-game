@@ -25,8 +25,8 @@ public class Unit : MonoBehaviour, ITakeDamage
     [SerializeField] private HFPoolID m_BulletID;
     public HFPoolID BulletID => m_BulletID;
 
-    private int m_unitHp;
-    public int UnitHp { get => m_unitHp; }
+    private float m_unitHp;
+    public float UnitHp { get => m_unitHp; }
     private bool m_canShowHealthBar = true;
 
     private IAttackTypes m_unitAttackType;
@@ -114,7 +114,8 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             if (m_unitHp < m_troopRef.GetStats().MaxHp)
             {
-                m_unitHp += (int)Mathf.Max(1, m_regenAmountPerFrame);
+                m_unitHp += m_regenAmountPerFrame;
+                m_visualScript.SetHealthbar(m_unitHp / m_troopRef.GetStats().MaxHp);
             }
         }
     }
@@ -248,7 +249,7 @@ public class Unit : MonoBehaviour, ITakeDamage
     {
         if (m_troopRef == null || m_troopRef.GetStats() == null) return true;
 
-        Damage = Mathf.Clamp(Damage, 1, UnitHp + m_troopRef.GetStats().Armor);
+        Damage = (int)Mathf.Clamp(Damage, 1, UnitHp + m_troopRef.GetStats().Armor);
 
         if (UnitHp <= Damage)
         {
@@ -258,7 +259,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         else
         {
             m_unitHp -= Damage;
-
+            m_lastTimeGetHit = Time.time;
             TroopRef.AttachAndPlaySound(TroopRef.GetStats().TakeDamageSound);
 
             if (m_visualScript != null)

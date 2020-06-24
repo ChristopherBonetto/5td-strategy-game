@@ -152,7 +152,7 @@ public class Troop : EntityBehavior, ICanMove
         for (int i = 0; i < UnitList.Count; i++)
         {
             if(UnitList[i].gameObject.activeSelf)
-            health += UnitList[i].UnitHp;
+            health += (int)UnitList[i].UnitHp;
         }
 
         return health;

@@ -388,11 +388,10 @@ public class GameController : Singleton<GameController>
         for (int i = 0; i < 10; i++)
         {
             NavMeshHit hit;
-            Vector3 randomPoint = center + UnityEngine.Random.insideUnitSphere * range;
 
-            if (NavMesh.SamplePosition(randomPoint, out hit, 1.0f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(center, out hit, range * 1.5f, NavMesh.AllAreas))
             {
-                float distance = Vector3.Distance(randomPoint, agentPosition);
+                float distance = Vector3.Distance(center, agentPosition);
 
                 if (distance < lowestDistance)
                 {
