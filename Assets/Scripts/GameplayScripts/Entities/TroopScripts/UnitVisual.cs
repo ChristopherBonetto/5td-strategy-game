@@ -75,13 +75,13 @@ public class UnitVisual : MonoBehaviour
     #region Animator Variables
     [SerializeField] private Animator m_animator;
     private int runLayer;
-    private int attackLayer;
+    private int topLayer;
     public Animator UnitAnimator { get => m_animator; }
 
     #endregion
 
-    public Unit unit;
-
+    //public Unit unit;
+    public Troop troop;
     private void Awake()
     {
         HealthbarSlider = Healthbar.GetComponent<Slider>();
@@ -93,7 +93,7 @@ public class UnitVisual : MonoBehaviour
       if(m_animator!=null)
         {
             runLayer = m_animator.GetLayerIndex("Bottom Run");
-            //attackLayer = m_animator.GetLayerIndex("Top");
+            topLayer = m_animator.GetLayerIndex("Top");
         }
     }
 
@@ -113,7 +113,7 @@ public class UnitVisual : MonoBehaviour
     {
         if (m_animator != null)
         {
-            m_animator.SetLayerWeight(runLayer, unit.UnitAgent.velocity.magnitude);
+            m_animator.SetLayerWeight(runLayer, troop.Agent.velocity.magnitude);
         }
     }
 
@@ -152,6 +152,13 @@ public class UnitVisual : MonoBehaviour
 
         m_animator.SetTrigger(inValue);
     }
+    public void TriggerTopLayer(int weight)
+    {
+        if (m_animator == null) return;
+        m_animator.SetLayerWeight(topLayer, weight);
+
+    }
+  
 
     #endregion
 
