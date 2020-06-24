@@ -29,15 +29,15 @@ public struct Fight
             battleScript.StartFight(Attacker, Defender);
         }
 
-        Vector3 objectLine = (Defender.transform.position - Attacker.transform.position); // This operation doesn't give you the midlle point between attacker and defender. 
+        //Vector3 objectLine = (Defender.transform.position - Attacker.transform.position); // This operation doesn't give you the midlle point between attacker and defender. 
         // If you want to position the Battle handler in the midlle of the fight just do the follow operations:
         // (V1 + V2) / 2.   (or in this case --> (attacker.position + defender.positon) / 2)
         // This change also the Y axis, give some offset if you wish.
 
-        float distance = objectLine.magnitude;
-        objectLine = objectLine.normalized; // Why normalize? Do you want to spawn it in 0,0,0 + some distance?
-        battleHandler.gameObject.SetActive(true);
-        battleHandler.transform.position = objectLine;
+        //float distance = objectLine.magnitude;
+        //objectLine = objectLine.normalized; // Why normalize? Do you want to spawn it in 0,0,0 + some distance?
+        //battleHandler.gameObject.SetActive(true);
+        //battleHandler.transform.position = objectLine;
     }
 }
 
@@ -194,7 +194,7 @@ public class BattleHandler : MonoBehaviour
 
     public void FinishFight()
     {
-        Debug.Log("Fight completed");
+        Debug.Log(attacker.transform.name + " and " + defender.transform.name + " Fight completed ");
         attacker.SetIdleState();
 
         // The problem with range attack is here.

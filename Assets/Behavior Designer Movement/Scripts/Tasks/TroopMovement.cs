@@ -47,7 +47,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (targetEntity.Value != null)
             {
-                Debug.Log(targetEntity.Value.transform.position);
                 return targetEntity.Value.transform.position;
             }
             return targetPosition.Value;

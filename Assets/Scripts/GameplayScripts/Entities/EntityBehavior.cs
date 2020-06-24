@@ -44,7 +44,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected BehaviorTree m_behaviorTree;
 
-    protected bool m_isBusy = false;
+    public bool m_isBusy = false;
     public bool IsBusy
     {
         get { return m_isBusy; }

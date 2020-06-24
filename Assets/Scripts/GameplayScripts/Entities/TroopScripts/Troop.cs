@@ -96,9 +96,9 @@ public class Troop : EntityBehavior, ICanMove
     {
         ResurrectDeathUnits();
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if(EntityPlayerType == PlayerType.AI && !IsBusy && !m_behaviorTree.isActiveAndEnabled && m_currentBattle == null)
         {
-            Death();
+            Debug.Log("ciaoooo");
         }
     }
 
@@ -409,6 +409,11 @@ public class Troop : EntityBehavior, ICanMove
 
         m_focusEntity = null;
 
+        if(inEntity == null)
+        {
+            ResetTree();
+            return;
+        }
 
         if (inEntity.EntityPlayerType != this.EntityPlayerType && !inEntity.IsBusy)
         {

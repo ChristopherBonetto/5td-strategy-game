@@ -157,6 +157,9 @@ public class HFPoolManager : MonoBehaviour
 			{
 				HFPoolableObject obj = null;
 				obj = CreateNewObject(m_poolItems[i], m_poolItems[i].SpawnUnderCanvas);
+
+				if (obj == null) return null;
+
 				return obj.gameObject;
 			}
 		}
