@@ -550,6 +550,12 @@ public class Troop : EntityBehavior, ICanMove
         }
 
         Drop();
+        Deselected();
+
+        if (this == InputReaderManager.Instance.CurrentEntity)
+        {
+            InputReaderManager.Instance.RemoveSelection();
+        }
 
         foreach (Unit unit in UnitList.ToList())
         {

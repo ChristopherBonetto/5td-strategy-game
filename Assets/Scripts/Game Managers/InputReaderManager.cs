@@ -226,6 +226,12 @@ public class InputReaderManager : Singleton<InputReaderManager>
         CurrentEntity = null;
     }
 
+    public void RemoveSelection()
+    {
+        ClearSelection();
+        HFEventManager.TriggerEvent(HFEventID.OnEntitySelected, null as EntityBehavior, 0);
+    }
+
     #endregion
 
     #region Command to current entity

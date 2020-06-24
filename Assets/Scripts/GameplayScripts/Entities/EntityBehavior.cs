@@ -103,16 +103,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         m_entityPlayerType = inPlayerType;
 
-        // By design the detection can only detect units and not anymore the troop.
-
-        //if (EntityPlayerType == PlayerType.Player)
-        //{
-        //    gameObject.layer = GameController.Instance.m_playerLayer;
-        //}
-        //else if (EntityPlayerType == PlayerType.AI)
-        //{
-        //    gameObject.layer = GameController.Instance.m_aiLayer;
-        //}
+        if (EntityPlayerType == PlayerType.Player)
+        {
+            gameObject.layer = GameController.Instance.m_playerLayer;
+        }
+        else if (EntityPlayerType == PlayerType.AI)
+        {
+            gameObject.layer = GameController.Instance.m_aiLayer;
+        }
     }
 
     public EntityStatsSO GetStats()
@@ -209,7 +207,10 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     }
     public virtual void Deselected()
     {
-
+        if(this == InputReaderManager.Instance.CurrentEntity)
+        {
+            InputReaderManager.Instance.RemoveSelection();
+        }
     }
 
     #endregion
@@ -256,6 +257,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             GameController.Instance.RemoveFromDictionary(this);
         }
 
+        Deselected();
+
         this.gameObject.SetActive(false);
 
         //HFEventManager.TriggerEvent(HFEventID.OnEntityDeath, this);
@@ -274,14 +277,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     #region Specialization
     public virtual void Specialization(UnitType type)
     {
-        Deselected();
+        //Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }
 
     public virtual void Specialization(BuildingType type)
     {
-        Deselected();
+        //Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
     }
