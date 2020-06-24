@@ -58,6 +58,8 @@ public class InputReaderManager : Singleton<InputReaderManager>
     private Vector3 mousePositon { get => Input.mousePosition; }
 
     private int? m_currentPressedNumber;
+    private bool m_overUI = false;
+
 
     #region Behavior Cycle
 
@@ -86,8 +88,14 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         if (HFGameManager.Instance.CurrentGameState != GameStates.PlayingLevel) return;
 
-        if (Input.GetButtonUp("Select"))
+        if (Input.anyKeyDown)
         {
+            m_overUI = HFUIManager.IsPointerOverUIElement();
+        }
+
+        if (Input.GetButtonUp("Select") && !m_overUI)
+        {
+            Debug.Log(HFUIManager.IsPointerOverUIElement());
             ClickEntity();
         }
         else if (Input.GetButtonUp("SwitchTroop"))
@@ -156,7 +164,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         RaycastHit HitInfo;
         Ray Ray = Camera.main.ScreenPointToRay(mousePositon);
-        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity,(1<<8)+(1<<9)) && !HFUIManager.IsPointerOverUIElement())
+        if (Physics.Raycast(Ray, out HitInfo, Mathf.Infinity,(1<<8)+(1<<9)))
         {
             IClickable canBeSelected = HitInfo.transform.GetComponentInParent<IClickable>();
 
