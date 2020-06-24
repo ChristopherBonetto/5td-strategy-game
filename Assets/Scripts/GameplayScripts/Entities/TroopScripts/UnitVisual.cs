@@ -76,7 +76,7 @@ public class UnitVisual : MonoBehaviour
     [SerializeField] private Animator m_animator;
     private int runLayer;
     private int attackLayer;
-    public Animator TriggerAnimations { get => m_animator; }
+    public Animator UnitAnimator { get => m_animator; }
 
     #endregion
 
