@@ -101,7 +101,7 @@ public class BuildingBehaviour : EntityBehavior
     {
         IsBusy = true;
         m_view.CarryBuilding();
-        transform.DOJump(carryPosition, 5, 1, 0.1f);
+        transform.DOJump(carryPosition, 5, 1, 0.5f);
         transform.up = Vector3.up;
         StopTree(true);
         return true;
@@ -118,7 +118,7 @@ public class BuildingBehaviour : EntityBehavior
         }
 
         m_view.DropBuilding();
-        transform.DOJump(dropPosition, 5, 1, .3f);
+        transform.DOJump(dropPosition, 3, 1, 1f);
         transform.up = fixedUpDirection;
         IsBusy = false;
         StopTree(false);
