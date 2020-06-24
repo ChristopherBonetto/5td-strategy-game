@@ -512,6 +512,7 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     
                     UnitList[i].visualScript.TriggerAnimation("Lift");
+                    UnitList[i].visualScript.TriggerTopLayer(1);
 
                 }
             }
@@ -538,6 +539,7 @@ public class Troop : EntityBehavior, ICanMove
                     {
 
                         UnitList[i].visualScript.TriggerAnimation("Drop");
+                        UnitList[i].visualScript.TriggerTopLayer(0);
                     }
                    
 

@@ -75,7 +75,7 @@ public class Unit : MonoBehaviour, ITakeDamage
             if(m_visualObj != null)
             {
                 m_visualScript = m_visualObj.GetComponent<UnitVisual>();
-                m_visualScript.unit = this;
+                m_visualScript.troop = m_troopRef; ;
             }
             else
             {

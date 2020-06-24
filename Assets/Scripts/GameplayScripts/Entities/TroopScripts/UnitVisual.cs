@@ -104,6 +104,7 @@ public class UnitVisual : MonoBehaviour
 
         if (m_animator == null) return;
         m_animator.SetLayerWeight(2, 1f);
+        m_animator.SetLayerWeight(topLayer, 0);
     }
     void OnDisable()
     {
