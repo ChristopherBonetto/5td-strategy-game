@@ -40,7 +40,7 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
-    private TroopStates m_currentTroopState = TroopStates.Idle;
+    public TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
 
     [SerializeField] private List<Unit> m_unitList;
@@ -127,6 +127,11 @@ public class Troop : EntityBehavior, ICanMove
 
         RefreshUnitsVisual(m_troopStats.UnitType, m_troopStats.UnitQuantity);
 
+        AssignTreeStats();
+    }
+
+    public void AssignTreeStats()
+    {
         var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
         engageRange.Value = m_troopStats.EngageRange;
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
@@ -391,6 +396,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_focusEntity = null;
 
+
         if (inEntity.EntityPlayerType != this.EntityPlayerType && !inEntity.IsBusy)
         {
             if (inEntity is Troop)
@@ -470,6 +476,7 @@ public class Troop : EntityBehavior, ICanMove
         m_currentBattle = null;
 
         StopTree(false);
+        AssignTreeStats();
         SetNewTroopState(TroopStates.Idle);
     }
 
