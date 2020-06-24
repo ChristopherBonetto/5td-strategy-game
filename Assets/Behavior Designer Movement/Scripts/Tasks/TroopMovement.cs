@@ -15,7 +15,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public SharedVector3 targetPosition;
 
         private Troop troopRef;
-        private Vector3? destination = null;
 
         public override void OnAwake()
         {
@@ -36,7 +35,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (HasArrived())
             {
-                destination = null;
                 return TaskStatus.Success;
             }
             SetDestination(Target());
@@ -49,19 +47,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (targetEntity.Value != null)
             {
-                NavMeshObstacle obstacle = targetEntity.Value.GetComponentInChildren<NavMeshObstacle>();
-                if(obstacle != null)
-                {
-                    if(destination == null)
-                    {
-                        destination = GameController.Instance.RandomPoint(targetEntity.Value.transform.position, obstacle.size.x, troopRef.transform.position);
-                        return destination.Value;
-                    }
-                    else
-                    {
-                        return destination.Value;
-                    }
-                }
                 return targetEntity.Value.transform.position;
             }
             return targetPosition.Value;
@@ -71,7 +56,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnReset();
             targetEntity = null;
-            destination = null;
             targetPosition = Vector3.zero;
         }
 
@@ -120,10 +104,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if(targetEntity.Value != null)
             {
+                float dist = Vector3.Distance(navMeshAgent.transform.position, targetEntity.Value.transform.position);
+
                 if (remainingDistance == 0)
                 {
-                    float dist = Vector3.Distance(navMeshAgent.transform.position, targetEntity.Value.transform.position);
                     remainingDistance = float.PositiveInfinity;
+                }
+
+                if(dist <= arriveDistance.Value)
+                {
+                    return true;
                 }
             }
             

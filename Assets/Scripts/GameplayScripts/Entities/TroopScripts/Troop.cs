@@ -352,6 +352,8 @@ public class Troop : EntityBehavior, ICanMove
             if (m_canEscape) { StartCoroutine(IsBusyDelay(2f)); }
         }
 
+        ResetTree();
+
         m_focusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
 
@@ -360,6 +362,13 @@ public class Troop : EntityBehavior, ICanMove
         Agent.destination = endPosition;
 
         SetNewTroopState(TroopStates.GoToDestination);
+    }
+
+    public void ResetTree()
+    {
+        StopTree(true);
+        StopTree(false);
+        AssignTreeStats();
     }
 
     IEnumerator IsBusyDelay(float inValue)
@@ -392,6 +401,10 @@ public class Troop : EntityBehavior, ICanMove
         if (m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
+        }
+        else
+        {
+            ResetTree();
         }
 
         m_focusEntity = null;
@@ -499,6 +512,7 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     
                     UnitList[i].visualScript.TriggerAnimation("Lift");
+                    UnitList[i].visualScript.TriggerTopLayer(1);
 
                 }
             }
@@ -525,6 +539,7 @@ public class Troop : EntityBehavior, ICanMove
                     {
 
                         UnitList[i].visualScript.TriggerAnimation("Drop");
+                        UnitList[i].visualScript.TriggerTopLayer(0);
                     }
                    
 
