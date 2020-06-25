@@ -64,6 +64,7 @@ namespace HF.Refactoring
 
         public void OnGlobalInitialization()
         {
+            pauseHudMask.DOFade(0, 0.5f);
             gameObject.SetActive(false);
         }
 
