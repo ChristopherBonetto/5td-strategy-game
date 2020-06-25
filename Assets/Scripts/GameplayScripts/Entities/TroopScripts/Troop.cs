@@ -134,11 +134,13 @@ public class Troop : EntityBehavior, ICanMove
     public void AssignTreeStats()
     {
         var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
-        engageRange.Value = m_troopStats.EngageRange;
+        if(engageRange.Value != null && m_troopStats != null) engageRange.Value = m_troopStats.EngageRange;
+
         var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
-        attackRange.Value = m_troopStats.AttackRange;
+        if (attackRange.Value != null && m_troopStats != null) attackRange.Value = m_troopStats.AttackRange;
+
         var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
-        movimentSpeed.Value = m_troopStats.UnitSpeed;
+        if(movimentSpeed.Value != null && m_troopStats != null) movimentSpeed.Value = m_troopStats.UnitSpeed;
     }
 
     public new UnitsStatsSO GetStats()

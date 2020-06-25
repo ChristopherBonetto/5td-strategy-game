@@ -189,6 +189,9 @@ public class UnitVisual : MonoBehaviour
        if(m_corpse!=null)
         {
             GameObject corpe = HFPoolManager.Instance.GetPooledObject(m_corpse.ID);
+
+            if (corpe == null) return;
+
             corpe.transform.position = transform.position;
             corpe.transform.rotation = Quaternion.FromToRotation(transform.forward, transform.up);
             corpe.SetActive(true);

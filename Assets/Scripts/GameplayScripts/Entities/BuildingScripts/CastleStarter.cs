@@ -122,7 +122,10 @@ public class CastleStarter : BuildingBehaviour
 
     public override bool TakeDamage(int Damage)
     {
-        SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
+        if(HealthbarSlider != null && HealthbarSlider.isActiveAndEnabled)
+        {
+            SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
+        }
         return base.TakeDamage(Damage);
     }
 
