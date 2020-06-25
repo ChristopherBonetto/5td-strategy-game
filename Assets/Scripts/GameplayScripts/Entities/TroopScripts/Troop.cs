@@ -355,7 +355,11 @@ public class Troop : EntityBehavior, ICanMove
             if (m_canEscape) { StartCoroutine(IsBusyDelay(2f)); }
         }
 
-        ResetTree();
+        if (!m_isFreezed)
+        {
+            ResetTree();
+        }
+        
 
         m_focusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
@@ -407,7 +411,10 @@ public class Troop : EntityBehavior, ICanMove
         }
         else
         {
-            ResetTree();
+            if (!m_isFreezed)
+            {
+                ResetTree();
+            }
         }
 
         m_focusEntity = null;
