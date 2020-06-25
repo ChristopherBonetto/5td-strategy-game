@@ -194,12 +194,14 @@ public class BattleHandler : MonoBehaviour
 
     public void FinishFight()
     {
-        Debug.Log(attacker.transform.name + " and " + defender.transform.name + " Fight completed ");
-        attacker.SetIdleState();
-
+        if(attacker != null)
+        {
+            attacker.SetIdleState();
+        }
+        
         // The problem with range attack is here.
         // When search for another alive target, is set idle the defender, cause them to stop going to castle.
-        if (defender.IsBusy && defender is Troop)
+        if (defender != null && defender.IsBusy && defender is Troop)
         {
             Troop defenderT = defender as Troop;
             defenderT.SetIdleState();

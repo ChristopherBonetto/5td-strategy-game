@@ -584,6 +584,7 @@ public class Troop : EntityBehavior, ICanMove
         if (m_currentBattle != null)
         {
             m_currentBattle.FinishFight();
+            m_currentBattle = null;
         }
 
         Drop();
@@ -616,7 +617,10 @@ public class Troop : EntityBehavior, ICanMove
 
         foreach (Unit unit in UnitList)
         {
-            unit.UnitAgent.isStopped = inValue;
+            if (unit.UnitAgent.isActiveAndEnabled)
+            {
+                unit.UnitAgent.isStopped = inValue;
+            }
 
             if (m_currentBattle != null)
             {
