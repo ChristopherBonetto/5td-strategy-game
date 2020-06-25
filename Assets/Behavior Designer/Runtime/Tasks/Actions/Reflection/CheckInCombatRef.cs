@@ -20,11 +20,11 @@ namespace BehaviorDesigner.Runtime.Tasks
                 return TaskStatus.Failure;
             }
 
-            if (troopRef.Value.m_currentBattle == null)
-            {
-                Debug.Log(gameObject.transform.name + " captain no in combat");
-                return TaskStatus.Failure;
-            }
+            //if (troopRef.Value.m_currentBattle == null)
+            //{
+            //    Debug.Log(gameObject.transform.name + " captain no in combat");
+            //    return TaskStatus.Failure;
+            //}
 
             return TaskStatus.Success;
         }

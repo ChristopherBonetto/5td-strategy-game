@@ -6,6 +6,7 @@ using BehaviorDesigner.Runtime;
 using Types;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Xml.Schema;
+using System;
 
 public class Unit : MonoBehaviour, ITakeDamage
 {
@@ -233,10 +234,10 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void CheckAnotherTarget()
     {
-        if (m_troopRef.m_currentBattle != null)
-        {
-            m_troopRef.m_currentBattle.TakeOtherTarget(this);
-        }
+        //if (m_troopRef.m_currentBattle != null)
+        //{
+        //    m_troopRef.m_currentBattle.TakeOtherTarget(this);
+        //}
     }
 
     #endregion
@@ -255,14 +256,15 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         Damage = (int)Mathf.Clamp(Damage, 1, UnitHp + m_troopRef.GetStats().Armor);
 
-        if (UnitHp <= Damage)
+        m_unitHp -= Damage;
+
+        if (UnitHp <= 0)
         {
             Death();
             return true;
         }
         else
         {
-            m_unitHp -= Damage;
             m_lastTimeGetHit = Time.time;
             TroopRef.AttachAndPlaySound(TroopRef.GetStats().TakeDamageSound);
 

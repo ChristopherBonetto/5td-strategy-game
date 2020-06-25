@@ -64,12 +64,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, FreezeMode);
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+        HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, MyTargetIsDeath);
     }
 
     protected virtual void OnDisable()
     {
         HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, FreezeMode);
         HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+        HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, MyTargetIsDeath);
     }
 
     #endregion
@@ -270,6 +272,14 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Attack()
     {
+    }
+
+    protected virtual void MyTargetIsDeath(EntityBehavior inEntity)
+    {
+        if(inEntity == FocusEntity)
+        {
+            Debug.Log("IL MIO TARGET E MORTO");
+        }
     }
 
     #endregion

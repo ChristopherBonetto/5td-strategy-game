@@ -74,7 +74,6 @@ public class Troop : EntityBehavior, ICanMove
 
     private Vector3 m_destination;
 
-    public BattleHandler m_currentBattle = null;
     private bool m_canEscape = true;
 
     private BuildingBehaviour m_buildingHandled;
@@ -86,6 +85,8 @@ public class Troop : EntityBehavior, ICanMove
     private float m_waitTimeToStartRegen = 10;
     private float m_lastTimeGetHit;
 
+    public bool m_isInCombat = false;
+
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -95,11 +96,6 @@ public class Troop : EntityBehavior, ICanMove
     private void Update()
     {
         ResurrectDeathUnits();
-
-        if(EntityPlayerType == PlayerType.AI && !IsBusy && !m_behaviorTree.isActiveAndEnabled && m_currentBattle == null)
-        {
-            Debug.Log("ciaoooo");
-        }
     }
 
     /// <summary>
@@ -348,18 +344,12 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
-        if(m_currentBattle != null)
-        {
-            m_currentBattle.FinishFight();
-
-            if (m_canEscape) { StartCoroutine(IsBusyDelay(2f)); }
-        }
+        if (m_canEscape) { StartCoroutine(IsBusyDelay(2f)); }
 
         if (!m_isFreezed)
         {
             ResetTree();
         }
-        
 
         m_focusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", m_focusEntity);
@@ -404,17 +394,9 @@ public class Troop : EntityBehavior, ICanMove
             //m_buildingHandled.Drop(this.transform.position);
             return;
         }
-
-        if (m_currentBattle != null)
+        if (!m_isFreezed)
         {
-            m_currentBattle.FinishFight();
-        }
-        else
-        {
-            if (!m_isFreezed)
-            {
-                ResetTree();
-            }
+            ResetTree();
         }
 
         m_focusEntity = null;
@@ -477,19 +459,6 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
-    //Custom commands for troop/entity
-    public override void Attack()
-    {
-        // Remember to get the focus entity or it will run a null reference.
-        var focusEntity = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-        FocusEntity = focusEntity.Value;
-
-        new Fight(this, FocusEntity);
-
-        if (gameObject.layer == LayerMask.GetMask("Player"))
-            HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
-    }
-
     public void SetIdleState()
     {
         StopTree(true);
@@ -500,8 +469,6 @@ public class Troop : EntityBehavior, ICanMove
         IsBusy = false;
 
         ResetUnits();
-
-        m_currentBattle = null;
 
         StopTree(false);
         AssignTreeStats();
@@ -581,12 +548,6 @@ public class Troop : EntityBehavior, ICanMove
         FocusEntity = null;
         m_behaviorTree.SetVariableValue("FocusEntity", null);
 
-        if (m_currentBattle != null)
-        {
-            m_currentBattle.FinishFight();
-            m_currentBattle = null;
-        }
-
         Drop();
         Deselected();
 
@@ -622,11 +583,11 @@ public class Troop : EntityBehavior, ICanMove
                 unit.UnitAgent.isStopped = inValue;
             }
 
-            if (m_currentBattle != null)
-            {
-                unit.StopTree(inValue);
-                unit.UnitTree.ResetValuesOnRestart = !inValue;
-            }
+            //if (m_currentBattle != null)
+            //{
+            //    unit.StopTree(inValue);
+            //    unit.UnitTree.ResetValuesOnRestart = !inValue;
+            //}
         }
     }
 
@@ -642,14 +603,13 @@ public class Troop : EntityBehavior, ICanMove
             {
                 unit.UnitAgent.isStopped = inValue;
             }
-            if(m_currentBattle != null)
-            {
-                unit.StopTree(inValue);
-                unit.UnitTree.ResetValuesOnRestart = !inValue;
-            }
+            //if(m_currentBattle != null)
+            //{
+            //    unit.StopTree(inValue);
+            //    unit.UnitTree.ResetValuesOnRestart = !inValue;
+            //}
         }
     }
-    
 
     #endregion
 
@@ -662,10 +622,6 @@ public class Troop : EntityBehavior, ICanMove
 
         if (CurrentHp == 0)
         {
-            if(m_currentBattle != null)
-            {
-                m_currentBattle.FinishFight();
-            }
             Death();
         }
     }
@@ -680,7 +636,28 @@ public class Troop : EntityBehavior, ICanMove
             GameController.Instance.RemoveFromDictionary(this);
         }
 
-        DisableEntity();
+        
+    }
+
+    IEnumerator TroopDie()
+    {
+        gameObject.GetComponent<Collider>().enabled = false;
+        FocusEntity = null;
+        m_behaviorTree.SetVariableValue("FocusEntity", null);
+
+        foreach (Unit unit in UnitList)
+        {
+            unit.AssignFocusToUnit((Unit)null);
+            unit.UnitAgent.isStopped = false;
+            unit.UnitAgent.ResetPath();
+            unit.StopTree(true);
+        }
+
+        yield return new WaitForSeconds(2f);
+        StopTree(true);
+        IsBusy = false;
+        gameObject.GetComponent<Collider>().enabled = true;
+        gameObject.SetActive(false);
     }
 
     private void ResurrectDeathUnits()
@@ -746,6 +723,99 @@ public class Troop : EntityBehavior, ICanMove
         {
             unit?.UpdateUnitVisualState(false);
         }
+    }
+
+    #endregion
+
+    #region AttackReworked
+
+    //Custom commands for troop/entity
+    public override void Attack()
+    {
+        if(FocusEntity is Troop)
+        {
+            TroopAttack(FocusEntity as Troop);
+        }
+        else if(FocusEntity is BuildingBehaviour)
+        {
+            BuildingAttack(FocusEntity as BuildingBehaviour);
+        }
+
+        if (gameObject.layer == LayerMask.GetMask("Player"))
+            HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
+    }
+
+    public void TroopAttack(Troop inTroop)
+    {
+        inTroop.IsBusy = true;
+        this.IsBusy = true;
+
+        inTroop.Agent.isStopped = true;
+        inTroop.StopTree(true);
+
+        this.Agent.isStopped = true;
+        this.StopTree(true);
+
+        inTroop.FocusEntity = this as Troop;
+
+        int enemyIndex = 0;
+        int playerIndex = 0;
+
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            enemyIndex = Mathf.Max(0, enemyIndex);
+
+            if (!DeathUnit.Contains(UnitList[i]))
+            {
+                
+                UnitList[i].AssignFocusToUnit(inTroop.UnitList[enemyIndex]);
+                UnitList[i].StopTree(false);
+            }
+            enemyIndex = (enemyIndex + 1) % inTroop.UnitList.Count;
+        }
+
+        for (int i = 0; i < inTroop.UnitList.Count; i++)
+        {
+            playerIndex = Mathf.Max(0, playerIndex);
+
+            if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
+            {
+                inTroop.UnitList[i].AssignFocusToUnit(UnitList[playerIndex]);
+                inTroop.UnitList[i].StopTree(false);
+            }
+            playerIndex = (playerIndex + 1) % inTroop.UnitList.Count;
+        }
+    }
+
+    public void BuildingAttack(BuildingBehaviour inBuilding)
+    {
+
+    }
+
+    protected override void MyTargetIsDeath(EntityBehavior inEntity)
+    {
+        if(inEntity == FocusEntity)
+        {
+            StartCoroutine(ResetAfterFight());
+        }
+    }
+
+    IEnumerator ResetAfterFight()
+    {
+        FocusEntity = null;
+        m_behaviorTree.SetVariableValue("FocusEntity", null);
+        IsBusy = false;
+
+        foreach(Unit unit in UnitList)
+        {
+            unit.AssignFocusToUnit((Unit)null);
+            unit.UnitAgent.isStopped = false;
+            unit.UnitAgent.ResetPath();
+            unit.StopTree(true);
+        }
+
+        yield return new WaitForSeconds(2f);
+        StopTree(false);
     }
 
     #endregion
