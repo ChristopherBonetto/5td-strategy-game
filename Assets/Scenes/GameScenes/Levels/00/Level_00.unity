@@ -361,16 +361,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Directional Light - primary
       objectReference: {fileID: 0}
-    - target: {fileID: 6040197150372273301, guid: 30c6fd743b051d44e8a1d9552f920daf,
-        type: 3}
-      propertyPath: m_Shadows.m_NearPlane
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6040197150372273301, guid: 30c6fd743b051d44e8a1d9552f920daf,
-        type: 3}
-      propertyPath: m_Shadows.m_Strength
-      value: 0.55
-      objectReference: {fileID: 0}
     - target: {fileID: 6040197150372273300, guid: 30c6fd743b051d44e8a1d9552f920daf,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -425,6 +415,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040197150372273301, guid: 30c6fd743b051d44e8a1d9552f920daf,
+        type: 3}
+      propertyPath: m_Shadows.m_NearPlane
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6040197150372273301, guid: 30c6fd743b051d44e8a1d9552f920daf,
+        type: 3}
+      propertyPath: m_Shadows.m_Strength
+      value: 0.55
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30c6fd743b051d44e8a1d9552f920daf, type: 3}
@@ -2310,6 +2310,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbcaa6aae48f7b84884cf6f5a0e70ced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &1016605823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6207566250808407140, guid: b75ece3090411b04394ec9ce688fa821,
+    type: 3}
+  m_PrefabInstance: {fileID: 1016605821}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1026665253
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2741,16 +2747,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpawnPoint
       objectReference: {fileID: 0}
-    - target: {fileID: 3354587706336031559, guid: 9b36fd5fe327d124baffb00cf35bcdab,
-        type: 3}
-      propertyPath: m_target
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3354587706336031559, guid: 9b36fd5fe327d124baffb00cf35bcdab,
-        type: 3}
-      propertyPath: TargetCastle
-      value: 
-      objectReference: {fileID: 1016605822}
     - target: {fileID: 3354587706336031556, guid: 9b36fd5fe327d124baffb00cf35bcdab,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2806,6 +2802,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3354587706336031559, guid: 9b36fd5fe327d124baffb00cf35bcdab,
+        type: 3}
+      propertyPath: m_target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3354587706336031559, guid: 9b36fd5fe327d124baffb00cf35bcdab,
+        type: 3}
+      propertyPath: TargetCastle
+      value: 
+      objectReference: {fileID: 1016605822}
+    - target: {fileID: 3354587706336031559, guid: 9b36fd5fe327d124baffb00cf35bcdab,
+        type: 3}
+      propertyPath: EngagePoint
+      value: 
+      objectReference: {fileID: 1016605823}
     - target: {fileID: 5119659774150530876, guid: 9b36fd5fe327d124baffb00cf35bcdab,
         type: 3}
       propertyPath: m_IsActive
@@ -3862,7 +3873,71 @@ MonoBehaviour:
   m_BeforeStackBundles:
   - assemblyQualifiedName: PostProcessOutline, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
       PublicKeyToken=null
-  m_AfterStackBundles: []
+  - assemblyQualifiedName: SCPE.CloudShadows, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.EdgeDetection, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Fog, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.LensFlares, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.LightStreaks, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Pixelize, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Posterize, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Sketch, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  m_AfterStackBundles:
+  - assemblyQualifiedName: SCPE.AmbientOcclusion2D, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.BlackBars, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Blur, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.ColorSplit, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Colorize, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Danger, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Dithering, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.DoubleVision, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Gradient, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.HueShift3D, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Kaleidoscope, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Kuwahara, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.LUT, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Mosaic, sc.posteffects.runtime, Version=0.0.0.0, Culture=neutral,
+      PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Overlay, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.RadialBlur, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Refraction, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Ripples, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Scanlines, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Sharpen, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.SpeedLines, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.Sunshafts, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.TiltShift, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  - assemblyQualifiedName: SCPE.TubeDistortion, sc.posteffects.runtime, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!1001 &2038523706
 PrefabInstance:
   m_ObjectHideFlags: 0
