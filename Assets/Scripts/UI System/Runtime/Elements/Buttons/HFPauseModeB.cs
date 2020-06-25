@@ -33,7 +33,6 @@ namespace HF.Refactoring
 
         protected override void OnDisable()
         {
-            Reset();
             base.OnDisable();
         }
 

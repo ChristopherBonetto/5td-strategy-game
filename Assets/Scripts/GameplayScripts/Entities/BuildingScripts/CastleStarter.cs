@@ -145,8 +145,9 @@ public class CastleStarter : BuildingBehaviour
         {
             Vector3 pos = GetPoint(transform.position, m_spawnDistance, i);
 
-            if (!Physics.CheckSphere(pos + Vector3.up * 2.3f, 1))
+            if (!Physics.CheckSphere(pos, 1, LayerMask.GetMask("Player")))
             {
+                Debug.Log("Trying to spaen a unit form the castle");
                 Troop troop = GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, pos, false);
 
                 if(troop != null && m_isFreezed)
