@@ -16,6 +16,8 @@ public class CastleStarter : BuildingBehaviour
     [SerializeField, Tooltip("Spawn point distance from castle")]
     private float m_spawnDistance = 6;
 
+    public Transform[] m_enemyEngagePoints;
+
     #region Healthbar Variables
     public static List<UnitVisual> Active = new List<UnitVisual>();
     public GameObject Healthbar;

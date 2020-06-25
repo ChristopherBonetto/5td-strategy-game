@@ -105,8 +105,9 @@ public class Troop : EntityBehavior, ICanMove
     /// <summary>
     /// This will be called after the troop is instantiated by the wave controller.
     /// </summary>
-    public void SetTargetCastle(BuildingBehaviour castle)
+    public void SetTargetCastle(BuildingBehaviour castle, Vector3 engangePoint)
     {
+        m_behaviorTree.SetVariableValue("CastleEngagePoint", engangePoint);
         m_behaviorTree.SetVariableValue("TargetCastle", castle);
     }
 
