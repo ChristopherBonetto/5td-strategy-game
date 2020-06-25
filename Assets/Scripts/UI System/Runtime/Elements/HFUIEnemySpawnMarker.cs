@@ -10,7 +10,8 @@ public class HFUIEnemySpawnMarker : MonoBehaviour
 
     private void Update()
     {
-        SetEnemySpawnMarker();
+        if (MarkDestination != null)
+            SetEnemySpawnMarker();
     }
 
     public void SetDestinationMarker(Transform transform)

@@ -77,6 +77,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom<string>(HFEventID.OnError, SetMessage);
 
             Popup.gameObject.SetActive(false);
+            Marker.gameObject.SetActive(false);
             Reset();
         }
 
@@ -323,6 +324,7 @@ namespace HF.Refactoring
         public void OnGlobalInitialization()
         {
             m_isTutorial = true;
+            
         }
 
         public void OnStepInitialization()
@@ -342,8 +344,8 @@ namespace HF.Refactoring
 
         public void SetEnemySpawnMarker(Transform transform)
         {
-            Marker.gameObject.SetActive(true);
             Marker.SetDestinationMarker(transform);
+            Marker.gameObject.SetActive(true);
         }
     }
 }
