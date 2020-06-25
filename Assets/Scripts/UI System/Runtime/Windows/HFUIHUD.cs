@@ -52,6 +52,9 @@ namespace HF.Refactoring
         [Header("Carry capacity")]
         public Slider carryCapacitySlider;
 
+        [Header("Marker")]
+        public HFUIEnemySpawnMarker Marker;
+
         private void OnEnable()
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
@@ -229,6 +232,10 @@ namespace HF.Refactoring
                     SpecializationButtons[0].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Cost.ToString();
                     SpecializationButtons[1].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].OriginalUnitStats.Cost.ToString();
                     SpecializationButtons[2].Cost.text = GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].OriginalUnitStats.Cost.ToString();
+
+                    SpecializationButtons[0].SetToolTipMessage(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.DEFENDER_LVL1].OriginalUnitStats.Name);
+                    SpecializationButtons[1].SetToolTipMessage(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.LIFTER_LVL1].OriginalUnitStats.Name);
+                    SpecializationButtons[2].SetToolTipMessage(GameController.Instance.Collection.UnitsDictionary[Types.UnitType.RUNNER_LVL1].OriginalUnitStats.Name);
                 }
                 else
                 {
@@ -287,6 +294,10 @@ namespace HF.Refactoring
                     SpecializationButtons[0].Cost.text = GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].OriginalBuildingStats.Cost.ToString();
                     SpecializationButtons[1].Cost.text = GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].OriginalBuildingStats.Cost.ToString();
                     SpecializationButtons[2].Cost.text = GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].OriginalBuildingStats.Cost.ToString();
+
+                    SpecializationButtons[0].SetToolTipMessage(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.BALLISTA_LVL1].OriginalBuildingStats.Name);
+                    SpecializationButtons[1].SetToolTipMessage(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.CRYSTAL_LVL1].OriginalBuildingStats.Name);
+                    SpecializationButtons[2].SetToolTipMessage(GameController.Instance.Collection.BuildingsDictionary[Types.BuildingType.MORTAR_LVL1].OriginalBuildingStats.Name);
                 }
                 else
                 {
@@ -327,6 +338,12 @@ namespace HF.Refactoring
         public void Reset()
         {
             m_isTutorial = false;
+        }
+
+        public void SetEnemySpawnMarker(Transform transform)
+        {
+            Marker.gameObject.SetActive(true);
+            Marker.SetDestinationMarker(transform);
         }
     }
 }

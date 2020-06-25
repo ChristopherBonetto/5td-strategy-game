@@ -34,6 +34,9 @@ public class HFSpecializationB : HFButton
     [SerializeField]
     private float m_fadingDuration;
 
+    [SerializeField]
+    private Text TooltipText;
+
     public Button ButtonComponent => m_ButtonComponent;
     public Image Icon => m_Icon;
     public Text Cost => m_Cost;
@@ -65,6 +68,11 @@ public class HFSpecializationB : HFButton
                 OnCursorExit();
                 // manager.instance.Purchrase(blablabla) --> Trigger event OnPurchrased();
         });
+    }
+
+    public void SetToolTipMessage(string message)
+    {
+        TooltipText.text = message;
     }
 
     public void RemoveAllListeners()

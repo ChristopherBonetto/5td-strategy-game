@@ -105,6 +105,7 @@ public class UnitVisual : MonoBehaviour
         if (m_animator == null) return;
         m_animator.SetLayerWeight(2, 1f);
         m_animator.SetLayerWeight(topLayer, 0);
+        Healthbar.gameObject.SetActive(true);
     }
     void OnDisable()
     {
@@ -186,7 +187,9 @@ public class UnitVisual : MonoBehaviour
     #region CorpsesMethods
     public void EnableCorpses()
     {
-       if(m_corpse!=null)
+       Healthbar.gameObject.SetActive(false);
+       
+        if(m_corpse!=null)
         {
             GameObject corpe = HFPoolManager.Instance.GetPooledObject(m_corpse.ID);
 

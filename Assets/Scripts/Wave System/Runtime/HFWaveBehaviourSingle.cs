@@ -8,7 +8,7 @@ namespace HF.Refactoring
     public class HFWaveBehaviourSingle : HFWaveBehaviour
     {
         int m_spawnPointID = 0;
-        int m_amountToSpawn = 0;
+        int m_amountToSpawn = 1;
         int m_spawnedUnitCount = 0;
         UnitType m_unitType = UnitType.STANDARD_ALLY;
 
@@ -30,6 +30,8 @@ namespace HF.Refactoring
                 Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition,false);
                 troop.SetTargetCastle(controller.SpawnPoints[m_spawnPointID].TargetCastle, controller.SpawnPoints[m_spawnPointID].EngagePoint.position.SnapLocation());
                 m_spawnedUnitCount++;
+
+                HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).SetEnemySpawnMarker(controller.SpawnPoints[m_spawnPointID].transform);
             }
         }
 

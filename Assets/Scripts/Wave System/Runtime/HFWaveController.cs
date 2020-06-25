@@ -75,7 +75,7 @@ namespace HF.Refactoring
 
         private void Update()
         {
-            if (m_currentBehaviour != null && !Pausing)
+            if (m_currentBehaviour != null && !Pausing && HFGameManager.Instance.CurrentGameState != GameStates.Pause)
             {
                 m_currentBehaviour.Execute(this);
                 m_currentBehaviour.Exit(this);
