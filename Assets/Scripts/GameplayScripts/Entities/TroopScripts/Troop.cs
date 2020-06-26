@@ -359,14 +359,9 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (FocusEntity != null && FocusEntity is Troop) { StartCoroutine(Escape(2f)); }
 
-        //if (!m_isFreezed)
-        //{
-        //    ResetTree();
-        //}
-
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
-        //Agent.SetDestination(endPosition);
+        Agent.SetDestination(endPosition);
 
         SetNewTroopState(TroopStates.GoToDestination);
     }
@@ -620,12 +615,11 @@ public class Troop : EntityBehavior, ICanMove
             {
                 unit.UnitAgent.isStopped = inValue;
             }
-
-            //if (m_currentBattle != null)
-            //{
-            //    unit.StopTree(inValue);
-            //    unit.UnitTree.ResetValuesOnRestart = !inValue;
-            //}
+            if (FocusEntity != null && FocusEntity is Troop)
+            {
+                unit.StopTree(inValue);
+                unit.UnitTree.ResetValuesOnRestart = !inValue;
+            }
         }
     }
 
@@ -641,11 +635,11 @@ public class Troop : EntityBehavior, ICanMove
             {
                 unit.UnitAgent.isStopped = inValue;
             }
-            //if(m_currentBattle != null)
-            //{
-            //    unit.StopTree(inValue);
-            //    unit.UnitTree.ResetValuesOnRestart = !inValue;
-            //}
+            if(FocusEntity != null && FocusEntity is Troop)
+            {
+                unit.StopTree(inValue);
+                unit.UnitTree.ResetValuesOnRestart = !inValue;
+            }
         }
     }
 

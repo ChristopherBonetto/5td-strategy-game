@@ -48,7 +48,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 return targetPosition.Value;
             }
-            return troopRef.transform.position;
+            return transform.position;
         }
 
         public override void OnReset()
@@ -100,21 +100,18 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 remainingDistance = navMeshAgent.remainingDistance;
             }
 
-            if (troopRef.FocusEntity != null)
+            float dist;
+            dist = Vector3.Distance(navMeshAgent.transform.position, targetPosition.Value);
+
+            if (remainingDistance == 0)
             {
-                float dist = Vector3.Distance(navMeshAgent.transform.position, troopRef.FocusEntity.transform.position);
-
-                if (remainingDistance == 0)
-                {
-                    remainingDistance = float.PositiveInfinity;
-                }
-
-                if (dist <= arriveDistance.Value)
-                {
-                    return true;
-                }
+                remainingDistance = float.PositiveInfinity;
             }
 
+            if (dist <= arriveDistance.Value)
+            {
+                return true;
+            }
 
             return remainingDistance <= arriveDistance.Value;
         }
