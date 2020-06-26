@@ -24,10 +24,10 @@ public struct Fight
 
         BattleHandler battleScript = battleHandler.GetComponent<BattleHandler>();
 
-        if (battleScript != null)
-        {
-            battleScript.StartFight(Attacker, Defender);
-        }
+        //if (battleScript != null)
+        //{
+        //    battleScript.StartFight(Attacker, Defender);
+        //}
 
         //Vector3 objectLine = (Defender.transform.position - Attacker.transform.position); // This operation doesn't give you the midlle point between attacker and defender. 
         // If you want to position the Battle handler in the midlle of the fight just do the follow operations:
@@ -44,169 +44,169 @@ public struct Fight
 
 public class BattleHandler : MonoBehaviour
 {
-    private Troop attacker;
-    private EntityBehavior defender;
+    //private Troop attacker;
+    //private EntityBehavior defender;
 
-    private void OnDisable()
-    {
-        attacker = null;
-        defender = null;
-    }
-    public void StartFight(Troop inAttacker, EntityBehavior inDefender)
-    {
-        attacker = inAttacker;
-        defender = inDefender;
+    //private void OnDisable()
+    //{
+    //    attacker = null;
+    //    defender = null;
+    //}
+    //public void StartFight(Troop inAttacker, EntityBehavior inDefender)
+    //{
+    //    attacker = inAttacker;
+    //    defender = inDefender;
 
-        attacker.FocusEntity = defender;
+    //    attacker.FocusEntity = defender;
 
-        attacker.StopTree(true);
+    //    attacker.StopTree(true);
 
-        if(!(defender is BuildingBehaviour))
-        {
-            attacker.IsBusy = true;
-        }
+    //    if(!(defender is BuildingBehaviour))
+    //    {
+    //        attacker.IsBusy = true;
+    //    }
         
 
-        inAttacker.m_currentBattle = this;
+    //    inAttacker.m_currentBattle = this;
 
-        // Case the defender is a troop.
-        if (inDefender is Troop)
-        {
-            int enemyIndex = 0;
-            int playerIndex = 0;
-            Troop defenderT = inDefender as Troop;
+    //    // Case the defender is a troop.
+    //    if (inDefender is Troop)
+    //    {
+    //        int enemyIndex = 0;
+    //        int playerIndex = 0;
+    //        Troop defenderT = inDefender as Troop;
 
-            if (attacker.GetStats().AttackType == Types.AttackType.MELEE)
-            {
-                defenderT.m_currentBattle = this;
+    //        if (attacker.GetStats().AttackType == Types.AttackType.MELEE)
+    //        {
+    //            defenderT.m_currentBattle = this;
 
-                defender.FocusEntity = attacker;
-                defender.StopTree(true);
-                defender.IsBusy = true;
+    //            defender.FocusEntity = attacker;
+    //            defender.StopTree(true);
+    //            defender.IsBusy = true;
 
-                for (int i = 0; i < attacker.UnitList.Count; i++)
-                {
-                    if (defenderT.UnitList.Count == 0) {
-                        FinishFight();
-                        goto end;   // make sure to exit from the loop
-                    }
+    //            for (int i = 0; i < attacker.UnitList.Count; i++)
+    //            {
+    //                if (defenderT.UnitList.Count == 0) {
+    //                    FinishFight();
+    //                    goto end;   // make sure to exit from the loop
+    //                }
 
-                    enemyIndex = Mathf.Max(0, enemyIndex);
-                    attacker.UnitList[i].AssignFocusToUnit(defenderT.UnitList[enemyIndex]);
+    //                enemyIndex = Mathf.Max(0, enemyIndex);
+    //                attacker.UnitList[i].AssignFocusToUnit(defenderT.UnitList[enemyIndex]);
 
-                    attacker.UnitList[i].StopTree(false);
-                    enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
-                }
-                for (int i = 0; i < defenderT.UnitList.Count; i++)
-                {
-                    if (attacker.UnitList.Count == 0) {
-                        FinishFight();
-                        goto end;   // make sure to exit from the loop
-                    }
+    //                attacker.UnitList[i].StopTree(false);
+    //                enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
+    //            }
+    //            for (int i = 0; i < defenderT.UnitList.Count; i++)
+    //            {
+    //                if (attacker.UnitList.Count == 0) {
+    //                    FinishFight();
+    //                    goto end;   // make sure to exit from the loop
+    //                }
 
-                    playerIndex = Mathf.Max(0, playerIndex);
-                    defenderT.UnitList[i].AssignFocusToUnit(attacker.UnitList[playerIndex]);
+    //                playerIndex = Mathf.Max(0, playerIndex);
+    //                defenderT.UnitList[i].AssignFocusToUnit(attacker.UnitList[playerIndex]);
 
-                    defenderT.UnitList[i].StopTree(false);
-                    playerIndex = (playerIndex + 1) % attacker.UnitList.Count;
-                }
-            }
-            else if (attacker.GetStats().AttackType == Types.AttackType.RANGED)
-            {
-                for (int i = 0; i < attacker.UnitList.Count; i++)
-                {
-                    if (defenderT.UnitList.Count == 0)
-                    {
-                        FinishFight();
-                        goto end;   // make sure to exit from the loop
-                    }
+    //                defenderT.UnitList[i].StopTree(false);
+    //                playerIndex = (playerIndex + 1) % attacker.UnitList.Count;
+    //            }
+    //        }
+    //        else if (attacker.GetStats().AttackType == Types.AttackType.RANGED)
+    //        {
+    //            for (int i = 0; i < attacker.UnitList.Count; i++)
+    //            {
+    //                if (defenderT.UnitList.Count == 0)
+    //                {
+    //                    FinishFight();
+    //                    goto end;   // make sure to exit from the loop
+    //                }
 
-                    enemyIndex = Mathf.Max(0, enemyIndex);
-                    attacker.UnitList[i].AssignFocusToUnit(defenderT.UnitList[enemyIndex]);
+    //                enemyIndex = Mathf.Max(0, enemyIndex);
+    //                attacker.UnitList[i].AssignFocusToUnit(defenderT.UnitList[enemyIndex]);
 
-                    attacker.UnitList[i].StopTree(false);
-                    enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
-                }
-            }
-        }
-        // Case the defender is a building
-        else if (inDefender is BuildingBehaviour)
-        {
-            BuildingBehaviour defenderB = inDefender as BuildingBehaviour;
+    //                attacker.UnitList[i].StopTree(false);
+    //                enemyIndex = (enemyIndex + 1) % defenderT.UnitList.Count;
+    //            }
+    //        }
+    //    }
+    //    // Case the defender is a building
+    //    else if (inDefender is BuildingBehaviour)
+    //    {
+    //        BuildingBehaviour defenderB = inDefender as BuildingBehaviour;
 
-            Debug.Log($"I'm activating the battle handler to get the castle as target.");
+    //        Debug.Log($"I'm activating the battle handler to get the castle as target.");
 
-            for (int i = 0; i < attacker.UnitList.Count; i++)
-            {
-                attacker.UnitList[i].AssignFocusToUnit(defenderB);
+    //        for (int i = 0; i < attacker.UnitList.Count; i++)
+    //        {
+    //            attacker.UnitList[i].AssignFocusToUnit(defenderB);
 
-                attacker.UnitList[i].StopTree(false);
-            }
-        }
-    end:; // The goal of the "goto" keyword.
-    }
+    //            attacker.UnitList[i].StopTree(false);
+    //        }
+    //    }
+    //end:; // The goal of the "goto" keyword.
+    //}
 
-    public void TakeOtherTarget(Unit inUnit)
-    {
-        if (!(defender is Troop)) return;
+    //public void TakeOtherTarget(Unit inUnit)
+    //{
+    //    if (!(defender is Troop)) return;
 
-        Troop defenderT = defender as Troop;
+    //    Troop defenderT = defender as Troop;
 
-        if (attacker.UnitList.Contains(inUnit))
-        {
-            inUnit.AssignFocusToUnit(TakeAnotherTargerFromTroop(inUnit, defenderT));
-        }
-        else if (defenderT.UnitList.Contains(inUnit))
-        {
-            inUnit.AssignFocusToUnit(TakeAnotherTargerFromTroop(inUnit, attacker));
-        }
-        else
-        {
-            Debug.Log("No one troop contain " + inUnit.name);
-        }
+    //    if (attacker.UnitList.Contains(inUnit))
+    //    {
+    //        inUnit.AssignFocusToUnit(TakeAnotherTargerFromTroop(inUnit, defenderT));
+    //    }
+    //    else if (defenderT.UnitList.Contains(inUnit))
+    //    {
+    //        inUnit.AssignFocusToUnit(TakeAnotherTargerFromTroop(inUnit, attacker));
+    //    }
+    //    else
+    //    {
+    //        Debug.Log("No one troop contain " + inUnit.name);
+    //    }
 
-    }
+    //}
 
-    private Unit TakeAnotherTargerFromTroop(Unit inUnit, Troop inTroop)
-    {
-        float distance = 1000f;
-        Unit tempUnit = null;
+    //private Unit TakeAnotherTargerFromTroop(Unit inUnit, Troop inTroop)
+    //{
+    //    float distance = 1000f;
+    //    Unit tempUnit = null;
 
-        for (int i = 0; i < inTroop.UnitList.Count; i++)
-        {
-            if (inTroop.UnitList[i].gameObject.activeSelf)
-            {
-                if (Vector3.Distance(inUnit.transform.position, inTroop.UnitList[i].transform.position) < distance)
-                {
-                    tempUnit = inTroop.UnitList[i];
-                }
-            }
-        }
+    //    for (int i = 0; i < inTroop.UnitList.Count; i++)
+    //    {
+    //        if (inTroop.UnitList[i].gameObject.activeSelf)
+    //        {
+    //            if (Vector3.Distance(inUnit.transform.position, inTroop.UnitList[i].transform.position) < distance)
+    //            {
+    //                tempUnit = inTroop.UnitList[i];
+    //            }
+    //        }
+    //    }
 
-        if (tempUnit == null)
-        {
-            FinishFight();
-            return null;
-        }
+    //    if (tempUnit == null)
+    //    {
+    //        FinishFight();
+    //        return null;
+    //    }
 
-        return tempUnit;
-    }
+    //    return tempUnit;
+    //}
 
-    public void FinishFight()
-    {
-        if(attacker != null)
-        {
-            attacker.SetIdleState();
-        }
+    //public void FinishFight()
+    //{
+    //    if(attacker != null)
+    //    {
+    //        attacker.SetIdleState();
+    //    }
         
-        // The problem with range attack is here.
-        // When search for another alive target, is set idle the defender, cause them to stop going to castle.
-        if (defender != null && defender.IsBusy && defender is Troop)
-        {
-            Troop defenderT = defender as Troop;
-            defenderT.SetIdleState();
-        }
+    //    // The problem with range attack is here.
+    //    // When search for another alive target, is set idle the defender, cause them to stop going to castle.
+    //    if (defender != null && defender.IsBusy && defender is Troop)
+    //    {
+    //        Troop defenderT = defender as Troop;
+    //        defenderT.SetIdleState();
+    //    }
 
-        gameObject.SetActive(false);
-    }
+    //    gameObject.SetActive(false);
+    //}
 }
