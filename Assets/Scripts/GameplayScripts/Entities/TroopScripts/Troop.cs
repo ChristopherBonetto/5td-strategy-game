@@ -74,6 +74,7 @@ public class Troop : EntityBehavior, ICanMove
     public Vector3[] m_formationPosition { get; private set; } = new Vector3[4];
 
     private Vector3 m_destination;
+    public Vector3 Destination { get => m_destination; }
 
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
@@ -365,7 +366,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
-        Agent.destination = endPosition;
+        //Agent.SetDestination(endPosition);
 
         SetNewTroopState(TroopStates.GoToDestination);
     }
