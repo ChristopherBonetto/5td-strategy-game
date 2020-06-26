@@ -168,10 +168,11 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     #region Command
 
-    public virtual void AssignFocusEntity(EntityBehavior inEntity)
+    public virtual bool AssignFocusEntity(EntityBehavior inEntity)
     {
         m_focusEntity = inEntity;
         Debug.Log(gameObject.name + " want to interact with " + inEntity.name);
+        return true;
     }
 
     //MAYBE INTERFACE.

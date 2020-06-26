@@ -7,7 +7,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     [TaskCategory("Movement")]
     [HelpURL("https://www.opsive.com/support/documentation/behavior-designer-movement-pack/")]
     [TaskIcon("Assets/Behavior Designer Movement/Editor/Icons/{SkinColor}SeekIcon.png")]
-    public class TroopMovement : NavMeshMovement
+    public class GoToCastle : NavMeshMovement
     {
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
@@ -44,10 +44,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return targetPosition if target is null
         private Vector3 Target()
         {
-            if (troopRef.FocusEntity != null)
+            if (troopRef.EngagePointForCastle != null && troopRef.TargetCastle != null)
             {
-                return troopRef.FocusEntity.transform.position;
+                return troopRef.EngagePointForCastle;
             }
+            Debug.Log("Point to castle not assigned");
             return targetPosition.Value;
         }
 
@@ -69,7 +70,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                     if (unit.isActiveAndEnabled)
                     {
-                        if(Vector3.Distance(navMeshAgent.transform.position, unit.transform.position) > 1)
+                        if (Vector3.Distance(navMeshAgent.transform.position, unit.transform.position) > 1)
                         {
                             unit.speed = speed.Value + 1;
                         }
@@ -100,7 +101,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 remainingDistance = navMeshAgent.remainingDistance;
             }
 
-            if(troopRef.FocusEntity != null)
+            if (troopRef.FocusEntity != null)
             {
                 float dist = Vector3.Distance(navMeshAgent.transform.position, troopRef.FocusEntity.transform.position);
 
@@ -109,12 +110,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     remainingDistance = float.PositiveInfinity;
                 }
 
-                if(dist <= arriveDistance.Value)
+                if (dist <= arriveDistance.Value)
                 {
                     return true;
                 }
             }
-            
+
 
             return remainingDistance <= arriveDistance.Value;
         }

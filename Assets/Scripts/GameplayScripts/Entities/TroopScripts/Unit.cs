@@ -104,6 +104,13 @@ public class Unit : MonoBehaviour, ITakeDamage
         }
     }
 
+
+    private void OnEnable()
+    {
+        StopTree(true);
+        FocusUnit = null;
+        FocusBuilding = null;
+    }
     private void Awake()
     {
         Initialize();
@@ -234,10 +241,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void CheckAnotherTarget()
     {
-        //if (m_troopRef.m_currentBattle != null)
-        //{
-        //    m_troopRef.m_currentBattle.TakeOtherTarget(this);
-        //}
+        TroopRef.GiveAnotherTargetToUnit(this);
     }
 
     #endregion
@@ -256,15 +260,14 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         Damage = (int)Mathf.Clamp(Damage, 1, UnitHp + m_troopRef.GetStats().Armor);
 
-        m_unitHp -= Damage;
-
-        if (UnitHp <= 0)
+        if (UnitHp <= Damage)
         {
             Death();
             return true;
         }
         else
         {
+            m_unitHp -= Damage;
             m_lastTimeGetHit = Time.time;
             TroopRef.AttachAndPlaySound(TroopRef.GetStats().TakeDamageSound);
 
@@ -295,11 +298,6 @@ public class Unit : MonoBehaviour, ITakeDamage
             m_visualScript.EnableCorpses();
         }
         
-        if(FocusUnit != null || FocusBuilding != null)
-        {
-            AssignFocusToUnit((Unit)null);
-        }
-
         if(m_troopRef.EntityPlayerType == PlayerType.AI)
         {
             GameObject gem = ObjectPooler.Instance.GetPooledObject("Gem");

@@ -22,11 +22,20 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("The distance that the agent can see")]
         public SharedFloat viewDistance = 1000;
         [Tooltip("The object that is within sight")]
-        public SharedEntity returnedObject;
+        private EntityBehavior returnedObject;
 
         private Collider[] overlapColliders = new Collider[1];
 
         private int numberOfCollisions;
+
+        private EntityBehavior entityRef;
+
+        public override void OnAwake()
+        {
+            base.OnAwake();
+
+            entityRef = gameObject.GetComponent<EntityBehavior>();
+        }
 
         // Returns success if an object was found otherwise failure
         public override TaskStatus OnUpdate()
@@ -47,17 +56,23 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                 if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, (go.transform.position - transform.position).normalized + Vector3.up * 1.5f, distance, ignoreLayerMask))
                 {
-                    returnedObject.Value = go.GetComponentInParent<EntityBehavior>();
+                    returnedObject = go.GetComponentInParent<EntityBehavior>();
 
-                    if (!returnedObject.Value.IsBusy || canSeeBusyTroop.Value && returnedObject.Value.IsBusy)
+                    if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
                     {
-                        if (returnedObject.Value is BuildingBehaviour && canSeeBuilding.Value)
+                        if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
                         {
-                            return TaskStatus.Success;
+                            if (entityRef.AssignFocusEntity(returnedObject))
+                            {
+                                return TaskStatus.Success;
+                            }
                         }
-                        else if (returnedObject.Value is Troop)
+                        else if (returnedObject is Troop)
                         {
-                            return TaskStatus.Success;
+                            if (entityRef.AssignFocusEntity(returnedObject))
+                            {
+                                return TaskStatus.Success;
+                            }
                         }
                     }
                 }
@@ -71,6 +86,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             viewDistance = 1000;
+            returnedObject = null;
         }
 
         // Draw the line of sight representation within the scene window

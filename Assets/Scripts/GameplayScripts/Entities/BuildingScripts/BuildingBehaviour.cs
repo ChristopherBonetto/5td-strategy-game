@@ -154,10 +154,10 @@ public class BuildingBehaviour : EntityBehavior
         }
     }
 
-    public void TakeFocusTargetFromTree()
+    public override bool AssignFocusEntity(EntityBehavior inEntity)
     {
-        var troop = (SharedEntity)m_behaviorTree.GetVariable("FocusEntity");
-        FocusEntity = troop.Value;
+        FocusEntity = inEntity;
+        return true;
     }
 
     IEnumerator DealDamge(EntityBehavior entity)
@@ -182,7 +182,7 @@ public class BuildingBehaviour : EntityBehavior
             {
                 if (target.UnitList != null && target.UnitList[i].TakeDamage(m_buildingStats.Damage))
                 {
-                    m_behaviorTree.SetVariableValue("FocusEntity", null);
+                    FocusEntity = null;
                 }
             }
         }
@@ -201,13 +201,13 @@ public class BuildingBehaviour : EntityBehavior
 
             if (unit == null)
             {
-                m_behaviorTree.SetVariableValue("FocusEntity", null);
+                FocusEntity = null;
                 StopCoroutine(this.DealDamge(null));
                 yield return null;
             }
             else if (unit.TakeDamage(m_buildingStats.Damage))
             {
-                m_behaviorTree.SetVariableValue("FocusEntity", null);
+                FocusEntity = null;
             }
         }
     }
