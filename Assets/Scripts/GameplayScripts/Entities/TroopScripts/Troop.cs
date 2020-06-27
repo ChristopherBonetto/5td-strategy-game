@@ -770,7 +770,7 @@ public class Troop : EntityBehavior, ICanMove
         }
         else if(FocusEntity is BuildingBehaviour)
         {
-            //BuildingAttack(FocusEntity as BuildingBehaviour);
+            BuildingAttack(FocusEntity as BuildingBehaviour);
         }
 
         if (gameObject.layer == LayerMask.GetMask("Player"))
@@ -850,7 +850,19 @@ public class Troop : EntityBehavior, ICanMove
 
     public void BuildingAttack(BuildingBehaviour inBuilding)
     {
+        Agent.isStopped = true;
+        StopTree(true);
 
+        FocusEntity = inBuilding as BuildingBehaviour;
+
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (!DeathUnit.Contains(UnitList[i]))
+            {
+                UnitList[i].AssignFocusToUnit(inBuilding as BuildingBehaviour);
+                UnitList[i].StopTree(false);
+            }
+        }
     }
 
     protected override void MyTargetIsDeath(EntityBehavior inEntity)

@@ -120,14 +120,7 @@ public class CastleStarter : BuildingBehaviour
         RefreshHealthbarSize(m_buildingStats.MaxHp);
     }
 
-    public override bool TakeDamage(int Damage)
-    {
-        if(HealthbarSlider != null && HealthbarSlider.isActiveAndEnabled)
-        {
-            SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
-        }
-        return base.TakeDamage(Damage);
-    }
+    
 
     public override void Click()
     {
@@ -135,6 +128,8 @@ public class CastleStarter : BuildingBehaviour
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Castle);
     }
 
+
+    #region Create Entities Methods
     public void SpawnTroop()
     {
         // I saw you use a random point on game controller but if it goes on failure you don't recall the method 
@@ -174,14 +169,9 @@ public class CastleStarter : BuildingBehaviour
         return pos;
     }
 
-    public void CheckFreeze(bool inValue)
-    {
-        m_canSpawn = !inValue;
-    }
-
     public void CheckEntityDead(EntityBehavior inEntity)
     {
-        if(inEntity.EntityPlayerType == PlayerType.Player && inEntity is Troop)
+        if (inEntity.EntityPlayerType == PlayerType.Player && inEntity is Troop)
         {
             StartCoroutine(Respawn(inEntity as Troop));
         }
@@ -211,10 +201,33 @@ public class CastleStarter : BuildingBehaviour
         }
 
     }
+    #endregion
+
+    public void CheckFreeze(bool inValue)
+    {
+        m_canSpawn = !inValue;
+    }
+
+
+
+
+    #region Hp methods
+    public override bool TakeDamage(int Damage)
+    {
+        if (HealthbarSlider != null && HealthbarSlider.isActiveAndEnabled)
+        {
+            SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
+        }
+        return base.TakeDamage(Damage);
+    }
 
     public override void Death()
     {
-        base.Death();
+        StopAllCoroutines();
+
+
+
+        BehaviorManager.instance.enabled = false;
         HFScenesManager.Instance.EndCurrentLevel(false);
     }
 
@@ -245,4 +258,5 @@ public class CastleStarter : BuildingBehaviour
     }
 
     #endregion
+#endregion
 }

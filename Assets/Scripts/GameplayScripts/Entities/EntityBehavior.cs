@@ -147,7 +147,11 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     protected virtual void GameStateChanged(GameStates inState)
     {
-        if ((inState == GameStates.EndLevel || inState == GameStates.WarRoom))
+        if ((inState == GameStates.EndLevel))
+        {
+            StopTree(true);
+        }
+        else if(inState == GameStates.WarRoom)
         {
             Deselected();
             DisableEntity();

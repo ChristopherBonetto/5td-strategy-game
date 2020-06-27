@@ -24,7 +24,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnStart();
 
-            SetDestination(Target());
+            if (!SetDestination(Target()))
+            {
+                Debug.Log("Can't go on the castle");
+            }
         }
 
         // Seek the destination. Return success once the agent has reached the destination.
@@ -33,10 +36,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (HasArrived())
             {
+                troopRef.FocusEntity = troopRef.TargetCastle;
                 return TaskStatus.Success;
             }
 
-            SetDestination(Target());
+            if (!SetDestination(Target()))
+            {
+                Debug.Log("Can't go on the castle");
+            }
 
             return TaskStatus.Running;
         }
@@ -60,6 +67,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
         protected override bool SetDestination(Vector3 destination)
         {
+            if(troopRef.TargetCastle == null || targetPosition == null)
+            {
+                return false;
+            }
+
             if (base.SetDestination(destination))
             {
                 navMeshAgent.speed = speed.Value;

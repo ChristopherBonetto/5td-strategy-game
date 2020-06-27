@@ -26,12 +26,15 @@ namespace HF.Refactoring
         {
             for (int i = 0; i < m_amountToSpawn; i++)
             {
-                // Instantitate prefab at the given position with the given data.
-                Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition,false);
-                troop.SetTargetCastle(controller.SpawnPoints[m_spawnPointID].TargetCastle, controller.SpawnPoints[m_spawnPointID].EngagePoint.position.SnapLocation());
-                m_spawnedUnitCount++;
+                if(controller.SpawnPoints[m_spawnPointID].TargetCastle.CurrentHp > 0)
+                {
+                    // Instantitate prefab at the given position with the given data.
+                    Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition, false);
+                    troop.SetTargetCastle(controller.SpawnPoints[m_spawnPointID].TargetCastle, controller.SpawnPoints[m_spawnPointID].EngagePoint.position.SnapLocation());
+                    m_spawnedUnitCount++;
 
-                HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).SetEnemySpawnMarker(controller.SpawnPoints[m_spawnPointID].transform);
+                    HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).SetEnemySpawnMarker(controller.SpawnPoints[m_spawnPointID].transform);
+                }
             }
         }
 
