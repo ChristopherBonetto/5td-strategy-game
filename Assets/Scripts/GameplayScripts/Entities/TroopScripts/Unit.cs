@@ -23,9 +23,6 @@ public class Unit : MonoBehaviour, ITakeDamage
     [SerializeField] private Transform m_BulletSpawnPoint;
     public Transform BulletSpawnPoint => m_BulletSpawnPoint;
 
-    [SerializeField] private HFPoolID m_BulletID;
-    public HFPoolID BulletID => m_BulletID;
-
     private float m_unitHp;
     public float UnitHp { get => m_unitHp; }
     private bool m_canShowHealthBar = true;
@@ -195,7 +192,7 @@ public class Unit : MonoBehaviour, ITakeDamage
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
                 m_BulletSpawnPoint.forward = (FocusUnit.transform.position - transform.position).normalized;
-                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(BulletID.ID).GetComponent<HF.HFBullet>();
+                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(m_troopRef.m_troopStats.Projectile.ID).GetComponent<HF.HFBullet>();
                 bullet.transform.rotation = BulletSpawnPoint.rotation;
                 bullet.transform.position = BulletSpawnPoint.position;
                 bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
@@ -214,7 +211,7 @@ public class Unit : MonoBehaviour, ITakeDamage
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
                 m_BulletSpawnPoint.forward = (FocusUnit.transform.position - transform.position).normalized;
-                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(BulletID.ID).GetComponent<HF.HFBullet>();
+                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(m_troopRef.m_troopStats.Projectile.ID).GetComponent<HF.HFBullet>();
                 bullet.transform.rotation = BulletSpawnPoint.rotation;
                 bullet.transform.position = BulletSpawnPoint.position;
                 bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));

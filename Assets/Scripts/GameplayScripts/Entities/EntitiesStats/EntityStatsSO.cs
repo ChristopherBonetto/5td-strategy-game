@@ -34,7 +34,7 @@ public class EntityStatsSO : ScriptableObject
     public bool CanAttack = false;
 
     [Space]
-    public GameObject Projectile = null;
+    public HFPoolID Projectile = null;
 
     [Header("Visual")]
     public Mesh Mesh;

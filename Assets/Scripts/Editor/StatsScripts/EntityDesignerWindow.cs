@@ -305,7 +305,7 @@ public class GeneralSettings : EditorWindow
 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("Projectile");
-                unit.Projectile = (GameObject)EditorGUILayout.ObjectField(unit.Projectile, typeof(GameObject), false);
+                unit.Projectile = (HFPoolID)EditorGUILayout.ObjectField(unit.Projectile, typeof(HFPoolID), false);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.Space();
 
@@ -460,7 +460,7 @@ public class GeneralSettings : EditorWindow
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Projectile");
-            building.Projectile = (GameObject)EditorGUILayout.ObjectField(building.Projectile, typeof(GameObject), false);
+            building.Projectile = (HFPoolID)EditorGUILayout.ObjectField(building.Projectile, typeof(HFPoolID), false);
             EditorGUILayout.EndHorizontal();
 
             if (building.Projectile == null)

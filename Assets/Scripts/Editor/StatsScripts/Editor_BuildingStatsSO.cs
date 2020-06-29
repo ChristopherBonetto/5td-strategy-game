@@ -142,7 +142,7 @@ public class Editor_BuildingStatsSO : Editor
 
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("Projectile");
-            building.Projectile = (GameObject)EditorGUILayout.ObjectField(building.Projectile, typeof(GameObject), false);
+            building.Projectile = (HFPoolID)EditorGUILayout.ObjectField(building.Projectile, typeof(HFPoolID), false);
             EditorGUILayout.EndHorizontal();
 
             if (building.Projectile == null)

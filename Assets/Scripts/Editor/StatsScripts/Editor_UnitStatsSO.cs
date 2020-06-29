@@ -159,7 +159,7 @@ public class Editor_UnitStatsSO : Editor
 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.Label("Projectile");
-                unit.Projectile = (GameObject)EditorGUILayout.ObjectField(unit.Projectile, typeof(GameObject), false);
+                unit.Projectile = (HFPoolID)EditorGUILayout.ObjectField(unit.Projectile, typeof(HFPoolID), false);
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.Space();
 
