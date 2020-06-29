@@ -38,7 +38,7 @@ namespace HF.Refactoring
                 if(controller.SpawnPoints[m_spawnPointID].TargetCastle.CurrentHp > 0)
                 {
                     Troop troop = GameController.Instance.CreateNewTroop(m_unitType, PlayerType.AI, controller.SpawnPoints[m_spawnPointID].SpawnPosition, false);
-                    troop.SetTargetCastle(controller.SpawnPoints[m_spawnPointID].TargetCastle, controller.SpawnPoints[m_spawnPointID].EngagePoint.position.SnapLocation());
+                    troop.AssignTargetCastle(controller.SpawnPoints[m_spawnPointID].TargetCastle, controller.SpawnPoints[m_spawnPointID].EngagePoint.position.SnapLocation());
 
                     // Increment index
                     m_spawnedUnitCount++;

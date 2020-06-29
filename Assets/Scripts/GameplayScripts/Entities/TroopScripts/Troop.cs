@@ -21,7 +21,16 @@ public enum TroopStates
 [RequireComponent(typeof(NavMeshAgent))]
 public class Troop : EntityBehavior, ICanMove
 {
+    #region Variables
+
+    #region Component Var
+
     public NavMeshAgent Agent;
+
+    #endregion
+
+    #region Stats Var
+
     public UnitsStatsSO m_troopStats;
     public override EntityStatsSO EntityStats
     {
@@ -32,6 +41,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         get { return TakeTroopHealth(); }
     }
+
     private float m_currentCarryCapacity;
     public float CurrentCarryCapacity
     {
@@ -41,8 +51,16 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
+    #endregion
+
+    #region Troop State Var
+
     public TroopStates m_currentTroopState = TroopStates.Idle;
     public TroopStates CurrentTroopState { get { return m_currentTroopState; } }
+
+    #endregion
+
+    #region Units Var
 
     [SerializeField] private List<Unit> m_unitList;
     public List<Unit> UnitList
@@ -73,8 +91,19 @@ public class Troop : EntityBehavior, ICanMove
     [SerializeField] private float m_formationRadius;
     public Vector3[] m_formationPosition { get; private set; } = new Vector3[4];
 
+    #endregion
+
+    #region Movement Var
+
     private Vector3 m_destination;
     public Vector3 Destination { get => m_destination; }
+
+    public Vector3 m_engagePointForCastle;
+    public Vector3 EngagePointForCastle { get => m_engagePointForCastle; }
+
+    #endregion
+
+    #region Target Var
 
     private BuildingBehaviour m_buildingHandled;
     public BuildingBehaviour BuildingHandled { get => m_buildingHandled; private set { m_buildingHandled = value; } }
@@ -82,14 +111,20 @@ public class Troop : EntityBehavior, ICanMove
     public CastleStarter m_targetCastle;
     public CastleStarter TargetCastle { get => m_targetCastle; }
 
-    public Vector3 m_engagePointForCastle;
-    public Vector3 EngagePointForCastle { get => m_engagePointForCastle; }
+    #endregion
 
+    #region Generic Var
 
     [Header("Regen")]
     [SerializeField]
     private float m_waitTimeToStartRegen = 10;
     private float m_lastTimeGetHit;
+
+    #endregion
+
+    #endregion
+
+    #region Behaviour Cycle
 
     protected override void OnDisable()
     {
@@ -110,14 +145,7 @@ public class Troop : EntityBehavior, ICanMove
         ResurrectDeathUnits();
     }
 
-    /// <summary>
-    /// This will be called after the troop is instantiated by the wave controller.
-    /// </summary>
-    public void SetTargetCastle(BuildingBehaviour castle, Vector3 engagePoint)
-    {
-        m_targetCastle = castle as CastleStarter;
-        m_engagePointForCastle = engagePoint;
-    }
+    #endregion
 
     #region States
 
@@ -366,16 +394,10 @@ public class Troop : EntityBehavior, ICanMove
         SetNewTroopState(TroopStates.GoToDestination);
     }
 
-    public void ResetTree()
-    {
-        StopTree(true);
-        StopTree(false);
-        AssignTreeStats();
-    }
-
     IEnumerator Escape(float inValue)
     {
-        Debug.Log("daiiiiiii");
+        if (FocusEntity == null) yield return null;
+
         if (FocusEntity is Troop)
         {
             Troop troop = FocusEntity as Troop;
@@ -498,14 +520,13 @@ public class Troop : EntityBehavior, ICanMove
         return false;
     }
 
-    public void SetIdleState()
+    /// <summary>
+    /// This will be called after the troop is instantiated by the wave controller.
+    /// </summary>
+    public void AssignTargetCastle(BuildingBehaviour castle, Vector3 engagePoint)
     {
-        FocusEntity = null;
-        IsBusy = false;
-
-        ResetUnits();
-
-        SetNewTroopState(TroopStates.Idle);
+        m_targetCastle = castle as CastleStarter;
+        m_engagePointForCastle = engagePoint;
     }
 
     public void Lift()
@@ -572,6 +593,27 @@ public class Troop : EntityBehavior, ICanMove
                 HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Reposition_Turret);
             }
         }
+    }
+
+    #endregion
+
+    #region Reset methods
+
+    public void SetIdleState()
+    {
+        FocusEntity = null;
+        IsBusy = false;
+
+        ResetUnits();
+
+        SetNewTroopState(TroopStates.Idle);
+    }
+
+    public void ResetTree()
+    {
+        StopTree(true);
+        StopTree(false);
+        AssignTreeStats();
     }
 
     protected override void DisableEntity()
@@ -773,6 +815,7 @@ public class Troop : EntityBehavior, ICanMove
             BuildingAttack(FocusEntity as BuildingBehaviour);
         }
 
+        //Must be changed with EntityPlayerType == PlayerType.Player
         if (gameObject.layer == LayerMask.GetMask("Player"))
             HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
     }
@@ -826,6 +869,8 @@ public class Troop : EntityBehavior, ICanMove
 
         Troop troop = FocusEntity as Troop;
 
+        if (troop == null) return;
+
         for (int i = 0; i < troop.UnitList.Count; i++)
         {
             if (troop.UnitList[i].gameObject.activeSelf)
@@ -878,7 +923,7 @@ public class Troop : EntityBehavior, ICanMove
         FocusEntity = null;
         IsBusy = false;
 
-        foreach(Unit unit in UnitList)
+        foreach (Unit unit in UnitList)
         {
             unit.AssignFocusToUnit((Unit)null);
 
@@ -896,6 +941,24 @@ public class Troop : EntityBehavior, ICanMove
         IsBusy = false;
 
         StopTree(false);
+    }
+
+    #endregion
+
+    #region GameState event
+
+    protected override void GameStateChanged(GameStates inState)
+    {
+        base.GameStateChanged(inState);
+
+        if(inState == GameStates.EndLevel)
+        {
+            foreach(Unit unit in UnitList)
+            {
+                unit.AssignFocusToUnit((Unit)null);
+                unit.StopTree(true);
+            }
+        }
     }
 
     #endregion
