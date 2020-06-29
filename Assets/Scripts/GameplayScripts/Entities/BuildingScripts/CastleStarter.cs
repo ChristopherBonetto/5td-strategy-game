@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Types;
 using BehaviorDesigner.Runtime;
+using HF.Refactoring;
 
 public class CastleStarter : BuildingBehaviour
 {
@@ -145,6 +146,8 @@ public class CastleStarter : BuildingBehaviour
         // in recursive way.
         // We need to find a way to make sure the success
 
+        bool success = false;
+
         for (int i = 0; i < 8; i++)
         {
             Vector3 pos = GetPoint(transform.position, m_spawnDistance, i);
@@ -159,11 +162,15 @@ public class CastleStarter : BuildingBehaviour
                     troop.FreezeMode(true);
                 }
 
+                success = true;
                 break;
             }
         }
 
-        // Debug : there aren0t any free slot.
+        if (!success)
+        {
+            HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).SetMessage("Threse aren't empty slot around the castle, try to move away any entity from it");
+        }
     }
 
     private Vector3 GetPoint(Vector3 center, float maxRadius, int index)

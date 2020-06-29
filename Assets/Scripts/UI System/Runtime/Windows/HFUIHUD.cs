@@ -145,7 +145,7 @@ namespace HF.Refactoring
             }
         }
 
-        private void SetMessage(string message)
+        public void SetMessage(string message)
         {
             Message.SetMessage(message);
         }
