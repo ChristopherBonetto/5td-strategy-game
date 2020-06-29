@@ -183,6 +183,7 @@ namespace HF.Refactoring
 
         public void WinLevel()
         {
+            HFGameManager.Instance.ChangeGMState(GameStates.None);
             HFScenesManager.Instance.EndCurrentLevel(true);
             HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
             HFScenesManager.Instance.LoadSceneFromIndex(1);

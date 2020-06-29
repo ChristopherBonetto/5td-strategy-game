@@ -25,9 +25,6 @@ namespace HF.Refactoring
             HFScenesManager sceneM = HFScenesManager.Instance;
             HFLevelContainerSO levelContainer = sceneM.LevelContainer;
 
-            // The first level (tutorial) is always completed.
-            sceneM.LevelContainer.Levels[0].m_levelCompleted = true;
-
             for (int i = 0; i < m_loadLevelButtons.Length; i++)
             {
                 if (i > 0)

@@ -76,7 +76,7 @@ public class HFGameManager : Singleton<HFGameManager>
 
     public List<HFGMStateSO> ListOfStates = new List<HFGMStateSO>();
 
-    public HFPlayerData m_playerData = null;
+    private HFPlayerData m_playerData = null;
     public HFPlayerData PlayerData
     {
         get
@@ -95,47 +95,46 @@ public class HFGameManager : Singleton<HFGameManager>
             Destroy(gameObject);
     }
 
-
     #region GAME STATE SYSTEM, and trigger event.
 
     //Deprecated
- //   public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
- //   {
- //       switch (preState)
- //       {
- //           case GameStates.LoadStartingInfo:
- //               break;
+    //   public void ActionBeforeChangeGMState(GameStates preState, GameStates postState)
+    //   {
+    //       switch (preState)
+    //       {
+    //           case GameStates.LoadStartingInfo:
+    //               break;
 
- //           case GameStates.StartGame:
- //               //used to take all the player info and if the player want load another file info
- //               break;
+    //           case GameStates.StartGame:
+    //               //used to take all the player info and if the player want load another file info
+    //               break;
 
- //           case GameStates.WarRoom:
- //               //level selection
- //               break;
+    //           case GameStates.WarRoom:
+    //               //level selection
+    //               break;
 
- //           case GameStates.InitializeLevel:
- //               //give info to all
- //               break;
+    //           case GameStates.InitializeLevel:
+    //               //give info to all
+    //               break;
 
- //           case GameStates.PlayingLevel:
- //               //level in play
- //               break;
+    //           case GameStates.PlayingLevel:
+    //               //level in play
+    //               break;
 
- //           case GameStates.EndLevel:
- //               break;
+    //           case GameStates.EndLevel:
+    //               break;
 
- //           case GameStates.Pause:
- //               break;
+    //           case GameStates.Pause:
+    //               break;
 
- //           default:
- //               break;
- //       }
- //       //Debug.Log("Do something before change " + preState + " in " + postState);
-	//	HFEventManager.TriggerEvent<GameStates, GameStates>(HFEventID.OnBeforeChangeState, preState, postState);
-	//}
+    //           default:
+    //               break;
+    //       }
+    //       //Debug.Log("Do something before change " + preState + " in " + postState);
+    //	HFEventManager.TriggerEvent<GameStates, GameStates>(HFEventID.OnBeforeChangeState, preState, postState);
+    //}
 
-	public void ActionAfterChangeGMState(GameStates inState)
+    public void ActionAfterChangeGMState(GameStates inState)
     {
         switch (inState)
         {
@@ -212,11 +211,13 @@ public class HFGameManager : Singleton<HFGameManager>
             executeInitializations.Dequeue()?.Invoke();
         }
 
-        while(PlayerData == null)
+        while(m_playerData == null)
         {
             PlayerData = HFSavingManager.LoadGame("NoName");
             yield return new WaitForEndOfFrame();
         }
+        
+        HFScenesManager.Instance.ActivateDeactivateLevels(PlayerData.LevelsCompletedCounter);
 
         CurrentGameState = GameStates.StartGame;
 

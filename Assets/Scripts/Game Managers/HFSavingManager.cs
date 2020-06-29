@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Schema;
 using UnityEngine;
 
 public static class HFSavingManager
@@ -71,9 +72,7 @@ public static class HFSavingManager
     {
         if (!DoesSaveGameExist(name))
         {
-            HFPlayerData newPlayerData = new HFPlayerData();
-            name = newPlayerData.PlayerName;
-            newPlayerData.InitSaveData();
+            HFPlayerData newPlayerData = new HFPlayerData(name, 1);
         }
 
 
@@ -124,20 +123,39 @@ public class HFPlayerData
 {
     public string PlayerName = "NoName";
 
-    public int LevelsCompletedCounter = 0;
+    private int m_levelsCompletedCounted = 0;
+    public int LevelsCompletedCounter
+    {
+        get
+        {
+            ClampValue(m_levelsCompletedCounted);
+            return m_levelsCompletedCounted;
+        }
+        set
+        {
+            m_levelsCompletedCounted = value;
+            ClampValue(m_levelsCompletedCounted);
+        }
+    }
 
     //Chosen units
     //Chosen perks
     //Other stuff
 
-
-    public HFPlayerData()
+    private int ClampValue(int inValue)
     {
-        PlayerName = "NoName";
-        LevelsCompletedCounter = 0;
+        inValue = Mathf.Clamp(inValue, 1, HFScenesManager.Instance.LevelContainer.Levels.Count);
+        return inValue;
     }
 
-    public void InitSaveData()
+    public HFPlayerData(string inName, int inLevelCompleted)
+    {
+        PlayerName = inName;
+        LevelsCompletedCounter = inLevelCompleted;
+        InitSaveData();
+    }
+
+    private void InitSaveData()
     {
         HFSavingManager.SaveGame(this, PlayerName);
     }
