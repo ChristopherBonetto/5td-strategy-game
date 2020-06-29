@@ -222,6 +222,12 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     }
     public virtual void Deselected()
     {
+        if (this == null)
+        {
+            InputReaderManager.Instance.RemoveSelection();
+            return;
+        } 
+
         if(this == InputReaderManager.Instance.CurrentEntity)
         {
             InputReaderManager.Instance.RemoveSelection();

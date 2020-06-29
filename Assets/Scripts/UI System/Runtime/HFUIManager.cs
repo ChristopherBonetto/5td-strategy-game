@@ -72,7 +72,7 @@ namespace HF.Refactoring
         //---------------------------------------------------------------------
         public delegate void GetIsListeningInput(HFUIWindowID myWindowId);
         public GetIsListeningInput IsMatchingWindowID;
-        private Stack<HFUIWindow> m_windowsHistory;   
+        private Stack<HFUIWindow> m_windowsHistory;
         #endregion
 
         #region Helpers

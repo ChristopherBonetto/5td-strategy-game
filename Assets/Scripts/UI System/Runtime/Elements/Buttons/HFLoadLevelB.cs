@@ -20,6 +20,17 @@ namespace HF.Refactoring
         public Text ButtonText;
         public Button button;
 
+        private Image m_Background;
+        public Image Background 
+        {
+            get
+            {
+                if (m_Background == null)
+                    m_Background = GetComponent<Image>();
+                return m_Background;
+            }
+        }
+
         /// <summary>
         /// On click() event: Load the level associated.
         /// </summary>
