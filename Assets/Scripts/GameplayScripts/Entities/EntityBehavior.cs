@@ -11,6 +11,20 @@ using System.Xml.Schema;
 [RequireComponent(typeof(BehaviorTree))]
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
+    #region Variables
+
+    #region Component Var and Interface instances
+
+    protected BehaviorTree m_behaviorTree;
+
+    protected IAttackTypes m_attackType;
+
+    protected HFIEvent3D m_3DSoundInterface;
+
+    #endregion
+
+    #region Stats Var
+
     protected EntityStatsSO m_entityStats;
     public virtual EntityStatsSO EntityStats
     {
@@ -18,14 +32,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         set { m_entityStats = value; }
     }
 
-    protected List<Command> m_commands;
-    protected int m_currentCommandIndex;
-
     protected PlayerType m_entityPlayerType;
     public PlayerType EntityPlayerType { get => m_entityPlayerType; }
-
-    protected EntityBehavior m_focusEntity = null;
-    public EntityBehavior FocusEntity { get { return m_focusEntity; } set { m_focusEntity = value; } }
 
     protected int m_currentHp;
     public virtual int CurrentHp
@@ -40,9 +48,23 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
-    protected IAttackTypes m_attackType;
+    #endregion
 
-    protected BehaviorTree m_behaviorTree;
+    #region Commands Var
+
+    protected List<Command> m_commands;
+    protected int m_currentCommandIndex;
+
+    #endregion
+
+    #region Target Var
+
+    protected EntityBehavior m_focusEntity = null;
+    public EntityBehavior FocusEntity { get { return m_focusEntity; } set { m_focusEntity = value; } }
+
+    #endregion
+
+    #region Generic Var
 
     public bool m_isBusy = false;
     public bool IsBusy
@@ -56,7 +78,9 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public bool m_isFreezed = false;
 
-    protected HFIEvent3D m_3DSoundInterface;
+    #endregion
+
+    #endregion
 
     #region Events
 
@@ -76,6 +100,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     #endregion
 
+    #region Behaviour Cycle
+
     public virtual void Awake()
     {
         m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
@@ -92,8 +118,9 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         IsBusy = false;
     }
 
-    #region Generic Methods for entity
+    #endregion
 
+    #region Stats methods
 
     public virtual void AssignStats(EntityStatsSO inStats)
     {
@@ -120,6 +147,10 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         return m_entityStats;
     }
 
+    #endregion
+
+    #region Reset and stop entity methods
+
     public void StopTree(bool inValue)
     {
         m_behaviorTree.enabled = !inValue;
@@ -144,29 +175,6 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         StopTree(inValue);
         m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
-
-    protected virtual void GameStateChanged(GameStates inState)
-    {
-        if ((inState == GameStates.EndLevel))
-        {
-            StopTree(true);
-        }
-        else if(inState == GameStates.WarRoom)
-        {
-            Deselected();
-            DisableEntity();
-        }
-        else if (inState == GameStates.Pause)
-        {
-            PauseEntity(true);
-        }
-        else if (inState == GameStates.PlayingLevel)
-        {
-            PauseEntity(false);
-        }
-    }
-
-    
 
     #endregion
 
@@ -305,12 +313,36 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     }
     #endregion
 
-    #region Sounds method
+    #region Sound methods
 
     public void AttachAndPlaySound(string eventPath)
     {
         HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(eventPath);
         m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
+    }
+
+    #endregion
+
+    #region GameState event
+    protected virtual void GameStateChanged(GameStates inState)
+    {
+        if ((inState == GameStates.EndLevel))
+        {
+            StopTree(true);
+        }
+        else if(inState == GameStates.WarRoom)
+        {
+            Deselected();
+            DisableEntity();
+        }
+        else if (inState == GameStates.Pause)
+        {
+            PauseEntity(true);
+        }
+        else if (inState == GameStates.PlayingLevel)
+        {
+            PauseEntity(false);
+        }
     }
 
     #endregion

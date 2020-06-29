@@ -496,13 +496,13 @@ public class GeneralSettings : EditorWindow
 
     void SaveData()
     {
-        string dataPath = "Assets/Developers/Chris/test/TEST_EntityStats/";
+        string dataPath = "Assets/ScriptableObjects/Entities/";
 
         switch (dataSetting)
         {
             case SettingType.Unit:
 
-                dataPath += "UnitsTest/" + EntityDesignerWindow.UnitData.Name + ".asset";
+                dataPath += "Units/" + EntityDesignerWindow.UnitData.Name + ".asset";
                 AssetDatabase.CreateAsset(EntityDesignerWindow.UnitData, dataPath);
 
                 AssetDatabase.SaveAssets();
@@ -511,7 +511,7 @@ public class GeneralSettings : EditorWindow
 
             case SettingType.Building:
 
-                dataPath += "BuildingsTest/" + EntityDesignerWindow.BuildingData.Name + ".asset";
+                dataPath += "Buildings/" + EntityDesignerWindow.BuildingData.Name + ".asset";
                 AssetDatabase.CreateAsset(EntityDesignerWindow.BuildingData, dataPath);
 
                 AssetDatabase.SaveAssets();

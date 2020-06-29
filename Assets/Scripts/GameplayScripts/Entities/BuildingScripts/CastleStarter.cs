@@ -7,6 +7,10 @@ using BehaviorDesigner.Runtime;
 
 public class CastleStarter : BuildingBehaviour
 {
+    #region Variables
+
+    #region Spawn variables
+
     [SerializeField] private Transform[] m_towerSpawnPoints;
 
     [SerializeField] private Transform m_unitSpawnPoint;
@@ -15,6 +19,8 @@ public class CastleStarter : BuildingBehaviour
 
     [SerializeField, Tooltip("Spawn point distance from castle")]
     private float m_spawnDistance = 6;
+
+    #endregion
 
     public Transform[] m_enemyEngagePoints;
 
@@ -75,6 +81,10 @@ public class CastleStarter : BuildingBehaviour
 
     #endregion
 
+    #endregion
+
+    #region Behaviour Cycle
+
     public override void Awake()
     {
         base.Awake();
@@ -120,14 +130,13 @@ public class CastleStarter : BuildingBehaviour
         RefreshHealthbarSize(m_buildingStats.MaxHp);
     }
 
-    
+    #endregion
 
     public override void Click()
     {
         base.Click();
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Select_Castle);
     }
-
 
     #region Create Entities Methods
     public void SpawnTroop()
@@ -194,7 +203,22 @@ public class CastleStarter : BuildingBehaviour
 
             if (timer >= stats.RespawnTime)
             {
-                GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, m_unitSpawnPoint.position.SnapLocation(), true);
+                for (int i = 0; i < 8; i++)
+                {
+                    Vector3 pos = GetPoint(transform.position, m_spawnDistance, i);
+
+                    if (!Physics.CheckSphere(pos, 1, LayerMask.GetMask("Player")))
+                    {
+                        Debug.Log("Trying to spaen a unit form the castle");
+                        GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, pos, false);
+
+                        if (troop != null && m_isFreezed)
+                        {
+                            troop.FreezeMode(true);
+                        }
+                        break;
+                    }
+                }
                 go = false;
             }
             yield return new WaitForEndOfFrame();
@@ -207,9 +231,6 @@ public class CastleStarter : BuildingBehaviour
     {
         m_canSpawn = !inValue;
     }
-
-
-
 
     #region Hp methods
     public override bool TakeDamage(int Damage)
@@ -225,12 +246,9 @@ public class CastleStarter : BuildingBehaviour
     {
         StopAllCoroutines();
 
-
-
         BehaviorManager.instance.enabled = false;
         HFScenesManager.Instance.EndCurrentLevel(false);
     }
-
 
     #region HealthBar methods
 

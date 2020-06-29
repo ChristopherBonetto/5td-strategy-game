@@ -759,6 +759,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
+    #region Specialization
     public override void Specialization(UnitType type)
     {
         if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost))
@@ -777,6 +778,8 @@ public class Troop : EntityBehavior, ICanMove
             unit?.UpdateUnitVisualState(true);
         }
     }
+
+    #endregion
 
     #region Click Interface
 
