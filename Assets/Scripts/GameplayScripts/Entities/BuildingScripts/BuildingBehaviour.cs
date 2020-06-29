@@ -20,6 +20,7 @@ public class BuildingBehaviour : EntityBehavior
     }
     private float m_attackDelayElapsed = 0;
 	public GameObject RangeFeedback;
+    public float ExplosionRadius = 3.5f;
 
     protected override void OnEnable()
     {
@@ -176,14 +177,20 @@ public class BuildingBehaviour : EntityBehavior
 
         int count = target.UnitList.Count;
 
-        if ((bool)m_behaviorTree.GetVariable("DamageMultipleTargets").GetValue())
+        if (m_view.AoEDamage)
         {
-            for (int i = 0; i < count; i++)
+            Collider[] collisions = Physics.OverlapSphere(target.transform.position, ExplosionRadius, LayerMask.GetMask("Enemy"));
+
+            for (int i = 0; i < collisions.Length; i++)
             {
-                if (target.UnitList != null && target.UnitList[i].TakeDamage(m_buildingStats.Damage))
+                if (target != null && target.UnitList != null && collisions[i].GetComponentInChildren<Unit>().TakeDamage(m_buildingStats.Damage))
                 {
                     FocusEntity = null;
                 }
+                //if (target.UnitList != null && target.UnitList[i].TakeDamage(m_buildingStats.Damage))
+                //{
+                //    FocusEntity = null;
+                //}
             }
         }
         else

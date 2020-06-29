@@ -23,6 +23,8 @@ namespace HF.Unit
         private HFPoolID m_BulletID;
         public HFPoolID BulletID => m_BulletID;
 
+        public bool AoEDamage = false;
+
         [SerializeField]
         private float m_BulletSpeed;
         public float BulletSpeed => m_BulletSpeed;
