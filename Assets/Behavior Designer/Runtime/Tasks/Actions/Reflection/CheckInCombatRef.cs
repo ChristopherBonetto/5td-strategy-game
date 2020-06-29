@@ -10,21 +10,25 @@ namespace BehaviorDesigner.Runtime.Tasks
     public class CheckInCombatRef : Action
     {
         [Tooltip("The GameObject to get the field on")]
-        public SharedTroop troopRef;
+        private Troop troopRef;
 
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            troopRef = gameObject.GetComponentInParent<Troop>();
+        }
         public override TaskStatus OnUpdate()
         {
-            if (troopRef == null || !troopRef.Value.gameObject.activeInHierarchy)
+            if (troopRef == null || !troopRef.gameObject.activeInHierarchy)
             {
                 Debug.LogWarning("Unable to get field - field value is null");
                 return TaskStatus.Failure;
             }
 
-            //if (troopRef.Value.m_currentBattle == null)
-            //{
-            //    Debug.Log(gameObject.transform.name + " captain no in combat");
-            //    return TaskStatus.Failure;
-            //}
+            if(troopRef.FocusEntity == null && troopRef.TargetCastle == null)
+            {
+                return TaskStatus.Failure;
+            }
 
             return TaskStatus.Success;
         }

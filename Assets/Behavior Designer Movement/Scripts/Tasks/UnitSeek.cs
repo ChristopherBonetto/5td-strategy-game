@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using UnityEngine;
 
 namespace BehaviorDesigner.Runtime.Tasks.Movement
 {
@@ -9,17 +10,19 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     public class UnitSeek : NavMeshMovement
     {
         [Tooltip("The GameObject that the agent is seeking")]
-        public SharedUnit unitRef;
+        public Unit unitRef;
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
 
-        private float m_arriveDistStartValue;
+        public override void OnAwake()
+        {
+            base.OnAwake();
+            unitRef = gameObject.GetComponent<Unit>();
+        }
 
         public override void OnStart()
         {
             base.OnStart();
-
-            m_arriveDistStartValue = arriveDistance.Value;
 
             SetDestination(Target());
         }
@@ -30,15 +33,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (HasArrived())
             {
-                arriveDistance = m_arriveDistStartValue;
-
-                if(unitRef.Value.FocusBuilding != null)
+                if(unitRef.FocusBuilding != null)
                 {
-                    unitRef.Value.transform.LookAt(unitRef.Value.FocusBuilding.transform.position);
+                    unitRef.transform.LookAt(unitRef.FocusBuilding.transform.position);
                 }
-                else if (unitRef.Value.FocusUnit != null)
+                else if (unitRef.FocusUnit != null)
                 {
-                    unitRef.Value.transform.LookAt(unitRef.Value.FocusUnit.transform.position);
+                    unitRef.transform.LookAt(unitRef.FocusUnit.transform.position);
                 }
 
                 return TaskStatus.Success;
@@ -52,14 +53,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return targetPosition if target is null
         private Vector3 Target()
         {
-            if (unitRef.Value.FocusUnit != null)
+            if (unitRef.FocusUnit != null)
             {
-                return unitRef.Value.FocusUnit.transform.position;
+                return unitRef.FocusUnit.transform.position;
             }
-            else if (unitRef.Value.FocusBuilding != null)
+            else if (unitRef.FocusBuilding != null)
             {
-                arriveDistance = 0.1f;
-                return unitRef.Value.UnitFormationPos;
+                return unitRef.UnitFormationPos;
             }
             return targetPosition.Value;
         }
@@ -67,9 +67,49 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             base.OnReset();
-            arriveDistance = m_arriveDistStartValue;
             unitRef = null;
             targetPosition = Vector3.zero;
+        }
+
+        protected override bool HasArrived()
+        {
+            // The path hasn't been computed yet if the path is pending.
+            float remainingDistance;
+            if (navMeshAgent.pathPending)
+            {
+                remainingDistance = float.PositiveInfinity;
+            }
+            else
+            {
+                remainingDistance = navMeshAgent.remainingDistance;
+            }
+
+            Transform tempFocus = null;
+
+            if(unitRef.FocusUnit != null)
+            {
+                tempFocus = unitRef.FocusUnit.transform;
+            }
+            else if(unitRef.FocusBuilding != null)
+            {
+                tempFocus = unitRef.FocusBuilding.transform;
+            }
+
+            if (tempFocus != null)
+            {
+                float dist = Vector3.Distance(navMeshAgent.transform.position, tempFocus.position);
+
+                if (remainingDistance == 0)
+                {
+                    remainingDistance = float.PositiveInfinity;
+                }
+
+                if (dist <= arriveDistance.Value)
+                {
+                    return true;
+                }
+            }
+            return remainingDistance <= arriveDistance.Value;
         }
     }
 }

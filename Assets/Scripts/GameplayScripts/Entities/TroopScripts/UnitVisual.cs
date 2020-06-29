@@ -131,7 +131,6 @@ public class UnitVisual : MonoBehaviour
         if (ScaleWithMAXHP)
         {
             float factor = 25*Mathf.Log(inValue+(inValue/10)/10);
-            Debug.Log(inValue);
             //Length = inValue * 2;
             HealthbarRect.sizeDelta = new Vector2(factor , HealthbarRect.sizeDelta.y);
             

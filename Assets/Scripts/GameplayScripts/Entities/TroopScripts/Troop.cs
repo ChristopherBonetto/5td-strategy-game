@@ -124,6 +124,8 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
+    private Coroutine ciao = null;
+
     #region Behaviour Cycle
 
     protected override void OnDisable()
@@ -385,11 +387,16 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
+        if(ciao != null)
+        {
+            return;
+        }
+
         if (FocusEntity != null && FocusEntity is Troop) { StartCoroutine(Escape(2f)); }
 
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
-        Agent.SetDestination(endPosition);
+        //Agent.SetDestination(endPosition);
 
         SetNewTroopState(TroopStates.GoToDestination);
     }
@@ -825,43 +832,65 @@ public class Troop : EntityBehavior, ICanMove
 
     public void TroopAttack(Troop inTroop)
     {
-        inTroop.IsBusy = true;
-        this.IsBusy = true;
-
-        inTroop.Agent.isStopped = true;
-        inTroop.StopTree(true);
-
-        this.Agent.isStopped = true;
-        this.StopTree(true);
-
-        inTroop.FocusEntity = this as Troop;
-
-        int enemyIndex = 0;
-        int playerIndex = 0;
-
-        for (int i = 0; i < UnitList.Count; i++)
+        if(m_troopStats.AttackType == AttackType.MELEE)
         {
-            enemyIndex = Mathf.Max(0, enemyIndex);
+            inTroop.IsBusy = true;
+            this.IsBusy = true;
 
-            if (!DeathUnit.Contains(UnitList[i]))
+            inTroop.Agent.isStopped = true;
+            inTroop.StopTree(true);
+
+            this.Agent.isStopped = true;
+            this.StopTree(true);
+
+            inTroop.FocusEntity = this as Troop;
+
+            int enemyIndex = 0;
+            int playerIndex = 0;
+
+            for (int i = 0; i < UnitList.Count; i++)
             {
-                
-                UnitList[i].AssignFocusToUnit(inTroop.UnitList[enemyIndex]);
-                UnitList[i].StopTree(false);
+                enemyIndex = Mathf.Max(0, enemyIndex);
+
+                if (!DeathUnit.Contains(UnitList[i]))
+                {
+
+                    UnitList[i].AssignFocusToUnit(inTroop.UnitList[enemyIndex]);
+                    UnitList[i].StopTree(false);
+                }
+                enemyIndex = (enemyIndex + 1) % inTroop.UnitList.Count;
             }
-            enemyIndex = (enemyIndex + 1) % inTroop.UnitList.Count;
+
+            for (int i = 0; i < inTroop.UnitList.Count; i++)
+            {
+                playerIndex = Mathf.Max(0, playerIndex);
+
+                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
+                {
+                    inTroop.UnitList[i].AssignFocusToUnit(UnitList[playerIndex]);
+                    inTroop.UnitList[i].StopTree(false);
+                }
+                playerIndex = (playerIndex + 1) % inTroop.UnitList.Count;
+            }
         }
-
-        for (int i = 0; i < inTroop.UnitList.Count; i++)
+        else if(m_troopStats.AttackType == AttackType.RANGED)
         {
-            playerIndex = Mathf.Max(0, playerIndex);
+            this.Agent.isStopped = true;
 
-            if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
+            int enemyIndex = 0;
+
+            for (int i = 0; i < UnitList.Count; i++)
             {
-                inTroop.UnitList[i].AssignFocusToUnit(UnitList[playerIndex]);
-                inTroop.UnitList[i].StopTree(false);
+                enemyIndex = Mathf.Max(0, enemyIndex);
+
+                if (!DeathUnit.Contains(UnitList[i]))
+                {
+
+                    UnitList[i].AssignFocusToUnit(inTroop.UnitList[enemyIndex]);
+                    UnitList[i].StopTree(false);
+                }
+                enemyIndex = (enemyIndex + 1) % inTroop.UnitList.Count;
             }
-            playerIndex = (playerIndex + 1) % inTroop.UnitList.Count;
         }
     }
 
@@ -917,7 +946,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         if(inEntity == FocusEntity)
         {
-            StartCoroutine(ResetAfterFight());
+            ciao = StartCoroutine(ResetAfterFight());
         }
     }
 
@@ -929,21 +958,19 @@ public class Troop : EntityBehavior, ICanMove
         foreach (Unit unit in UnitList)
         {
             unit.AssignFocusToUnit((Unit)null);
-
-            if (unit.UnitAgent.isActiveAndEnabled)
-            {
-                unit.UnitAgent.isStopped = false;
-                unit.UnitAgent.ResetPath();
-            }
             unit.StopTree(true);
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.3f);
+        
+        MoveFromTo(AliveUnit.transform.position);
 
         FocusEntity = null;
         IsBusy = false;
 
         StopTree(false);
+
+        ciao = null;
     }
 
     #endregion

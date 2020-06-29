@@ -169,7 +169,13 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     #endregion
 
-    #region Behavior Tree
+    #region Reset unit
+
+    public void StopUnit()
+    {
+        AssignFocusToUnit((Unit)null);
+        StopTree(true);
+    }
 
     public void StopTree(bool inValue)
     {
