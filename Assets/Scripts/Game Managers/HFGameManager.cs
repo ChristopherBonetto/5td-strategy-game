@@ -214,6 +214,7 @@ public class HFGameManager : Singleton<HFGameManager>
         while(m_playerData == null)
         {
             PlayerData = HFSavingManager.LoadGame("NoName");
+            PlayerData.LevelsCompletedCounter = 1;
             yield return new WaitForEndOfFrame();
         }
         

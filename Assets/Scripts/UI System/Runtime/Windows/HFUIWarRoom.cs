@@ -24,7 +24,6 @@ namespace HF.Refactoring
         {
             HFScenesManager sceneM = HFScenesManager.Instance;
             HFLevelContainerSO levelContainer = sceneM.LevelContainer;
-            sceneM.LevelContainer.Levels[0].m_levelCompleted = true;
 
             for (int i = 0; i < m_loadLevelButtons.Length; i++)
             {
