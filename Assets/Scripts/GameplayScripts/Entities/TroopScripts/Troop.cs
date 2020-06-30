@@ -434,10 +434,13 @@ public class Troop : EntityBehavior, ICanMove
 
         IsBusy = true;
         FocusEntity = null;
-        StopTree(false);
 
-        ResetFormation();
+        StopTree(false);
+        AssignTreeStats();
+
+        //ResetFormation();
         SetNewTroopState(TroopStates.Idle);
+
 
         yield return new WaitForSeconds(inDestinationTime);
 
