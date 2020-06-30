@@ -398,6 +398,9 @@ public class Troop : EntityBehavior, ICanMove
 
     IEnumerator Reset(float inDestinationTime = 0.3f)
     {
+        //StopTree(true);
+        IsBusy = true;
+
         if (FocusEntity != null && FocusEntity is Troop && FocusEntity.FocusEntity == this)
         {
             Troop troop = FocusEntity as Troop;
@@ -432,17 +435,16 @@ public class Troop : EntityBehavior, ICanMove
             }
         }
 
-        IsBusy = true;
         FocusEntity = null;
+
+        ResetFormation();
+
+        yield return new WaitForSeconds(inDestinationTime);
+
+        SetNewTroopState(TroopStates.Idle);
 
         StopTree(false);
         AssignTreeStats();
-
-        //ResetFormation();
-        SetNewTroopState(TroopStates.Idle);
-
-
-        yield return new WaitForSeconds(inDestinationTime);
 
         m_resetCoroutine = null;
         IsBusy = false;
