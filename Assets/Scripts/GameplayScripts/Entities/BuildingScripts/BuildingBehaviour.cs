@@ -144,7 +144,7 @@ public class BuildingBehaviour : EntityBehavior
 
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {
-                m_view.SpawnBullet();
+                m_view.SpawnBullet(EntityPlayerType);
                 StartCoroutine(DealDamge(m_focusEntity));
                 m_attackDelayElapsed = 0;
             }

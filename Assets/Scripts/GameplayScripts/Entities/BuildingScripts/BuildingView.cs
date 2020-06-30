@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Types;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -96,7 +97,7 @@ namespace HF.Unit
             }
         }
 
-        public void SpawnBullet()
+        public void SpawnBullet(PlayerType inPlayerType)
         {
             if(anim!=null)
             {
@@ -119,8 +120,7 @@ namespace HF.Unit
                 go.transform.rotation = m_SpawnPoint.rotation;
 
                 HFBullet bullet = go.GetComponent<HFBullet>();
-                bullet.SetParameters(new HFBulletParameters(null, 0, 0, m_BulletSpeed));
-                bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
+                bullet.SetParameters(new HFBulletParameters(inPlayerType, 0, 0, m_BulletSpeed));
                 go.SetActive(true);
             }
         }

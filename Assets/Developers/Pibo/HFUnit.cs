@@ -1205,14 +1205,14 @@ namespace HF
 				if (soldier.gameObject.activeSelf)
 				{
 					HFBullet bullet = Instantiate(m_bulletPrefab, soldier.BulletSpawn.position, soldier.BulletSpawn.rotation);
-					HFBulletParameters bulletParams = new HFBulletParameters(
-						this,
-						m_stats[HFStatistics.UnitDamage],
-						m_stats[HFStatistics.BuildingDamage],
-						m_stats[HFStatistics.BulletSpeed] * speedModifier
-					);
-					bullet.SetParameters(bulletParams);
-					bullet.SetTarget(target);
+					//HFBulletParameters bulletParams = new HFBulletParameters(
+					//	this,
+					//	m_stats[HFStatistics.UnitDamage],
+					//	m_stats[HFStatistics.BuildingDamage],
+					//	m_stats[HFStatistics.BulletSpeed] * speedModifier
+					//);
+					//bullet.SetParameters(bulletParams);
+					//bullet.SetTarget(target);
 				}
 			}
 		}

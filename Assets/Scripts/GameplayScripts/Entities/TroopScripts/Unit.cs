@@ -201,8 +201,7 @@ public class Unit : MonoBehaviour, ITakeDamage
                 HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(m_troopRef.m_troopStats.Projectile.ID).GetComponent<HF.HFBullet>();
                 bullet.transform.rotation = BulletSpawnPoint.rotation;
                 bullet.transform.position = BulletSpawnPoint.position;
-                bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
-                bullet.SetParameters(new HF.HFBulletParameters(null, 0, 0, 50));
+                bullet.SetParameters(new HF.HFBulletParameters(TroopRef.EntityPlayerType, 0, 0, 50));
                 bullet.gameObject.SetActive(true);
 
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
@@ -216,12 +215,11 @@ public class Unit : MonoBehaviour, ITakeDamage
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
             {
-                m_BulletSpawnPoint.forward = (FocusUnit.transform.position - transform.position).normalized;
+                m_BulletSpawnPoint.forward = (FocusBuilding.transform.position - transform.position).normalized;
                 HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(m_troopRef.m_troopStats.Projectile.ID).GetComponent<HF.HFBullet>();
                 bullet.transform.rotation = BulletSpawnPoint.rotation;
                 bullet.transform.position = BulletSpawnPoint.position;
-                bullet.SetAllyLayer(LayerMask.LayerToName(gameObject.layer));
-                bullet.SetParameters(new HF.HFBulletParameters(null, 0, 0, 10));
+                bullet.SetParameters(new HF.HFBulletParameters(TroopRef.EntityPlayerType, 0, 0, 10));
                 bullet.gameObject.SetActive(true);
 
                 m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);

@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Types;
 
 namespace HF
 {
 	public struct HFBulletParameters
 	{
-		public HFUnit Instigator;
+		public PlayerType Instigator;
 		public float UnitDamage;
 		public float BuildingDamage;
 		public float Speed;
 
-		public HFBulletParameters(HFUnit inInstigator, float inUnitDamage = 0f, float inBuildingDamage = 0f, float inSpeed = 10f)
+		public HFBulletParameters(PlayerType inInstigator, float inUnitDamage = 0f, float inBuildingDamage = 0f, float inSpeed = 10f)
 		{
 			Instigator = inInstigator;
 			UnitDamage = inUnitDamage;
@@ -21,8 +22,6 @@ namespace HF
 
 	public class HFBullet : MonoBehaviour
 	{
-		private HFUnit m_target;
-
 		[SerializeField]
 		private Renderer m_mesh = null;
 
@@ -31,7 +30,6 @@ namespace HF
 
         [SerializeField]
 		private ParticleSystem m_explosionHit = null;
-
 
         private Transform m_transform;
 
@@ -77,19 +75,22 @@ namespace HF
 		/// Put the layer of the gameobject that spawn it.
 		/// </summary>
 		/// <param name="layer"></param>
-		public void SetAllyLayer(string layer) 
+		private void SetAllyLayer(string layer) 
 		{
 			m_layer = layer;
-		}
-
-		public void SetTarget(HFUnit inTarget)
-		{
-			m_target = inTarget;
 		}
 
 		public void SetParameters(HFBulletParameters inParameters)
 		{
 			m_parameters = inParameters;
+			if(m_parameters.Instigator == PlayerType.AI)
+			{
+				SetAllyLayer(LayerMask.LayerToName(GameController.Instance.m_aiLayer));
+			}
+			else if(m_parameters.Instigator == PlayerType.Player)
+			{
+				SetAllyLayer(LayerMask.LayerToName(GameController.Instance.m_playerLayer));
+			}
 		}
 
         IEnumerator DisableBullet()
@@ -107,10 +108,5 @@ namespace HF
             yield return new WaitForSeconds(.5f);
             gameObject.SetActive(false);
         }
-
-       
-
-        
-
     }
 }
