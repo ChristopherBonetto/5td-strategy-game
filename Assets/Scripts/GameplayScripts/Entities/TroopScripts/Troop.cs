@@ -124,7 +124,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
-    private Coroutine ciao = null;
+    private Coroutine m_resetCoroutine = null;
 
     #region Behaviour Cycle
 
@@ -387,12 +387,7 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
-        if(ciao != null)
-        {
-            return;
-        }
-
-        if (FocusEntity != null && FocusEntity is Troop) { StartCoroutine(Escape(2f)); }
+        if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(3f); }
 
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
@@ -401,11 +396,9 @@ public class Troop : EntityBehavior, ICanMove
         SetNewTroopState(TroopStates.GoToDestination);
     }
 
-    IEnumerator Escape(float inValue)
+    IEnumerator Reset(float inDestinationTime = 0.3f)
     {
-        if (FocusEntity == null) yield return null;
-
-        if (FocusEntity is Troop)
+        if (FocusEntity != null && FocusEntity is Troop && FocusEntity.FocusEntity == this)
         {
             Troop troop = FocusEntity as Troop;
 
@@ -442,8 +435,13 @@ public class Troop : EntityBehavior, ICanMove
         IsBusy = true;
         FocusEntity = null;
         StopTree(false);
-        yield return new WaitForSeconds(inValue);
 
+        ResetFormation();
+        SetNewTroopState(TroopStates.Idle);
+
+        yield return new WaitForSeconds(inDestinationTime);
+
+        m_resetCoroutine = null;
         IsBusy = false;
     }
 
@@ -946,31 +944,16 @@ public class Troop : EntityBehavior, ICanMove
     {
         if(inEntity == FocusEntity)
         {
-            ciao = StartCoroutine(ResetAfterFight());
+            ResetTroop();
         }
     }
 
-    IEnumerator ResetAfterFight()
+    public void ResetTroop(float inDestinationTime = 0.3f)
     {
-        FocusEntity = null;
-        IsBusy = false;
-
-        foreach (Unit unit in UnitList)
+        if(m_resetCoroutine == null)
         {
-            unit.AssignFocusToUnit((Unit)null);
-            unit.StopTree(true);
+            m_resetCoroutine = StartCoroutine(Reset(inDestinationTime));
         }
-
-        yield return new WaitForSeconds(0.3f);
-        
-        MoveFromTo(AliveUnit.transform.position);
-
-        FocusEntity = null;
-        IsBusy = false;
-
-        StopTree(false);
-
-        ciao = null;
     }
 
     #endregion
