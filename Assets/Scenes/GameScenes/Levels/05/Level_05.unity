@@ -656,17 +656,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -4609128360709998781, guid: 3281f7e3cd774e2469ab0e698014dbae,
-        type: 3}
-      propertyPath: m_BeforeStackBundles.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4609128360709998781, guid: 3281f7e3cd774e2469ab0e698014dbae,
-        type: 3}
-      propertyPath: m_BeforeStackBundles.Array.data[0].assemblyQualifiedName
-      value: PostProcessOutline, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
-        PublicKeyToken=null
-      objectReference: {fileID: 0}
     - target: {fileID: 3590807787343524548, guid: 3281f7e3cd774e2469ab0e698014dbae,
         type: 3}
       propertyPath: m_Name
@@ -675,12 +664,12 @@ PrefabInstance:
     - target: {fileID: 3590807787343524547, guid: 3281f7e3cd774e2469ab0e698014dbae,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 693
       objectReference: {fileID: 0}
     - target: {fileID: 3590807787343524547, guid: 3281f7e3cd774e2469ab0e698014dbae,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 3590807787343524547, guid: 3281f7e3cd774e2469ab0e698014dbae,
         type: 3}
@@ -737,6 +726,17 @@ PrefabInstance:
       propertyPath: m_target
       value: 
       objectReference: {fileID: 1902786220}
+    - target: {fileID: -4609128360709998781, guid: 3281f7e3cd774e2469ab0e698014dbae,
+        type: 3}
+      propertyPath: m_BeforeStackBundles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4609128360709998781, guid: 3281f7e3cd774e2469ab0e698014dbae,
+        type: 3}
+      propertyPath: m_BeforeStackBundles.Array.data[0].assemblyQualifiedName
+      value: PostProcessOutline, Assembly-CSharp, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3281f7e3cd774e2469ab0e698014dbae, type: 3}
 --- !u!1001 &495778788
@@ -1047,6 +1047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c21f9444a78782b4e8248502793c55f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sunLight: {fileID: 515895404}
 --- !u!1001 &647828217
 PrefabInstance:
   m_ObjectHideFlags: 0
