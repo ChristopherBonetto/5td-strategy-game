@@ -25,7 +25,6 @@ namespace HF.Refactoring
         public Sequence m_victorySequence;
         public Sequence m_defeatSequence;
 
-
         private void Awake()
         {
             m_victorySequence = DOTween.Sequence();
@@ -36,6 +35,12 @@ namespace HF.Refactoring
                 .Append(FadeBackground.DOColor(victoryBackgroundColor, 1f))
                 .Append(VictoryBanner.transform.DOScale(1f, 1f))
                 .AppendCallback(() => SetActiveElements(true, /*RestartLevelButton.gameObject, NextLevelButton.gameObject,*/ ReturnToMainMenuButton.gameObject))
+                .AppendCallback(() =>
+                {
+                    if (HFGameManager.Instance.CurrentGameState != GameStates.EndLevel)
+                        return;
+                    HFUIManager.Instance.TryGetWindow(HFUIWindowID.LEVEL_ENDING);
+                })
                 .Pause();
             m_victorySequence.SetAutoKill(false);
 
@@ -44,6 +49,12 @@ namespace HF.Refactoring
                 .Append(FadeBackground.DOColor(defeatBackgroundColor, 1f))
                 .Append(DefeatBanner.transform.DOScale(1f, 1f))
                 .AppendCallback(() => SetActiveElements(true, /*RestartLevelButton.gameObject,*/ ReturnToMainMenuButton.gameObject))
+                .AppendCallback(() =>
+                {
+                    if (HFGameManager.Instance.CurrentGameState != GameStates.EndLevel)
+                        return;
+                    HFUIManager.Instance.TryGetWindow(HFUIWindowID.LEVEL_ENDING);
+                })
                 .Pause();
             m_defeatSequence.SetAutoKill(false);
         }
