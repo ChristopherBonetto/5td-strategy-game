@@ -111,6 +111,8 @@ public class Troop : EntityBehavior, ICanMove
     public CastleStarter m_targetCastle;
     public CastleStarter TargetCastle { get => m_targetCastle; }
 
+    private Coroutine m_resetCoroutine = null;
+
     #endregion
 
     #region Generic Var
@@ -124,7 +126,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
-    private Coroutine m_resetCoroutine = null;
+    
 
     #region Behaviour Cycle
 
@@ -145,6 +147,12 @@ public class Troop : EntityBehavior, ICanMove
     private void Update()
     {
         ResurrectDeathUnits();
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            AliveUnit.TakeDamage(100);
+        }
+
     }
 
     #endregion
@@ -220,7 +228,6 @@ public class Troop : EntityBehavior, ICanMove
 
     public void RefreshUnitsVisual(UnitType inType, int inValue)
     {
-        
         for (int i = 0; i < UnitList.Count; i++)
         {
             if (UnitList[i].VisualObj != null)
@@ -240,8 +247,10 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].VisualObj.transform.rotation = UnitList[i].UnitAgent.transform.rotation;
                 UnitList[i].VisualObj.SetActive(true);
 
-                UnitList[i].AssignValuesToTree();
                 UnitList[i].RefreshHp();
+                UnitList[i].AssignValuesToTree();
+
+                UnitList[i].UpdateUnitVisualState(this == InputReaderManager.Instance.CurrentEntity);
 
                 UnitList[i].transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
 
@@ -263,6 +272,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (inUnit.VisualObj != null)
         {
+            inUnit.UpdateUnitVisualState(false);
             inUnit.VisualObj.SetActive(false);
             inUnit.VisualObj.transform.parent = null;
             inUnit.VisualObj = null;
@@ -761,7 +771,7 @@ public class Troop : EntityBehavior, ICanMove
             unit.AssignValuesToTree();
             unit.RefreshHp();
 
-            unit.UpdateUnitVisualState(InputReaderManager.Instance.CurrentEntity);
+            unit.UpdateUnitVisualState(this == InputReaderManager.Instance.CurrentEntity);
 
             unit.transform.DOScale(new Vector3(1, 1, 1), 1f).SetEase(Ease.OutBack);
         }
@@ -782,11 +792,6 @@ public class Troop : EntityBehavior, ICanMove
         AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
 
         base.Specialization(type);
-
-        foreach (Unit unit in m_unitList)
-        {
-            unit?.UpdateUnitVisualState(true);
-        }
     }
 
     #endregion

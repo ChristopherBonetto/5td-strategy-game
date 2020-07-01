@@ -71,7 +71,6 @@ public class UnitVisual : MonoBehaviour
     [SerializeField] private HFPoolID m_corpse;
     #endregion
 
-
     #region Animator Variables
     [SerializeField] private Animator m_animator;
     private int runLayer;
@@ -87,8 +86,6 @@ public class UnitVisual : MonoBehaviour
         HealthbarSlider = Healthbar.GetComponent<Slider>();
         HealthbarRect = Healthbar.GetComponent<RectTransform>();
         HealthbarCanvas = Healthbar.GetComponent<CanvasGroup>();
-        SetHealthBarAlpha(0);
-        SelectionCircle.SetActive(false);
 
       if(m_animator!=null)
         {
@@ -99,17 +96,13 @@ public class UnitVisual : MonoBehaviour
 
     void OnEnable()
     {
-        SetHealthbar(1f); //Reset Healthbar value to its maximum
-        Active.Add(this);
-
         if (m_animator == null) return;
         m_animator.SetLayerWeight(2, 1f);
         m_animator.SetLayerWeight(topLayer, 0);
-        Healthbar.gameObject.SetActive(true);
     }
     void OnDisable()
     {
-        Active.Remove(this);
+        EnableDisableHealthBar(false);
     }
     private void Update()
     {
@@ -120,6 +113,24 @@ public class UnitVisual : MonoBehaviour
     }
 
     #region HealthBar methods
+
+    public void EnableDisableHealthBar(bool inValue)
+    {
+        if (Healthbar == null) return;
+
+        Healthbar.gameObject.SetActive(inValue);
+
+        if (inValue)
+        {
+            SetHealthBarAlpha(1f);
+            Active.Add(this);
+        }
+        else
+        {
+            SetHealthBarAlpha(0f);
+            Active.Remove(this);
+        }
+    }
 
     public void SetHealthbar(float NormalizedPercentage) //Changes the fill of the healthbar based on a provided normalized value;
     {

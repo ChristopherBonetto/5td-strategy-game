@@ -330,19 +330,8 @@ public class Unit : MonoBehaviour, ITakeDamage
     {
         if (m_visualScript == null) { return; }
 
-        if (state == true)
-        {
-            //Lerp BG and FG alpha of healthbar and Selectioncircle from 0 to 1 with a preferred ease, 
-            m_visualScript.SetHealthBarAlpha(1f);
-            m_visualScript.SelectionCircle.SetActive(true);
-
-        }
-        else
-        {
-            //disable
-            m_visualScript.SetHealthBarAlpha(0f);
-            m_visualScript.SelectionCircle.SetActive(false);
-        }
+        m_visualScript.EnableDisableHealthBar(state);
+        m_visualScript.SelectionCircle.SetActive(state);
     }
 
     public void ResetUnitRotation()
