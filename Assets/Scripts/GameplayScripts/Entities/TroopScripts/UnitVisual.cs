@@ -144,7 +144,6 @@ public class UnitVisual : MonoBehaviour
             float factor = 25*Mathf.Log(inValue+(inValue/10)/10);
             //Length = inValue * 2;
             HealthbarRect.sizeDelta = new Vector2(factor , HealthbarRect.sizeDelta.y);
-            
         }
     }
 

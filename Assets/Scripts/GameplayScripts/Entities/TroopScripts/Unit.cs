@@ -24,7 +24,9 @@ public class Unit : MonoBehaviour, ITakeDamage
     public Transform BulletSpawnPoint => m_BulletSpawnPoint;
 
     private float m_unitHp;
+    private float m_previousHp = 1;
     public float UnitHp { get => m_unitHp; }
+    public float PreviousHp { get { return m_previousHp; } set { m_previousHp = value; } }
     private bool m_canShowHealthBar = true;
 
     private IAttackTypes m_unitAttackType;
@@ -107,6 +109,7 @@ public class Unit : MonoBehaviour, ITakeDamage
         StopTree(true);
         FocusUnit = null;
         FocusBuilding = null;
+        PreviousHp = 1f;
     }
     private void Awake()
     {
@@ -249,10 +252,15 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     #region Health
 
-    public void RefreshHp()
+    public void SetUnitHp(float inValue)
     {
-        m_unitHp = m_troopRef.GetStats().MaxHp;
+        float currentHp = inValue * TroopRef.GetStats().MaxHp;
+
+        m_unitHp = currentHp;
+
         m_visualScript.RefreshHealthbarSize(TroopRef.GetStats().MaxHp);
+
+        m_visualScript.SetHealthbar(inValue);
     }
 
     public bool TakeDamage(int Damage)

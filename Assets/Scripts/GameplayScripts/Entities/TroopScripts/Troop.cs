@@ -126,7 +126,10 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
-    
+    public bool CanRefreshHp()
+    {
+        return (EntityPlayerType == PlayerType.Player && m_troopStats.UnitType == UnitType.STANDARD_ALLY || EntityPlayerType == PlayerType.AI);
+    }
 
     #region Behaviour Cycle
 
@@ -150,7 +153,7 @@ public class Troop : EntityBehavior, ICanMove
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            AliveUnit.TakeDamage(100);
+            AliveUnit.TakeDamage(5);
         }
 
     }
@@ -226,7 +229,7 @@ public class Troop : EntityBehavior, ICanMove
 
     #region Units
 
-    public void RefreshUnitsVisual(UnitType inType, int inValue)
+    public void RefreshUnitsVisual(UnitType inType, int inQuantity)
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
@@ -237,7 +240,7 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].VisualObj = null;
             }
 
-            if (i < inValue)
+            if (i < inQuantity)
             {
                 UnitList[i].gameObject.SetActive(true);
                 GameObject visualUnit = ObjectPooler.Instance.GetUnitObject(inType);
@@ -247,7 +250,8 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].VisualObj.transform.rotation = UnitList[i].UnitAgent.transform.rotation;
                 UnitList[i].VisualObj.SetActive(true);
 
-                UnitList[i].RefreshHp();
+                UnitList[i].SetUnitHp(UnitList[i].PreviousHp);
+
                 UnitList[i].AssignValuesToTree();
 
                 UnitList[i].UpdateUnitVisualState(this == InputReaderManager.Instance.CurrentEntity);
@@ -769,7 +773,7 @@ public class Troop : EntityBehavior, ICanMove
             unit.gameObject.SetActive(true);
 
             unit.AssignValuesToTree();
-            unit.RefreshHp();
+            unit.SetUnitHp(1);
 
             unit.UpdateUnitVisualState(this == InputReaderManager.Instance.CurrentEntity);
 
@@ -782,14 +786,23 @@ public class Troop : EntityBehavior, ICanMove
     #region Specialization
     public override void Specialization(UnitType type)
     {
-        if (!GameController.Instance.CheckResourcesAvailability(GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost))
+        UnitsStatsSO tempStats = GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy;
+
+        if (!GameController.Instance.CheckResourcesAvailability(tempStats.Cost))
         {
             HFEventManager.TriggerEvent(HFEventID.OnError, "You don't have enough resources");
             return;
         }
 
-        GameController.Instance.AddResources(-GameController.Instance.Collection.UnitsDictionary[type].OriginalUnitStats.Cost);
-        AssignStats(GameController.Instance.Collection.UnitsDictionary[type].UnitStatsCopy);
+        GameController.Instance.AddResources(-tempStats.Cost);
+        
+        foreach(Unit unit in UnitList)
+        {
+            float HPperc = (float)(unit.UnitHp / m_troopStats.MaxHp);
+            unit.PreviousHp = HPperc;
+        }
+
+        AssignStats(tempStats);
 
         base.Specialization(type);
     }
