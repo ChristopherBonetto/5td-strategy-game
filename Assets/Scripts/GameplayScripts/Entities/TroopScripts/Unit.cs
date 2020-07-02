@@ -267,7 +267,9 @@ public class Unit : MonoBehaviour, ITakeDamage
     {
         if (m_troopRef == null || m_troopRef.GetStats() == null) return true;
 
-        Damage = (int)Mathf.Clamp(Damage, 1, UnitHp + m_troopRef.GetStats().Armor);
+        Damage = (int)Mathf.Clamp(Damage, 1, TroopRef.GetStats().MaxHp + m_troopRef.GetStats().Armor);
+
+        //Debug.Log(TroopRef.GetStats().UnitType + " " + gameObject.transform.name + " take : " + Damage);
 
         if (UnitHp <= Damage)
         {
