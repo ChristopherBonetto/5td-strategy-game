@@ -12,7 +12,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("Should the 2D version be used?")]
         public bool usePhysics2D;
         [Tooltip("The object that we are searching for")]
-        public SharedBuilding targetObject;
+        public BuildingBehaviour targetObject;
         [Tooltip("The tag of the object that we are searching for")]
         public SharedString targetTag;
         [Tooltip("The LayerMask of the objects that we are searching for")]
@@ -29,7 +29,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("The target raycast offset relative to the pivot position")]
         public SharedVector3 targetOffset;
         [Tooltip("The object variable that will be set when a object is found what the object is")]
-        public SharedEntity returnedObject;
+        public EntityBehavior returnedObject;
 
         private List<GameObject> objects;
         // distance * distance, optimization so we don't have to take the square root
@@ -49,7 +49,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 objects = new List<GameObject>();
             }
             // if objects is null then find all of the objects using the layer mask or tag
-            if (targetObject.Value == null)
+            if (targetObject == null)
             {
                 if (!string.IsNullOrEmpty(targetTag.Value))
                 {
@@ -66,7 +66,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             }
             else
             {
-                objects.Add(targetObject.Value.gameObject);
+                objects.Add(targetObject.gameObject);
             }
         }
 
@@ -115,14 +115,14 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                         if (MovementUtility.LineOfSight(transform, offset.Value, objects[i], targetOffset.Value, usePhysics2D, ignoreLayerMask.value))
                         {
                             // the object has a magnitude less than the specified magnitude and is within sight. Set the object and return success
-                            returnedObject.Value = objects[i].GetComponent<BuildingBehaviour>();
+                            returnedObject = objects[i].GetComponent<BuildingBehaviour>();
                             return TaskStatus.Success;
                         }
                     }
                     else
                     {
                         // the object has a magnitude less than the specified magnitude. Set the object and return success
-                        returnedObject.Value = objects[i].GetComponent<BuildingBehaviour>();
+                        returnedObject = objects[i].GetComponent<BuildingBehaviour>();
                         return TaskStatus.Success;
                     }
                 }

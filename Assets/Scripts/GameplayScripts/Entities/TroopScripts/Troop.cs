@@ -126,11 +126,6 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
-    public bool CanRefreshHp()
-    {
-        return (EntityPlayerType == PlayerType.Player && m_troopStats.UnitType == UnitType.STANDARD_ALLY || EntityPlayerType == PlayerType.AI);
-    }
-
     #region Behaviour Cycle
 
     protected override void OnDisable()
@@ -367,6 +362,8 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].UnitAgent.enabled = true;
                 UnitList[i].UnitAgent.isStopped = false;
                 Vector3 destination = transform.position + m_formationPosition[i];
+
+                if(UnitList[i].UnitAgent.isActiveAndEnabled)
                 UnitList[i].UnitAgent.destination = destination;
             }
         }
@@ -385,8 +382,10 @@ public class Troop : EntityBehavior, ICanMove
                 UnitList[i].UnitAgent.enabled = true;
                 UnitList[i].UnitAgent.isStopped = false;
                 Vector3 destination = Agent.pathEndPosition + m_formationPosition[i];
-                UnitList[i].UnitAgent.SetDestination(destination);
                 UnitList[i].transform.forward = transform.forward;
+
+                if (UnitList[i].UnitAgent.isActiveAndEnabled)
+                    UnitList[i].UnitAgent.SetDestination(destination);
             }
         }
     }

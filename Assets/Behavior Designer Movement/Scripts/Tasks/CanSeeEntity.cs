@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     public class CanSeeEntity : Conditional
     {
         [Tooltip("The object that we are searching for")]
-        public SharedEntity targetObject;
+        public EntityBehavior targetObject;
         [Tooltip("Enable to see busying troops")]
         public SharedBool canSeeBusyTroop;
         [Tooltip("Enable object to detect player's building/tower")]
