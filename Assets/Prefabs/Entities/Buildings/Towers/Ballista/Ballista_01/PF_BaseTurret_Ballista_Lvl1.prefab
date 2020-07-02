@@ -148,8 +148,9 @@ MonoBehaviour:
   m_objectToRotateOnY: {fileID: 828862078411452110}
   m_objectToRotateOnX: {fileID: 0}
   m_lockSpawnBulletPoint: 0
-  m_SpawnPoint: {fileID: 4840694363284278179}
+  m_SpawnPoint: {fileID: 1042682023205174711}
   m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
+  AoEDamage: 0
   m_BulletSpeed: 50
   anim: {fileID: 5786378230752888467}
   drop: {fileID: 1610414165068327662}
@@ -400,12 +401,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3901638638354211059}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4840694363284278179 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8433269901078113104, guid: e2aacf4d47144004ca5ba9490d8f92e6,
-    type: 3}
-  m_PrefabInstance: {fileID: 3901638638354211059}
-  m_PrefabAsset: {fileID: 0}
 --- !u!95 &5786378230752888467 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7379218343646914144, guid: e2aacf4d47144004ca5ba9490d8f92e6,
@@ -418,6 +413,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 3901638638354211059}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1042682023205174711 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4061471080854773060, guid: e2aacf4d47144004ca5ba9490d8f92e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 3901638638354211059}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5001524645548951734
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -425,11 +426,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1435356430576437218}
     m_Modifications:
-    - target: {fileID: 6462419346236322318, guid: eb19485da31f4a0408fdf174da5c885b,
-        type: 3}
-      propertyPath: m_Name
-      value: VFX_Upgrade_Turret_Lv1
-      objectReference: {fileID: 0}
     - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -485,6 +481,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6462419346236322318, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_Name
+      value: VFX_Upgrade_Turret_Lv1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb19485da31f4a0408fdf174da5c885b, type: 3}
 --- !u!4 &582948214628157383 stripped
@@ -500,11 +501,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1435356430576437218}
     m_Modifications:
-    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_DropTurrets
-      objectReference: {fileID: 0}
     - target: {fileID: 1819429389894858647, guid: 354440a4d24d715439b6c1fa932dd381,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -559,6 +555,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_DropTurrets
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 354440a4d24d715439b6c1fa932dd381, type: 3}

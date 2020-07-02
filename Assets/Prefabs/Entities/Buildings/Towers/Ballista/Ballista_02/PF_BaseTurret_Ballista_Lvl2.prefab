@@ -130,8 +130,9 @@ MonoBehaviour:
   m_objectToRotateOnY: {fileID: 8739886630721729172}
   m_objectToRotateOnX: {fileID: 0}
   m_lockSpawnBulletPoint: 0
-  m_SpawnPoint: {fileID: 823279653678671115}
+  m_SpawnPoint: {fileID: 5114183419209427693}
   m_BulletID: {fileID: 11400000, guid: da7c1e5937471aa47a572bb30a8dac0e, type: 2}
+  AoEDamage: 0
   m_BulletSpeed: 50
   anim: {fileID: 2488165579472460489}
   drop: {fileID: 3111397143402193931}
@@ -316,6 +317,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1491779427654688940}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &5114183419209427693 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5929806693062691393, guid: fb0562b256583f042a4da808a2773175,
+    type: 3}
+  m_PrefabInstance: {fileID: 1491779427654688940}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1732441739538404149
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -494,11 +501,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4423182055241356954}
     m_Modifications:
-    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_DropTurrets
-      objectReference: {fileID: 0}
     - target: {fileID: 1819429389894858647, guid: 354440a4d24d715439b6c1fa932dd381,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -553,6 +555,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_DropTurrets
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 354440a4d24d715439b6c1fa932dd381, type: 3}
