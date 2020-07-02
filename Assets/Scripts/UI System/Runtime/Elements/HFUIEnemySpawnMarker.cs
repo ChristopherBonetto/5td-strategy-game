@@ -2,16 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class HFUIEnemySpawnMarker : MonoBehaviour
 {
     public Image ImageMarker;
     public Transform MarkDestination;
+    private Tween scale;
+
+    private void Awake()
+    {
+        scale = transform.DOScale(.82f, 3.5f).SetLoops(-1, LoopType.Yoyo);
+    }
 
     private void Update()
     {
         if (MarkDestination != null)
             SetEnemySpawnMarker();
+    }
+
+    private void OnEnable()
+    {
+        scale.Restart();
     }
 
     public void SetDestinationMarker(Transform transform)

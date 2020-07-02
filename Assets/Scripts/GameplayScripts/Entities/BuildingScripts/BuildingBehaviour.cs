@@ -20,7 +20,7 @@ public class BuildingBehaviour : EntityBehavior
     }
     private float m_attackDelayElapsed = 0;
 	public GameObject RangeFeedback;
-    public float ExplosionRadius = 3.5f;
+    public float ExplosionRadius = 5f;
 
     protected override void OnEnable()
     {
@@ -179,18 +179,18 @@ public class BuildingBehaviour : EntityBehavior
 
         if (m_view.AoEDamage)
         {
-            Collider[] collisions = Physics.OverlapSphere(target.transform.position, ExplosionRadius, LayerMask.GetMask("Enemy"));
+            // Check the area around an alive unit. 
+            // If we check area around the troop can happen that the unit is out of range and don't take damage.
+            Collider[] collisions = Physics.OverlapSphere(target.AliveUnit.transform.position, ExplosionRadius, LayerMask.GetMask("Enemy"));
 
             for (int i = 0; i < collisions.Length; i++)
             {
-                if (target != null && target.UnitList != null && collisions[i].GetComponentInChildren<Unit>().TakeDamage(m_buildingStats.Damage))
+                collisions[i].TryGetComponent<Unit>(out Unit unit);
+
+                if (target != null && target.UnitList != null && unit != null && unit.TakeDamage(m_buildingStats.Damage))
                 {
                     FocusEntity = null;
                 }
-                //if (target.UnitList != null && target.UnitList[i].TakeDamage(m_buildingStats.Damage))
-                //{
-                //    FocusEntity = null;
-                //}
             }
         }
         else

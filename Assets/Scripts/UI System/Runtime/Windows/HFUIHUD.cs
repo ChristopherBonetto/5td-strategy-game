@@ -106,6 +106,7 @@ namespace HF.Refactoring
         private void OnWaveCleared()
         {
             ButtonCallNextWave.gameObject.SetActive(true);
+            Marker.gameObject.SetActive(false);
         }
 
         private void OnUnitSelected(EntityBehavior entity, int team)
