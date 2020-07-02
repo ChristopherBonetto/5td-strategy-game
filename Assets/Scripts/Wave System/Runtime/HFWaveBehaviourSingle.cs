@@ -36,6 +36,7 @@ namespace HF.Refactoring
                     HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).SetEnemySpawnMarker(controller.SpawnPoints[m_spawnPointID].transform);
                 }
             }
+            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Call_wave);
         }
 
         public override void Exit(HFWaveController controller)

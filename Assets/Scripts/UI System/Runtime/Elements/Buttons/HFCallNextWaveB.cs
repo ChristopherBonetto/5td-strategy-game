@@ -35,8 +35,8 @@ public class HFCallNextWaveB : HFButton, IHFTutorial
     {
         if (m_isListeningInput && m_tutorialMatch)
         {
+            HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).Popup.gameObject.SetActive(false);
             HFEventManager.TriggerEvent(HFEventID.OnWaveBeginned);
-            HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Call_wave);
         }
     }
 

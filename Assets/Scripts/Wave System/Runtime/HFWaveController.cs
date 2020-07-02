@@ -53,6 +53,7 @@ namespace HF.Refactoring
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnWaveBeggined);
             HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, OnWaveCleared);
+            HFEventManager.SubscribeTo(HFEventID.OnWaveEnded, OnWaveEnded);
             HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
             HFEventManager.SubscribeTo<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnLevelEnd);
@@ -62,6 +63,7 @@ namespace HF.Refactoring
         {
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, OnWaveBeggined);
             HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, OnWaveCleared);
+            HFEventManager.UnsubscribeFrom(HFEventID.OnWaveEnded, OnWaveEnded);
             HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnEntityDeath, OnEntityDead);
             HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
             HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnLevelEnd);
@@ -177,7 +179,6 @@ namespace HF.Refactoring
         /// </summary>
         private void OnWaveEnded()
         {
-
         }
 
         /// <summary>
