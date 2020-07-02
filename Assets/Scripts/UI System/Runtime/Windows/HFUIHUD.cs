@@ -55,6 +55,9 @@ namespace HF.Refactoring
         [Header("Marker")]
         public HFUIEnemySpawnMarker Marker;
 
+        public Image PauseHudMask;
+        public bool IsPaused { get; set; } = false;
+
         private void OnEnable()
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
@@ -63,6 +66,7 @@ namespace HF.Refactoring
             HFEventManager.SubscribeTo<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
             HFEventManager.SubscribeTo<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
             HFEventManager.SubscribeTo<string>(HFEventID.OnError, SetMessage);
+            HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, OnPauseMode);
 
             ButtonCallNextWave.gameObject.SetActive(true);
         }
@@ -75,10 +79,7 @@ namespace HF.Refactoring
             HFEventManager.UnsubscribeFrom<EntityBehavior, int>(HFEventID.OnUnitSpecialized, OnUnitSpecialized);
             HFEventManager.UnsubscribeFrom<EntityBehavior>(HFEventID.OnUnitFight, OnUnitFight);
             HFEventManager.UnsubscribeFrom<string>(HFEventID.OnError, SetMessage);
-
-            Popup.gameObject.SetActive(false);
-            Marker.gameObject.SetActive(false);
-            Reset();
+            HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, OnPauseMode);
         }
 
         private void Awake()
@@ -176,17 +177,32 @@ namespace HF.Refactoring
         public void ReturnToLevelSelection()
         {
             OnUnitSelected(null as EntityBehavior, 0);
-            HFGameManager.Instance.ChangeGMState(GameStates.WarRoom);
+            HFGameManager.Instance.ChangeGMState(GameStates.None);
+            HFScenesManager.Instance.EndCurrentLevel(false);
             HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
             HFScenesManager.Instance.LoadSceneFromIndex(1);
+            Reset();
         }
 
         public void WinLevel()
         {
+            OnUnitSelected(null as EntityBehavior, 0);
             HFGameManager.Instance.ChangeGMState(GameStates.None);
             HFScenesManager.Instance.EndCurrentLevel(true);
             HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
             HFScenesManager.Instance.LoadSceneFromIndex(1);
+        }
+
+        private void OnPauseMode(bool pause)
+        {
+            if (pause)
+            {
+                PauseHudMask.DOFade(.8f, 0.5f);
+            }
+            else
+            {
+                PauseHudMask.DOFade(0, 0.5f);
+            }
         }
 
         public void SetUpSpecializationButton(EntityBehavior entity)
@@ -341,6 +357,20 @@ namespace HF.Refactoring
         public void Reset()
         {
             m_isTutorial = false;
+        }
+
+        public void ResetHUD()
+        {
+            Reset();
+
+            UnitSelectedContainer.SetActive(false);
+            CastleCommandContainer.SetActive(false);
+            Popup.gameObject.SetActive(false);
+            Marker.gameObject.SetActive(false);
+
+            PauseHudMask.DOFade(0, .1f);
+            IsPaused = false;
+            HFEventManager.TriggerEvent<bool>(HFEventID.OnPauseMode, IsPaused);
         }
 
         public void SetEnemySpawnMarker(Transform transform)

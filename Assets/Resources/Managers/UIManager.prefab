@@ -7668,7 +7668,7 @@ MonoBehaviour:
   - {fileID: 8262379256869666739}
   - {fileID: 3852164486321775920}
   PrefixButtonText: 
-  AllLevelsUnlocked: 1
+  AllLevelsUnlocked: 0
 --- !u!222 &4757236159672593371
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8149,6 +8149,7 @@ MonoBehaviour:
   Message: {fileID: 4122454172556503904}
   carryCapacitySlider: {fileID: 6371535956816765628}
   Marker: {fileID: 4451532435885801563}
+  PauseHudMask: {fileID: 4664758602443021874}
 --- !u!114 &4664758602443021874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8162,7 +8163,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.7058824}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -10288,7 +10289,6 @@ MonoBehaviour:
   isPaused: 0
   Events: {fileID: 11400000, guid: e4ed4c69e9996274b8d27fddc2d46329, type: 2}
   Initialization: {fileID: 11400000, guid: 2a355153ed399934f90e161e221ebd48, type: 2}
-  pauseHudMask: {fileID: 4664758602443021874}
 --- !u!114 &4200950495751383114
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -143,6 +143,9 @@ namespace HF.Refactoring
                     break;
                 case GameStates.PlayingLevel:
                     break;
+                case GameStates.EndLevel:
+                    Getwindow<HFUIHUD>(HFUIWindowID.HUD).ResetHUD();
+                    break;
                 default:
                     break;
             }

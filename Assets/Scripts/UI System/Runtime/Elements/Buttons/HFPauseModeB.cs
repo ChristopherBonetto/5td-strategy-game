@@ -10,51 +10,22 @@ namespace HF.Refactoring
 {
     public class HFPauseModeB : HFButton, IHFTutorial
     {
-       public bool isPaused = false;
-
         public TutorialID TutorialID { get; set; } = TutorialID.Pause_Mode;
         public GameEventData Events;
         public GameEventData Initialization;
-
-        public Image pauseHudMask;
-
-        
-        //public LightweightRenderPipelineAsset standard;
-        //public LightweightRenderPipelineAsset pause;
-
+        private HFUIHUD m_hudRef;
 
         private void Awake()
         {
             Initialization.AddListener(this);
             Events.AddListener(this);
-
-           
+            m_hudRef = HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD);
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
         }
-
-        private void Update()
-        {
-            if(isPaused==true)
-            {
-                if (pauseHudMask != null)
-                {
-                    pauseHudMask.DOFade(.8f, 0.5f);
-                }
-            }
-            else
-            {
-                if (pauseHudMask != null)
-                {
-                    pauseHudMask.DOFade(0, 0.5f);
-                }
-            }
-
-        }
-
 
         private void OnDestroy()
         {
@@ -64,7 +35,6 @@ namespace HF.Refactoring
 
         public void OnGlobalInitialization()
         {
-            pauseHudMask.DOFade(0, 0.5f);
             gameObject.SetActive(false);
         }
 
@@ -72,8 +42,8 @@ namespace HF.Refactoring
         {
             if (m_isListeningInput)
             {
-                isPaused = !isPaused;
-                HFEventManager.TriggerEvent<bool>(HFEventID.OnPauseMode, isPaused);
+                m_hudRef.IsPaused = !m_hudRef.IsPaused;
+                HFEventManager.TriggerEvent<bool>(HFEventID.OnPauseMode, m_hudRef.IsPaused);
                 HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID);
             }
         }
