@@ -28,6 +28,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 Debug.Log("Can't go on the castle");
             }
+
+            Debug.Log("CIAOOOO");
         }
 
         // Seek the destination. Return success once the agent has reached the destination.
@@ -80,19 +82,22 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 {
                     NavMeshAgent unit = troopRef.UnitList[i].UnitAgent;
 
-                    if (unit.isActiveAndEnabled)
+                    if (unit.isActiveAndEnabled && unit.isOnNavMesh)
                     {
-                        if (Vector3.Distance(navMeshAgent.transform.position, unit.transform.position) > 1)
+                        unit.angularSpeed = navMeshAgent.angularSpeed;
+
+                        if (Vector3.Distance(unit.transform.position, navMeshAgent.transform.position) > 3f)
                         {
-                            unit.speed = speed.Value + 1;
+                            unit.speed = speed.Value + 2;
+                            Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
+                            unit.SetDestination(unitDestin);
                         }
                         else
                         {
                             unit.speed = speed.Value;
+                            Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
+                            unit.SetDestination(unitDestin);
                         }
-                        unit.angularSpeed = navMeshAgent.angularSpeed;
-                        Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
-                        unit.SetDestination(unitDestin);
                     }
                 }
                 return true;
@@ -113,9 +118,9 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 remainingDistance = navMeshAgent.remainingDistance;
             }
 
-            if (troopRef.FocusEntity != null)
+            if (troopRef.TargetCastle != null && troopRef.EngagePointForCastle != null)
             {
-                float dist = Vector3.Distance(navMeshAgent.transform.position, troopRef.FocusEntity.transform.position);
+                float dist = Vector3.Distance(navMeshAgent.transform.position, troopRef.TargetCastle.transform.position);
 
                 if (remainingDistance == 0)
                 {
