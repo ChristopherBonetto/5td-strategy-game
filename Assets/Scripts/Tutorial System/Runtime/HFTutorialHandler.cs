@@ -23,11 +23,13 @@ public enum TutorialID
     Move_Unit,
     Carry_Turret,
     Reposition_Turret,
-    Upgrade_Unit,
+    Specialize_Unit,
     Pause_Mode,
     Call_wave,
     Select_Castle,
     Create_Ally,
+    Specialize_Turret,
+    Upgrade_Unit,
     None,
 }
 

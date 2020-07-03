@@ -5,8 +5,11 @@ using System;
 using UnityEngine.EventSystems;
 using HF.Refactoring;
 
-public class HFSpecializationB : HFButton
+public class HFSpecializationB : HFButton, IHFTutorial
 {
+    public GameEventData Event;
+    public bool RightTutorialButton = false;
+
     [SerializeField]
     private Button m_ButtonComponent;
 
@@ -43,6 +46,17 @@ public class HFSpecializationB : HFButton
     public Image CostIcon => m_CostIcon;
     public Image FadingImage => m_FadingImage;
 
+    public TutorialID TutorialID { get; set; } = TutorialID.Specialize_Unit;
+
+    private void Awake()
+    {
+        Event.AddListener(this);
+    }
+
+    private void OnDestroy()
+    {
+        Event.RemoveListener(this);
+    }
 
     protected override void OnEnable()
     {
@@ -158,5 +172,28 @@ public class HFSpecializationB : HFButton
         }
 
         Cost.color = Color.red;
+    }
+
+    public void Reset()
+    {
+        ButtonComponent.enabled = true;
+        transform.localScale = Vector3.one;
+    }
+
+    public void OnGlobalInitialization()
+    {
+    }
+
+    public void OnStepInitialization()
+    {
+        if (RightTutorialButton)
+        {
+            ButtonComponent.enabled = true;
+        }
+    }
+
+    public void OnStepCompleted()
+    {
+        ButtonComponent.enabled = true;
     }
 }

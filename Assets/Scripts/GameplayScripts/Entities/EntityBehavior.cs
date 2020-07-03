@@ -309,6 +309,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         //Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
+        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Specialize_Unit);
     }
 
     public virtual void Specialization(BuildingType type)
@@ -316,6 +317,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         //Deselected();
         HFEventManager.TriggerEvent(HFEventID.OnUnitSpecialized, this, 0);
         HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Upgrade_Unit);
+        HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Specialize_Turret);
     }
     #endregion
 

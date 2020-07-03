@@ -238,9 +238,7 @@ namespace HF.Refactoring
                     for (int i = 0; i < SpecializationButtons.Length; i++)
                     {
                         SpecializationButtons[i].Icon.sprite = TroopIconsSpecializations[i];
-
-                        if (m_isTutorial && i == 1 || !m_isTutorial)
-                            SpecializationButtons[i].gameObject.SetActive(true);
+                        SpecializationButtons[i].gameObject.SetActive(true);
                     }
                     SpecializationBar.gameObject.SetActive(true);
                     SpecializationButtons[0].AddListener(() => entity.Specialization(Types.UnitType.DEFENDER_LVL1));
@@ -342,7 +340,9 @@ namespace HF.Refactoring
         public void OnGlobalInitialization()
         {
             m_isTutorial = true;
-            
+
+            foreach (var item in SpecializationButtons)
+                item.ButtonComponent.enabled = false;
         }
 
         public void OnStepInitialization()
@@ -363,6 +363,8 @@ namespace HF.Refactoring
         public void ResetHUD()
         {
             Reset();
+            foreach (var item in SpecializationButtons)
+                item.Reset();
 
             UnitSelectedContainer.SetActive(false);
             CastleCommandContainer.SetActive(false);
