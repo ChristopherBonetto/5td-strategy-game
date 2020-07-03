@@ -7,8 +7,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     {
         [Tooltip("The speed of the agent")]
         public SharedFloat speed = 10;
-        [Tooltip("The angular speed of the agent")]
-        public SharedFloat angularSpeed = 120;
         [Tooltip("The agent has arrived when the destination is less than the specified amount. This distance should be greater than or equal to the NavMeshAgent StoppingDistance.")]
         public SharedFloat arriveDistance = 0.2f;
         [Tooltip("Should the NavMeshAgent be stopped when the task ends?")]
@@ -35,7 +33,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             navMeshAgent.enabled = true;
             navMeshAgent.speed = speed.Value;
-            navMeshAgent.angularSpeed = angularSpeed.Value;
             navMeshAgent.isStopped = false;
             startUpdateRotation = navMeshAgent.updateRotation;
             UpdateRotation(updateRotation.Value);
@@ -149,7 +146,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             speed = 10;
-            angularSpeed = 120;
             arriveDistance = 1;
             stopOnTaskEnd = true;
         }

@@ -84,8 +84,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                     if (unit.isActiveAndEnabled && unit.isOnNavMesh)
                     {
-                        unit.angularSpeed = navMeshAgent.angularSpeed;
-
                         if (Vector3.Distance(unit.transform.position, navMeshAgent.transform.position) > 3f)
                         {
                             unit.speed = speed.Value + 2;
