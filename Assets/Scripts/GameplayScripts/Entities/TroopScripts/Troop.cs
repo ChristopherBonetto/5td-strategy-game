@@ -348,8 +348,22 @@ public class Troop : EntityBehavior, ICanMove
         {
             UnitList[i].UnitFormationPos = inPos[i];
             if (UnitList[i].UnitAgent.isActiveAndEnabled)
+            {
                 //UnitList[i].UnitAgent.SetDestination(transform.position + inPos[i]);
-                UnitList[i].UnitAgent.Warp(transform.position + inPos[i]);
+                NavMeshHit hit;
+
+                if (NavMesh.SamplePosition(inPos[i], out hit, 1, NavMesh.AllAreas))
+                {
+                    if (hit.position != null)
+                    {
+                        UnitList[i].UnitAgent.Warp(hit.position);
+                    }
+                    else
+                    {
+                        TroopTakeDamage(UnitList[i]);
+                    }
+                }
+            }
         }
     }
 
@@ -680,6 +694,11 @@ public class Troop : EntityBehavior, ICanMove
             {
                 unit.UnitAgent.isStopped = inValue;
             }
+            if(unit.visualScript != null)
+            {
+                if (unit.visualScript.UnitAnimator != null)
+                    unit.visualScript.UnitAnimator.enabled = !inValue;
+            }
             if (FocusEntity != null && FocusEntity is Troop)
             {
                 unit.StopTree(inValue);
@@ -700,7 +719,12 @@ public class Troop : EntityBehavior, ICanMove
             {
                 unit.UnitAgent.isStopped = inValue;
             }
-            if(FocusEntity != null && FocusEntity is Troop)
+            if (unit.visualScript != null)
+            {
+                if(unit.visualScript.UnitAnimator != null)
+                   unit.visualScript.UnitAnimator.enabled = !inValue;
+            }
+            if (FocusEntity != null && FocusEntity is Troop)
             {
                 unit.StopTree(inValue);
                 unit.UnitTree.ResetValuesOnRestart = !inValue;

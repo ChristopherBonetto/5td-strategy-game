@@ -28,8 +28,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 Debug.Log("Can't go on the castle");
             }
-
-            Debug.Log("CIAOOOO");
         }
 
         // Seek the destination. Return success once the agent has reached the destination.
