@@ -50,12 +50,14 @@ public class HFSpecializationB : HFButton, IHFTutorial
 
     private void Awake()
     {
-        Event.AddListener(this);
+        if (Event != null)
+            Event.AddListener(this);
     }
 
     private void OnDestroy()
     {
-        Event.RemoveListener(this);
+        if (Event != null)
+            Event.RemoveListener(this);
     }
 
     protected override void OnEnable()
