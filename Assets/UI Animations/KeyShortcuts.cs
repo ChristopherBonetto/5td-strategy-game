@@ -16,7 +16,8 @@ public class KeyShortcuts : MonoBehaviour
         {
             if(Input.GetKeyDown(assignedKey))
             {
-                m_Button.onClick.Invoke();
+                if (m_Button.enabled)
+                    m_Button.onClick.Invoke();
             }
         }
     }
