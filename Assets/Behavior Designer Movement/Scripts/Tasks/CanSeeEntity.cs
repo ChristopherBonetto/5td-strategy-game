@@ -52,27 +52,25 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (go != null)
             {
-                float distance = Vector3.Distance(go.transform.position + Vector3.up * 1.5f, transform.position + Vector3.up * 1.5f) - .1f;
+                if (Physics.Linecast(transform.position + Vector3.up * 2f, go.transform.position + Vector3.up * 1.5f, ignoreLayerMask))
+                    return TaskStatus.Failure;
 
-                if (!Physics.Raycast(transform.position + Vector3.up * 1.5f, (go.transform.position - transform.position).normalized + Vector3.up * 1.5f, distance, ignoreLayerMask))
+                returnedObject = go.GetComponentInParent<EntityBehavior>();
+
+                if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
                 {
-                    returnedObject = go.GetComponentInParent<EntityBehavior>();
-
-                    if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
+                    if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
                     {
-                        if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
+                        if (entityRef.AssignFocusEntity(returnedObject))
                         {
-                            if (entityRef.AssignFocusEntity(returnedObject))
-                            {
-                                return TaskStatus.Success;
-                            }
+                            return TaskStatus.Success;
                         }
-                        else if (returnedObject is Troop)
+                    }
+                    else if (returnedObject is Troop)
+                    {
+                        if (entityRef.AssignFocusEntity(returnedObject))
                         {
-                            if (entityRef.AssignFocusEntity(returnedObject))
-                            {
-                                return TaskStatus.Success;
-                            }
+                            return TaskStatus.Success;
                         }
                     }
                 }
