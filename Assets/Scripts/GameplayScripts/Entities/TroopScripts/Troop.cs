@@ -414,12 +414,11 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
-        if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(3f); }
+        if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(5f); }
 
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
-        //Agent.SetDestination(endPosition);
-
+        StopTree(false);
         SetNewTroopState(TroopStates.GoToDestination);
     }
 
@@ -462,6 +461,7 @@ public class Troop : EntityBehavior, ICanMove
             }
         }
 
+        FocusEntity.FocusEntity = null;
         FocusEntity = null;
 
         ResetFormation();
