@@ -414,11 +414,14 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
-        if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(5f); }
-
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
-        StopTree(false);
+        Agent.SetDestination(endPosition);
+
+        if(m_isFreezed) return;
+ 
+        if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(5f); }
+
         SetNewTroopState(TroopStates.GoToDestination);
     }
 
@@ -709,6 +712,7 @@ public class Troop : EntityBehavior, ICanMove
 
     public override void FreezeMode(bool inValue)
     {
+        Debug.Log(inValue);
         base.FreezeMode(inValue);
 
         Agent.isStopped = inValue;
