@@ -24,13 +24,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnStart();
 
-            if (Target() != null)
+            if (Target() != null && SetDestination(Target().Value))
             {
-                if (!SetDestination(Target().Value))
-                {
-                    Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
-                    troopRef.Death();
-                }
+            }
+            else
+            {
+                Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
+                troopRef.Death();
             }
         }
 
@@ -38,21 +38,20 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
-            Debug.Log(HasArrived());
             if (HasArrived())
             {
                 troopRef.FocusEntity = troopRef.TargetCastle;
                 return TaskStatus.Success;
             }
 
-            if(Target() != null)
+            if (Target() != null && SetDestination(Target().Value))
             {
-                if (!SetDestination(Target().Value))
-                {
-                    Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
-                    troopRef.Death();
-                    return TaskStatus.Failure;
-                }
+            }
+            else
+            {
+                Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
+                troopRef.Death();
+                return TaskStatus.Failure;
             }
             return TaskStatus.Running;
         }
