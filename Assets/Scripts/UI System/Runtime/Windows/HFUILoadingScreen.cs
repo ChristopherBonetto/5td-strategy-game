@@ -72,6 +72,13 @@ namespace HF.Refactoring
                 yield return null;
             }
 
+            float currentDelay = 0f;
+            while (currentDelay < MinLoadingTime)
+            {
+                currentDelay += Time.deltaTime;
+                yield return null;
+            }
+
             StartCoroutine(Load(levelIndex, showLoadingText));
             yield return null;
         }
@@ -113,13 +120,6 @@ namespace HF.Refactoring
         /// </summary>
         IEnumerator FadeOut()
         {
-            float currentDelay = 0f;
-            while(currentDelay < MinLoadingTime)
-            {
-                currentDelay += Time.deltaTime;
-                yield return null;
-            }
-
             m_Text.gameObject.SetActive(false);
 
             while (m_canvasGroupComponentRef.alpha > 0f)
