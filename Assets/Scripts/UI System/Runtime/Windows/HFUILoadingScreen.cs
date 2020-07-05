@@ -12,12 +12,24 @@ namespace HF.Refactoring
     {
         public override HFUIWindowID ID => HFUIWindowID.LOADING_SCREEN;
 
-        [Header("Fade")]
+        public float MinLoadingTime = 3f;
 
         [SerializeField]
-        private Image[] m_imageToFade;
+        private bool m_RandomTip = true;
+        public bool RandomTip { get => m_RandomTip; set => m_RandomTip = value; }
+
+        [SerializeField]
+        private CanvasGroup m_canvasGroupComponentRef;
+        [SerializeField]
+        private Image m_imageComponentRef;
+        [SerializeField]
+        private Text m_textTipRef;
         [SerializeField]
         private Text m_Text;
+        [SerializeField]
+        private Sprite[] TipImages;
+        [SerializeField, TextArea]
+        private String[] TipTexts;
 
 
         private void OnEnable()
@@ -43,6 +55,7 @@ namespace HF.Refactoring
             // 2) Load progress...
             // 3) Fade out.
 
+            GetTip(RandomTip);
             OnShow();
             StartCoroutine(FadeIn(levelIndex,  showLoadingText));
         }
@@ -53,10 +66,9 @@ namespace HF.Refactoring
         /// </summary>
         IEnumerator FadeIn(int levelIndex, bool showLoadingText = true)
         {
-            while(m_imageToFade[0].color.a < 1f)
+            while(m_canvasGroupComponentRef.alpha < 1f)
             {
-                m_imageToFade[0].DOFade(1.1f, 0.6f);
-                m_imageToFade[1].DOFade(1.1f, 0.6f);
+                m_canvasGroupComponentRef.DOFade(1.1f, 0.6f);
                 yield return null;
             }
 
@@ -101,17 +113,48 @@ namespace HF.Refactoring
         /// </summary>
         IEnumerator FadeOut()
         {
+            float currentDelay = 0f;
+            while(currentDelay < MinLoadingTime)
+            {
+                currentDelay += Time.deltaTime;
+                yield return null;
+            }
+
             m_Text.gameObject.SetActive(false);
 
-            while (m_imageToFade[0].color.a > 0f)
+            while (m_canvasGroupComponentRef.alpha > 0f)
             {
-                DOTweenModuleUI.DOFade(m_imageToFade[0], -0.1f, 0.6f);
-                DOTweenModuleUI.DOFade(m_imageToFade[1], -0.1f, 0.6f);
+                DOTweenModuleUI.DOFade(m_canvasGroupComponentRef, -0.1f, 0.6f);
                 yield return null;
             }
 
             OnHide();
             yield return null;
+        }
+
+        private void GetTip(bool random = false)
+        {
+            // Select an image tip
+            if (TipImages != null && TipImages.Length > 0)
+            {
+                if (random)
+                    m_imageComponentRef.sprite = TipImages[UnityEngine.Random.Range(0, TipImages.Length)];
+                else
+                    m_imageComponentRef.sprite = TipImages[HFScenesManager.Instance.IndexCurrentScene % TipImages.Length];
+            }
+            else
+                m_imageComponentRef.sprite = null;
+
+            // Select a text tip
+            if (TipTexts != null && TipTexts.Length > 0)
+            {
+                if (random)
+                    m_textTipRef.text = TipTexts[UnityEngine.Random.Range(0, TipTexts.Length)];
+                else
+                    m_textTipRef.text = TipTexts[HFScenesManager.Instance.IndexCurrentScene % TipTexts.Length];
+            }
+            else
+                m_textTipRef.text = "";
         }
     }
 }
