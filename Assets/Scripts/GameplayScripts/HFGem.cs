@@ -4,10 +4,25 @@ using UnityEngine;
 using DG.Tweening;
 using Types;
 
-public class HFGem : MonoBehaviour
+public class HFGem : MonoBehaviour, IHFTutorial
 {
     [SerializeField] private int m_amount;
+    public GameEventData Event;
+    public GameEventData InitEvent;
 
+    public TutorialID TutorialID { get; set; } = TutorialID.Reposition_Turret;
+
+    private void Awake()
+    {
+        InitEvent.AddListener(this);
+        Event.AddListener(this);
+    }
+
+    private void OnDestroy()
+    {
+        InitEvent.RemoveListener(this);
+        Event.RemoveListener(this);
+    }
 
     private void OnEnable()
     {
@@ -47,5 +62,24 @@ public class HFGem : MonoBehaviour
             transform.DOScale(.5f, .1f);
             this.gameObject.SetActive(false);
         }
+    }
+
+    public void Reset()
+    {
+
+    }
+
+    public void OnGlobalInitialization()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    public void OnStepInitialization()
+    {
+        this.gameObject.SetActive(true);
+    }
+
+    public void OnStepCompleted()
+    {
     }
 }
