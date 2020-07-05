@@ -82,7 +82,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (base.SetDestination(destination))
             {
-                if(navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
+                if(navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial || navMeshAgent.pathStatus == NavMeshPathStatus.PathInvalid)
                 {
                     return false;
                 }

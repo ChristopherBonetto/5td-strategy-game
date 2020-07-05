@@ -24,7 +24,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnStart();
 
-            SetDestination(Target());
+            if (!SetDestination(Target()))
+            {
+                Debug.LogError("ERROR IN ALLY MOVEMENT : Can't find point");
+                troopRef.Death();
+            }
         }
 
         // Seek the destination. Return success once the agent has reached the destination.
@@ -36,7 +40,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
             }
 
-            SetDestination(Target());
+            if (!SetDestination(Target()))
+            {
+                Debug.LogError("ERROR IN ALLY MOVEMENT : Can't find point");
+                troopRef.Death();
+                return TaskStatus.Failure;
+            }
 
             return TaskStatus.Running;
         }
@@ -61,6 +70,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             if (base.SetDestination(destination))
             {
+                if(navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
+                {
+                    return false;
+                }
+
                 navMeshAgent.speed = speed.Value;
 
                 for (int i = 0; i < troopRef.UnitList.Count; i++)
@@ -111,6 +125,20 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 }
 
                 if(dist <= arriveDistance.Value)
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                float dist = Vector3.Distance(navMeshAgent.transform.position, navMeshAgent.pathEndPosition);
+
+                if (remainingDistance == 0)
+                {
+                    remainingDistance = float.PositiveInfinity;
+                }
+
+                if (dist <= arriveDistance.Value)
                 {
                     return true;
                 }
