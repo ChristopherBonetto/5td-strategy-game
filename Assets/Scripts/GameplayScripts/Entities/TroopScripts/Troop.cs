@@ -420,7 +420,7 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
-        AssignFocusEntity((EntityBehavior)null);
+        FocusEntity = null;
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
         Agent.SetDestination(endPosition);
@@ -496,15 +496,9 @@ public class Troop : EntityBehavior, ICanMove
     }
     public override bool AssignFocusEntity(EntityBehavior inEntity)
     {
-        if (inEntity == null)
+        if (!m_isFreezed)
         {
-            FocusEntity = null;
-
-            if (!m_isFreezed)
-            {
-                ResetTree();
-            }
-            return false;
+            ResetTree();
         }
 
         if (m_buildingHandled != null)
@@ -523,7 +517,9 @@ public class Troop : EntityBehavior, ICanMove
 
                 if (enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
                 {
-                    Agent.SetDestination(inEntity.transform.position);
+                    m_destination = inEntity.transform.position;
+                    m_behaviorTree.SetVariableValue("Destination", m_destination);
+                    Agent.SetDestination(m_destination);
                     FocusEntity = enemyTroop;
                     SetNewTroopState(TroopStates.GoToEnemy);
                     //Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
@@ -552,10 +548,12 @@ public class Troop : EntityBehavior, ICanMove
                 Debug.Log(CurrentCarryCapacity);
                 if(CurrentCarryCapacity >= building.GetStats().Weight)
                 {
-                    Agent.SetDestination(inEntity.transform.position);
+                    m_destination = inEntity.transform.position;
+                    m_behaviorTree.SetVariableValue("Destination", m_destination);
+                    Agent.SetDestination(m_destination);
                     FocusEntity = inEntity;
                     SetNewTroopState(TroopStates.GoToAlly);
-                    //Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
+                    Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
                     return true;
                 }
             }
@@ -583,6 +581,17 @@ public class Troop : EntityBehavior, ICanMove
         if (FocusEntity != null)
         {
             BuildingHandled = FocusEntity as BuildingBehaviour;
+
+            //Vector3 dropPosition = Vector3.zero;
+
+            //for (int i = 0; i < UnitList.Count; i++)
+            //{
+            //    if (UnitList[i].gameObject.activeSelf)
+            //        dropPosition = new Vector3(dropPosition.x + UnitList[i].transform.position.x, 0, dropPosition.z + UnitList[i].transform.position.z);
+            //}
+
+            //dropPosition = dropPosition / UnitList.Count;
+            //dropPosition.y = 3f;
 
             BuildingHandled.Carry(Agent.transform.position + new Vector3(0, 3f, 0));
             BuildingHandled.transform.parent = this.transform;
