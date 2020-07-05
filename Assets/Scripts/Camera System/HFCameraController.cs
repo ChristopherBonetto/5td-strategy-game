@@ -105,6 +105,7 @@ public class HFCameraController : MonoBehaviour
     {
         m_transform = transform;
         m_cam = Camera.main;
+        m_currentAngleY = transform.eulerAngles.y;
         m_actualDistanceFromTarget = m_initialDistanceFromTarget;
     }
 
