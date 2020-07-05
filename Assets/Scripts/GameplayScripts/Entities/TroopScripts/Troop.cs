@@ -140,6 +140,8 @@ public class Troop : EntityBehavior, ICanMove
         IsBusy = false;
         FocusEntity = null;
 
+        m_destination = transform.position;
+        m_behaviorTree.SetVariableValue("Destination", m_destination);
     }
 
     private void Update()
