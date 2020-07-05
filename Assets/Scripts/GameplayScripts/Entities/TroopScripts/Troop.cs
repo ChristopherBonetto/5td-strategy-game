@@ -150,7 +150,7 @@ public class Troop : EntityBehavior, ICanMove
         {
             AliveUnit.TakeDamage(5);
         }
-
+        Debug.Log(FocusEntity);
     }
 
     #endregion
@@ -215,7 +215,11 @@ public class Troop : EntityBehavior, ICanMove
             return capacity;
         }
 
-        capacity = UnitList.Count * m_troopStats.CarryCapacity;
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (UnitList[i].gameObject.activeSelf)
+                capacity += m_troopStats.CarryCapacity;
+        }
 
         return capacity;
     }
@@ -414,15 +418,15 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
+        AssignFocusEntity((EntityBehavior)null);
         m_destination = endPosition;
         m_behaviorTree.SetVariableValue("Destination", m_destination);
         Agent.SetDestination(endPosition);
+        SetNewTroopState(TroopStates.GoToDestination);
 
-        if(m_isFreezed) return;
+        if (m_isFreezed) return;
  
         if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(5f); }
-
-        SetNewTroopState(TroopStates.GoToDestination);
     }
 
     IEnumerator Reset(float inDestinationTime = 0.3f)
@@ -492,7 +496,12 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (inEntity == null)
         {
-            ResetTree();
+            FocusEntity = null;
+
+            if (!m_isFreezed)
+            {
+                ResetTree();
+            }
             return false;
         }
 
@@ -500,10 +509,6 @@ public class Troop : EntityBehavior, ICanMove
         {
             //m_buildingHandled.Drop(this.transform.position);
             return false;
-        }
-        if (!m_isFreezed)
-        {
-            ResetTree();
         }
 
         FocusEntity = null;
@@ -516,6 +521,7 @@ public class Troop : EntityBehavior, ICanMove
 
                 if (enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
                 {
+                    Agent.SetDestination(inEntity.transform.position);
                     FocusEntity = enemyTroop;
                     SetNewTroopState(TroopStates.GoToEnemy);
                     //Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
@@ -544,6 +550,7 @@ public class Troop : EntityBehavior, ICanMove
                 Debug.Log(CurrentCarryCapacity);
                 if(CurrentCarryCapacity >= building.GetStats().Weight)
                 {
+                    Agent.SetDestination(inEntity.transform.position);
                     FocusEntity = inEntity;
                     SetNewTroopState(TroopStates.GoToAlly);
                     //Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
@@ -575,8 +582,9 @@ public class Troop : EntityBehavior, ICanMove
         {
             BuildingHandled = FocusEntity as BuildingBehaviour;
 
+            BuildingHandled.Carry(Agent.transform.position + new Vector3(0, 3f, 0));
             BuildingHandled.transform.parent = this.transform;
-            BuildingHandled.Carry(Agent.transform.position + new Vector3(0, 3, 0));
+
 
             for (int i = 0; i < UnitList.Count; i++)
             {
@@ -593,7 +601,7 @@ public class Troop : EntityBehavior, ICanMove
                 }
             }
 
-            Agent.SetDestination(FocusEntity.transform.position);
+            //Agent.SetDestination(FocusEntity.transform.position);
 
             //HFEventManager.TriggerEvent(HFEventID.OnUnitLift);
 

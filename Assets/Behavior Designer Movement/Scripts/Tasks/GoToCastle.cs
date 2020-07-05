@@ -24,9 +24,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         {
             base.OnStart();
 
-            if (!SetDestination(Target()))
+            if (Target() != null)
             {
-                Debug.Log("Can't go on the castle");
+                if (!SetDestination(Target().Value))
+                {
+                    Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
+                    troopRef.Death();
+                }
             }
         }
 
@@ -34,29 +38,34 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Return running if the agent hasn't reached the destination yet
         public override TaskStatus OnUpdate()
         {
+            Debug.Log(HasArrived());
             if (HasArrived())
             {
                 troopRef.FocusEntity = troopRef.TargetCastle;
                 return TaskStatus.Success;
             }
 
-            if (!SetDestination(Target()))
+            if(Target() != null)
             {
-                Debug.Log("Can't go on the castle");
+                if (!SetDestination(Target().Value))
+                {
+                    Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
+                    troopRef.Death();
+                    return TaskStatus.Failure;
+                }
             }
-
             return TaskStatus.Running;
         }
 
         // Return targetPosition if target is null
-        private Vector3 Target()
+        private Vector3? Target()
         {
             if (troopRef.EngagePointForCastle != null && troopRef.TargetCastle != null)
             {
                 return troopRef.EngagePointForCastle;
             }
             Debug.Log("Point to castle not assigned");
-            return targetPosition.Value;
+            return null;
         }
 
         public override void OnReset()
@@ -74,6 +83,11 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (base.SetDestination(destination))
             {
+                if(navMeshAgent.pathStatus == NavMeshPathStatus.PathPartial)
+                {
+                    return false;
+                }
+
                 navMeshAgent.speed = speed.Value;
 
                 for (int i = 0; i < troopRef.UnitList.Count; i++)
