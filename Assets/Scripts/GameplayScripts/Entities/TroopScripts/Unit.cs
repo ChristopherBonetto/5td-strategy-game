@@ -110,7 +110,15 @@ public class Unit : MonoBehaviour, ITakeDamage
         FocusUnit = null;
         FocusBuilding = null;
         PreviousHp = 1f;
+
+        HFEventManager.SubscribeTo<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
     }
+
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, OnEndLevel);
+    }
+
     private void Awake()
     {
         Initialize();
@@ -353,4 +361,18 @@ public class Unit : MonoBehaviour, ITakeDamage
         //VisualObj.transform.rotation = TroopRef.transform.rotation;
     }
     #endregion
+
+    public void OnEndLevel(HFLevelInfoSO level, bool winForPlayer)
+    {
+        if (m_troopRef.EntityPlayerType == PlayerType.AI && m_visualScript != null)
+        {
+            if (!winForPlayer)
+                m_visualScript.TriggerAnimation("Victory");
+        }
+        else if (m_troopRef.EntityPlayerType == PlayerType.Player && m_visualScript != null)
+        {
+            if (winForPlayer)
+                m_visualScript.TriggerAnimation("Victory");
+        }
+    }
 }
