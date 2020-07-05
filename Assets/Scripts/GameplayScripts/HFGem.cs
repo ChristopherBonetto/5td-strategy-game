@@ -8,9 +8,11 @@ public class HFGem : MonoBehaviour
 {
     [SerializeField] private int m_amount;
 
+
     private void OnEnable()
     {
         HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameChangedState);
+
     }
     private void OnDisable()
     {
@@ -42,6 +44,7 @@ public class HFGem : MonoBehaviour
             transform.DOScale(.5f, .5f);
             yield return new WaitForSeconds(.5f);
             GameController.Instance.AddResources(m_amount);
+            transform.DOScale(.5f, .1f);
             this.gameObject.SetActive(false);
         }
     }
