@@ -206,6 +206,7 @@ public class BuildingBehaviour : EntityBehavior
                 }
             }
 
+
             if (unit == null)
             {
                 FocusEntity = null;
@@ -214,6 +215,9 @@ public class BuildingBehaviour : EntityBehavior
             }
             else if (unit.TakeDamage(m_buildingStats.Damage))
             {
+                if (Vector3.Distance(transform.position, unit.transform.position) > m_buildingStats.AttackRange)
+                    yield return null;
+
                 FocusEntity = null;
             }
         }

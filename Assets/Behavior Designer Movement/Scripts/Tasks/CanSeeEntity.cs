@@ -52,25 +52,27 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (go != null)
             {
-                if (Physics.Linecast(transform.position + Vector3.up * 2f, go.transform.position + Vector3.up * 1.5f, ignoreLayerMask))
-                    return TaskStatus.Failure;
-
-                returnedObject = go.GetComponentInParent<EntityBehavior>();
-
-                if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
+                if (!Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, ignoreLayerMask))
                 {
-                    if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
+                    UnityEngine.Debug.DrawLine(transform.position + Vector3.up, go.transform.position + Vector3.up, Color.red);
+
+                    returnedObject = go.GetComponentInParent<EntityBehavior>();
+
+                    if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
                     {
-                        if (entityRef.AssignFocusEntity(returnedObject))
+                        if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
                         {
-                            return TaskStatus.Success;
+                            if (entityRef.AssignFocusEntity(returnedObject))
+                            {
+                                return TaskStatus.Success;
+                            }
                         }
-                    }
-                    else if (returnedObject is Troop)
-                    {
-                        if (entityRef.AssignFocusEntity(returnedObject))
+                        else if (returnedObject is Troop)
                         {
-                            return TaskStatus.Success;
+                            if (entityRef.AssignFocusEntity(returnedObject))
+                            {
+                                return TaskStatus.Success;
+                            }
                         }
                     }
                 }
