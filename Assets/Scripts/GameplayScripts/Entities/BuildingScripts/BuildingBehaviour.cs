@@ -147,13 +147,14 @@ public class BuildingBehaviour : EntityBehavior
                 m_view.SpawnBullet(EntityPlayerType);
                 StartCoroutine(DealDamge(m_focusEntity));
                 m_attackDelayElapsed = 0;
+                AttachAndPlaySound(m_buildingStats.AttackSound);
             }
             else
             {
                 m_attackDelayElapsed += Time.deltaTime;
             }
 
-            AttachAndPlaySound(m_buildingStats.AttackSound);
+            
         }
     }
 

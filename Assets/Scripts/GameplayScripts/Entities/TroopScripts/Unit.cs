@@ -243,12 +243,6 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_visualScript.TriggerAnimation("isAttacking01");
         }
-        
-        if(TroopRef != null)
-        {
-            TroopRef.AttachAndPlaySound(TroopRef.GetStats().AttackSound);
-        }
-        
     }
 
     public void CheckAnotherTarget()

@@ -743,7 +743,10 @@ public class Troop : EntityBehavior, ICanMove
 
         base.PauseEntity(inValue);
 
-        Agent.isStopped = inValue;
+        if (Agent.isActiveAndEnabled)
+        {
+            Agent.isStopped = inValue;
+        }
 
         foreach (Unit unit in UnitList)
         {
@@ -768,7 +771,10 @@ public class Troop : EntityBehavior, ICanMove
     {
         base.FreezeMode(inValue);
 
-        Agent.isStopped = inValue;
+        if (Agent.isActiveAndEnabled)
+        {
+            Agent.isStopped = inValue;
+        }
 
         foreach(Unit unit in UnitList)
         {
