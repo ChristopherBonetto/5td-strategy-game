@@ -30,7 +30,7 @@ public class HFLevelInfoSO : ScriptableObject
     public bool m_levelCompleted = false;
 
     [FMODUnity.EventRef]
-    public string LevelSound;
+    public string LevelSoundPath;
 
 
     public void CompleteLevel()

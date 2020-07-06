@@ -54,6 +54,8 @@ public class HFSoundManager : Singleton<HFSoundManager>
     public string DefeatSoundPath;
     private HFCustomEvent DefeatSoundEvent;
 
+    private HFCustomEvent CurrentLevelSound;
+
     #region Behaviour Cycle
     private void OnEnable()
     {
@@ -193,6 +195,7 @@ public class HFSoundManager : Singleton<HFSoundManager>
                 break;
 
             case GameStates.PlayingLevel:
+                PlayLevelSound();
                 break;
 
             case GameStates.EndLevel:
@@ -214,13 +217,33 @@ public class HFSoundManager : Singleton<HFSoundManager>
         {
             if (!StartGameAndWarRoomMusicEvent.isPlaying() && inWantToPlay)
             {
-                StartGameAndWarRoomMusicEvent.SetEventVolume(0.8f);
+                StartGameAndWarRoomMusicEvent.SetEventVolume(0.6f);
                 StartGameAndWarRoomMusicEvent.Play();
             }
             else if(StartGameAndWarRoomMusicEvent.isPlaying() && !inWantToPlay)
             {
                 StartGameAndWarRoomMusicEvent.Stop();
             }
+        }
+        else
+        {
+            Debug.LogError("Can't find : " + StartGameAndWarRoomMusicEvent.ToString());
+        }
+    }
+
+    private void PlayLevelSound()
+    {
+        if(CurrentLevelSound != null)
+        {
+            CurrentLevelSound.Stop();
+        }
+
+        CurrentLevelSound = GetFreeEventFromDictionaryKey(HFScenesManager.Instance.CurrentLevelSelected.LevelSoundPath);
+
+        if (CurrentLevelSound != null)
+        {
+            CurrentLevelSound.SetEventVolume(0.5f);
+            CurrentLevelSound.Play();
         }
         else
         {
