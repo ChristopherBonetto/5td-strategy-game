@@ -733,7 +733,9 @@ public class Troop : EntityBehavior, ICanMove
         m_troopStats = null;
 
         DeathUnit.Clear();
+
         this.gameObject.SetActive(false);
+        m_isFreezed = false;
         //Return to the pool
     }
 
@@ -925,7 +927,10 @@ public class Troop : EntityBehavior, ICanMove
     //Custom commands for troop/entity
     public override void Attack()
     {
-        if(FocusEntity is Troop)
+        if (m_isFreezed)
+            return;
+
+        if (FocusEntity is Troop)
         {
             TroopAttack(FocusEntity as Troop);
         }
