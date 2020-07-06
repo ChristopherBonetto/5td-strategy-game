@@ -214,6 +214,7 @@ public class HFSoundManager : Singleton<HFSoundManager>
         {
             if (!StartGameAndWarRoomMusicEvent.isPlaying() && inWantToPlay)
             {
+                StartGameAndWarRoomMusicEvent.SetEventVolume(0.8f);
                 StartGameAndWarRoomMusicEvent.Play();
             }
             else if(StartGameAndWarRoomMusicEvent.isPlaying() && !inWantToPlay)
@@ -237,6 +238,8 @@ public class HFSoundManager : Singleton<HFSoundManager>
             }
 
             if (WinnedSoundEvent == null) return;
+
+            WinnedSoundEvent.SetEventVolume(0.8f);
             WinnedSoundEvent.Play();
         }
         else
@@ -247,6 +250,8 @@ public class HFSoundManager : Singleton<HFSoundManager>
             }
 
             if (DefeatSoundEvent == null) return;
+
+            DefeatSoundEvent.SetEventVolume(0.8f);
             DefeatSoundEvent.Play();
         }
     }
