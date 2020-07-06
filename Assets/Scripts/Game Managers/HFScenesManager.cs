@@ -165,6 +165,8 @@ public class HFScenesManager : Singleton<HFScenesManager>
 
         HFEventManager.TriggerEvent<HFLevelInfoSO, bool>(HFEventID.OnEndLevel, CurrentLevelSelected, winCondition);
 
+        HFSoundManager.Instance.PlayWinDefeatSound(winCondition);
+
         HFGameManager.Instance.PlayerData.RefreshPlayerData();
 
         CurrentLevelSelected = null;

@@ -46,6 +46,14 @@ public class HFSoundManager : Singleton<HFSoundManager>
     public string StartGameAndWarRoomMusicPath;
     private HFCustomEvent StartGameAndWarRoomMusicEvent;
 
+    [FMODUnity.EventRef]
+    public string WinnedSoundPath;
+    private HFCustomEvent WinnedSoundEvent;
+
+    [FMODUnity.EventRef]
+    public string DefeatSoundPath;
+    private HFCustomEvent DefeatSoundEvent;
+
     #region Behaviour Cycle
     private void OnEnable()
     {
@@ -173,15 +181,15 @@ public class HFSoundManager : Singleton<HFSoundManager>
                 break;
 
             case GameStates.StartGame:
-                TakeStartGameAndWarRoomSound(true);
+                PlayStartGameAndWarRoomSound(true);
                 break;
 
             case GameStates.WarRoom:
-                TakeStartGameAndWarRoomSound(true);
+                PlayStartGameAndWarRoomSound(true);
                 break;
 
             case GameStates.InitializeLevel:
-                TakeStartGameAndWarRoomSound(false);
+                PlayStartGameAndWarRoomSound(false);
                 break;
 
             case GameStates.PlayingLevel:
@@ -195,7 +203,7 @@ public class HFSoundManager : Singleton<HFSoundManager>
         }
     }
 
-    private void TakeStartGameAndWarRoomSound(bool wantToPlay)
+    private void PlayStartGameAndWarRoomSound(bool inWantToPlay)
     {
         if (StartGameAndWarRoomMusicEvent == null)
         {
@@ -204,11 +212,11 @@ public class HFSoundManager : Singleton<HFSoundManager>
 
         if (StartGameAndWarRoomMusicEvent != null)
         {
-            if (!StartGameAndWarRoomMusicEvent.isPlaying() && wantToPlay)
+            if (!StartGameAndWarRoomMusicEvent.isPlaying() && inWantToPlay)
             {
                 StartGameAndWarRoomMusicEvent.Play();
             }
-            else if(StartGameAndWarRoomMusicEvent.isPlaying() && !wantToPlay)
+            else if(StartGameAndWarRoomMusicEvent.isPlaying() && !inWantToPlay)
             {
                 StartGameAndWarRoomMusicEvent.Stop();
             }
@@ -216,6 +224,30 @@ public class HFSoundManager : Singleton<HFSoundManager>
         else
         {
             Debug.LogError("Can't find : " + StartGameAndWarRoomMusicEvent.ToString());
+        }
+    }
+
+    public void PlayWinDefeatSound(bool inWinned)
+    {
+        if (inWinned)
+        {
+            if(WinnedSoundEvent == null)
+            {
+                WinnedSoundEvent = GetFreeEventFromDictionaryKey(WinnedSoundPath);
+            }
+
+            if (WinnedSoundEvent == null) return;
+            WinnedSoundEvent.Play();
+        }
+        else
+        {
+            if (DefeatSoundEvent == null)
+            {
+                DefeatSoundEvent = GetFreeEventFromDictionaryKey(DefeatSoundPath);
+            }
+
+            if (DefeatSoundEvent == null) return;
+            DefeatSoundEvent.Play();
         }
     }
 }
