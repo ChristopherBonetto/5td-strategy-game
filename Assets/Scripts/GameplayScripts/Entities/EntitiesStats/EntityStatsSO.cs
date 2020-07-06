@@ -43,6 +43,6 @@ public class EntityStatsSO : ScriptableObject
     public int Cost;
 
     [FMODUnity.EventRef]
-    public string AttackSound, DeathSound, TakeDamageSound;
+    public string AttackSound, DeathSound, TakeDamageSound, UpgradeSound;
 
 }

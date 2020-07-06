@@ -10,7 +10,7 @@ public class Editor_UnitStatsSO : Editor
 {
     UnitsStatsSO unit;
 
-    SerializedProperty m_attackSound, m_deathSound, m_takeDamageSound, m_hittedSound, m_liftSound, m_dropSound;
+    SerializedProperty m_attackSound, m_deathSound, m_takeDamageSound, m_hittedSound, m_liftSound, m_dropSound, m_upgradeSound;
 
     private void OnEnable()
     {
@@ -21,6 +21,7 @@ public class Editor_UnitStatsSO : Editor
         m_takeDamageSound = serializedObject.FindProperty("TakeDamageSound");
         m_liftSound = serializedObject.FindProperty("LiftSound");
         m_dropSound = serializedObject.FindProperty("DropSound");
+        m_upgradeSound = serializedObject.FindProperty("UpgradeSound");
     }
     private void OnDisable()
     {
@@ -240,7 +241,12 @@ public class Editor_UnitStatsSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
-        
+        EditorGUILayout.BeginHorizontal();
+        EditorGUILayout.PropertyField(m_upgradeSound, new GUIContent("Upgrade Sound"), true);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
+
 
         serializedObject.ApplyModifiedProperties();
     }
