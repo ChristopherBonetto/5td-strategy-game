@@ -80,6 +80,7 @@ public class CastleStarter : BuildingBehaviour
     [SerializeField]
     public GameObject SelectionCircle;
 
+    private HFUIHUD m_hudRef;
     #endregion
 
     #endregion
@@ -88,6 +89,8 @@ public class CastleStarter : BuildingBehaviour
 
     public override void Awake()
     {
+        m_hudRef = HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD);
+
         base.Awake();
 
         HealthbarSlider = Healthbar.GetComponent<Slider>();
@@ -128,7 +131,9 @@ public class CastleStarter : BuildingBehaviour
             GameController.Instance.CreateNewBuilding(BuildingType.TOWER, t.transform.position.SnapLocation());
         }
 
-        RefreshHealthbarSize(m_buildingStats.MaxHp);
+        //RefreshHealthbarSize(m_buildingStats.MaxHp);
+
+        m_hudRef.CastleContainer.AddCastle(this);
     }
 
     #endregion
@@ -242,11 +247,21 @@ public class CastleStarter : BuildingBehaviour
     #region Hp methods
     public override bool TakeDamage(int Damage)
     {
-        if (HealthbarSlider != null && HealthbarSlider.isActiveAndEnabled)
+        //if (HealthbarSlider != null && HealthbarSlider.isActiveAndEnabled)
+        //{
+        //    SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
+        //}
+
+
+        m_currentHp -= Damage;
+        m_hudRef.CastleContainer.CastleTakeDamageFeedback(this);
+
+        if (m_currentHp <= 0)
         {
-            SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
+            Death();
+            return true;
         }
-        return base.TakeDamage(Damage);
+        return false;
     }
 
     public override void Death()

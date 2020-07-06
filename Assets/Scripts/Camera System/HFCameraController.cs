@@ -6,7 +6,7 @@ public class HFCameraController : MonoBehaviour
 {
     private Camera m_cam;
     private Transform m_transform;
-    public HFCameraController Instance;
+    public static HFCameraController Instance;
 
     [Header("Camera variables")]
 

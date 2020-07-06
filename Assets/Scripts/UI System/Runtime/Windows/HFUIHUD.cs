@@ -58,6 +58,8 @@ namespace HF.Refactoring
         public Image PauseHudMask;
         public bool IsPaused { get; set; } = false;
 
+        public HFCastleHealthContainer CastleContainer;
+
         private void OnEnable()
         {
             HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, OnNewWaveBegin);
@@ -370,7 +372,7 @@ namespace HF.Refactoring
             CastleCommandContainer.SetActive(false);
             Popup.gameObject.SetActive(false);
             Marker.gameObject.SetActive(false);
-
+            CastleContainer.ClearCollection();
             PauseHudMask.DOFade(0, .1f);
             IsPaused = false;
             HFEventManager.TriggerEvent<bool>(HFEventID.OnPauseMode, IsPaused);
