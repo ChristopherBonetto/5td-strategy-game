@@ -238,7 +238,9 @@ public class BuildingBehaviour : EntityBehavior
             m__viewObj.gameObject.transform.parent = null;
             m__viewObj = null;
         }
+
         this.gameObject.SetActive(false);
+        m_isFreezed = false;
     }
 
     public override void Specialization(BuildingType type)

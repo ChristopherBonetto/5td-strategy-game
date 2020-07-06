@@ -159,6 +159,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected virtual void DisableEntity()
     {
         this.gameObject.SetActive(false);
+        m_isFreezed = false;
     }
 
     public virtual void FreezeMode(bool inValue)
