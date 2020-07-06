@@ -6,6 +6,7 @@ public class HFCameraController : MonoBehaviour
 {
     private Camera m_cam;
     private Transform m_transform;
+    public HFCameraController Instance;
 
     [Header("Camera variables")]
 
@@ -101,6 +102,12 @@ public class HFCameraController : MonoBehaviour
     [SerializeField, Tooltip("Max angle value on x")]
     private float X_MAX_Angle = 50.0f;
 
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     private void Start()
     {
         m_transform = transform;
@@ -115,6 +122,11 @@ public class HFCameraController : MonoBehaviour
         MoveTarget();
         UpdateDistance();
 
+    }
+
+    private void OnDestroy()
+    {
+        Instance = null;
     }
 
     private void LateUpdate()
@@ -237,6 +249,9 @@ public class HFCameraController : MonoBehaviour
 
     }
 
-
+    public void SetTarget(Transform refPos)
+    {
+        m_target.position = refPos.position;
+    }
 }
 
