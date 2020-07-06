@@ -216,8 +216,8 @@ public class CastleStarter : BuildingBehaviour
 
                     if (!Physics.CheckSphere(pos, 1, LayerMask.GetMask("Player")))
                     {
-                        Debug.Log("Trying to spaen a unit form the castle");
-                        GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, pos, false);
+                        Debug.Log("Trying to spawn a unit form the castle");
+                        GameController.Instance.CreateNewTroop(stats.UnitType, PlayerType.Player, pos, true);
 
                         if (troop != null && m_isFreezed)
                         {

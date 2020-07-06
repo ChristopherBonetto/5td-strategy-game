@@ -132,15 +132,18 @@ public class Troop : EntityBehavior, ICanMove
     {
         base.OnDisable();
         Deselected();
+
+        IsBusy = false;
+        FocusEntity = null;
+        
     }
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        IsBusy = false;
-        FocusEntity = null;
 
         AssignDest(transform.position);
+        SetNewTroopState(TroopStates.Idle);
     }
 
     private void Update()
