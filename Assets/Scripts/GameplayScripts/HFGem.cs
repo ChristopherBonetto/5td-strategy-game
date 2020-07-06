@@ -10,12 +10,20 @@ public class HFGem : MonoBehaviour, IHFTutorial
     public GameEventData Event;
     public GameEventData InitEvent;
 
+    [FMODUnity.EventRef]
+    public string GemPickUpSoundPath;
+    private HFCustomEvent GemPickUpSoundEvent;
+
+    private HFIEvent3D m_3DSoundInterface;
+
     public TutorialID TutorialID { get; set; } = TutorialID.Reposition_Turret;
 
     private void Awake()
     {
         InitEvent.AddListener(this);
         Event.AddListener(this);
+
+        m_3DSoundInterface = new HFIAttachPlay3D();
     }
 
     private void OnDestroy()
@@ -54,14 +62,24 @@ public class HFGem : MonoBehaviour, IHFTutorial
             StartCoroutine(PickUpGem());
         }
 
-        IEnumerator PickUpGem()
+        
+    }
+
+    IEnumerator PickUpGem()
+    {
+        transform.DOScale(.5f, .5f);
+
+        HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(GemPickUpSoundPath);
+
+        if(tempEvent != null)
         {
-            transform.DOScale(.5f, .5f);
-            yield return new WaitForSeconds(.5f);
-            GameController.Instance.AddResources(m_amount);
-            transform.DOScale(.5f, .1f);
-            this.gameObject.SetActive(false);
+            m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
         }
+        
+        yield return new WaitForSeconds(.5f);
+        GameController.Instance.AddResources(m_amount);
+        transform.DOScale(.5f, .1f);
+        this.gameObject.SetActive(false);
     }
 
     public void Reset()

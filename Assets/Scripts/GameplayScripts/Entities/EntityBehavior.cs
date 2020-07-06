@@ -330,6 +330,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if(tempEvent == null)
         {
             Debug.LogError("Can't play sound saved from path : " + eventPath);
+            return;
         }
         m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
     }
