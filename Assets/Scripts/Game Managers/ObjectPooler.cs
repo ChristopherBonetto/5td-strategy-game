@@ -350,8 +350,6 @@ public class ObjectPooler : Singleton<ObjectPooler>
         obj.SetActive(false);
         pooledList.Add(obj);
 
-        
-
         return obj;
     }
 

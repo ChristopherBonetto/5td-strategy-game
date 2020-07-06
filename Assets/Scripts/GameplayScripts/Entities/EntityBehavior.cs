@@ -326,6 +326,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     public void AttachAndPlaySound(string eventPath)
     {
         HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(eventPath);
+
+        if(tempEvent != null)
         m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
     }
 
