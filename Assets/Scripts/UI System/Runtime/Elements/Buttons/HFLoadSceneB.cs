@@ -21,7 +21,7 @@ namespace HF.Refactoring
             if (m_isListeningInput)
             {
                 HFGameManager.Instance.ChangeGMState(GameStates.Pause); // Change the state when the level end.
-                Debug.Log("Pressing...");
+                HFUIManager.Instance.ClearHistory();
                 HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(Sceneindex, false);
             }
         }

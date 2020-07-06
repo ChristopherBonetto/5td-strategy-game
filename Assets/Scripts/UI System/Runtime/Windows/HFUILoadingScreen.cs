@@ -88,7 +88,7 @@ namespace HF.Refactoring
         /// </summary>
         IEnumerator Load(int levelIndex, bool showLoadingText = true)
         {
-            m_Text.gameObject.SetActive(showLoadingText);
+            m_Text.gameObject.SetActive(true);
             HFScenesManager.Instance.LoadSceneFromIndex(levelIndex);
 
             yield return null;

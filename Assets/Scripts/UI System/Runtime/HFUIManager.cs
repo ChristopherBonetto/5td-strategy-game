@@ -255,6 +255,22 @@ namespace HF.Refactoring
         }
 
         /// <summary>
+        /// Hide all panels and clear history.
+        /// </summary>
+        public void ClearHistory()
+        {
+            if (!IsHistoryEmpty(0))
+            {
+                while (m_windowsHistory.Count > 0)
+                {
+                    m_windowsHistory.Pop().OnHide();
+                }
+            }
+
+            m_windowsHistory.Clear();
+        }
+
+        /// <summary>
         /// Hide the current window,
         /// Show the window passed in as ID and
         /// add it to the history.

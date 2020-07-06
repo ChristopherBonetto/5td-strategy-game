@@ -182,8 +182,8 @@ namespace HF.Refactoring
             OnUnitSelected(null as EntityBehavior, 0);
             HFGameManager.Instance.ChangeGMState(GameStates.None);
             HFScenesManager.Instance.EndCurrentLevel(false);
-            HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
-            HFScenesManager.Instance.LoadSceneFromIndex(1);
+            HFUIManager.Instance.ClearHistory();
+            HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(1, false);
             Reset();
         }
 
@@ -192,8 +192,8 @@ namespace HF.Refactoring
             OnUnitSelected(null as EntityBehavior, 0);
             HFGameManager.Instance.ChangeGMState(GameStates.None);
             HFScenesManager.Instance.EndCurrentLevel(true);
-            HFUIManager.Instance.ShowAndClearHistory(HFUIWindowID.WAR_ROOM);
-            HFScenesManager.Instance.LoadSceneFromIndex(1);
+            HFUIManager.Instance.ClearHistory();
+            HFUIManager.Instance.Getwindow<HFUILoadingScreen>(HFUIWindowID.LOADING_SCREEN).LoadLevel(1, false);
         }
 
         private void OnPauseMode(bool pause)

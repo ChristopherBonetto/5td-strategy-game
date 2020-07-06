@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-public class Pulsating_Button_Tween : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class Pulsating_Button_Tween : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 
     private Button my_button;
@@ -18,8 +18,8 @@ public class Pulsating_Button_Tween : MonoBehaviour, IPointerEnterHandler, IPoin
     private void Start()
     {
         my_button = GetComponent<Button>();
-
     }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         my_button.transform.DOScale(highlightButtonSize, 0.3f);
@@ -32,7 +32,9 @@ public class Pulsating_Button_Tween : MonoBehaviour, IPointerEnterHandler, IPoin
         my_button.transform.DOScale(standardButtonSize, 0.3f);
     }
 
-
-
-
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        my_text.transform.DOScale(standardTextSize, 0.6f);
+        my_button.transform.DOScale(standardButtonSize, 0.3f);
+    }
 }
