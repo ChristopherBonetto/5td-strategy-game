@@ -38,11 +38,24 @@ public class HFSoundManager : Singleton<HFSoundManager>
         }
     }
 
-
     public Dictionary<string, List<HFCustomEvent> > EventsDictionary = new Dictionary<string, List<HFCustomEvent> >();
 
     public Dictionary<string, Bus> BusesDictionary = new Dictionary<string, Bus>();
 
+    [FMODUnity.EventRef]
+    public string StartGameAndWarRoomMusicPath;
+    private HFCustomEvent StartGameAndWarRoomMusicEvent;
+
+    #region Behaviour Cycle
+    private void OnEnable()
+    {
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+    }
+    private void OnDisable()
+    {
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+    }
+    #endregion
 
     #region Events Dictionary
 
@@ -148,4 +161,61 @@ public class HFSoundManager : Singleton<HFSoundManager>
     #endregion
 
     #endregion
+
+    public void GameStateChanged(GameStates inState)
+    {
+        switch (inState)
+        {
+            case GameStates.None:
+                break;
+
+            case GameStates.LoadStartingInfo:
+                break;
+
+            case GameStates.StartGame:
+                TakeStartGameAndWarRoomSound(true);
+                break;
+
+            case GameStates.WarRoom:
+                TakeStartGameAndWarRoomSound(true);
+                break;
+
+            case GameStates.InitializeLevel:
+                TakeStartGameAndWarRoomSound(false);
+                break;
+
+            case GameStates.PlayingLevel:
+                break;
+
+            case GameStates.EndLevel:
+                break;
+
+            case GameStates.Pause:
+                break;
+        }
+    }
+
+    private void TakeStartGameAndWarRoomSound(bool wantToPlay)
+    {
+        if (StartGameAndWarRoomMusicEvent == null)
+        {
+            StartGameAndWarRoomMusicEvent = GetFreeEventFromDictionaryKey(StartGameAndWarRoomMusicPath);
+        }
+
+        if (StartGameAndWarRoomMusicEvent != null)
+        {
+            if (!StartGameAndWarRoomMusicEvent.isPlaying() && wantToPlay)
+            {
+                StartGameAndWarRoomMusicEvent.Play();
+            }
+            else if(StartGameAndWarRoomMusicEvent.isPlaying() && !wantToPlay)
+            {
+                StartGameAndWarRoomMusicEvent.Stop();
+            }
+        }
+        else
+        {
+            Debug.LogError("Can't find : " + StartGameAndWarRoomMusicEvent.ToString());
+        }
+    }
 }

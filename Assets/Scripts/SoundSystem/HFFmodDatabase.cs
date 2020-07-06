@@ -38,8 +38,6 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
         }
     }
 
-
-
     //STUDIO VARIABLES
     private FMOD.Studio.System m_system = new FMOD.Studio.System();
 
@@ -55,8 +53,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
     private int m_pendingEvents = 0;
 
     //BUSS VARIABLES
-    private const string m_busPrefix = "bus:/";
-    [SerializeField] private string[] m_busesNames;
+    private const string m_busPrefix = "bus:/PlaceHolder_All/";
 
     private bool m_eventDatabaseCompleted = false;
     public bool EventDatabaseCompleted
@@ -76,11 +73,6 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
         //base.Awake();
         InitializeStudio();
         FindBanks();
-    }
-
-    private void Start()
-    {
-        FindBuses();
     }
 
     private void Update()
@@ -205,6 +197,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
                 Bus[] buses;
                 result = bank.getBusList(out buses);
                 Debug.Log("Finded : " + m_pendingEvents + " Events and " + buses.Length + " Buses");
+                FindBuses(buses);
             }
             StartCoroutine(LoadPendingEventDescriptions(pendingEventDesc));
         }
@@ -235,7 +228,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
         //If all events finded from banks as been loaded right so READY.
         if(m_pendingEvents == 0)
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1f);
 
             m_eventDatabaseCompleted = true;
             HFEventManager.TriggerEvent<bool>(HFEventID.OnFinishedLoadEvents, true);
@@ -247,17 +240,21 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
     #region Initialize Bus
 
     //Find all buses from RuntimeManager checking if their name if equal to the bus prefix + the bus name.
-    public void FindBuses()
+    public void FindBuses(Bus[] inBuses)
     {
         HFSoundManager tempRef = HFSoundManager.Instance;
 
-        for (int i = 0; i < m_busesNames.Length; i++)
+        for (int i = 0; i < inBuses.Length; i++)
         {
-            Bus tempBus = new Bus();
+            string busName;
 
-            tempBus = RuntimeManager.GetBus(m_busPrefix + m_busesNames[i]);
+            inBuses[i].getPath(out busName);
 
-            tempRef.BusesDictionary.Add(m_busesNames[i], tempBus);
+            busName = busName.Replace(m_busPrefix, "");
+
+            Debug.Log("BUS FINDED : " + busName);
+            
+            tempRef.BusesDictionary.Add(busName, inBuses[i]);
         }
     }
 
