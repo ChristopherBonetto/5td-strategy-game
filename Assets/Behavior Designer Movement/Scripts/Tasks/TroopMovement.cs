@@ -27,7 +27,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if (!SetDestination(Target()))
             {
                 Debug.LogError("ERROR IN ALLY MOVEMENT : Can't find point");
-                troopRef.Death();
+                navMeshAgent.isStopped = true;
             }
         }
 
@@ -43,7 +43,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             if (!SetDestination(Target()))
             {
                 Debug.LogError("ERROR IN ALLY MOVEMENT : Can't find point");
-                troopRef.Death();
+                navMeshAgent.isStopped = true;
                 return TaskStatus.Failure;
             }
 
