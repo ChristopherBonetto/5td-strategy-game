@@ -327,7 +327,10 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(eventPath);
 
-        if(tempEvent != null)
+        if(tempEvent == null)
+        {
+            Debug.LogError("Can't play sound saved from path : " + eventPath);
+        }
         m_3DSoundInterface.AttachAndPlay(tempEvent, this.gameObject);
     }
 

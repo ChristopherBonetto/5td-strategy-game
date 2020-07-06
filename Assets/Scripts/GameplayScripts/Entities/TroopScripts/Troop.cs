@@ -885,6 +885,8 @@ public class Troop : EntityBehavior, ICanMove
         AssignStats(tempStats);
 
         base.Specialization(type);
+
+        AttachAndPlaySound(m_troopStats.UpgradeSound);
     }
 
     #endregion

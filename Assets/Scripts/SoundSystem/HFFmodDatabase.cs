@@ -228,7 +228,7 @@ public class HFFmodDatabase : Singleton<HFFmodDatabase>
         //If all events finded from banks as been loaded right so READY.
         if(m_pendingEvents == 0)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
 
             m_eventDatabaseCompleted = true;
             HFEventManager.TriggerEvent<bool>(HFEventID.OnFinishedLoadEvents, true);

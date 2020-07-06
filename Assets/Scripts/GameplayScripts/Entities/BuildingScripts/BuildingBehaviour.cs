@@ -152,6 +152,8 @@ public class BuildingBehaviour : EntityBehavior
             {
                 m_attackDelayElapsed += Time.deltaTime;
             }
+
+            AttachAndPlaySound(m_buildingStats.AttackSound);
         }
     }
 
@@ -255,6 +257,7 @@ public class BuildingBehaviour : EntityBehavior
         {
             base.Specialization(type);
             m_view?.UpdateTowerVisualState(true);
+            AttachAndPlaySound(m_buildingStats.UpgradeSound);
         }
     }
 
