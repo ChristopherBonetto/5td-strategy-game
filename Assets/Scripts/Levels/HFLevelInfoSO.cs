@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using HF.Refactoring;
+using FMOD.Studio;
 
 [CreateAssetMenu(menuName = "Human Factor/New Level Info", fileName = "L_00_Info")]
 public class HFLevelInfoSO : ScriptableObject
@@ -27,6 +28,10 @@ public class HFLevelInfoSO : ScriptableObject
     public int LevelSceneIndex;
 
     public bool m_levelCompleted = false;
+
+    [FMODUnity.EventRef]
+    public string LevelSound;
+
 
     public void CompleteLevel()
     {
