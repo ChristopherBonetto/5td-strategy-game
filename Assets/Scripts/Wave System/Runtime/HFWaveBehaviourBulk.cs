@@ -46,8 +46,10 @@ namespace HF.Refactoring
                     // Reset the timer
                     m_timeElapsed = 0;
 
+
                     HFUIManager.Instance.Getwindow<HFUIHUD>(HFUIWindowID.HUD).SetEnemySpawnMarker(controller.SpawnPoints[m_spawnPointID].transform);
                     HFEventManager.TriggerEvent(HFEventID.OnTutorialQuestCompleted, TutorialID.Call_wave);
+                    controller?.OnBehaviourExecute.Invoke();
                 }
             }
         }

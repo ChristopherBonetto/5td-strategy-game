@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace HF.Refactoring
 {
@@ -39,6 +40,13 @@ namespace HF.Refactoring
         TileHighlight lastLocator;
         public LayerMask LocatorLayer;
 
+        // Sound
+        [Tooltip("Play when a single behaviour of the wave is executed. Sound's index is 0")]
+        public UnityEvent OnBehaviourExecute;
+        [Tooltip("Play when the wave begin. Sound's index is 1")]
+        public UnityEvent OnWaveBegin;
+        [Tooltip("Play when the last wave begin. Sound's index is 2")]
+        public UnityEvent OnLastWaveBegin;
 
 
 
@@ -200,6 +208,12 @@ namespace HF.Refactoring
             // Notify that this is the last wave.
             if (m_currentWave == TotalWaves[TotalWaves.Count - 1])
                 HFEventManager.TriggerEvent(HFEventID.OnWaveEnded);
+
+            // Sound
+            if (WaveIndex == TotalWaves.Count - 1)
+                OnLastWaveBegin?.Invoke();
+            else
+                OnWaveBegin?.Invoke();
         }
 
         /// <summary>
