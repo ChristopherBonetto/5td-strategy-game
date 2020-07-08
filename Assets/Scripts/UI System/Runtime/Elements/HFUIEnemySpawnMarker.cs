@@ -12,7 +12,7 @@ public class HFUIEnemySpawnMarker : MonoBehaviour
 
     private void Awake()
     {
-        scale = transform.DOScale(.82f, 3.5f).SetLoops(-1, LoopType.Yoyo);
+        scale = transform.DOScale(2f, .5f).SetLoops(-1, LoopType.Yoyo);
     }
 
     private void Update()
