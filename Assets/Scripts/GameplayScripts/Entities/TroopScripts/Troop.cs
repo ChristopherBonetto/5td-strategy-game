@@ -405,11 +405,12 @@ public class Troop : EntityBehavior, ICanMove
     {
         for (int i = 0; i < UnitList.Count; i++)
         {
+            UnitList[i].AssignFocusToUnit((BuildingBehaviour)null);
+
             if (UnitList[i].gameObject.activeSelf)
             {
                 UnitList[i].StopTree(true);
                 //unit.ResetUnitRotation();
-                UnitList[i].AssignFocusToUnit((BuildingBehaviour)null);
 
                 UnitList[i].UnitAgent.enabled = true;
                 UnitList[i].UnitAgent.isStopped = false;
@@ -528,7 +529,7 @@ public class Troop : EntityBehavior, ICanMove
             ResetTree();
         }
 
-        if (m_buildingHandled != null)
+        if (m_buildingHandled != null || FocusEntity != null)
         {
             //m_buildingHandled.Drop(this.transform.position);
             return false;
@@ -950,11 +951,11 @@ public class Troop : EntityBehavior, ICanMove
             inTroop.IsBusy = true;
             this.IsBusy = true;
 
-            inTroop.Agent.isStopped = true;
             inTroop.StopTree(true);
+            inTroop.Agent.isStopped = true;
 
-            this.Agent.isStopped = true;
             this.StopTree(true);
+            this.Agent.isStopped = true;
 
             inTroop.FocusEntity = this as Troop;
 
