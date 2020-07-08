@@ -108,8 +108,8 @@ public class InputReaderManager : Singleton<InputReaderManager>
         {
             m_currentPressedNumber = ReturnKeyboardNumber();
 
-            if (m_currentPressedNumber == null) return;
-
+            if (m_currentPressedNumber == null || GameController.Instance.TakeEntityFromDictionary(typeof(BuildingBehaviour), m_currentPressedNumber.Value) == null) return;
+            HFCameraController.Instance.SetTarget(GameController.Instance.TakeEntityFromDictionary(typeof(BuildingBehaviour), m_currentPressedNumber.Value).transform);
             GameController.Instance.TakeEntityFromDictionary(typeof(BuildingBehaviour), m_currentPressedNumber.Value);
         }
     }
