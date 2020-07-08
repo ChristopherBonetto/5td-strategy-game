@@ -135,8 +135,6 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     return true;
                 }
             }
-
-            Debug.Log(remainingDistance);
             return remainingDistance <= arriveDistance.Value;
         }
     }

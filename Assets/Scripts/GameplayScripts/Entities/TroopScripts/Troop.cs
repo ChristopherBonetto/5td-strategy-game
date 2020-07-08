@@ -385,6 +385,8 @@ public class Troop : EntityBehavior, ICanMove
 
     public void ResetFormation()
     {
+        AssignDest(Agent.transform.position);
+
         for (int i = 0; i < UnitList.Count; i++)
         {
             if (UnitList[i].gameObject.activeSelf)
@@ -453,7 +455,6 @@ public class Troop : EntityBehavior, ICanMove
 
     IEnumerator Reset(float inDestinationTime = 0.3f, Vector3? inResetDestination = null)
     {
-        //StopTree(true);
         IsBusy = true;
 
         if (FocusEntity != null && FocusEntity is Troop && FocusEntity.FocusEntity == this)
@@ -492,8 +493,6 @@ public class Troop : EntityBehavior, ICanMove
 
         FocusEntity.FocusEntity = null;
         FocusEntity = null;
-
-        ResetFormation();
 
         if(inResetDestination != null)
         {
@@ -637,9 +636,7 @@ public class Troop : EntityBehavior, ICanMove
                 }
             }
 
-            //Agent.SetDestination(FocusEntity.transform.position);
-
-            //HFEventManager.TriggerEvent(HFEventID.OnUnitLift);
+            SetIdleState();
 
             AttachAndPlaySound(m_troopStats.LiftSound);
 
@@ -667,8 +664,6 @@ public class Troop : EntityBehavior, ICanMove
 
                 BuildingHandled = null;
             
-                FocusEntity = null;
-
                 SetIdleState();
 
                 //HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
@@ -685,8 +680,7 @@ public class Troop : EntityBehavior, ICanMove
     {
         FocusEntity = null;
         IsBusy = false;
-        m_destination = Agent.transform.position;
-        Agent.destination = Agent.transform.position;
+        AssignDest(transform.position);
 
         ResetUnits();
 
