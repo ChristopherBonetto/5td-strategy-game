@@ -155,14 +155,14 @@ public class Troop : EntityBehavior, ICanMove
             AliveUnit.TakeDamage(5);
         }
 
-        if(CurrentTroopState == TroopStates.GoToEnemy && FocusEntity == null)
-        {
-            SetIdleState();
-        }
-        if (CurrentTroopState == TroopStates.GoToAlly && FocusEntity == null)
-        {
-            SetIdleState();
-        }
+        //if(CurrentTroopState == TroopStates.GoToEnemy && FocusEntity == null)
+        //{
+        //    SetIdleState();
+        //}
+        //if (CurrentTroopState == TroopStates.GoToAlly && FocusEntity == null)
+        //{
+        //    SetIdleState();
+        //}
     }
 
     #endregion
@@ -669,8 +669,6 @@ public class Troop : EntityBehavior, ICanMove
             
                 FocusEntity = null;
 
-                ResetFormation();
-
                 SetIdleState();
 
                 //HFEventManager.TriggerEvent(HFEventID.OnUnitDropBuilding);
@@ -681,12 +679,14 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
-    #region Reset methods
+    #region Reset and Pause methods
 
     public void SetIdleState()
     {
         FocusEntity = null;
         IsBusy = false;
+        m_destination = Agent.transform.position;
+        Agent.des = Agent.transform.position;
 
         ResetUnits();
 
@@ -743,6 +743,8 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (m_isFreezed) return;
 
+        //DA RIVEDERE PERCHE COSI SE è IN FIGHT SI RIATTIVA IL COMANDANTE CHE VA PER I CAVOLI SUOI. QUINDI O SI FA UN CONTROLLO SU FOCUS ENTITY O MEGLIO SI FA UN CHECK PIU
+        //MIRATO DOVE COTROLLA UN PO TUTTO
         base.PauseEntity(inValue);
 
         if (Agent.isActiveAndEnabled)
@@ -761,7 +763,7 @@ public class Troop : EntityBehavior, ICanMove
                 if (unit.visualScript.UnitAnimator != null)
                     unit.visualScript.UnitAnimator.enabled = !inValue;
             }
-            if (FocusEntity != null && FocusEntity is Troop)
+            if (FocusEntity != null)
             {
                 unit.StopTree(inValue);
                 unit.UnitTree.ResetValuesOnRestart = !inValue;
@@ -789,7 +791,7 @@ public class Troop : EntityBehavior, ICanMove
                 if(unit.visualScript.UnitAnimator != null)
                    unit.visualScript.UnitAnimator.enabled = !inValue;
             }
-            if (FocusEntity != null && FocusEntity is Troop)
+            if (FocusEntity != null)
             {
                 unit.StopTree(inValue);
                 unit.UnitTree.ResetValuesOnRestart = !inValue;

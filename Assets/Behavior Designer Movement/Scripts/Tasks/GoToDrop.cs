@@ -104,16 +104,10 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             float dist;
             dist = Vector3.Distance(navMeshAgent.transform.position, targetPosition.Value);
 
-            if (remainingDistance == 0)
-            {
-                remainingDistance = float.PositiveInfinity;
-            }
-
-            if (dist <= arriveDistance.Value)
+            if (remainingDistance == 0 && dist <= arriveDistance.Value)
             {
                 return true;
             }
-
             return remainingDistance <= arriveDistance.Value;
         }
     }

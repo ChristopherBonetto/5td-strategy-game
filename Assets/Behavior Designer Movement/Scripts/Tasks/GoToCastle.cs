@@ -131,12 +131,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
             {
                 float dist = Vector3.Distance(navMeshAgent.transform.position, troopRef.TargetCastle.transform.position);
 
-                if (remainingDistance == 0)
-                {
-                    remainingDistance = float.PositiveInfinity;
-                }
-
-                if (dist <= arriveDistance.Value)
+                if (remainingDistance == 0 && dist <= arriveDistance.Value)
                 {
                     return true;
                 }
