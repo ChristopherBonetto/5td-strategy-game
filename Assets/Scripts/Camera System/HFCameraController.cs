@@ -12,6 +12,12 @@ public class HFCameraController : MonoBehaviour
 
     [SerializeField]
     private Transform m_target;
+    private Transform m_lastTargetPosition = null;
+    private Vector3 m_targetVelocity = Vector3.zero;
+    [SerializeField]
+    private float m_smoothTime = .65f;
+    [SerializeField]
+    private float m_maxSpeed = 80f;
 
     [SerializeField]
     private float m_cameraMovementSpeed;
@@ -122,6 +128,12 @@ public class HFCameraController : MonoBehaviour
         MoveTarget();
         UpdateDistance();
 
+        if (m_lastTargetPosition != null)
+        {
+            m_target.position = Vector3.SmoothDamp(m_target.position, m_lastTargetPosition.position, ref m_targetVelocity, m_smoothTime, m_maxSpeed);
+            if (m_target.position.sqrMagnitude == m_lastTargetPosition.position.sqrMagnitude)
+                m_lastTargetPosition = null;
+        }
     }
 
     private void OnDestroy()
@@ -199,6 +211,7 @@ public class HFCameraController : MonoBehaviour
 
         if (x != 0 || z != 0)
         {
+            m_lastTargetPosition = null;
             m_target.rotation = Quaternion.Euler(0, m_transform.rotation.eulerAngles.y, 0);
 
             float speedOnX = x * m_cameraMovementSpeed * Time.deltaTime;
@@ -218,40 +231,13 @@ public class HFCameraController : MonoBehaviour
 
             HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Camera);
         }
-
-        //Vector3 pos = m_target.transform.localPosition;
-
-        //if (Input.mousePosition.y >= Screen.height - panBorderThickness)
-        //{
-        //    pos.z += m_cameraMovementSpeed * Time.deltaTime;
-        //}
-        //if (Input.mousePosition.y <= panBorderThickness)
-        //{
-        //    pos.z -= m_cameraMovementSpeed * Time.deltaTime;
-        //}
-        //if (Input.mousePosition.x >= Screen.width - panBorderThickness)
-        //{
-        //    pos.x += m_cameraMovementSpeed * Time.deltaTime;
-        //}
-        //if (Input.mousePosition.x <= panBorderThickness)
-        //{
-        //    pos.x -= m_cameraMovementSpeed * Time.deltaTime;
-        //}
-
-        ////pos.x = Mathf.Clamp(pos.x, -m_Bounds.bounds.extents.x, m_Bounds.bounds.extents.x);
-        ////pos.z = Mathf.Clamp(pos.z, -m_Bounds.bounds.extents.z, m_Bounds.bounds.extents.z);
-        //m_target.transform.localPosition = pos;
-
-
-
-
-
-
     }
 
     public void SetTarget(Transform refPos)
     {
-        m_target.position = refPos.position;
+        if (refPos == null) return;
+
+        m_lastTargetPosition = refPos;
     }
 }
 

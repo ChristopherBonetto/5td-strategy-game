@@ -100,7 +100,9 @@ public class InputReaderManager : Singleton<InputReaderManager>
         }
         else if (Input.GetButtonUp("SwitchTroop"))
         {
-            GameController.Instance.TakeEntityFromDictionary(typeof(Troop));
+            EntityBehavior entity = GameController.Instance.TakeEntityFromDictionary(typeof(Troop));
+            if (entity == null) return;
+            HFCameraController.Instance.SetTarget(entity.transform);
         }
         else
         {
