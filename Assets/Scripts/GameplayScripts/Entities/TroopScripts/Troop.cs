@@ -725,9 +725,12 @@ public class Troop : EntityBehavior, ICanMove
             InputReaderManager.Instance.RemoveSelection();
         }
 
+        int index = 0;
         foreach (Unit unit in UnitList.ToList())
         {
             DismissUnitInTroop(unit);
+            unit.transform.position = transform.position + m_formationPosition[index];
+            index++;
         }
 
         m_troopStats = null;
