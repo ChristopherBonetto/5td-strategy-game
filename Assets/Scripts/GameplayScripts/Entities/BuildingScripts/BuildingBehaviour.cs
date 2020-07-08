@@ -176,7 +176,11 @@ public class BuildingBehaviour : EntityBehavior
             yield return null;
         }
 
-        if (target == null || entity == null || target.UnitList == null) yield return null;
+        if (target == null || target.AliveUnit == null || entity == null || target.UnitList == null)
+        {
+            m_focusEntity = null;
+            yield return null;
+        }
 
         int count = target.UnitList.Count;
 
@@ -184,7 +188,11 @@ public class BuildingBehaviour : EntityBehavior
         {
             // Check the area around an alive unit. 
             // If we check area around the troop can happen that the unit is out of range and don't take damage.
-            Collider[] collisions = Physics.OverlapSphere(target.AliveUnit.transform.position, ExplosionRadius, LayerMask.GetMask("Enemy"));
+            Unit aliveUnit = target.AliveUnit;
+            if (aliveUnit == null) 
+                yield return null;
+
+            Collider[] collisions = Physics.OverlapSphere(aliveUnit.transform.position, ExplosionRadius, LayerMask.GetMask("Enemy"));
 
             for (int i = 0; i < collisions.Length; i++)
             {
