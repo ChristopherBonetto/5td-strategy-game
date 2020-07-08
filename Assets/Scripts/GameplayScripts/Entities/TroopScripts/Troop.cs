@@ -686,7 +686,7 @@ public class Troop : EntityBehavior, ICanMove
         FocusEntity = null;
         IsBusy = false;
         m_destination = Agent.transform.position;
-        Agent.des = Agent.transform.position;
+        Agent.destination = Agent.transform.position;
 
         ResetUnits();
 
