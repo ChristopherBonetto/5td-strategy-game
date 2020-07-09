@@ -268,6 +268,7 @@ public class BuildingBehaviour : EntityBehavior
         {
             base.Specialization(type);
             m_view?.UpdateTowerVisualState(true);
+            Click();
             AttachAndPlaySound(m_buildingStats.UpgradeSound);
         }
     }

@@ -63,14 +63,10 @@ namespace HF.Unit
             }
         }
 
-
-        private void Awake()
-        {
-            RangeFeedback.SetActive(false);
-        }
-
         private void OnEnable()
         {
+            RangeFeedback.SetActive(false);
+
             if(drop!=null)
             {
                 drop.Stop();
@@ -157,14 +153,7 @@ namespace HF.Unit
         }
         public void UpdateTowerVisualState(bool state)
         {
-            if (state == true)
-            {
-                RangeFeedback.SetActive(true);
-            }
-            else
-            {
-                RangeFeedback.SetActive(false);
-            }
+            RangeFeedback.SetActive(state);
         }
 
 
