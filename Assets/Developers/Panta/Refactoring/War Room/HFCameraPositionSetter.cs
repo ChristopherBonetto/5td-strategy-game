@@ -11,7 +11,8 @@ namespace HF.Refactoring
 
         private void OnMouseUp() 
         {
-            HFCameraWarRoom.Instance.SetPositionCount(CameraPositionCount);
+            if (HFCameraWarRoom.Instance.Position != CameraPositionCount)
+                HFCameraWarRoom.Instance.SetPositionCount(CameraPositionCount);
         }
     }
 }
