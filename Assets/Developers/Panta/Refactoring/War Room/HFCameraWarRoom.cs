@@ -6,6 +6,8 @@ namespace HF.Refactoring
 {
     public class HFCameraWarRoom : MonoBehaviour
     {
+        public static HFCameraWarRoom Instance;
+
         [SerializeField]
         private int CountOfPositions;
         private Animator m_animatorController;
@@ -13,23 +15,29 @@ namespace HF.Refactoring
 
         private void Awake()
         {
+            Instance = this;
             m_animatorController = GetComponent<Animator>();
         }
 
-        private void Update()
+        private void Update() 
         {
-            if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)) 
             {
-                m_position++;
-                m_position = (int)Mathf.Repeat(m_position++, CountOfPositions);
-                m_animatorController.SetInteger("Position", m_position);
+                int newPos = m_position + 1;
+                SetPositionCount(newPos);
             }
-            else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)) 
             {
-                m_position--;
-                m_position = (int)Mathf.Repeat(m_position--, CountOfPositions);
-                m_animatorController.SetInteger("Position", m_position);
+                int newPos = m_position - 1;
+                SetPositionCount(newPos);
             }
+        }
+
+        public void SetPositionCount(int index)
+        {
+            m_position = index % CountOfPositions;
+            m_position = (int)Mathf.Repeat(m_position, CountOfPositions);
+            m_animatorController.SetInteger("Position", m_position);
         }
     }
 }
