@@ -61,5 +61,13 @@ namespace HF.Refactoring
                 m_loadLevelButtons[i].Level = levelContainer.Levels[i];
             }
         }
+
+        public void EnableAllButtons(bool enabled) 
+        {
+            for (int i = 0; i < m_loadLevelButtons.Length; i++) 
+            {
+                m_loadLevelButtons[i].button.enabled = enabled;
+            }
+        }
     }
 }
