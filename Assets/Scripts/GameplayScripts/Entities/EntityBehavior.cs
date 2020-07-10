@@ -8,14 +8,14 @@ using System.ComponentModel;
 using System;
 using System.Xml.Schema;
 
-[RequireComponent(typeof(BehaviorTree))]
+//[RequireComponent(typeof(BehaviorTree))]
 public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 {
     #region Variables
 
     #region Component Var and Interface instances
 
-    protected BehaviorTree m_behaviorTree;
+    //protected BehaviorTree m_behaviorTree;
 
     protected IAttackTypes m_attackType;
 
@@ -62,6 +62,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     protected EntityBehavior m_focusEntity = null;
     public EntityBehavior FocusEntity { get { return m_focusEntity; } set { m_focusEntity = value; } }
 
+    public LayerMask OpponentMask;
+
     #endregion
 
     #region Generic Var
@@ -104,7 +106,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public virtual void Awake()
     {
-        m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
+        //m_behaviorTree = gameObject.GetComponent<BehaviorTree>();
         StopTree(true);
         m_3DSoundInterface = new HFIAttachPlay3D();
 
@@ -135,10 +137,13 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if (EntityPlayerType == PlayerType.Player)
         {
             gameObject.layer = GameController.Instance.m_playerLayer;
+            //OpponentMask = LayerMask.NameToLayer("Enemy");
+
         }
         else if (EntityPlayerType == PlayerType.AI)
         {
             gameObject.layer = GameController.Instance.m_aiLayer;
+            //OpponentMask = LayerMask.NameToLayer("Player");
         }
     }
 
@@ -153,7 +158,8 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
 
     public void StopTree(bool inValue)
     {
-        m_behaviorTree.enabled = !inValue;
+        //if(m_behaviorTree != null)
+        //    m_behaviorTree.enabled = !inValue;
     }
 
     protected virtual void DisableEntity()
@@ -166,7 +172,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
     {
         m_isFreezed = inValue;
         StopTree(inValue);
-        m_behaviorTree.ResetValuesOnRestart = !inValue;
+        //m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
 
     protected virtual void PauseEntity(bool inValue)
@@ -174,7 +180,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         if (m_isFreezed) return;
 
         StopTree(inValue);
-        m_behaviorTree.ResetValuesOnRestart = !inValue;
+        //m_behaviorTree.ResetValuesOnRestart = !inValue;
     }
 
     #endregion
@@ -229,7 +235,7 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
             return;
         } 
 
-        if(this == InputReaderManager.Instance.CurrentEntity)
+        if (InputReaderManager.Instance.CurrentEntity != null && this == InputReaderManager.Instance.CurrentEntity)
         {
             InputReaderManager.Instance.RemoveSelection();
         }

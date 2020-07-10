@@ -49,16 +49,16 @@ public class BuildingBehaviour : EntityBehavior
     {
         EntityStats = inStats;
 
-        var buildingRef = (SharedBuilding)m_behaviorTree.GetVariable("BuildingRef");
-        buildingRef.Value = this;
-        var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
-        attackRange.Value = m_buildingStats.AttackRange;
+        //var buildingRef = (SharedBuilding)m_behaviorTree.GetVariable("BuildingRef");
+        //buildingRef.Value = this;
+        //var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
+        //attackRange.Value = m_buildingStats.AttackRange;
 
         TakeVisualPrefab(m_buildingStats.BuildingType);
 
         CurrentHp = m_buildingStats.MaxHp;
 
-        m_behaviorTree.enabled = true;
+        //m_behaviorTree.enabled = true;
     }
 
     public override bool TakeDamage(int Damage)

@@ -28,15 +28,19 @@ public class DetectionEntityBehaviour<T> : IDetectGeneric<T> where T : EntityBeh
         {
             if (m_collisionCollection[i])
             {
-                if (Physics.Raycast(inOrigin.transform.position, m_collisionCollection[i].transform.position - inOrigin.transform.position, inRange, inDetectionMask))
-                {
+                //if (Physics.Raycast(inOrigin.transform.position, m_collisionCollection[i].transform.position - inOrigin.transform.position, inRange, inDetectionMask))
+                //{
                     entity = m_collisionCollection[i].GetComponent<T>();
 
                     if (entity != null)
                     {
                         return entity;
                     }
-                }
+                    else
+                    {
+                        entity = m_collisionCollection[i].GetComponentInParent<T>();
+                    }
+                //}
             }
         }
 

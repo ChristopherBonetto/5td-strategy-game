@@ -35,8 +35,8 @@ public class GameController : Singleton<GameController>
         }
     }
 
-    public int m_playerLayer { get; private set; }
-    public int m_aiLayer { get; private set; }
+    public int m_playerLayer;
+    public int m_aiLayer; 
 
     [SerializeField] private GameCollection m_gameCollection;
 
@@ -155,6 +155,7 @@ public class GameController : Singleton<GameController>
         troop.SetActive(true);
 
         troopRef.AssignStats(Collection.UnitsDictionary[inUnitType].UnitStatsCopy);
+        troopRef.Initialize();
         troopRef.AssignPlayer(inPlayerType);
         troopRef.StopTree(false);
 

@@ -6,16 +6,19 @@ using BehaviorDesigner.Runtime;
 using UnityEngine.AI;
 using DG.Tweening;
 using System.Linq;
+using System;
+using FMOD;
+using BehaviorDesigner.Runtime.Tasks;
+using BehaviorDesigner.Runtime.Tasks.Unity.UnityNavMeshAgent;
 using UnityEditor;
-using Unity.Collections.LowLevel.Unsafe;
-using System.Threading;
+using System.Runtime.InteropServices;
 
 public enum TroopStates
 {
     Idle,
-    GoToEnemy,
-    GoToAlly,
-    GoToDestination
+    GoTo,
+    Attack,
+    Lift
 }
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -26,6 +29,7 @@ public class Troop : EntityBehavior, ICanMove
     #region Component Var
 
     public NavMeshAgent Agent;
+    public DetectionEntityBehaviour<Troop> Detect;
 
     #endregion
 
@@ -113,6 +117,10 @@ public class Troop : EntityBehavior, ICanMove
 
     private Coroutine m_resetCoroutine = null;
 
+    //private EntityBehavior currentTarget;
+
+    private int numberOfCollisions;
+    private Collider[] overlapColliders;
     #endregion
 
     #region Generic Var
@@ -124,9 +132,24 @@ public class Troop : EntityBehavior, ICanMove
 
     #endregion
 
+    #region State
+    public TroopState curretState;
+
+    public AttackState AttackState;
+    public GoToDestination GoToState;
+    public IdleState IdleState;
+    public LiftState LiftState;
+
+    #endregion
+
     #endregion
 
     #region Behaviour Cycle
+
+    //public override void Awake()
+    //{
+
+    //}
 
     protected override void OnDisable()
     {
@@ -142,27 +165,62 @@ public class Troop : EntityBehavior, ICanMove
     {
         base.OnEnable();
 
-        AssignDest(transform.position);
-        SetNewTroopState(TroopStates.Idle);
+        //AssignDest(transform.position);
+        //SetNewTroopState(TroopStates.Idle);
+
     }
 
     private void Update()
     {
+        if (EntityPlayerType == PlayerType.AI) return;
+
         ResurrectDeathUnits();
 
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            AliveUnit.TakeDamage(5);
-        }
+        //if (Input.GetKeyDown(KeyCode.M))
+        //{
+        //    AliveUnit.TakeDamage(5);
+        //}
 
-        //if(CurrentTroopState == TroopStates.GoToEnemy && FocusEntity == null)
-        //{
-        //    SetIdleState();
-        //}
-        //if (CurrentTroopState == TroopStates.GoToAlly && FocusEntity == null)
-        //{
-        //    SetIdleState();
-        //}
+        // Update current state
+        curretState?.OnUpdate();
+
+        if(CanDetect())
+        {
+            UnityEngine.Debug.Log("Detect");
+            // Detect
+            GameObject go = null;
+            numberOfCollisions = Physics.OverlapSphereNonAlloc(transform.position, m_troopStats.EngageRange, overlapColliders, OpponentMask);
+            for (int i = 0; i < numberOfCollisions; i++)
+            {
+                if (overlapColliders[i])
+                {
+                    go = overlapColliders[i].gameObject;
+                    break;
+                }
+            }
+
+            if (go != null)
+            {
+                //if (!Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, ignoreLayerMask))
+                //{
+                //UnityEngine.Debug.DrawLine(transform.position + Vector3.up, go.transform.position + Vector3.up, Color.red);
+
+                EntityBehavior returnedObject = go.GetComponentInParent<EntityBehavior>();
+
+             
+                if (returnedObject is CastleStarter)
+                {
+                    //SetAttack(currentTarget);
+                }
+                else if (returnedObject is Troop)
+                {
+                    FocusEntity = returnedObject;
+                    SetAttack(FocusEntity);
+                }
+                
+                //}
+            }
+        }
     }
 
     #endregion
@@ -174,9 +232,101 @@ public class Troop : EntityBehavior, ICanMove
         m_currentTroopState = inNewState;
     }
 
+    public void ChangeState(TroopStates _newState)
+    {
+        curretState?.OnExit();
+
+        m_currentTroopState = _newState;
+
+        switch (m_currentTroopState)
+        {
+            case TroopStates.Idle:
+                curretState = IdleState;
+                break;
+            case TroopStates.GoTo:
+                curretState = GoToState;
+                break;
+            case TroopStates.Attack:
+                curretState = AttackState;
+                break;
+            case TroopStates.Lift:
+                curretState = LiftState;
+                break;
+        }
+
+        curretState.OnEnter();
+    }
+
+    public void SetAttack(EntityBehavior _target)
+    {
+        SetDestination(_target);
+    }
+
+
+    public void SetDestination(Vector3 _pos)
+    {
+        ChangeState(TroopStates.GoTo);
+
+        (curretState as GoToDestination).SetDestination(_pos, () => ChangeState(TroopStates.Idle));
+
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            NavMeshAgent unit = UnitList[i].UnitAgent;
+
+            if (unit.isActiveAndEnabled && unit.isOnNavMesh)
+            {
+                Vector3 unitDestin = _pos + m_formationPosition[i];
+                unit.SetDestination(unitDestin);
+            }
+        }
+    }
+
+    public void SetDestination(EntityBehavior _target)
+    {
+        ChangeState(TroopStates.GoTo);
+
+        // Lift turrets
+        if(EntityPlayerType == PlayerType.Player && _target.EntityPlayerType == PlayerType.Player)
+        {
+            if(_target is BuildingBehaviour && CurrentCarryCapacity >= (_target as BuildingBehaviour).GetStats().Weight)
+                (curretState as GoToDestination).SetDestination(_target.transform, false,() => ChangeState(TroopStates.Lift));
+        }
+        else
+            (curretState as GoToDestination).SetDestination(_target.transform, true, () => ChangeState(TroopStates.Attack));
+
+
+
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            NavMeshAgent unit = UnitList[i].UnitAgent;
+
+            if (unit.isActiveAndEnabled && unit.isOnNavMesh)
+            {
+                Vector3 unitDestin = _target.transform.position + m_formationPosition[i];
+                unit.SetDestination(unitDestin);
+            }
+        }
+    }
+
     #endregion
 
     #region Stats
+    public void Initialize()
+    {
+        GoToState = new GoToDestination(Agent, m_troopStats.UnitSpeed, m_troopStats.AttackRange);
+        foreach (Unit item in UnitList)
+        {
+            item.UnitAgent.speed = m_troopStats.UnitSpeed;
+        }
+
+        IdleState = new IdleState();
+        LiftState = new LiftState();
+        AttackState = new AttackState(this);
+
+        overlapColliders = new Collider[99];
+
+        ChangeState(TroopStates.Idle);
+    }
 
     public override void AssignStats(EntityStatsSO inStats)
     {
@@ -184,19 +334,19 @@ public class Troop : EntityBehavior, ICanMove
 
         RefreshUnitsVisual(m_troopStats.UnitType, m_troopStats.UnitQuantity);
 
-        AssignTreeStats();
+        //AssignTreeStats();
     }
 
     public void AssignTreeStats()
     {
-        var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
-        if(engageRange.Value != null && m_troopStats != null) engageRange.Value = m_troopStats.EngageRange;
+        //var engageRange = (SharedFloat)m_behaviorTree.GetVariable("EngageRange");
+        //if(engageRange.Value != null && m_troopStats != null) engageRange.Value = m_troopStats.EngageRange;
 
-        var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
-        if (attackRange.Value != null && m_troopStats != null) attackRange.Value = m_troopStats.AttackRange;
+        //var attackRange = (SharedFloat)m_behaviorTree.GetVariable("AttackRange");
+        //if (attackRange.Value != null && m_troopStats != null) attackRange.Value = m_troopStats.AttackRange;
 
-        var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
-        if(movimentSpeed.Value != null && m_troopStats != null) movimentSpeed.Value = m_troopStats.UnitSpeed;
+        //var movimentSpeed = (SharedFloat)m_behaviorTree.GetVariable("MovimentSpeed");
+        //if(movimentSpeed.Value != null && m_troopStats != null) movimentSpeed.Value = m_troopStats.UnitSpeed;
     }
 
     public new UnitsStatsSO GetStats()
@@ -223,7 +373,7 @@ public class Troop : EntityBehavior, ICanMove
 
         if (AliveUnit == null)
         {
-            Debug.Log("This troop don't have units");
+            //Debug.Log("This troop don't have units");
             return capacity;
         }
 
@@ -433,25 +583,19 @@ public class Troop : EntityBehavior, ICanMove
     //Command from interfaces
     public void MoveFromTo(Vector3 endPosition)
     {
-        if (!m_isFreezed)
-        {
-            if (FocusEntity != null && FocusEntity is Troop) { ResetTroop(3f, endPosition); }
-        }
-
-        FocusEntity = null;
-        AssignDest(endPosition);
-        SetNewTroopState(TroopStates.GoToDestination);
+        SetDestination(endPosition);
+       // SetNewTroopState(TroopStates.GoToDestination);
     }
 
     private void AssignDest(Vector3 inDest)
     {
-        if (Agent.isActiveAndEnabled && Agent.isOnNavMesh)
-        {
-            m_destination = inDest;
-            var dest = (SharedVector3)m_behaviorTree.GetVariable("Destination");
-            if (dest != null) dest.Value = m_destination;
-            Agent.SetDestination(inDest);
-        }
+        //if (Agent.isActiveAndEnabled && Agent.isOnNavMesh)
+        //{
+        //    m_destination = inDest;
+        //    var dest = (SharedVector3)m_behaviorTree.GetVariable("Destination");
+        //    if (dest != null) dest.Value = m_destination;
+        //    Agent.SetDestination(inDest);
+        //}
     }
 
     IEnumerator Reset(float inDestinationTime = 0.3f, Vector3? inResetDestination = null)
@@ -547,7 +691,7 @@ public class Troop : EntityBehavior, ICanMove
                 {
                     AssignDest(inEntity.transform.position);
                     FocusEntity = enemyTroop;
-                    SetNewTroopState(TroopStates.GoToEnemy);
+                    //SetNewTroopState(TroopStates.GoToEnemy);
                     //Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyTroop.name);
                     return true;
                 }
@@ -560,7 +704,7 @@ public class Troop : EntityBehavior, ICanMove
                 if (enemyBuilding.GetStats().CanTakeDamage && m_troopStats.CanAttack)
                 {
                     FocusEntity = enemyBuilding;
-                    SetNewTroopState(TroopStates.GoToEnemy);
+                    //SetNewTroopState(TroopStates.GoToEnemy);
                     //Debug.Log(gameObject.name + " GO TO ATTACK : " + enemyBuilding.name);
                     return true;
                 }
@@ -571,12 +715,12 @@ public class Troop : EntityBehavior, ICanMove
             if (inEntity is BuildingBehaviour && !inEntity.IsBusy)
             {
                 BuildingBehaviour building = inEntity as BuildingBehaviour;
-                Debug.Log(CurrentCarryCapacity);
+                //Debug.Log(CurrentCarryCapacity);
                 if(CurrentCarryCapacity >= building.GetStats().Weight)
                 {
                     AssignDest(inEntity.transform.position);
                     FocusEntity = inEntity;
-                    SetNewTroopState(TroopStates.GoToAlly);
+                    //SetNewTroopState(TroopStates.GoToAlly);
                     //Debug.Log(gameObject.name + " GO TO : " + m_focusEntity.name);
                     return true;
                 }
@@ -585,7 +729,7 @@ public class Troop : EntityBehavior, ICanMove
 
         if(FocusEntity == null)
         {
-            Debug.LogWarning("Assigned null FOCUS ENTITY");
+            //Debug.LogWarning("Assigned null FOCUS ENTITY");
             //SetIdleState();
             return false;
         }
@@ -685,10 +829,10 @@ public class Troop : EntityBehavior, ICanMove
 
         ResetUnits();
 
-        if (!m_behaviorTree.isActiveAndEnabled)
-        {
-            ResetTree();
-        }
+        //if (!m_behaviorTree.isActiveAndEnabled)
+        //{
+        //    ResetTree();
+        //}
         if (!Agent.isActiveAndEnabled)
         {
             Agent.enabled = true;
@@ -707,7 +851,7 @@ public class Troop : EntityBehavior, ICanMove
 
     protected override void DisableEntity()
     {
-        m_behaviorTree.enabled = false;
+        //m_behaviorTree.enabled = false;
 
         FocusEntity = null;
         IsBusy = false;
@@ -924,6 +1068,16 @@ public class Troop : EntityBehavior, ICanMove
 
     #region AttackReworked
 
+    public bool CanDetect()
+    {
+        if (CurrentTroopState == TroopStates.Attack) return false;
+        if (CurrentTroopState == TroopStates.Lift) return false;
+        if (FocusEntity != null) return false;
+        if (CurrentTroopState == TroopStates.GoTo && FocusEntity != null) return false;
+
+        return true;
+    }
+
     //Custom commands for troop/entity
     public override void Attack()
     {
@@ -944,53 +1098,63 @@ public class Troop : EntityBehavior, ICanMove
             HFEventManager.TriggerEvent(HFEventID.OnUnitFight);
     }
 
-    public void TroopAttack(Troop inTroop)
+
+    public void CheckTargetDefeat()
     {
-        if(m_troopStats.AttackType == AttackType.MELEE)
+        if (FocusEntity == null) return;
+
+        if (FocusEntity.CurrentHp <= 0)
         {
-            inTroop.IsBusy = true;
-            this.IsBusy = true;
-
-            inTroop.StopTree(true);
-            inTroop.Agent.isStopped = true;
-
-            this.StopTree(true);
-            this.Agent.isStopped = true;
-
-            inTroop.FocusEntity = this as Troop;
-
-            for (int i = 0; i < UnitList.Count; i++)
-            {
-                if (!DeathUnit.Contains(UnitList[i]))
-                {
-                    GiveAnotherTargetToUnit(UnitList[i]);
-                    UnitList[i].StopTree(false);
-                }
-            }
-
-            for (int i = 0; i < inTroop.UnitList.Count; i++)
-            {
-                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
-                {
-                    inTroop.GiveAnotherTargetToUnit(inTroop.UnitList[i]);
-                    inTroop.UnitList[i].StopTree(false);
-                }
-            }
-        }
-        else if(m_troopStats.AttackType == AttackType.RANGED)
-        {
-            this.Agent.isStopped = true;
-
-            for (int i = 0; i < UnitList.Count; i++)
-            {
-                if (!DeathUnit.Contains(UnitList[i]))
-                {
-                    GiveAnotherTargetToUnit(UnitList[i]);
-                    UnitList[i].StopTree(false);
-                }
-            }
+            FocusEntity = null;
+            ChangeState(TroopStates.Idle);
         }
     }
+
+    public void TroopAttack(Troop inTroop)
+    {
+        //if(m_troopStats.AttackType == AttackType.MELEE)
+        //{
+            List<Unit> alive = new List<Unit>();
+            for (int i = 0; i < UnitList.Count; i++)
+            {
+                if (!DeathUnit.Contains(UnitList[i]))
+                    alive.Add(UnitList[i]);
+            }
+
+            List<Unit> targ = inTroop.GetUnitAsTargetList(UnitList.Count);
+
+            for (int i = 0; i < alive.Count; i++)
+            {
+                alive[i].AssignFocusToUnit(targ[i]);
+
+            }
+
+        //}
+        //else if(m_troopStats.AttackType == AttackType.RANGED)
+        //{
+        //    //this.Agent.isStopped = true;
+
+        //    for (int i = 0; i < UnitList.Count; i++)
+        //    {
+        //        if (!DeathUnit.Contains(UnitList[i]))
+        //        {
+        //            UnitList[i].AssignFocusToUnit(inTroop.GetUnitAsTarget(i));
+        //            //GiveAnotherTargetToUnit(UnitList[i]);
+        //            //UnitList[i].StopTree(false);
+        //        }
+        //    }
+        //}
+    }
+
+    public void UpdateUnitAttack()
+    {
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (!DeathUnit.Contains(UnitList[i]))
+                UnitList[i].UnitAttack();
+        }
+    }
+
 
     public void GiveAnotherTargetToUnit(Unit inUnit)
     {
@@ -1020,8 +1184,45 @@ public class Troop : EntityBehavior, ICanMove
         {
             inUnit.FocusBuilding = null;
             inUnit.FocusUnit = null;
-            inUnit.StopTree(true);
+            //inUnit.StopTree(true);
         }
+    }
+
+    public Unit GetUnitAsTarget(int _index)
+    {
+        List<Unit> temp = new List<Unit>();
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (!DeathUnit.Contains(UnitList[i]))
+                temp.Add(UnitList[i]);
+        }
+
+        int m_index = (int)Mathf.Repeat(_index, temp.Count);
+
+        return temp[m_index];
+    }
+
+    public List<Unit> GetUnitAsTargetList(int _quantity)
+    {
+        List<Unit> alive = new List<Unit>();
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (!DeathUnit.Contains(UnitList[i]))
+                alive.Add(UnitList[i]);
+        }
+
+        int index = 0;
+        List<Unit> tmp = new List<Unit>();
+        for (int i = 0; i < _quantity; i++)
+        {
+            tmp.Add(alive[index]);
+
+            index++;
+            index = (int)Mathf.Repeat(index, alive.Count);
+        }
+
+
+        return tmp;
     }
 
     public void BuildingAttack(BuildingBehaviour inBuilding)
@@ -1043,10 +1244,10 @@ public class Troop : EntityBehavior, ICanMove
 
     protected override void MyTargetIsDeath(EntityBehavior inEntity)
     {
-        if(inEntity == FocusEntity)
-        {
-            ResetTroop(0.3f, null);
-        }
+        //if(inEntity == FocusEntity)
+        //{
+        //    ResetTroop(0.3f, null);
+        //}
     }
 
     public void ResetTroop(float inDestinationTime = 0.3f, Vector3? inDestPos = null)
@@ -1057,6 +1258,46 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
+    public void LookForEnemy()
+    {
+        //GameObject go = null;
+        //numberOfCollisions = Physics.OverlapSphereNonAlloc(transform.position, viewDistance.Value, overlapColliders, objectLayerMask);
+        //for (int i = 0; i < numberOfCollisions; i++)
+        //{
+        //    if (overlapColliders[i])
+        //    {
+        //        go = overlapColliders[i].gameObject;
+        //    }
+        //}
+
+        //if (go != null)
+        //{
+        //    if (!Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, ignoreLayerMask))
+        //    {
+        //        UnityEngine.Debug.DrawLine(transform.position + Vector3.up, go.transform.position + Vector3.up, Color.red);
+
+        //        returnedObject = go.GetComponentInParent<EntityBehavior>();
+
+        //        if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
+        //        {
+        //            if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
+        //            {
+        //                if (entityRef.AssignFocusEntity(returnedObject))
+        //                {
+        //                    return TaskStatus.Success;
+        //                }
+        //            }
+        //            else if (returnedObject is Troop)
+        //            {
+        //                if (entityRef.AssignFocusEntity(returnedObject))
+        //                {
+        //                    return TaskStatus.Success;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+    }
     #endregion
 
     #region GameState event
@@ -1076,4 +1317,135 @@ public class Troop : EntityBehavior, ICanMove
     }
 
     #endregion
+}
+
+
+public class TroopState
+{
+    public virtual void OnEnter() { }
+
+    public virtual void OnUpdate()  { /*UnityEngine.Debug.Log(" HERE");*/ }
+
+    public virtual void OnExit() { }
+
+}
+
+public class AttackState : TroopState 
+{
+    Troop m_Troop;
+
+    public AttackState(Troop _troop)
+    {
+        m_Troop = _troop;
+    }
+
+    public override void OnEnter()
+    {
+        m_Troop.Attack();
+        UnityEngine.Debug.Log("enter attack");
+    }
+
+    public override void OnUpdate()
+    {
+        m_Troop.UpdateUnitAttack();
+    }
+}
+
+public class IdleState : TroopState
+{
+    public override void OnEnter()
+    {
+        
+    }
+}
+
+/// <summary>
+/// Stationary target
+/// </summary>
+public class GoToDestination : TroopState
+{
+    private Animator animator;
+    public NavMeshAgent agent;
+    float speed;
+    System.Action action;
+
+    private Transform targetTransfrom;
+    private Vector3? destination;
+
+    private float currentRange;
+    private float visionDistance;
+    private float attackDistance;
+
+    public GoToDestination( NavMeshAgent _agent, float _speed, float _attack)
+    {
+        agent = _agent;
+
+        speed = _speed;
+        agent.speed = _speed;
+
+        visionDistance = agent.stoppingDistance;
+        attackDistance = _attack;
+
+        // Assign agent value
+    }
+    
+    public override void OnUpdate()
+    {
+        if(targetTransfrom != null)
+        {
+            // Timer
+            agent.SetDestination(targetTransfrom.position);
+
+        }
+
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        {
+            // Arrived
+            targetTransfrom = null;
+            action?.Invoke();
+
+            action = null;
+            UnityEngine.Debug.Log("Move DONE");
+        }
+    }
+
+
+    public override void OnExit()
+    {
+        targetTransfrom = null;
+        action = null;
+        destination = null;
+    }
+
+
+    public void SetDestination(Transform _target, bool _isEnemy, System.Action _action = null )
+    {
+        targetTransfrom = _target;
+
+        currentRange = (_isEnemy) ? attackDistance : visionDistance;
+        agent.stoppingDistance = currentRange;
+
+        agent.SetDestination(targetTransfrom.position);
+
+        action = _action;
+    }
+
+    public void SetDestination(Vector3 _target, System.Action _action = null)
+    {
+        destination = _target;
+
+        agent.stoppingDistance = visionDistance;
+        agent.SetDestination(destination.Value);
+        
+        action = _action;
+    }
+}
+
+
+public class LiftState : TroopState
+{
+    public override void OnUpdate()
+    {
+        UnityEngine.Debug.Log("Lift");
+    }
 }

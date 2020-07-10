@@ -7,6 +7,8 @@ using Types;
 using BehaviorDesigner.Runtime.Tasks;
 using System.Xml.Schema;
 using System;
+using System.Net.Http;
+using System.Diagnostics;
 
 public class Unit : MonoBehaviour, ITakeDamage
 {
@@ -157,8 +159,10 @@ public class Unit : MonoBehaviour, ITakeDamage
     {
         FocusBuilding = null;
 
-        AssignValuesToTree();
+        //AssignValuesToTree();
         FocusUnit = inUnit;
+
+        UnityEngine.Debug.Log($"unit {gameObject.name} attack {inUnit} as target");
     }
 
     public void AssignFocusToUnit(BuildingBehaviour building)
@@ -199,8 +203,17 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void UnitAttack()
     {
+        if (!m_unitAttackType.CanAttack(m_troopRef.GetStats().AttackSpeed)) return;
+        
         if (FocusUnit)
         {
+            if (!FocusUnit.gameObject.activeSelf)
+            {
+                TroopRef.GiveAnotherTargetToUnit(this);
+                TroopRef.CheckTargetDefeat();
+                return;
+            }
+
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
 
@@ -216,6 +229,12 @@ public class Unit : MonoBehaviour, ITakeDamage
                 bullet.gameObject.SetActive(true);
 
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
+            }
+
+            //Tanto dovrà essere cambiato siccome il danno verrà messo all'animazione.
+            if (m_visualScript != null)
+            {
+                m_visualScript.TriggerAnimation("isAttacking01");
             }
         }
         else if (FocusBuilding)
@@ -235,14 +254,16 @@ public class Unit : MonoBehaviour, ITakeDamage
 
                 m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
             }
+
+            //Tanto dovrà essere cambiato siccome il danno verrà messo all'animazione.
+            if (m_visualScript != null)
+            {
+                m_visualScript.TriggerAnimation("isAttacking01");
+            }
         }
 
 
-        //Tanto dovrà essere cambiato siccome il danno verrà messo all'animazione.
-        if(m_visualScript != null)
-        {
-            m_visualScript.TriggerAnimation("isAttacking01");
-        }
+        
     }
 
     public void CheckAnotherTarget()
