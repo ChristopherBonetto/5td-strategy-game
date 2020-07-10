@@ -9,6 +9,7 @@ using System.Xml.Schema;
 using System;
 using System.Net.Http;
 using System.Diagnostics;
+using DG.Tweening;
 
 public class Unit : MonoBehaviour, ITakeDamage
 {
@@ -157,7 +158,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void AssignFocusToUnit(Unit inUnit)
     {
-        FocusBuilding = null;
+        //FocusBuilding = null;
 
         //AssignValuesToTree();
         FocusUnit = inUnit;
@@ -167,9 +168,9 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void AssignFocusToUnit(BuildingBehaviour building)
     {
-        FocusUnit = null;
+        //FocusUnit = null;
 
-        AssignValuesToTree();
+        //AssignValuesToTree();
         FocusBuilding = building;
     }
 
@@ -203,6 +204,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void UnitAttack()
     {
+        if (!gameObject.activeSelf) return;
         if (!m_unitAttackType.CanAttack(m_troopRef.GetStats().AttackSpeed)) return;
         
         if (FocusUnit)
@@ -214,9 +216,14 @@ public class Unit : MonoBehaviour, ITakeDamage
                 return;
             }
 
+            if(Vector3.Distance(transform.position, FocusUnit.transform.position) > m_troopRef.GetStats().AttackRange)
+            {
+                m_unitAgent.SetDestination(FocusUnit.transform.position);
+                return;
+            }
+
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
@@ -261,9 +268,6 @@ public class Unit : MonoBehaviour, ITakeDamage
                 m_visualScript.TriggerAnimation("isAttacking01");
             }
         }
-
-
-        
     }
 
     public void CheckAnotherTarget()
