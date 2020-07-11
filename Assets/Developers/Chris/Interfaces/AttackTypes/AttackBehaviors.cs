@@ -55,11 +55,11 @@ public class AttackBehaviors : IAttackTypes
             {
                 if (takeDamage.TakeDamage(inDamage))
                 {
+                    m_lastAttack = Time.time;
                     return true;
                 }
             }
         }
-        
         m_lastAttack = Time.time;
         return false;
     }

@@ -204,7 +204,6 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-
                 m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
             }
             else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)

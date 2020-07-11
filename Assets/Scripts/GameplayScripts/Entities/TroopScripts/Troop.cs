@@ -165,6 +165,7 @@ public class Troop : EntityBehavior, ICanMove
         //{
         //    SetIdleState();
         //}
+        Debug.Log(DeathUnit.Count);
     }
 
     #endregion
@@ -966,7 +967,7 @@ public class Troop : EntityBehavior, ICanMove
             List<Unit> alive = new List<Unit>();
             for (int i = 0; i < UnitList.Count; i++)
             {
-                if (!DeathUnit.Contains(UnitList[i]))
+                if (!DeathUnit.Contains(UnitList[i]) && UnitList[i].gameObject.activeSelf)
                     alive.Add(UnitList[i]);
             }
             List<Unit> myTarget = inTroop.GetUnitAsTargetList(alive.Count);
@@ -981,7 +982,7 @@ public class Troop : EntityBehavior, ICanMove
             List<Unit> aliveEnemy = new List<Unit>();
             for (int i = 0; i < inTroop.UnitList.Count; i++)
             {
-                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
+                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]) && UnitList[i].gameObject.activeSelf)
                     aliveEnemy.Add(inTroop.UnitList[i]);
             }
             List<Unit> myTargetEnemy = GetUnitAsTargetList(aliveEnemy.Count);
@@ -1018,7 +1019,7 @@ public class Troop : EntityBehavior, ICanMove
             List<Unit> alive = new List<Unit>();
             for (int i = 0; i < UnitList.Count; i++)
             {
-                if (!DeathUnit.Contains(UnitList[i]))
+                if (!DeathUnit.Contains(UnitList[i]) && UnitList[i].gameObject.activeSelf)
                     alive.Add(UnitList[i]);
             }
             List<Unit> myTarget = inTroop.GetUnitAsTargetList(alive.Count);
@@ -1045,7 +1046,7 @@ public class Troop : EntityBehavior, ICanMove
         List<Unit> alive = new List<Unit>();
         for (int i = 0; i < UnitList.Count; i++)
         {
-            if (!DeathUnit.Contains(UnitList[i]))
+            if (!DeathUnit.Contains(UnitList[i]) && UnitList[i].gameObject.activeSelf)
                 alive.Add(UnitList[i]);
         }
 
@@ -1058,7 +1059,7 @@ public class Troop : EntityBehavior, ICanMove
             index++;
             index = (int)Mathf.Repeat(index, alive.Count);
         }
-
+        Debug.Log(index + " " + alive.Count);
 
         return tmp;
     }
