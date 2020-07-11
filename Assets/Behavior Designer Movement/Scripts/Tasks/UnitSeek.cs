@@ -10,7 +10,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
     public class UnitSeek : NavMeshMovement
     {
         [Tooltip("The GameObject that the agent is seeking")]
-        public Unit unitRef;
+        private Unit unitRef;
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
 
@@ -67,7 +67,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         public override void OnReset()
         {
             base.OnReset();
-            unitRef = null;
+            //unitRef = null;
             targetPosition = Vector3.zero;
         }
 

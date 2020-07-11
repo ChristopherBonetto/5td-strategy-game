@@ -88,6 +88,8 @@ public class Troop : EntityBehavior, ICanMove
         }
     }
 
+    public int AliveUnitsCount { get => UnitList.Count - DeathUnit.Count; }
+
     [SerializeField] private float m_formationRadius;
     public Vector3[] m_formationPosition { get; private set; } = new Vector3[4];
 
@@ -278,6 +280,8 @@ public class Troop : EntityBehavior, ICanMove
             {
                 UnitList[i].gameObject.SetActive(false);
             }
+
+            UnitList[i].transform.name = "Unit_" + i + "_" + m_troopStats.UnitType;
         }
 
         SetFormationPositions(m_formationRadius);
@@ -959,37 +963,104 @@ public class Troop : EntityBehavior, ICanMove
 
             inTroop.FocusEntity = this as Troop;
 
+            List<Unit> alive = new List<Unit>();
             for (int i = 0; i < UnitList.Count; i++)
             {
                 if (!DeathUnit.Contains(UnitList[i]))
-                {
-                    GiveAnotherTargetToUnit(UnitList[i]);
-                    UnitList[i].StopTree(false);
-                }
+                    alive.Add(UnitList[i]);
+            }
+            List<Unit> myTarget = inTroop.GetUnitAsTargetList(alive.Count);
+
+            for (int i = 0; i < alive.Count; i++)
+            {
+                alive[i].AssignFocusToUnit(myTarget[i]);
+                alive[i].StopTree(false);
             }
 
+
+            List<Unit> aliveEnemy = new List<Unit>();
             for (int i = 0; i < inTroop.UnitList.Count; i++)
             {
                 if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
-                {
-                    inTroop.GiveAnotherTargetToUnit(inTroop.UnitList[i]);
-                    inTroop.UnitList[i].StopTree(false);
-                }
+                    aliveEnemy.Add(inTroop.UnitList[i]);
             }
+            List<Unit> myTargetEnemy = GetUnitAsTargetList(aliveEnemy.Count);
+
+            for (int i = 0; i < aliveEnemy.Count; i++)
+            {
+                aliveEnemy[i].AssignFocusToUnit(myTargetEnemy[i]);
+                aliveEnemy[i].StopTree(false);
+            }
+
+
+            //for (int i = 0; i < UnitList.Count; i++)
+            //{
+            //    if (!DeathUnit.Contains(UnitList[i]))
+            //    {
+            //        GiveAnotherTargetToUnit(UnitList[i]);
+            //        UnitList[i].StopTree(false);
+            //    }
+            //}
+
+            //for (int i = 0; i < inTroop.UnitList.Count; i++)
+            //{
+            //    if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
+            //    {
+            //        inTroop.GiveAnotherTargetToUnit(inTroop.UnitList[i]);
+            //        inTroop.UnitList[i].StopTree(false);
+            //    }
+            //}
         }
         else if(m_troopStats.AttackType == AttackType.RANGED)
         {
             this.Agent.isStopped = true;
 
+            List<Unit> alive = new List<Unit>();
             for (int i = 0; i < UnitList.Count; i++)
             {
                 if (!DeathUnit.Contains(UnitList[i]))
-                {
-                    GiveAnotherTargetToUnit(UnitList[i]);
-                    UnitList[i].StopTree(false);
-                }
+                    alive.Add(UnitList[i]);
             }
+            List<Unit> myTarget = inTroop.GetUnitAsTargetList(alive.Count);
+
+            for (int i = 0; i < alive.Count; i++)
+            {
+                alive[i].AssignFocusToUnit(myTarget[i]);
+                alive[i].StopTree(false);
+            }
+
+            //for (int i = 0; i < UnitList.Count; i++)
+            //{
+            //    if (!DeathUnit.Contains(UnitList[i]))
+            //    {
+            //        GiveAnotherTargetToUnit(UnitList[i]);
+            //        UnitList[i].StopTree(false);
+            //    }
+            //}
         }
+    }
+
+    public List<Unit> GetUnitAsTargetList(int _quantity)
+    {
+        List<Unit> alive = new List<Unit>();
+        for (int i = 0; i < UnitList.Count; i++)
+        {
+            if (!DeathUnit.Contains(UnitList[i]))
+                alive.Add(UnitList[i]);
+        }
+
+        int index = 0;
+        List<Unit> tmp = new List<Unit>();
+        for (int i = 0; i < _quantity; i++)
+        {
+            tmp.Add(alive[index]);
+
+            index++;
+            index = (int)Mathf.Repeat(index, alive.Count);
+        }
+
+
+        return tmp;
     }
 
     public void GiveAnotherTargetToUnit(Unit inUnit)

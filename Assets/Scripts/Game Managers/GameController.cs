@@ -68,6 +68,13 @@ public class GameController : Singleton<GameController>
 
         
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            AddResources(100);
+        }
+    }
 
     #endregion
 
@@ -161,6 +168,10 @@ public class GameController : Singleton<GameController>
         if(inPlayerType == PlayerType.Player)
         {
             AddEntityToDictionary(troopRef);
+        }
+        else
+        {
+            troopRef.gameObject.name += "_J";
         }
 
         return troopRef;

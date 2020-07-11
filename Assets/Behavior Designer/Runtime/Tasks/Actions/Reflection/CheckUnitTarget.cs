@@ -10,21 +10,27 @@ namespace BehaviorDesigner.Runtime.Tasks
     public class CheckUnitTarget : Action
     {
         [Tooltip("The GameObject to get the field on")]
-        public SharedUnit unitRef;
+        private Unit unitRef;
 
+        public override void OnAwake()
+        {
+            base.OnAwake();
+
+            unitRef = GetComponent<Unit>();
+        }
         public override TaskStatus OnUpdate()
         {
-            if (unitRef.Value.FocusUnit == null && unitRef.Value.FocusBuilding == null)
+            if (unitRef.FocusUnit == null && unitRef.FocusBuilding == null)
             {
                 //Debug.Log("try to catch another");
                 return TaskStatus.Failure;
             }
 
 
-            if (unitRef.Value.FocusUnit != null && !unitRef.Value.FocusUnit.gameObject.activeSelf || 
-                unitRef.Value.FocusBuilding != null && !unitRef.Value.FocusBuilding.gameObject.activeSelf)
+            if (unitRef.FocusUnit != null && !unitRef.FocusUnit.gameObject.activeSelf || 
+                unitRef.FocusBuilding != null && !unitRef.FocusBuilding.gameObject.activeSelf)
             {
-                unitRef.Value.AssignFocusToUnit((Unit)null);
+                unitRef.AssignFocusToUnit((Unit)null);
                 return TaskStatus.Failure;
             }
 
@@ -33,7 +39,7 @@ namespace BehaviorDesigner.Runtime.Tasks
 
         public override void OnReset()
         {
-            unitRef = null;
+            //unitRef = null;
         }
     }
 }
