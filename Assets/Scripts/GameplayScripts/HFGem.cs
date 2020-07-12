@@ -67,7 +67,7 @@ public class HFGem : MonoBehaviour, IHFTutorial
 
     IEnumerator PickUpGem()
     {
-        transform.DOScale(.5f, .5f);
+        transform.DOScale(1f, .5f);
 
         HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(GemPickUpSoundPath);
 
