@@ -61,7 +61,7 @@ public class PathHighlight : MonoBehaviour
             //Debug.Log(myNavMeshAgent.path.corners[i]);
             if (myNavMeshAgent.path.corners[i - 1].y - myNavMeshAgent.path.corners[i].y < -heightDistance)
             {
-                Debug.Log("fjfgnòdòggògdnfgdnglkdgdg");
+
                 if(myNavMeshAgent.path.corners[i].y== myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length-1].y)
                 {
                     pointPosition[i] = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y , myNavMeshAgent.path.corners[i].z);
@@ -71,7 +71,7 @@ public class PathHighlight : MonoBehaviour
             }
             else if (myNavMeshAgent.path.corners[i - 1].y - myNavMeshAgent.path.corners[i].y > heightDistance)
             {
-                //Debug.Log("43255454364565475685688769987988");
+
                 if (myNavMeshAgent.path.corners[i].y == myNavMeshAgent.path.corners[myNavMeshAgent.path.corners.Length - 1].y)
                 {
                     pointPosition[i] = new Vector3(myNavMeshAgent.path.corners[i].x, myNavMeshAgent.path.corners[i].y, myNavMeshAgent.path.corners[i].z);
