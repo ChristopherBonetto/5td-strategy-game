@@ -29,7 +29,6 @@ namespace HF.Refactoring
             {
                 if (i > 0)
                 {
-#if UNITY_EDITOR
                     if (AllLevelsUnlocked)
                     {
                         m_loadLevelButtons[i].button.enabled = true;
@@ -45,16 +44,6 @@ namespace HF.Refactoring
                         else
                             m_loadLevelButtons[i].Background.color = Color.white;
                     }
-#else
-
-                    // enable the "i" button if the previous one is completed
-                    m_loadLevelButtons[i].button.enabled = sceneM.LevelContainer.Levels[i - 1].m_levelCompleted;
-
-                        if (!m_loadLevelButtons[i].button.enabled)
-                            m_loadLevelButtons[i].Background.color = Color.grey;
-                        else
-                            m_loadLevelButtons[i].Background.color = Color.white;
-#endif
                 }
 
                 m_loadLevelButtons[i].ButtonText.text = PrefixButtonText + " " + (i + 1).ToString();

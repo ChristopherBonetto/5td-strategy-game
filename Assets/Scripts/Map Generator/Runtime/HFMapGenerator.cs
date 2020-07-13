@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-#region
-using UnityEditor;
-#endregion
 #if UNITY_EDITOR
+using UnityEditor;
+#endif
 namespace HF.Refactoring
 {
     /// <summary>
@@ -194,6 +193,7 @@ namespace HF.Refactoring
             }
         }
 
+#if UNITY_EDITOR
         public void GenerateMap()
         {
             // If there is already a map generated, destroy it.
@@ -281,6 +281,6 @@ namespace HF.Refactoring
                 }
             }
         }
+#endif
     }
 }
-#endif
