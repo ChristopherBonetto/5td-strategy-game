@@ -18,12 +18,24 @@ public class Entity_TestScript : MonoBehaviour
 
     [SerializeField] private Button StartGameButton;
     [SerializeField] private Button SpawnEnemyButton;
+    [SerializeField] private Button AddGemsButton;
 
     private void Awake()
     {
         StartGameButton.onClick.AddListener(StartGame);
         SpawnEnemyButton.onClick.AddListener(SpawnEnemy);
+        AddGemsButton.onClick.AddListener(AddGems);
+
+        EnableCheatButtons(false);
     }
+
+    public void EnableCheatButtons(bool inValue)
+    {
+        StartGameButton.gameObject.SetActive(!inValue);
+        SpawnEnemyButton.gameObject.SetActive(inValue);
+        AddGemsButton.gameObject.SetActive(inValue);
+    }
+
 
     public void StartGame()
     {
@@ -32,7 +44,7 @@ public class Entity_TestScript : MonoBehaviour
             m_instantiatedCastle = Instantiate(caste).GetComponent<CastleStarter>();
             HFGameManager.Instance.ChangeGMState(GameStates.InitializeLevel);
             HFGameManager.Instance.ChangeGMState(GameStates.PlayingLevel);
-            StartGameButton.gameObject.SetActive(false);
+            EnableCheatButtons(true);
         }
     }
 
@@ -43,5 +55,11 @@ public class Entity_TestScript : MonoBehaviour
             Troop enemy = GameController.Instance.CreateNewTroop(enemyUnitType, PlayerType.AI, enemySpawnPoint.position, true);
             enemy.AssignTargetCastle(m_instantiatedCastle, m_instantiatedCastle.m_enemyEngagePoints[0].position);
         }
+    }
+
+
+    public void AddGems()
+    {
+        GameController.Instance.AddResources(50);
     }
 }
