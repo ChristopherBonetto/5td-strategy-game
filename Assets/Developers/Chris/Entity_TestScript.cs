@@ -4,6 +4,7 @@ using UnityEngine;
 using Types;
 using HF.Refactoring;
 using UnityEngine.UI;
+using System;
 
 public class Entity_TestScript : MonoBehaviour
 {
@@ -13,12 +14,12 @@ public class Entity_TestScript : MonoBehaviour
 
     [SerializeField] private Transform enemySpawnPoint;
 
-    [SerializeField] private UnitType enemyUnitType;
-
-
     [SerializeField] private Button StartGameButton;
     [SerializeField] private Button SpawnEnemyButton;
     [SerializeField] private Button AddGemsButton;
+
+    [SerializeField] private Dropdown EntitiesDropdown;
+    List<string> entities = new List<string>();
 
     private void Awake()
     {
@@ -26,7 +27,14 @@ public class Entity_TestScript : MonoBehaviour
         SpawnEnemyButton.onClick.AddListener(SpawnEnemy);
         AddGemsButton.onClick.AddListener(AddGems);
 
+        InitializeGame();
+    }
+
+    public void InitializeGame()
+    {
         EnableCheatButtons(false);
+
+        TakeInfoDropDown();
     }
 
     public void EnableCheatButtons(bool inValue)
@@ -36,7 +44,7 @@ public class Entity_TestScript : MonoBehaviour
         AddGemsButton.gameObject.SetActive(inValue);
     }
 
-
+    #region Buttons
     public void StartGame()
     {
         if (m_instantiatedCastle == null)
@@ -52,7 +60,10 @@ public class Entity_TestScript : MonoBehaviour
     {
         if (m_instantiatedCastle != null)
         {
+            UnitType enemyUnitType = (UnitType)EntitiesDropdown.value;
             Troop enemy = GameController.Instance.CreateNewTroop(enemyUnitType, PlayerType.AI, enemySpawnPoint.position, true);
+
+            if(enemy!=null)
             enemy.AssignTargetCastle(m_instantiatedCastle, m_instantiatedCastle.m_enemyEngagePoints[0].position);
         }
     }
@@ -62,4 +73,17 @@ public class Entity_TestScript : MonoBehaviour
     {
         GameController.Instance.AddResources(50);
     }
+    #endregion
+
+    #region Dropdown
+
+    public void TakeInfoDropDown()
+    {
+        EntitiesDropdown.ClearOptions();
+        string[] enumNames = Enum.GetNames(typeof(UnitType));
+        List<string> names = new List<string>(enumNames);
+        EntitiesDropdown.AddOptions(names);
+    }
+
+    #endregion
 }
