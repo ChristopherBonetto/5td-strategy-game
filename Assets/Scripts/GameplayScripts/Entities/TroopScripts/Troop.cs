@@ -974,6 +974,7 @@ public class Troop : EntityBehavior, ICanMove
 
             for (int i = 0; i < alive.Count; i++)
             {
+                
                 alive[i].AssignFocusToUnit(myTarget[i]);
                 alive[i].StopTree(false);
             }
@@ -982,7 +983,7 @@ public class Troop : EntityBehavior, ICanMove
             List<Unit> aliveEnemy = new List<Unit>();
             for (int i = 0; i < inTroop.UnitList.Count; i++)
             {
-                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]) && UnitList[i].gameObject.activeSelf)
+                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]) && inTroop.UnitList[i].gameObject.activeSelf)
                     aliveEnemy.Add(inTroop.UnitList[i]);
             }
             List<Unit> myTargetEnemy = GetUnitAsTargetList(aliveEnemy.Count);
@@ -1047,7 +1048,9 @@ public class Troop : EntityBehavior, ICanMove
         for (int i = 0; i < UnitList.Count; i++)
         {
             if (!DeathUnit.Contains(UnitList[i]) && UnitList[i].gameObject.activeSelf)
+            {
                 alive.Add(UnitList[i]);
+            }
         }
 
         int index = 0;
