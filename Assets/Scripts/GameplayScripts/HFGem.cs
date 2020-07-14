@@ -67,7 +67,6 @@ public class HFGem : MonoBehaviour, IHFTutorial
 
     IEnumerator PickUpGem()
     {
-        transform.DOScale(1f, .5f);
 
         HFCustomEvent tempEvent = HFSoundManager.Instance.GetFreeEventFromDictionaryKey(GemPickUpSoundPath);
 
@@ -78,7 +77,6 @@ public class HFGem : MonoBehaviour, IHFTutorial
         
         yield return new WaitForSeconds(.5f);
         GameController.Instance.AddResources(m_amount);
-        transform.DOScale(.5f, .1f);
         this.gameObject.SetActive(false);
     }
 
