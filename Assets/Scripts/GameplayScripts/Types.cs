@@ -12,56 +12,50 @@ namespace Types
 
     public enum UnitType
     {
-        STANDARD_ALLY,
-        LIFTER,
-        DEFENDER,
-        RUNNER,
-        ARCHER,
-        TANK,
-        SPEARMAN,
-        STANDARDENEMY,
+        STANDARD_ALLY = 0,
+        STANDARDENEMY = 7,
 
         // Upgrade
 
         // Lifter
-        LIFTER_LVL1,
-        LIFTER_LVL2,
-        LIFTER_LVL3,
+        LIFTER_LVL1 = 8,
+        LIFTER_LVL2 = 9,
+        LIFTER_LVL3 = 10,
 
         // Defender
-        DEFENDER_LVL1,
-        DEFENDER_LVL2,
-        DEFENDER_LVL3,
+        DEFENDER_LVL1 = 11,
+        DEFENDER_LVL2 = 12,
+        DEFENDER_LVL3 = 13,
 
         // Runner
-        RUNNER_LVL1,
-        RUNNER_LVL2,
-        RUNNER_LVL3,
+        RUNNER_LVL1 = 14,
+        RUNNER_LVL2 = 15,
+        RUNNER_LVL3 = 16,
 
         // Warrior
-        WARRIOR_LVL1,
-        WARRIOR_LVL2,
-        WARRIOR_LVL3,
+        WARRIOR_LVL1 = 17,
+        WARRIOR_LVL2 = 18,
+        WARRIOR_LVL3 = 19,
 
         // Archer
-        ARCHER_LVL1,
-        ARCHER_LVL2,
-        ARCHER_LVL3,
+        ARCHER_LVL1 = 20,
+        ARCHER_LVL2 = 21,
+        ARCHER_LVL3 = 22,
 
         //Tank
-        TANK_LVL1,
-        TANK_LVL2,
-        TANK_LVL3,
+        TANK_LVL1 = 23,
+        TANK_LVL2 = 24,
+        TANK_LVL3 = 25,
 
         //Spearmean
-        SPEARMAN_LVL1,
-        SPEARMAN_LVL2,
-        SPEARMAN_LVL3,
+        SPEARMAN_LVL1 = 26,
+        SPEARMAN_LVL2 = 27,
+        SPEARMAN_LVL3 = 28,
 
         //Standard enemy
-        STANDARDENEMY_LVL1,
-        STANDARDENEMY_LVL2,
-        STANDARDENEMY_LVL3,
+        STANDARDENEMY_LVL1 = 29,
+        STANDARDENEMY_LVL2 = 30,
+        STANDARDENEMY_LVL3 = 31,
     }
 
     public enum BuildingType
