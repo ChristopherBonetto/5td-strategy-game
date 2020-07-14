@@ -610,6 +610,12 @@ public class Troop : EntityBehavior, ICanMove
     {
         if (FocusEntity != null)
         {
+            if (FocusEntity.IsBusy)
+            {
+                SetIdleState();
+                return;
+            }
+
             BuildingHandled = FocusEntity as BuildingBehaviour;
 
             //Vector3 dropPosition = Vector3.zero;
