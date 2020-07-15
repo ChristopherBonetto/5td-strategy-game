@@ -20,6 +20,8 @@ public class UnitsStatsSO : EntityStatsSO
 
     public float RespawnTime;
 
+    public int GemDropAmount = 8;
+
     [FMODUnity.EventRef]
     public string LiftSound, DropSound;
 }

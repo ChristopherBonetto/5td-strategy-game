@@ -6,7 +6,9 @@ using Types;
 
 public class HFGem : MonoBehaviour, IHFTutorial
 {
-    [SerializeField] private int m_amount;
+    [SerializeField] 
+    private int m_amount = 5;
+
     public GameEventData Event;
     public GameEventData InitEvent;
 
@@ -61,8 +63,6 @@ public class HFGem : MonoBehaviour, IHFTutorial
             transform.DOMove(unit.transform.position, .5f);
             StartCoroutine(PickUpGem());
         }
-
-        
     }
 
     IEnumerator PickUpGem()
@@ -97,5 +97,10 @@ public class HFGem : MonoBehaviour, IHFTutorial
 
     public void OnStepCompleted()
     {
+    }
+
+    public void SetAmount(int amount) 
+    {
+        m_amount = amount;
     }
 }

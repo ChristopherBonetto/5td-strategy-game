@@ -832,6 +832,13 @@ public class Troop : EntityBehavior, ICanMove
         {
             GameController.Instance.RemoveFromDictionary(this);
         }
+        else if (EntityPlayerType == PlayerType.AI) 
+        {
+            HFGem gem = ObjectPooler.Instance.GetPooledObject("Gem").GetComponent<HFGem>();
+            gem.SetAmount(m_troopStats.GemDropAmount);
+            gem.transform.position = transform.position.SnapLocation();
+            gem.gameObject.SetActive(true);
+        }
 
         DisableEntity();
     }

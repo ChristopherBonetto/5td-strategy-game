@@ -310,13 +310,6 @@ public class Unit : MonoBehaviour, ITakeDamage
         {
             m_visualScript.EnableCorpses();
         }
-        
-        if(m_troopRef.EntityPlayerType == PlayerType.AI)
-        {
-            GameObject gem = ObjectPooler.Instance.GetPooledObject("Gem");
-            gem.transform.position = this.transform.position;
-            gem.SetActive(true);
-        }
 
         TroopRef.AttachAndPlaySound(TroopRef.GetStats().DeathSound);
 

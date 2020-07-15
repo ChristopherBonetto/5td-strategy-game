@@ -203,6 +203,12 @@ public class Editor_UnitStatsSO : Editor
         EditorGUILayout.EndHorizontal();
         EditorGUILayout.Space();
 
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Gem Drop Amount");
+        unit.GemDropAmount = EditorGUILayout.IntField(unit.GemDropAmount);
+        EditorGUILayout.EndHorizontal();
+        EditorGUILayout.Space();
+
         GUILayout.Label("Cost");
         EditorGUILayout.BeginHorizontal();
         unit.Cost = EditorGUILayout.IntField(unit.Cost);
