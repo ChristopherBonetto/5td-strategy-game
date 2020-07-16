@@ -9,6 +9,9 @@ public class HFGem : MonoBehaviour, IHFTutorial
     [SerializeField] 
     private int m_amount = 5;
 
+    [SerializeField, Tooltip("The scaling factor is a logaritmic function that consider this base as offset")]
+    private float m_scalingFactorLogBase = 4;
+
     public GameEventData Event;
     public GameEventData InitEvent;
 
@@ -102,5 +105,9 @@ public class HFGem : MonoBehaviour, IHFTutorial
     public void SetAmount(int amount) 
     {
         m_amount = amount;
+
+        // link logaritmic function visualization: https://www.desmos.com/calculator/auubsajefh 
+        float scalingFactor = Mathf.Log(Mathf.Max(m_scalingFactorLogBase, m_amount), m_scalingFactorLogBase);
+        transform.localScale = Vector3.one * scalingFactor;
     }
 }
