@@ -20,15 +20,7 @@ namespace HF.Unit
         private Transform m_SpawnPoint;
         public Transform SpawnPoint => m_SpawnPoint;
 
-        [SerializeField]
-        private HFPoolID m_BulletID;
-        public HFPoolID BulletID => m_BulletID;
-
         public bool AoEDamage = false;
-
-        [SerializeField]
-        private float m_BulletSpeed;
-        public float BulletSpeed => m_BulletSpeed;
 
         #region Visual Feedbacks
         public Animator anim;
@@ -93,7 +85,7 @@ namespace HF.Unit
             }
         }
 
-        public void SpawnBullet(PlayerType inPlayerType)
+        public void SpawnBullet(PlayerType inPlayerType, BuildingsStatsSO inParam)
         {
             if(anim!=null)
             {
@@ -106,7 +98,7 @@ namespace HF.Unit
 
 
             // Get bullet from pool.
-            GameObject go = HFPoolManager.Instance.GetPooledObject(m_BulletID.ID);
+            GameObject go = HFPoolManager.Instance.GetPooledObject(inParam.Projectile.ID);
 
             Debug.Log(go);
             // Set spawn position and rotation.
@@ -116,7 +108,7 @@ namespace HF.Unit
                 go.transform.rotation = m_SpawnPoint.rotation;
 
                 HFBullet bullet = go.GetComponent<HFBullet>();
-                bullet.SetParameters(new HFBulletParameters(inPlayerType, 0, 0, m_BulletSpeed));
+                bullet.SetParameters(new HFBulletParameters(inPlayerType, inParam.Damage, inParam.Damage, inParam.ProjectileSpeed));
                 go.SetActive(true);
             }
         }

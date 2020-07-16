@@ -144,7 +144,7 @@ public class BuildingBehaviour : EntityBehavior
 
             if (m_attackDelayElapsed > m_buildingStats.AttackSpeed)
             {
-                m_view.SpawnBullet(EntityPlayerType);
+                m_view.SpawnBullet(EntityPlayerType, m_buildingStats);
                 StartCoroutine(DealDamge(m_focusEntity));
                 m_attackDelayElapsed = 0;
                 AttachAndPlaySound(m_buildingStats.AttackSound);
@@ -168,7 +168,7 @@ public class BuildingBehaviour : EntityBehavior
     {
         Troop target = entity.GetComponent<Troop>();
         float distance = Vector3.Distance(transform.position, m_focusEntity.transform.position);
-        float time = distance / m_view.BulletSpeed;
+        float time = distance / m_buildingStats.ProjectileSpeed;
 
         while (time > 0)
         {

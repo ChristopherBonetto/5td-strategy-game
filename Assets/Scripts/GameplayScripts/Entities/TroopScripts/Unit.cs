@@ -200,40 +200,42 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     public void UnitAttack()
     {
+        UnitsStatsSO troopStat = TroopRef.GetStats();
+
         if (FocusUnit)
         {
-            if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
+            if (troopStat.AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(m_focusUnit, troopStat.Damage);
             }
-            else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
+            else if (troopStat.AttackType == AttackType.RANGED)
             {
                 m_BulletSpawnPoint.forward = (FocusUnit.transform.position - transform.position).normalized;
-                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(m_troopRef.m_troopStats.Projectile.ID).GetComponent<HF.HFBullet>();
+                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(troopStat.Projectile.ID).GetComponent<HF.HFBullet>();
                 bullet.transform.rotation = BulletSpawnPoint.rotation;
                 bullet.transform.position = BulletSpawnPoint.position;
-                bullet.SetParameters(new HF.HFBulletParameters(TroopRef.EntityPlayerType, 0, 0, 50));
+                bullet.SetParameters(new HF.HFBulletParameters(TroopRef.EntityPlayerType, troopStat.Damage, troopStat.Damage, troopStat.ProjectileSpeed));
                 bullet.gameObject.SetActive(true);
 
-                m_unitAttackType.SingleMeleeAttack(m_focusUnit, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(m_focusUnit, troopStat.Damage);
             }
         }
         else if (FocusBuilding)
         {
             if (m_troopRef.GetStats().AttackType == AttackType.MELEE)
             {
-                m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(FocusBuilding, troopStat.Damage);
             }
-            else if (m_troopRef.GetStats().AttackType == AttackType.RANGED)
+            else if (troopStat.AttackType == AttackType.RANGED)
             {
                 m_BulletSpawnPoint.forward = (FocusBuilding.transform.position - transform.position).normalized;
-                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(m_troopRef.m_troopStats.Projectile.ID).GetComponent<HF.HFBullet>();
+                HF.HFBullet bullet = HFPoolManager.Instance.GetPooledObject(troopStat.Projectile.ID).GetComponent<HF.HFBullet>();
                 bullet.transform.rotation = BulletSpawnPoint.rotation;
                 bullet.transform.position = BulletSpawnPoint.position;
-                bullet.SetParameters(new HF.HFBulletParameters(TroopRef.EntityPlayerType, 0, 0, 10));
+                bullet.SetParameters(new HF.HFBulletParameters(TroopRef.EntityPlayerType, troopStat.Damage, troopStat.Damage, troopStat.ProjectileSpeed));
                 bullet.gameObject.SetActive(true);
 
-                m_unitAttackType.SingleMeleeAttack(FocusBuilding, TroopRef.GetStats().Damage);
+                m_unitAttackType.SingleMeleeAttack(FocusBuilding, troopStat.Damage);
             }
         }
 

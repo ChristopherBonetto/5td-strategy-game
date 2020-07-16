@@ -168,6 +168,13 @@ public class Editor_UnitStatsSO : Editor
                 {
                     EditorGUILayout.HelpBox("This entity need a projectile", MessageType.Warning);
                 }
+                else
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label("Projectile Speed");
+                    unit.ProjectileSpeed = EditorGUILayout.Slider(unit.ProjectileSpeed, 1, 999);
+                    EditorGUILayout.EndHorizontal();
+                }
             }
 
             EditorGUILayout.BeginHorizontal();

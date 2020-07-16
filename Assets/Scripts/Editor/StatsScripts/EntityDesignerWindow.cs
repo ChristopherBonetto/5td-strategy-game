@@ -314,6 +314,13 @@ public class GeneralSettings : EditorWindow
                     EditorGUILayout.HelpBox("This entity need a projectile", MessageType.Warning);
                     tempValue = false;
                 }
+                else
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    GUILayout.Label("Projectile Speed");
+                    unit.ProjectileSpeed = EditorGUILayout.Slider(unit.ProjectileSpeed, 1, 999);
+                    EditorGUILayout.EndHorizontal();
+                }
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -467,6 +474,13 @@ public class GeneralSettings : EditorWindow
             {
                 EditorGUILayout.HelpBox("This entity need a projectile", MessageType.Warning);
                 tempValue = false;
+            }
+            else
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.Label("Projectile Speed");
+                building.ProjectileSpeed = EditorGUILayout.Slider(building.ProjectileSpeed, 1, 999);
+                EditorGUILayout.EndHorizontal();
             }
         }
 

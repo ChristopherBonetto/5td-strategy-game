@@ -35,6 +35,7 @@ public class EntityStatsSO : ScriptableObject
 
     [Space]
     public HFPoolID Projectile = null;
+    public float ProjectileSpeed;
 
     [Header("Visual")]
     public Mesh Mesh;
