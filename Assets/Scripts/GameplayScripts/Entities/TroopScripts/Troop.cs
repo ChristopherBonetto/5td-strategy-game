@@ -151,21 +151,6 @@ public class Troop : EntityBehavior, ICanMove
     private void Update()
     {
         ResurrectDeathUnits();
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            AliveUnit.TakeDamage(5);
-        }
-
-        //if(CurrentTroopState == TroopStates.GoToEnemy && FocusEntity == null)
-        //{
-        //    SetIdleState();
-        //}
-        //if (CurrentTroopState == TroopStates.GoToAlly && FocusEntity == null)
-        //{
-        //    SetIdleState();
-        //}
-        Debug.Log(DeathUnit.Count);
     }
 
     #endregion

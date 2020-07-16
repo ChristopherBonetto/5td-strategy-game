@@ -169,10 +169,6 @@ public class GameController : Singleton<GameController>
         {
             AddEntityToDictionary(troopRef);
         }
-        else
-        {
-            troopRef.gameObject.name += "_J";
-        }
 
         return troopRef;
     }

@@ -95,7 +95,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
         if (Input.GetButtonUp("Select") && !m_overUI)
         {
-            Debug.Log(HFUIManager.IsPointerOverUIElement());
             ClickEntity();
         }
         else if (Input.GetButtonUp("SwitchTroop"))

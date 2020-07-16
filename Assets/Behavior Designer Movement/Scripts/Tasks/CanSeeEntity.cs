@@ -58,6 +58,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                     returnedObject = go.GetComponentInParent<EntityBehavior>();
 
+                    if (returnedObject == null) return TaskStatus.Failure;
+
                     if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
                     {
                         if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)

@@ -34,7 +34,7 @@ namespace HF
         private Transform m_transform;
 
 		private Rigidbody m_rigidbody;
-		private string m_layer;
+		private int m_targetLayer;
 
 		private HFBulletParameters m_parameters = new HFBulletParameters();
 
@@ -66,43 +66,40 @@ namespace HF
 
 		private void OnTriggerEnter(Collider other)
 		{
-            if (other.gameObject.layer != LayerMask.NameToLayer(m_layer))
-
-                StartCoroutine(DisableBullet());
+			if (other.gameObject.layer == 1 << m_targetLayer || other.gameObject.layer == LayerMask.NameToLayer("Terrain") || other.gameObject.layer == LayerMask.NameToLayer("Bakeable"))
+			{
+				Debug.LogError("Hitted");
+				StartCoroutine(DisableBullet());
+			}
 		}
 
-		/// <summary>
-		/// Put the layer of the gameobject that spawn it.
-		/// </summary>
-		/// <param name="layer"></param>
-		private void SetAllyLayer(string layer) 
-		{
-			m_layer = layer;
-		}
 
 		public void SetParameters(HFBulletParameters inParameters)
 		{
 			m_parameters = inParameters;
 			if(m_parameters.Instigator == PlayerType.AI)
 			{
-				SetAllyLayer(LayerMask.LayerToName(GameController.Instance.m_aiLayer));
+				gameObject.layer = GameController.Instance.m_aiLayer;
+				m_targetLayer = GameController.Instance.m_playerLayer;
 			}
 			else if(m_parameters.Instigator == PlayerType.Player)
 			{
-				SetAllyLayer(LayerMask.LayerToName(GameController.Instance.m_playerLayer));
+				gameObject.layer = GameController.Instance.m_playerLayer;
+				m_targetLayer = GameController.Instance.m_aiLayer;
 			}
 		}
 
         IEnumerator DisableBullet()
         {
-            if (m_bulletParticle != null)
+			m_rigidbody.velocity = Vector3.zero;
+
+			if (m_bulletParticle != null)
             {
                 m_bulletParticle.Stop();
             }
-            m_rigidbody.velocity = Vector3.zero;
+            
             if (m_explosionHit != null)
             {
-
                 m_explosionHit.Play();
             }
             yield return new WaitForSeconds(.5f);
