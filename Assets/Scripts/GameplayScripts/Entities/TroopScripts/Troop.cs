@@ -502,6 +502,7 @@ public class Troop : EntityBehavior, ICanMove
 
         m_resetCoroutine = null;
         IsBusy = false;
+        IsLifting = false;
     }
 
     public void AssignGameObjectEntity(GameObject inObj)
@@ -527,7 +528,7 @@ public class Troop : EntityBehavior, ICanMove
 
         FocusEntity = null;
 
-        if (inEntity.EntityPlayerType != this.EntityPlayerType && !inEntity.IsBusy)
+        if (inEntity.EntityPlayerType != this.EntityPlayerType /*&& !inEntity.isBusy*/)
         {
             if (inEntity is Troop)
             {
@@ -601,6 +602,7 @@ public class Troop : EntityBehavior, ICanMove
                 return;
             }
 
+            IsLifting = true;
             BuildingHandled = FocusEntity as BuildingBehaviour;
 
             //Vector3 dropPosition = Vector3.zero;
@@ -647,7 +649,7 @@ public class Troop : EntityBehavior, ICanMove
         {
             if (BuildingHandled.Drop(Agent.destination.SnapLocation()))
             {
-
+                IsLifting = false;
                 for (int i = 0; i < UnitList.Count; i++)
                     if (!DeathUnit.Contains(UnitList[i]))
                     {
@@ -972,8 +974,7 @@ public class Troop : EntityBehavior, ICanMove
 
             for (int i = 0; i < alive.Count; i++)
             {
-                
-                alive[i].AssignFocusToUnit(myTarget[i]);
+                alive[i].AssignFocusToUnit(myTarget[i % inTroop.AliveUnitsCount]);
                 alive[i].StopTree(false);
             }
 
@@ -988,7 +989,7 @@ public class Troop : EntityBehavior, ICanMove
 
             for (int i = 0; i < aliveEnemy.Count; i++)
             {
-                aliveEnemy[i].AssignFocusToUnit(myTargetEnemy[i]);
+                aliveEnemy[i].AssignFocusToUnit(myTargetEnemy[i % AliveUnitsCount]);
                 aliveEnemy[i].StopTree(false);
             }
 

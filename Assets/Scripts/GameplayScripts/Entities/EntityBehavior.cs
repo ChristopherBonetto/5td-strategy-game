@@ -76,6 +76,9 @@ public class EntityBehavior : MonoBehaviour, ITakeCommand, ITakeDamage, IAttack
         }
     }
 
+    private bool m_isLifting = false;
+    public bool IsLifting { get => m_isLifting; set => m_isLifting = value; }
+
     public bool m_isFreezed = false;
 
     #endregion

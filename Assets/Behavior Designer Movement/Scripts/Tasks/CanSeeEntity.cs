@@ -40,6 +40,8 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         // Returns success if an object was found otherwise failure
         public override TaskStatus OnUpdate()
         {
+            if (entityRef.IsLifting) return TaskStatus.Failure;
+
             GameObject go = null;
             numberOfCollisions = Physics.OverlapSphereNonAlloc(transform.position, viewDistance.Value, overlapColliders, objectLayerMask);
             for (int i = 0; i < numberOfCollisions; i++)
@@ -60,21 +62,18 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                     if (returnedObject == null) return TaskStatus.Failure;
 
-                    if (!returnedObject.IsBusy || canSeeBusyTroop.Value && returnedObject.IsBusy)
+                    if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
                     {
-                        if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
+                        if (entityRef.AssignFocusEntity(returnedObject))
                         {
-                            if (entityRef.AssignFocusEntity(returnedObject))
-                            {
-                                return TaskStatus.Success;
-                            }
+                            return TaskStatus.Success;
                         }
-                        else if (returnedObject is Troop)
+                    }
+                    else if (returnedObject is Troop)
+                    {
+                        if (entityRef.AssignFocusEntity(returnedObject))
                         {
-                            if (entityRef.AssignFocusEntity(returnedObject))
-                            {
-                                return TaskStatus.Success;
-                            }
+                            return TaskStatus.Success;
                         }
                     }
                 }
