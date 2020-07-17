@@ -133,7 +133,11 @@ public class HFCameraController : MonoBehaviour
 
     private void Update()
     {
-        Rotate();
+        if(InputReaderManager.Instance.CurrentInputManagerState == InputManagerStates.Drag)
+        {
+            Rotate();
+        }
+        
         MoveTarget();
         UpdateDistance();
 

@@ -8,6 +8,13 @@ using Types;
 using HF.Refactoring;
 using System;
 
+public enum InputManagerStates
+{
+    None,
+    Click,
+    Drag
+}
+
 public class InputReaderManager : Singleton<InputReaderManager>
 {
     new public static InputReaderManager Instance
@@ -58,10 +65,13 @@ public class InputReaderManager : Singleton<InputReaderManager>
     private Vector3 mousePositon { get => Input.mousePosition; }
 
     private int? m_currentPressedNumber;
-    private bool m_overUI = false;
+    private bool m_overUI { get => HFUIManager.IsPointerOverUIElement(); }
 
+    private Coroutine m_stateChanger;
+    private InputManagerStates m_currentInputManagerState = InputManagerStates.None;
+    public InputManagerStates CurrentInputManagerState { get => m_currentInputManagerState; }
 
-    #region Behavior Cycle
+#region Behavior Cycle
 
     private void Awake()
     {
@@ -72,12 +82,47 @@ public class InputReaderManager : Singleton<InputReaderManager>
     // Update is called once per frame
     void Update()
     {
-        SelectDeselectOneObject();
-        
         if (Input.GetButtonUp("Command"))
         {
             TroopAction();
         }
+
+        if(Input.GetButtonDown("Click") && !m_overUI)
+        {
+            if(m_stateChanger == null)
+            m_stateChanger = StartCoroutine(InputReaderController());
+        }
+
+        SwitchCurrentEntity();
+    }
+
+    IEnumerator InputReaderController()
+    {
+        float distance = 0f;
+        Vector3 mouseStartingPos = mousePositon;
+
+        while(Input.GetButton("Click"))
+        {
+            Vector3 mouseCurrentPos = Input.mousePosition;
+
+            if(Vector3.Distance(mouseStartingPos,mouseCurrentPos) > 200f)
+            {
+                Debug.LogError("DRAG");
+                m_currentInputManagerState = InputManagerStates.Drag;
+            }
+            yield return null;
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        if(CurrentInputManagerState != InputManagerStates.Drag)
+        {
+            m_currentInputManagerState = InputManagerStates.Click;
+            SelectDeselectOneObject();
+        }
+
+        m_currentInputManagerState = InputManagerStates.None;
+        m_stateChanger = null;
     }
 
     #endregion
@@ -88,16 +133,15 @@ public class InputReaderManager : Singleton<InputReaderManager>
     {
         if (HFGameManager.Instance.CurrentGameState != GameStates.PlayingLevel) return;
 
-        if (Input.anyKeyDown)
-        {
-            m_overUI = HFUIManager.IsPointerOverUIElement();
-        }
+        ClickEntity();
+    }
 
-        if (Input.GetButtonUp("Select") && !m_overUI)
-        {
-            ClickEntity();
-        }
-        else if (Input.GetButtonUp("SwitchTroop"))
+    public void SwitchCurrentEntity()
+    {
+        if (HFGameManager.Instance.CurrentGameState != GameStates.PlayingLevel) return;
+
+
+        if (Input.GetButtonUp("SwitchTroop"))
         {
             EntityBehavior entity = GameController.Instance.TakeEntityFromDictionary(typeof(Troop));
             if (entity == null) return;
