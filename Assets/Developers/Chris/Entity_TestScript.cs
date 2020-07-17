@@ -60,7 +60,7 @@ public class Entity_TestScript : MonoBehaviour
     {
         if (m_instantiatedCastle != null)
         {
-            UnitType enemyUnitType = (UnitType)EntitiesDropdown.value;
+            UnitType enemyUnitType = (UnitType)EntitiesDropdown.value == 0 ? (UnitType)EntitiesDropdown.value : (UnitType)(EntitiesDropdown.value + 6);
             Troop enemy = GameController.Instance.CreateNewTroop(enemyUnitType, PlayerType.AI, enemySpawnPoint.position, true);
 
             if(enemy!=null)
