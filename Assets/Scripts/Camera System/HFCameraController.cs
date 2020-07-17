@@ -108,6 +108,12 @@ public class HFCameraController : MonoBehaviour
     [SerializeField, Tooltip("Max angle value on x")]
     private float X_MAX_Angle = 50.0f;
 
+    private float m_screenWidth;
+    private float m_screenHeight;
+    [SerializeField]
+    private float m_horizontalPaddingOffset = 15.0f;
+    [SerializeField]
+    private float m_verticalPaddingOffset = 10.0f;
 
     private void Awake()
     {
@@ -120,6 +126,9 @@ public class HFCameraController : MonoBehaviour
         m_cam = Camera.main;
         m_currentAngleY = transform.eulerAngles.y;
         m_actualDistanceFromTarget = m_initialDistanceFromTarget;
+
+        m_screenWidth = Screen.width;
+        m_screenHeight = Screen.height;
     }
 
     private void Update()
@@ -208,14 +217,13 @@ public class HFCameraController : MonoBehaviour
         var x = Input.GetAxis("Horizontal");
         var z = Input.GetAxis("Vertical");
 
-
-        if (x != 0 || z != 0)
+        void UpdatePosition(float valueX, float valueZ) 
         {
             m_lastTargetPosition = null;
             m_target.rotation = Quaternion.Euler(0, m_transform.rotation.eulerAngles.y, 0);
 
-            float speedOnX = x * m_cameraMovementSpeed * Time.deltaTime;
-            float speedOnZ = z * m_cameraMovementSpeed * Time.deltaTime;
+            float speedOnX = valueX * m_cameraMovementSpeed * Time.deltaTime;
+            float speedOnZ = valueZ * m_cameraMovementSpeed * Time.deltaTime;
 
             Vector3 origin = m_Bounds.bounds.center;
             float minBoundOnX = origin.x - m_Bounds.bounds.extents.x;
@@ -230,6 +238,34 @@ public class HFCameraController : MonoBehaviour
             m_target.position = new Vector3(clampOnX, m_target.position.y, clampOnZ);
 
             HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Move_Camera);
+        }
+
+        if (x != 0 || z != 0)
+        {
+            UpdatePosition(x, z);
+        }
+        // If the player is not pressing the inputs.
+        else 
+        {
+            // Position of the mouse in the screen
+            Vector2 mousePosition = Input.mousePosition;
+
+            if (mousePosition.x < m_horizontalPaddingOffset) 
+            {
+                UpdatePosition(-1, 0);
+            }
+            if (mousePosition.x > m_screenWidth - m_horizontalPaddingOffset) 
+            {
+                UpdatePosition(1, 0);
+            }
+            if (mousePosition.y < m_verticalPaddingOffset) 
+            {
+                UpdatePosition(0, -1);
+            }
+            if (mousePosition.y > m_screenHeight - m_verticalPaddingOffset) 
+            {
+                UpdatePosition(0, 1);
+            }
         }
     }
 
