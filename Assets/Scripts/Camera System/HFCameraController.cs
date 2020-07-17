@@ -135,9 +135,11 @@ public class HFCameraController : MonoBehaviour
     {
         if(InputReaderManager.Instance.CurrentInputManagerState == InputManagerStates.Drag)
         {
-            Rotate();
+            m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
+            m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
         }
-        
+
+        Rotate();
         MoveTarget();
         UpdateDistance();
 
@@ -164,22 +166,15 @@ public class HFCameraController : MonoBehaviour
 
     private void Rotate()
     {
-        // GetMouseButton(2) = click on scroll wheel
-        if (Input.GetMouseButton(0)|| Input.GetMouseButton(2))
+        if (Mathf.Abs(m_actualMouseXValue) > 0)
         {
-            m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
-            m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
+            m_actualMouseXValue -= (m_actualMouseXValue * m_angularFriction);
+            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Rotate_Camera);
         }
-        // GetMouseButton(2) = click on scroll wheel
-        else if (!Input.GetMouseButton(0) || Input.GetMouseButton(2))
+        if(Mathf.Abs(m_actualMouseYValue) > 0) 
         {
-            if (m_actualMouseXValue != 0 || m_actualMouseYValue != 0)
-            {
-                m_actualMouseXValue -= (m_actualMouseXValue * m_angularFriction);
-                m_actualMouseYValue -= (m_actualMouseYValue * m_angularFriction);
-
-                HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Rotate_Camera);
-            }
+            m_actualMouseXValue -= (m_actualMouseXValue * m_angularFriction);
+            HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Rotate_Camera);
         }
 
         m_currentAngleX += m_actualMouseYValue;
