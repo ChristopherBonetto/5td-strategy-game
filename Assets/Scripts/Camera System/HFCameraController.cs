@@ -137,15 +137,10 @@ public class HFCameraController : MonoBehaviour
         {
             m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
             m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
-            Rotate();
-        }
-        else
-        {
-            MoveTarget();
         }
 
-        
-        
+        Rotate();
+        MoveTarget();
         UpdateDistance();
 
         if (m_lastTargetPosition != null)
@@ -178,7 +173,7 @@ public class HFCameraController : MonoBehaviour
         }
         if(Mathf.Abs(m_actualMouseYValue) > 0) 
         {
-            m_actualMouseXValue -= (m_actualMouseXValue * m_angularFriction);
+            m_actualMouseYValue -= (m_actualMouseYValue * m_angularFriction);
             HFEventManager.TriggerEvent<TutorialID>(HFEventID.OnTutorialQuestCompleted, TutorialID.Rotate_Camera);
         }
 
