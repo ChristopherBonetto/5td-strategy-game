@@ -54,32 +54,37 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (go != null)
             {
-                if (Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, obstaclesLayerMask))
+                RaycastHit hit;
+                if (Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, out hit, obstaclesLayerMask))
                 {
-                    return TaskStatus.Failure;
-                }
-                else
-                {
-                    UnityEngine.Debug.Log(transform.name + " see  " + go.name);
-                    UnityEngine.Debug.DrawLine(transform.position + Vector3.up, go.transform.position + Vector3.up, Color.red);
-
-                    returnedObject = go.GetComponentInParent<EntityBehavior>();
-
-                    if (returnedObject == null) return TaskStatus.Failure;
-
-                    if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
+                    if (hit.transform != null && entityRef is BuildingBehaviour)
                     {
-                        if (entityRef.AssignFocusEntity(returnedObject))
+                        EntityBehavior entity = hit.transform.GetComponentInParent<EntityBehavior>();
+                        if (entity != null && entity is BuildingBehaviour)
                         {
-                            return TaskStatus.Success;
+                            return TaskStatus.Failure;
                         }
                     }
-                    else if (returnedObject is Troop)
+
+                    return TaskStatus.Failure;
+                }
+
+                returnedObject = go.GetComponentInParent<EntityBehavior>();
+
+                if (returnedObject == null) return TaskStatus.Failure;
+
+                if (returnedObject is BuildingBehaviour && canSeeBuilding.Value)
+                {
+                    if (entityRef.AssignFocusEntity(returnedObject))
                     {
-                        if (entityRef.AssignFocusEntity(returnedObject))
-                        {
-                            return TaskStatus.Success;
-                        }
+                        return TaskStatus.Success;
+                    }
+                }
+                else if (returnedObject is Troop)
+                {
+                    if (entityRef.AssignFocusEntity(returnedObject))
+                    {
+                        return TaskStatus.Success;
                     }
                 }
             }

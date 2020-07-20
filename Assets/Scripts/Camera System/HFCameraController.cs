@@ -137,10 +137,15 @@ public class HFCameraController : MonoBehaviour
         {
             m_actualMouseXValue = Input.GetAxis("Mouse X") * m_sensitivityOnXAngle;
             m_actualMouseYValue = -Input.GetAxis("Mouse Y") * m_sensitivityOnYAngle;
+            Rotate();
+        }
+        else
+        {
+            MoveTarget();
         }
 
-        Rotate();
-        MoveTarget();
+        
+        
         UpdateDistance();
 
         if (m_lastTargetPosition != null)
