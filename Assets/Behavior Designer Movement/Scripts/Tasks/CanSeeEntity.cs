@@ -18,7 +18,7 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("The LayerMask of the objects that we are searching for")]
         public LayerMask objectLayerMask;
         [Tooltip("The LayerMask of the objects to ignore when performing the line of sight check")]
-        public LayerMask ignoreLayerMask;
+        public LayerMask obstaclesLayerMask;
         [Tooltip("The distance that the agent can see")]
         public SharedFloat viewDistance = 1000;
         [Tooltip("The object that is within sight")]
@@ -54,8 +54,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
             if (go != null)
             {
-                if (!Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, ignoreLayerMask))
+                if (Physics.Linecast(transform.position + Vector3.up, go.transform.position + Vector3.up, obstaclesLayerMask))
                 {
+                    return TaskStatus.Failure;
+                }
+                else
+                {
+                    UnityEngine.Debug.Log(transform.name + " see  " + go.name);
                     UnityEngine.Debug.DrawLine(transform.position + Vector3.up, go.transform.position + Vector3.up, Color.red);
 
                     returnedObject = go.GetComponentInParent<EntityBehavior>();
