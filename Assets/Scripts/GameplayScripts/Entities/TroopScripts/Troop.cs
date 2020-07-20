@@ -951,18 +951,34 @@ public class Troop : EntityBehavior, ICanMove
 
     public void TroopAttack(Troop inTroop)
     {
-        if(m_troopStats.AttackType == AttackType.MELEE)
+        if (m_troopStats.AttackType == AttackType.MELEE)
         {
-            inTroop.IsBusy = true;
+            if (!inTroop.IsLifting)
+            {
+                inTroop.IsBusy = true;
+                inTroop.StopTree(true);
+                inTroop.Agent.isStopped = true;
+
+                inTroop.FocusEntity = this as Troop;
+
+                List<Unit> aliveEnemy = new List<Unit>();
+                for (int i = 0; i < inTroop.UnitList.Count; i++)
+                {
+                    if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]) && inTroop.UnitList[i].gameObject.activeSelf)
+                        aliveEnemy.Add(inTroop.UnitList[i]);
+                }
+                List<Unit> myTargetEnemy = GetUnitAsTargetList(aliveEnemy.Count);
+
+                for (int i = 0; i < aliveEnemy.Count; i++)
+                {
+                    aliveEnemy[i].AssignFocusToUnit(myTargetEnemy[i % AliveUnitsCount]);
+                    aliveEnemy[i].StopTree(false);
+                }
+            }
+            
             this.IsBusy = true;
-
-            inTroop.StopTree(true);
-            inTroop.Agent.isStopped = true;
-
             this.StopTree(true);
             this.Agent.isStopped = true;
-
-            inTroop.FocusEntity = this as Troop;
 
             List<Unit> alive = new List<Unit>();
             for (int i = 0; i < UnitList.Count; i++)
@@ -977,40 +993,6 @@ public class Troop : EntityBehavior, ICanMove
                 alive[i].AssignFocusToUnit(myTarget[i % inTroop.AliveUnitsCount]);
                 alive[i].StopTree(false);
             }
-
-
-            List<Unit> aliveEnemy = new List<Unit>();
-            for (int i = 0; i < inTroop.UnitList.Count; i++)
-            {
-                if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]) && inTroop.UnitList[i].gameObject.activeSelf)
-                    aliveEnemy.Add(inTroop.UnitList[i]);
-            }
-            List<Unit> myTargetEnemy = GetUnitAsTargetList(aliveEnemy.Count);
-
-            for (int i = 0; i < aliveEnemy.Count; i++)
-            {
-                aliveEnemy[i].AssignFocusToUnit(myTargetEnemy[i % AliveUnitsCount]);
-                aliveEnemy[i].StopTree(false);
-            }
-
-
-            //for (int i = 0; i < UnitList.Count; i++)
-            //{
-            //    if (!DeathUnit.Contains(UnitList[i]))
-            //    {
-            //        GiveAnotherTargetToUnit(UnitList[i]);
-            //        UnitList[i].StopTree(false);
-            //    }
-            //}
-
-            //for (int i = 0; i < inTroop.UnitList.Count; i++)
-            //{
-            //    if (!inTroop.DeathUnit.Contains(inTroop.UnitList[i]))
-            //    {
-            //        inTroop.GiveAnotherTargetToUnit(inTroop.UnitList[i]);
-            //        inTroop.UnitList[i].StopTree(false);
-            //    }
-            //}
         }
         else if(m_troopStats.AttackType == AttackType.RANGED)
         {
@@ -1029,15 +1011,6 @@ public class Troop : EntityBehavior, ICanMove
                 alive[i].AssignFocusToUnit(myTarget[i]);
                 alive[i].StopTree(false);
             }
-
-            //for (int i = 0; i < UnitList.Count; i++)
-            //{
-            //    if (!DeathUnit.Contains(UnitList[i]))
-            //    {
-            //        GiveAnotherTargetToUnit(UnitList[i]);
-            //        UnitList[i].StopTree(false);
-            //    }
-            //}
         }
     }
 
