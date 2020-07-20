@@ -61,6 +61,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
     }
     
     [SerializeField] private LayerMask m_GroundMask;
+    [SerializeField] private int dragTreshold= 50;
 
     private Vector3 mousePositon { get => Input.mousePosition; }
 
@@ -105,7 +106,7 @@ public class InputReaderManager : Singleton<InputReaderManager>
         {
             Vector3 mouseCurrentPos = Input.mousePosition;
 
-            if(Vector3.Distance(mouseStartingPos,mouseCurrentPos) > 200f)
+            if(Vector3.Distance(mouseStartingPos,mouseCurrentPos) > dragTreshold)
             {
                 Debug.LogError("DRAG");
                 m_currentInputManagerState = InputManagerStates.Drag;
