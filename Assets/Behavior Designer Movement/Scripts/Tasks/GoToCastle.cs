@@ -12,6 +12,12 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
         [Tooltip("If target is null then use the target position")]
         public SharedVector3 targetPosition;
 
+        [Tooltip("d divided the distance, so it represents the rateo in wich the speed growth")]
+        public SharedFloat d = 2f;
+        [Tooltip("how faster the speed growth")]
+        public SharedFloat Growth = 50f;
+
+
         private Troop troopRef;
 
         public override void OnAwake()
@@ -44,15 +50,13 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
             }
 
-            //if (Target() != null && SetDestination(Target().Value))
-            //{
-            //}
-            //else
-            //{
-            //    Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
-            //    troopRef.Death();
-            //    return TaskStatus.Failure;
-            //}
+            if (Target() != null && SetDestination(Target().Value)) { }
+            else 
+            {
+                Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
+                troopRef.Death();
+                return TaskStatus.Failure;
+            }
             return TaskStatus.Running;
         }
 
@@ -96,20 +100,15 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                     if (unit.isActiveAndEnabled && unit.isOnNavMesh)
                     {
                         unit.ResetPath();
-                        unit.destination = destination;
-                        unit.speed = speed.Value;
-                        //if (Vector3.Distance(unit.transform.position, navMeshAgent.transform.position) > 3f)
-                        //{
-                        //    unit.speed = speed.Value + 2;
-                        //    Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
-                        //    unit.SetDestination(unitDestin);
-                        //}
-                        //else
-                        //{
-                        //    unit.speed = speed.Value;
-                        //    Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
-                        //    unit.SetDestination(unitDestin);
-                        //}
+
+                        // Set destination
+                        Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
+                        unit.SetDestination(navMeshAgent.transform.position);
+
+
+                        // Define the speed
+                        float distance = Vector3.Distance(unit.transform.position, unitDestin);
+                        unit.speed = speed.Value + (distance / d.Value * (speed.Value * Growth.Value / 100f));
                     }
                 }
                 return true;
