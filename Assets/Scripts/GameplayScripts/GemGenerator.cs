@@ -12,22 +12,27 @@ public class GemGenerator : MonoBehaviour
     [SerializeField] private float currentTimer = 0;
     bool canSpawnGem = false;
 
-
+    private bool inWave = false;
 
     private void OnEnable()
     {
-        HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, ActivateGemSpawn);
-        HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, StopGemSpawn);
+        HFEventManager.SubscribeTo(HFEventID.OnWaveBeginned, StartWave);
+        HFEventManager.SubscribeTo(HFEventID.OnWaveCleared, WaveCleared);
+        HFEventManager.SubscribeTo<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+        HFEventManager.SubscribeTo<bool>(HFEventID.OnPauseMode, FreezeMode);
     }
     private void OnDisable()
     {
-        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, ActivateGemSpawn);
-        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, StopGemSpawn);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveBeginned, StartWave);
+        HFEventManager.UnsubscribeFrom(HFEventID.OnWaveCleared, WaveCleared);
+        HFEventManager.UnsubscribeFrom<GameStates>(HFEventID.OnGameStateChanged, GameStateChanged);
+        HFEventManager.UnsubscribeFrom<bool>(HFEventID.OnPauseMode, FreezeMode);
     }
 
     private void Update()
     {
         SpawnGem();
+        Debug.LogError(canSpawnGem);
     }
 
 
@@ -56,14 +61,47 @@ public class GemGenerator : MonoBehaviour
         }
     }
 
-
-
-    public void ActivateGemSpawn()
+    public void GameStateChanged(GameStates inState)
     {
+        if(inState == GameStates.Pause)
+        {
+            canSpawnGem = false;
+        }
+        else if(inState == GameStates.PlayingLevel)
+        {
+            if(inWave)
+            {
+                canSpawnGem = true;
+            }
+        }
+    }
+
+    public void FreezeMode(bool inValue)
+    {
+        if(inValue)
+        {
+            canSpawnGem = false;
+        }
+        else
+        {
+            if(inWave)
+            {
+                canSpawnGem = true;
+            }
+        }
+    }
+
+
+
+
+    public void StartWave()
+    {
+        inWave = true;
         canSpawnGem = true;
     }
-    public void StopGemSpawn()
+    public void WaveCleared()
     {
+        inWave = false;
         canSpawnGem = false;
     }
 

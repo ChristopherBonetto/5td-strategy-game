@@ -21,6 +21,8 @@ public class CastleStarter : BuildingBehaviour
     [SerializeField, Tooltip("Spawn point distance from castle")]
     private float m_spawnDistance = 6;
 
+    private List<Troop> m_spawnedTroops = new List<Troop>();
+
     #endregion
 
     public Transform[] m_enemyEngagePoints;
@@ -161,7 +163,7 @@ public class CastleStarter : BuildingBehaviour
             {
                 Debug.Log("Trying to spaen a unit form the castle");
                 Troop troop = GameController.Instance.CreateNewTroop(UnitType.STANDARD_ALLY, PlayerType.Player, pos, false);
-
+                m_spawnedTroops.Add(troop);
                 if(troop != null && m_isFreezed)
                 {
                     troop.FreezeMode(true);
@@ -194,7 +196,8 @@ public class CastleStarter : BuildingBehaviour
     {
         if (inEntity.EntityPlayerType == PlayerType.Player && inEntity is Troop)
         {
-            StartCoroutine(Respawn(inEntity as Troop));
+            if(m_spawnedTroops.Contains(inEntity as Troop))
+                StartCoroutine(Respawn(inEntity as Troop));
         }
     }
 
@@ -244,6 +247,12 @@ public class CastleStarter : BuildingBehaviour
         m_canSpawn = !inValue;
     }
 
+    protected override void DisableEntity()
+    {
+        m_spawnedTroops.Clear();
+        base.DisableEntity();
+    }
+
     #region Hp methods
     public override bool TakeDamage(int Damage)
     {
@@ -251,7 +260,6 @@ public class CastleStarter : BuildingBehaviour
         //{
         //    SetHealthbar((float)m_currentHp / (float)m_buildingStats.MaxHp);
         //}
-
 
         m_currentHp -= Damage;
         m_hudRef.CastleContainer.CastleTakeDamageFeedback(this);
