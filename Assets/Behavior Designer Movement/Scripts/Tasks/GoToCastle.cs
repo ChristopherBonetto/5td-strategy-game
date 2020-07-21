@@ -44,15 +44,15 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
                 return TaskStatus.Success;
             }
 
-            if (Target() != null && SetDestination(Target().Value))
-            {
-            }
-            else
-            {
-                Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
-                troopRef.Death();
-                return TaskStatus.Failure;
-            }
+            //if (Target() != null && SetDestination(Target().Value))
+            //{
+            //}
+            //else
+            //{
+            //    Debug.LogError("Enemy troop can't go to the castle because path is invalid or castle engange is not setted");
+            //    troopRef.Death();
+            //    return TaskStatus.Failure;
+            //}
             return TaskStatus.Running;
         }
 
@@ -95,18 +95,21 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                     if (unit.isActiveAndEnabled && unit.isOnNavMesh)
                     {
-                        if (Vector3.Distance(unit.transform.position, navMeshAgent.transform.position) > 3f)
-                        {
-                            unit.speed = speed.Value + 2;
-                            Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
-                            unit.SetDestination(unitDestin);
-                        }
-                        else
-                        {
-                            unit.speed = speed.Value;
-                            Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
-                            unit.SetDestination(unitDestin);
-                        }
+                        unit.ResetPath();
+                        unit.destination = destination;
+                        unit.speed = speed.Value;
+                        //if (Vector3.Distance(unit.transform.position, navMeshAgent.transform.position) > 3f)
+                        //{
+                        //    unit.speed = speed.Value + 2;
+                        //    Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
+                        //    unit.SetDestination(unitDestin);
+                        //}
+                        //else
+                        //{
+                        //    unit.speed = speed.Value;
+                        //    Vector3 unitDestin = navMeshAgent.pathEndPosition + troopRef.m_formationPosition[i];
+                        //    unit.SetDestination(unitDestin);
+                        //}
                     }
                 }
                 return true;
