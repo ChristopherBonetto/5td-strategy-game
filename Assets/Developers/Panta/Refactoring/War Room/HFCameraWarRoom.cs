@@ -17,6 +17,8 @@ namespace HF.Refactoring
         [SerializeField]
         private KeyCode ResetKey;
 
+
+
         private HFUIWarRoom m_warRoomRef;
 
         private void Awake()
@@ -40,7 +42,7 @@ namespace HF.Refactoring
                 int newPos = m_Position - 1;
                 SetPositionCount(newPos);
             }
-            else if (Input.GetKeyDown(ResetKey)) 
+            else if (Input.GetKeyDown(ResetKey)||  Input.GetMouseButton(1)) 
             {
                 SetPositionCount(0);
             }
