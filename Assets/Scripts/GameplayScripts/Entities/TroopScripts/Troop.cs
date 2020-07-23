@@ -114,6 +114,7 @@ public class Troop : EntityBehavior, ICanMove
     public CastleStarter TargetCastle { get => m_targetCastle; }
 
     private Coroutine m_resetCoroutine = null;
+    public bool IsResetting { get => m_resetCoroutine != null; }
 
     #endregion
 
@@ -447,7 +448,7 @@ public class Troop : EntityBehavior, ICanMove
     IEnumerator Reset(float inDestinationTime = 0.3f, Vector3? inResetDestination = null)
     {
         IsBusy = true;
-
+        
         if (FocusEntity != null && FocusEntity is Troop && FocusEntity.FocusEntity == this)
         {
             Troop troop = FocusEntity as Troop;
@@ -520,9 +521,8 @@ public class Troop : EntityBehavior, ICanMove
             ResetTree();
         }
 
-        if (m_buildingHandled != null || FocusEntity != null)
+        if (m_buildingHandled != null || FocusEntity != null && FocusEntity is Troop)
         {
-            //m_buildingHandled.Drop(this.transform.position);
             return false;
         }
 
@@ -534,7 +534,7 @@ public class Troop : EntityBehavior, ICanMove
             {
                 Troop enemyTroop = inEntity as Troop;
 
-                if (enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack)
+                if (enemyTroop.GetStats().CanTakeDamage && m_troopStats.CanAttack && !enemyTroop.IsResetting)
                 {
                     AssignDest(inEntity.transform.position);
                     FocusEntity = enemyTroop;
