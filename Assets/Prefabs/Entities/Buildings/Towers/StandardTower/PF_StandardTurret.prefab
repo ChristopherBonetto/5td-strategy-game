@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 3564979417834792227}
   - component: {fileID: 5486052142169988885}
   - component: {fileID: 2242465166889051116}
-  - component: {fileID: 6277775745425440441}
   m_Layer: 0
   m_Name: SM_BaseTurret_Lvl0
   m_TagString: Untagged
@@ -80,19 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6277775745425440441
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 513973567722477360}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.714938, y: 4.3342285, z: 2.714938}
-  m_Center: {x: 0, y: 2.1671143, z: 0}
 --- !u!1 &1409501506797681094
 GameObject:
   m_ObjectHideFlags: 0
@@ -4977,7 +4963,6 @@ GameObject:
   - component: {fileID: 6264826335395855964}
   - component: {fileID: 7282342167141053971}
   - component: {fileID: 5048059714674582781}
-  - component: {fileID: 2212116008387907809}
   - component: {fileID: 5114234050613983068}
   m_Layer: 0
   m_Name: PF_StandardTurret
@@ -5036,26 +5021,11 @@ MonoBehaviour:
   m_objectToRotateOnX: {fileID: 0}
   m_lockSpawnBulletPoint: 0
   m_SpawnPoint: {fileID: 842548064299464275}
-  m_BulletID: {fileID: 11400000, guid: e2f747f28dfcb4f49baf9043149c33a1, type: 2}
   AoEDamage: 0
-  m_BulletSpeed: 20
   anim: {fileID: 0}
   drop: {fileID: 2652534659444787915}
   RangeFeedback: {fileID: 3153614629867810712}
   muzzleFlash: {fileID: 0}
---- !u!65 &2212116008387907809
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3084877532521328238}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4, y: 4, z: 4}
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &5114234050613983068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5191,7 +5161,6 @@ GameObject:
   - component: {fileID: 5690107877903898710}
   - component: {fileID: 3723443663277269600}
   - component: {fileID: 6958304570809900697}
-  - component: {fileID: 4919799811060611472}
   m_Layer: 0
   m_Name: SM_BaseTurret_Tutorial
   m_TagString: Untagged
@@ -5259,16 +5228,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &4919799811060611472
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8695337278170196549}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2.714938, y: 4.3342285, z: 2.714938}
-  m_Center: {x: 0, y: 2.1671143, z: 0}

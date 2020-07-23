@@ -121,7 +121,6 @@ GameObject:
   - component: {fileID: 4063697167737908859}
   - component: {fileID: 2956023665401784935}
   - component: {fileID: 6572253793603712222}
-  - component: {fileID: 3329993021870840426}
   m_Layer: 0
   m_Name: PF_BaseTurret_Mortar_Lvl1
   m_TagString: Untagged
@@ -180,26 +179,11 @@ MonoBehaviour:
   m_objectToRotateOnX: {fileID: 0}
   m_lockSpawnBulletPoint: 0
   m_SpawnPoint: {fileID: 2506577838477243359}
-  m_BulletID: {fileID: 11400000, guid: e0536d7ec8227be4787f150ba0116cd2, type: 2}
   AoEDamage: 1
-  m_BulletSpeed: 40
   anim: {fileID: 1264226478686425497}
   drop: {fileID: 2493674251482318054}
   RangeFeedback: {fileID: 3989521381731141157}
   muzzleFlash: {fileID: 8710396947994753910}
---- !u!65 &3329993021870840426
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4104347628196674159}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6, y: 4, z: 6}
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1001 &3583164823059318418
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -420,6 +404,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4063697167737908859}
     m_Modifications:
+    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_DropTurrets
+      objectReference: {fileID: 0}
     - target: {fileID: 1819429389894858647, guid: 354440a4d24d715439b6c1fa932dd381,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -474,11 +463,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_DropTurrets
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 354440a4d24d715439b6c1fa932dd381, type: 3}
@@ -597,6 +581,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4063697167737908859}
     m_Modifications:
+    - target: {fileID: 6462419346236322318, guid: eb19485da31f4a0408fdf174da5c885b,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_VFX_Upgrade_Turret_Lv1
+      objectReference: {fileID: 0}
     - target: {fileID: 5584446471854526321, guid: eb19485da31f4a0408fdf174da5c885b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -651,11 +640,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6462419346236322318, guid: eb19485da31f4a0408fdf174da5c885b,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_VFX_Upgrade_Turret_Lv1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb19485da31f4a0408fdf174da5c885b, type: 3}

@@ -22,6 +22,17 @@ public class BuildingBehaviour : EntityBehavior
 	public GameObject RangeFeedback;
     public float ExplosionRadius = 5f;
 
+    private Collider m_Collider;
+    public Collider Collider 
+    {
+        get 
+        {
+            if (m_Collider == null)
+                m_Collider = GetComponent<Collider>();
+            return m_Collider;
+        }
+    }
+
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -102,6 +113,7 @@ public class BuildingBehaviour : EntityBehavior
     {
         Deselected();
         IsBusy = true;
+        Collider.enabled = false;
         m_view.CarryBuilding();
         transform.DOJump(carryPosition, 5, 1, 0.5f);
         transform.up = Vector3.up;
@@ -124,6 +136,7 @@ public class BuildingBehaviour : EntityBehavior
         transform.up = fixedUpDirection;
         IsBusy = false;
         StopTree(false);
+        Collider.enabled = true;
         return true;
     }
 
@@ -293,5 +306,20 @@ public class BuildingBehaviour : EntityBehavior
 
         m_view?.UpdateTowerVisualState(false);
         
+    }
+
+    public void OnMouseExit() {
+        HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
+        hud.carryCapacitySlider.gameObject.SetActive(false);
+    }
+
+    public void OnMouseOver() {
+        HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
+        hud.carryCapacitySlider.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position + Vector3.up * 3);
+    }
+
+    public void OnMouseEnter() {
+        HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
+        hud.SetCarryCapacity(transform.position + Vector3.up * 3, GetComponentInParent<BuildingBehaviour>().m_buildingStats.Weight);
     }
 }

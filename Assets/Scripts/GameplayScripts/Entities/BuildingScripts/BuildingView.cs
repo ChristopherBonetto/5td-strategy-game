@@ -44,17 +44,6 @@ namespace HF.Unit
             }
         }
 
-        private Collider m_Collider;
-        public Collider Collider
-        {
-            get
-            {
-                if (m_Collider == null)
-                    m_Collider = GetComponent<Collider>();
-                return m_Collider;
-            }
-        }
-
         private void OnEnable()
         {
             RangeFeedback.SetActive(false);
@@ -72,13 +61,11 @@ namespace HF.Unit
         public void CarryBuilding()
         {
             NavMeshObstacle.enabled = false;
-            Collider.enabled = false;
         }
 
         public void DropBuilding()
         {
             NavMeshObstacle.enabled = true;
-            Collider.enabled = true;
            if(drop!=null)
             {
                 drop.Play();
@@ -146,25 +133,6 @@ namespace HF.Unit
         public void UpdateTowerVisualState(bool state)
         {
             RangeFeedback.SetActive(state);
-        }
-
-
-        public void OnMouseExit()
-        {
-            HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
-            hud.carryCapacitySlider.gameObject.SetActive(false);
-        }
-
-        public void OnMouseOver()
-        {
-            HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
-            hud.carryCapacitySlider.transform.position = RectTransformUtility.WorldToScreenPoint(Camera.main,transform.position + Vector3.up * 3);
-        }
-
-        public void OnMouseEnter()
-        {
-            HF.Refactoring.HFUIHUD hud = HF.Refactoring.HFUIManager.Instance.Getwindow<HF.Refactoring.HFUIHUD>(HF.Refactoring.HFUIWindowID.HUD);
-            hud.SetCarryCapacity(transform.position + Vector3.up * 3, GetComponentInParent<BuildingBehaviour>().m_buildingStats.Weight);
         }
     }
 

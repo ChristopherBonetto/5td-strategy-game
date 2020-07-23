@@ -90,7 +90,6 @@ GameObject:
   - component: {fileID: 7817200739618432361}
   - component: {fileID: 3922665040273577455}
   - component: {fileID: 6797087979773828522}
-  - component: {fileID: 6151579556816179784}
   m_Layer: 0
   m_Name: PF_BaseTurret_Mortar_Lvl3
   m_TagString: Untagged
@@ -149,26 +148,11 @@ MonoBehaviour:
   m_objectToRotateOnX: {fileID: 0}
   m_lockSpawnBulletPoint: 0
   m_SpawnPoint: {fileID: 8127713922540032967}
-  m_BulletID: {fileID: 11400000, guid: 2537526bbe052ea40867770932365230, type: 2}
   AoEDamage: 1
-  m_BulletSpeed: 40
   anim: {fileID: 6695097751734161687}
   drop: {fileID: 988393619127323091}
   RangeFeedback: {fileID: 7405892873191386237}
   muzzleFlash: {fileID: 3641263247219337572}
---- !u!65 &6151579556816179784
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7848916260422611325}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 6, y: 4, z: 6}
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &8634394275352842281
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,6 +437,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7817200739618432361}
     m_Modifications:
+    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
+        type: 3}
+      propertyPath: m_Name
+      value: PF_DropTurrets
+      objectReference: {fileID: 0}
     - target: {fileID: 1819429389894858647, guid: 354440a4d24d715439b6c1fa932dd381,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -507,11 +496,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8174048302730790589, guid: 354440a4d24d715439b6c1fa932dd381,
-        type: 3}
-      propertyPath: m_Name
-      value: PF_DropTurrets
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 354440a4d24d715439b6c1fa932dd381, type: 3}
