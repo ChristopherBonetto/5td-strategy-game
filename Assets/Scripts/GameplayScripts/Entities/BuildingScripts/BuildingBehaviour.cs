@@ -100,6 +100,7 @@ public class BuildingBehaviour : EntityBehavior
 
     public bool Carry(Vector3 carryPosition)
     {
+        Deselected();
         IsBusy = true;
         m_view.CarryBuilding();
         transform.DOJump(carryPosition, 5, 1, 0.5f);
