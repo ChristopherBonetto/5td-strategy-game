@@ -108,7 +108,6 @@ public class InputReaderManager : Singleton<InputReaderManager>
 
             if(Vector3.Distance(mouseStartingPos,mouseCurrentPos) > dragTreshold)
             {
-                Debug.LogError("DRAG");
                 m_currentInputManagerState = InputManagerStates.Drag;
             }
             yield return null;

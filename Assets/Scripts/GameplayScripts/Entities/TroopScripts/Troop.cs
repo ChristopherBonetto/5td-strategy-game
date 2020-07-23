@@ -993,6 +993,24 @@ public class Troop : EntityBehavior, ICanMove
                 alive[i].AssignFocusToUnit(myTarget[i % inTroop.AliveUnitsCount]);
                 alive[i].StopTree(false);
             }
+
+            Vector3 point = (Agent.transform.position + inTroop.Agent.transform.position) / 2;
+            Vector3? navMeshPoint = GameController.Instance.RandomPoint(point, 1);
+
+            if(navMeshPoint.Value != null)
+            {
+                inTroop.Agent.enabled = true;
+                inTroop.Agent.isStopped = false;
+                inTroop.Agent.ResetPath();
+
+                Agent.enabled = true;
+                Agent.isStopped = false;
+                Agent.ResetPath();
+
+                inTroop.Agent.SetDestination(navMeshPoint.Value);
+                Agent.SetDestination(navMeshPoint.Value);
+            }
+
         }
         else if(m_troopStats.AttackType == AttackType.RANGED)
         {
@@ -1012,6 +1030,12 @@ public class Troop : EntityBehavior, ICanMove
                 alive[i].StopTree(false);
             }
         }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawCube(Agent.transform.position, new Vector3(0.5f, 1f, 0.5f));
     }
 
     public List<Unit> GetUnitAsTargetList(int _quantity)
@@ -1034,8 +1058,6 @@ public class Troop : EntityBehavior, ICanMove
             index++;
             index = (int)Mathf.Repeat(index, alive.Count);
         }
-        Debug.Log(index + " " + alive.Count);
-
         return tmp;
     }
 

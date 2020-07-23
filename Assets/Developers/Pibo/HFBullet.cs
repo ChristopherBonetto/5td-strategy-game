@@ -68,7 +68,6 @@ namespace HF
 		{
 			if (other.gameObject.layer == m_targetLayer || other.gameObject.layer == LayerMask.NameToLayer("Terrain") || other.gameObject.layer == LayerMask.NameToLayer("Bakeable"))
 			{
-				Debug.LogError("Hitted");
 				StartCoroutine(DisableBullet());
 			}
 		}

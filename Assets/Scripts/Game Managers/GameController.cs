@@ -112,7 +112,7 @@ public class GameController : Singleton<GameController>
             return null;
         }
 
-        Vector3? closestPoint = RandomPoint(inPosition, 1, inPosition);
+        Vector3? closestPoint = RandomPoint(inPosition, 1);
 
         if (closestPoint != null)
         {
@@ -387,7 +387,7 @@ public class GameController : Singleton<GameController>
 
     #endregion
 
-    public Vector3? RandomPoint(Vector3 center, float range, Vector3 agentPosition)
+    public Vector3? RandomPoint(Vector3 center, float range)
     {
         NavMeshHit closestPoint = new NavMeshHit();
         float lowestDistance = Mathf.Infinity;
@@ -398,7 +398,7 @@ public class GameController : Singleton<GameController>
 
             if (NavMesh.SamplePosition(center, out hit, range * 1.5f, NavMesh.AllAreas))
             {
-                float distance = Vector3.Distance(center, agentPosition);
+                float distance = Vector3.Distance(center, hit.position);
 
                 if (distance < lowestDistance)
                 {

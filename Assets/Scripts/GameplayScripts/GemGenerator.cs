@@ -32,7 +32,6 @@ public class GemGenerator : MonoBehaviour
     private void Update()
     {
         SpawnGem();
-        Debug.LogError(canSpawnGem);
     }
 
 
