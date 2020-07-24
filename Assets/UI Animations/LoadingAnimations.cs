@@ -10,21 +10,17 @@ public class LoadingAnimations : MonoBehaviour
     public float delay= 0.5f;
     bool isactive = false;
 
-    void Start()
+    void OnEnable()
     {
         dots[0].enabled = false;
         dots[1].enabled = false;
         dots[2].enabled = false;
-    }
 
-
-    void Update()
-    {
         StartCoroutine(TypeDots());
     }
+
     IEnumerator TypeDots()
     {
-        isactive = true;
         dots[0].enabled = true;
         yield return new WaitForSeconds(delay);
         dots[1].enabled = true;
@@ -35,6 +31,7 @@ public class LoadingAnimations : MonoBehaviour
         dots[1].enabled = false;
         dots[2].enabled = false;
         yield return new WaitForSeconds(delay);
-        isactive = false;
+
+        StartCoroutine(TypeDots());
     }
 }
