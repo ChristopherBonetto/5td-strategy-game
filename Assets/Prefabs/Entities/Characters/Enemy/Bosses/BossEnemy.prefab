@@ -57,7 +57,7 @@ MonoBehaviour:
   ScaleWithMAXHP: 1
   color: {r: 0, g: 1, b: 0, a: 1}
   SelectionCircle: {fileID: 425945841093503760}
-  m_corpse: {fileID: 11400000, guid: cb7faea425831f24e8e10631ae89e371, type: 2}
+  m_corpse: {fileID: 11400000, guid: b74177df8111590459dfa6a55a9de9bc, type: 2}
   m_animator: {fileID: 3798934774266899762}
   troop: {fileID: 0}
 --- !u!1001 &2254104405601397586
@@ -72,6 +72,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EH_Boss
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 51acc5b4a91878640b63cc67e02e0fb4,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 97cb91c9a54571c4cac2c21b5106be56, type: 2}
     - target: {fileID: -4216859302048453862, guid: 51acc5b4a91878640b63cc67e02e0fb4,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -142,11 +147,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 51acc5b4a91878640b63cc67e02e0fb4,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 97cb91c9a54571c4cac2c21b5106be56, type: 2}
     - target: {fileID: 3115338531472790098, guid: 51acc5b4a91878640b63cc67e02e0fb4,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
