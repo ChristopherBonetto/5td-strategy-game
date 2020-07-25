@@ -31,9 +31,9 @@ public class TileHighlight : MonoBehaviour
 
     bool mouseOver = false;
 
+    private NavMeshObstacle obstacle;
 
-
-
+    
     private void Awake()
     {
         isOnPlayableArea = false;
@@ -43,7 +43,9 @@ public class TileHighlight : MonoBehaviour
         //spriteColor.sprite = RandomSpriteList[Random.Range(0, RandomSpriteList.Length-1)];
         //startColor = spriteColor.color;
 
-        if (coll.gameObject.layer != LayerMask.NameToLayer("Terrain"))
+        obstacle = GetComponentInParent<NavMeshObstacle>();
+
+        if (coll.gameObject.layer != LayerMask.NameToLayer("Terrain") || obstacle != null)
         {
             gameObject.SetActive(false);
         }

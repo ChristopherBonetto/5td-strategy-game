@@ -103,8 +103,16 @@ namespace BehaviorDesigner.Runtime.Tasks.Movement
 
                         // Set destination
                         Vector3 unitDestin = navMeshAgent.transform.position + troopRef.m_formationPosition[i];
-                        unit.SetDestination(navMeshAgent.transform.position);
 
+                        NavMeshHit hit;
+                        if (NavMesh.SamplePosition(unitDestin, out hit, 1.0f, NavMesh.AllAreas))
+                        {
+                            unit.SetDestination(hit.position);
+                        }
+                        else
+                        {
+                            unit.SetDestination(navMeshAgent.transform.position);
+                        }
 
                         // Define the speed
                         float distance = Vector3.Distance(unit.transform.position, unitDestin);
