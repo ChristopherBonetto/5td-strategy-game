@@ -106,7 +106,7 @@ public class Unit : MonoBehaviour, ITakeDamage
 
     private void OnEnable()
     {
-        StopTree(true);
+        //StopTree(true);
         FocusUnit = null;
         FocusBuilding = null;
         PreviousHp = 1f;
@@ -159,7 +159,6 @@ public class Unit : MonoBehaviour, ITakeDamage
 
         AssignValuesToTree();
         FocusUnit = inUnit;
-        //Debug.Log(transform.name + " FIGHT WITH : " + " " + inUnit.transform.name);
     }
 
     public void AssignFocusToUnit(BuildingBehaviour building)

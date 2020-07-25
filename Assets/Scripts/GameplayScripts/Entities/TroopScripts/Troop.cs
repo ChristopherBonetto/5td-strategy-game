@@ -1026,17 +1026,16 @@ public class Troop : EntityBehavior, ICanMove
 
             for (int i = 0; i < alive.Count; i++)
             {
-                alive[i].AssignFocusToUnit(myTarget[i]);
+                alive[i].AssignFocusToUnit(myTarget[i % inTroop.AliveUnitsCount]);
                 alive[i].StopTree(false);
             }
         }
+
+        UnitList[0].UnitTree.enabled = false;
+        UnitList[0].UnitTree.enabled = true;
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawCube(Agent.transform.position, new Vector3(0.5f, 1f, 0.5f));
-    }
+    
 
     public List<Unit> GetUnitAsTargetList(int _quantity)
     {
@@ -1145,4 +1144,10 @@ public class Troop : EntityBehavior, ICanMove
     }
 
     #endregion
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawCube(Agent.transform.position, new Vector3(0.5f, 1f, 0.5f));
+    }
 }
