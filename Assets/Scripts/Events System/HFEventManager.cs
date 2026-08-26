@@ -8,7 +8,7 @@ public class HFEventManager
     public delegate void Callback();
     public delegate void Callback<T>(T arg);
     public delegate void Callback<T, K>(T arg1, K arg2);
-
+    
     private static Dictionary<HFEventID, Delegate> m_Events = new Dictionary<HFEventID, Delegate>();
 
     public static void SubscribeTo(HFEventID inEvent, Callback inHandler)
