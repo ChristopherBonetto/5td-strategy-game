@@ -18,13 +18,13 @@
 </p>
 
 <p align="center">
-  <a href="https://drive.google.com/file/d/1HBuVKyWop0EiN7ZbtbKt64ulLq0-rSvA/view"><strong>Watch the Trailer (1:04)</strong></a>
+  <a href="https://youtu.be/4LCMpMkx36Y"><strong>Watch the Trailer (1:04)</strong></a>
   ·
   <a href="https://github.com/ChristopherBonetto/5td-strategy-game/releases/latest/download/5TD-Windows.zip"><strong>Download the Windows Build</strong></a>
 </p>
 
 <p align="center">
-  <a href="https://drive.google.com/file/d/1HBuVKyWop0EiN7ZbtbKt64ulLq0-rSvA/view">
+  <a href="https://youtu.be/4LCMpMkx36Y">
     <img src="docs/images/5td-gameplay.webp" alt="5TD gameplay showing a player squad defending the map during an enemy wave" width="720">
   </a>
 </p>
@@ -139,7 +139,7 @@ The project includes a custom workflow for generating and validating entity defi
 
 ## 🎬 Media
 
-- [Project trailer (1:04)](https://drive.google.com/file/d/1HBuVKyWop0EiN7ZbtbKt64ulLq0-rSvA/view)
+- [Project trailer (1:04)](https://youtu.be/4LCMpMkx36Y)
 
 The trailer shows the war room, tabletop campaign map, troop and building controls, wave and resource UI, and active combat. The images in this README were extracted from that trailer.
 
