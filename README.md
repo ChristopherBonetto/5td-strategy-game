@@ -20,7 +20,7 @@
 <p align="center">
   <a href="https://drive.google.com/file/d/1HBuVKyWop0EiN7ZbtbKt64ulLq0-rSvA/view"><strong>Watch the Trailer (1:04)</strong></a>
   ·
-  <a href="https://www.linkedin.com/in/christopher-bonetto-547876221"><strong>LinkedIn</strong></a>
+  <a href="https://github.com/ChristopherBonetto/5td-strategy-game/releases/latest/download/5TD-Windows.zip"><strong>Download the Windows Build</strong></a>
 </p>
 
 <p align="center">
@@ -38,20 +38,20 @@
 | **Role** | Gameplay & Systems Programmer |
 | **Engine** | Unity 2019.2.0f1 |
 | **Language** | C# |
-| **Team** | Human Factor — 13 people, including 3 programmers |
+| **Team** | Human Factor — 12 people, including 2 programmers |
 | **Development** | 2019–2020 academic production cycle |
 | **Platform** | Windows PC |
 | **Status** | Completed team project; archived portfolio copy |
 
 ## 🎮 Overview
 
-*5TD*, developed under the earlier working title *Good North*, is a real-time strategy and tower-defence prototype created by the 13-person Human Factor student team. The player directs squads, constructs and upgrades defensive buildings, manages resources, and survives scripted enemy waves across a multi-level campaign selected from a 3D war room.
+*5TD*, developed under the earlier working title *Good North*, is a real-time strategy and tower-defence prototype created by the 12-person Human Factor student team. The player directs squads, repositions and upgrades defensive turrets, gathers resources, and survives scripted enemy waves across a multi-level campaign selected from a 3D war room.
 
 My work focused on the gameplay and runtime architecture connecting entities, allied and enemy units, AI, game states, progression, input, tools, persistence, pooling, events, and audio. It is my strongest Unity example of responsibility across several interacting systems in a multidisciplinary production.
 
 ## 🕹️ How to Play
 
-Build and upgrade defences, direct your squads, and protect your territory through successive enemy waves. Resources are used to construct buildings and produce or improve units, while each level introduces a different tactical layout.
+Direct your squads, collect gems, reposition and upgrade turrets, and protect your territory through successive enemy waves. Units can carry turrets across the battlefield, making positioning and timing central to each level's tactical layout.
 
 | Input | Action |
 |---|---|
@@ -70,7 +70,7 @@ The game also provides contextual interface hints and a tutorial flow for its co
 
 ## 👨‍💻 My Contributions
 
-I worked as one of three programmers in a multidisciplinary team. My documented contributions include:
+I worked as one of two programmers in a multidisciplinary team. My documented contributions include:
 
 - Designed a **ScriptableObject-driven game-state flow** covering startup, war room, level initialization, gameplay, pause, and level completion.
 - Built the **level and scene-management pipeline**, including level metadata, progression state, transitions, and runtime initialization.
@@ -114,6 +114,7 @@ The project includes a custom workflow for generating and validating entity defi
 ## ✨ Project Features
 
 - Squad-based movement and combat using NavMesh navigation.
+- Units that can lift and reposition turrets across the battlefield.
 - Constructible and upgradeable defensive buildings.
 - Resource gathering, spending, and unit production.
 - Configurable single, timed, and bulk enemy-wave behaviours.
@@ -144,7 +145,17 @@ The trailer shows the war room, tabletop campaign map, troop and building contro
 
 ## 🚀 Build and Running the Project
 
-This repository preserves the complete Unity project rather than generated caches or a prebuilt executable.
+### Windows build
+
+A preserved Windows build is available from the latest GitHub Release:
+
+1. [Download `5TD-Windows.zip`](https://github.com/ChristopherBonetto/5td-strategy-game/releases/latest/download/5TD-Windows.zip).
+2. Extract the archive.
+3. Open the `VTD 1.1.30` folder and run `5TD.exe`.
+
+Windows may display a security warning because this archived student build is not code-signed.
+
+### Unity project
 
 1. Install Unity **2019.2.0f1** through Unity Hub.
 2. Clone the repository with [Git LFS](https://git-lfs.com/) installed.
@@ -152,13 +163,11 @@ This repository preserves the complete Unity project rather than generated cache
 4. Allow Package Manager to restore the versions recorded in `Packages/manifest.json`.
 5. Open `Assets/Scenes/GameScenes/SCN_Start.unity` and enter Play Mode, or create a Windows build from the scenes already configured in Build Settings.
 
-A verified prebuilt Windows portfolio build can be added later without changing the source archive.
-
 ## 🧭 Project Context
 
 - **Context:** Academic multidisciplinary team production
-- **Team:** Human Factor — 3 programmers, 3 game designers, 3 2D artists, and 4 3D artists
-- **My position:** One of three programmers
+- **Team:** Human Factor — 2 programmers, 3 game designers, 3 2D artists, and 4 3D artists
+- **My position:** One of two programmers
 - **Repository history:** Original team development history preserved; later portfolio migration and dependency archival changes identified separately
 
 ## 👥 Credits, Ownership and Status
