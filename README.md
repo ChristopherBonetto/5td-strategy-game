@@ -20,7 +20,7 @@
 <p align="center">
   <a href="https://youtu.be/4LCMpMkx36Y"><strong>Watch the Trailer (1:04)</strong></a>
   ·
-  <a href="https://github.com/ChristopherBonetto/5td-strategy-game/releases/latest/download/5TD-Windows.zip"><strong>Download the Windows Build</strong></a>
+  <a href="https://github.com/ChristopherBonetto/5td-rts-tower-defense/releases/latest/download/5TD-Windows.zip"><strong>Download the Windows Build</strong></a>
 </p>
 
 <p align="center">
@@ -149,7 +149,7 @@ The trailer shows the war room, tabletop campaign map, troop and building contro
 
 A preserved Windows build is available from the latest GitHub Release:
 
-1. [Download `5TD-Windows.zip`](https://github.com/ChristopherBonetto/5td-strategy-game/releases/latest/download/5TD-Windows.zip).
+1. [Download `5TD-Windows.zip`](https://github.com/ChristopherBonetto/5td-rts-tower-defense/releases/latest/download/5TD-Windows.zip).
 2. Extract the archive.
 3. Open the `VTD 1.1.30` folder and run `5TD.exe`.
 
